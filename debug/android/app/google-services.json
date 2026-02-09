@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1035222509869",
+    "project_id": "soulink-af046",
+    "storage_bucket": "soulink-af046.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035222509869:android:58307516f2fae7c8cf4ba4",
+        "android_client_info": {
+          "package_name": "com.docare.solink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHTDGpv2nvFE6B3-_wWuZ8S-JhYg9e6MM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

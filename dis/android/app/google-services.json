@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1013253152993",
+    "project_id": "solink-e0c49",
+    "storage_bucket": "solink-e0c49.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013253152993:android:1ffb39ef39febd6b7d97a0",
+        "android_client_info": {
+          "package_name": "com.soulink.aibot.release"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013253152993-61u3q6esm5m5vd0h8p8ud7q36v07ol45.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soulink.aibot.release",
+            "certificate_hash": "6b8ff7b5a1c1893e52c538bd534fe4853f7be75a"
+          }
+        },
+        {
+          "client_id": "1013253152993-v3fn02dj6a41nl4qtiusrk7rt7upur1c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soulink.aibot.release",
+            "certificate_hash": "45045a2aa6b55e872fd4433832474d61e5e5fd8d"
+          }
+        },
+        {
+          "client_id": "1013253152993-p4scbj0jocfl33qnnnpe9lql2fn2cfn7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU4JYzrE3F1fjb0pCx9vrOBLT6QH7Ak4M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1013253152993-jtm8u982iuko513hncv3s63qcf5pqsfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

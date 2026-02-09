@@ -1,0 +1,11 @@
+framework module image_gallery_saver_plus {
+  umbrella header "image_gallery_saver_plus-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module image_gallery_saver_plus.Swift {
+  header "image_gallery_saver_plus-Swift.h"
+  requires objc
+}
