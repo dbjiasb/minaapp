@@ -1,0 +1,1 @@
+ /Users/zhangyingqi/StudioProjects/minaapp/debug/.dart_tool/flutter_build/5117101dee5c9642424382d8d37f072c/native_assets.json: 
