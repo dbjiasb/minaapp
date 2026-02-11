@@ -114,7 +114,7 @@ class ChatMessage implements AudioInfoInterface {
   int like = 0;
   List<int>? specifyRepliers, bannedRepliers; //群聊发送对象
   ChatSession? session; //发送的时候会设置
-  final int sessionType;
+  final int sessionType;//0普通私聊，1剧场，2群聊
 
   bool get isGroup => sessionType == 2;
 

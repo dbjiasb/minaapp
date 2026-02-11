@@ -85,39 +85,39 @@ class AccountView extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: 0,
-            right: 0,
-            left: 0,
-            child: SafeArea(
-              bottom: false,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routers.editMe);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Color(0xFF272533)),
-                        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        child: Center(
-                          child: Row(
-                            children: [
-                              Image.asset(ImagePath.ic_edit, width: 16, height: 16),
-                              Text(Copywriting.security_edit, style: TextStyle(color: Color(0xFFC1C5CD), fontSize: 12, fontWeight: FontWeight.w500)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 0,
+          //   right: 0,
+          //   left: 0,
+          //   child: SafeArea(
+          //     bottom: false,
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.end,
+          //       children: [
+          //         Padding(
+          //           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          //           child: GestureDetector(
+          //             onTap: () {
+          //               Get.toNamed(Routers.editMe);
+          //             },
+          //             child: Container(
+          //               decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Color(0xFF272533)),
+          //               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          //               child: Center(
+          //                 child: Row(
+          //                   children: [
+          //                     Image.asset(ImagePath.ic_edit, width: 16, height: 16),
+          //                     Text(Copywriting.security_edit, style: TextStyle(color: Color(0xFFC1C5CD), fontSize: 12, fontWeight: FontWeight.w500)),
+          //                   ],
+          //                 ),
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

@@ -322,14 +322,14 @@ class ChatRoomViewController extends GetxController {
     ChatManager.instance.currentSession = session;
     //刷新session
     await refreshSession();
-    debugPrint('[ChatRoom] sid:${session.id}, greeted: ${session.greeted}');
+    debugPrint('[ChatRoom] sid:${session.id}, sessionId:${session.sessionId}, greeted: ${session.greeted}');
 
     if (!session.greeted) {
       ChatManager.instance.sayHelloIfNeeded(session);
     }
 
     //查聊天记录
-    List<ChatMessage> results = await ChatManager.instance.messageHandler.queryMessages(session.id);
+    List<ChatMessage> results = await ChatManager.instance.messageHandler.queryMessages(session.sessionId);
     messages.addAll(results);
     insertAiTipsMessageIfNeeded();
     showContinueButtonIfNeed();
@@ -440,16 +440,16 @@ class ChatRoomViewController extends GetxController {
   }
 
   handlePullMessages(Event event) async {
-    if (event.data[session.id] != null) {
-      List<ChatMessage> newMessages = event.data[session.id];
+    if (event.data[session.sessionId] != null) {
+      List<ChatMessage> newMessages = event.data[session.sessionId];
       insertMessages(newMessages);
       showContinueButtonIfNeed(lastestMsg: newMessages.lastOrNull);
     }
   }
 
   handlePushMessages(Event event) async {
-    if (event.data[session.id] != null) {
-      List<ChatMessage> newMessages = event.data[session.id];
+    if (event.data[session.sessionId] != null) {
+      List<ChatMessage> newMessages = event.data[session.sessionId];
       insertMessages(newMessages);
       showContinueButtonIfNeed(lastestMsg: newMessages.lastOrNull);
     }
@@ -457,10 +457,12 @@ class ChatRoomViewController extends GetxController {
 
   void insertTheaterMessage(List<ChatMessage> newest) {
     removeGeneratingMessage(); //移除生成中的消息
-    messages.insertAll(0, newest);
+    messages.insertAll(0, newest.reversed);
     if (storyMessageIndex.value == 0) {
       storyMessageIndex.value = newest.length - 1;
     }
+    ChatTheaterBottomBarController bottomBarController = Get.find<ChatTheaterBottomBarController>();
+    bottomBarController.requestTemplateText();
   }
 
   void insertMessages(List<ChatMessage> newest) {
@@ -506,6 +508,10 @@ class ChatRoomViewController extends GetxController {
     generatingMsgTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
       removeGeneratingMessage();
     });
+  }
+
+  bool isGenerating() {
+    return messages.first == generatingMessage;
   }
 
   void removeGeneratingMessage() {

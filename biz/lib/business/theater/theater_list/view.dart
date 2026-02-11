@@ -32,11 +32,11 @@ class TheaterListView extends StatelessWidget {
                           child:
                               controller.dataList.isEmpty
                                   ? emptyView()
-                                  : Expanded(child: ListView.builder(
-                                controller: controller.scrollController,
-                                itemBuilder: (context, index) => _buildListItem(controller.dataList[index]),
-                                itemCount: controller.dataList.length,
-                              )),
+                                  : ListView.builder(
+                                    controller: controller.scrollController,
+                                    itemBuilder: (context, index) => _buildListItem(controller.dataList[index]),
+                                    itemCount: controller.dataList.length,
+                                  ),
                           onRefresh: () async {
                             controller.refreshData();
                           },
@@ -56,9 +56,7 @@ class TheaterListView extends StatelessWidget {
     child: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(Copywriting.security_no_data, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal)),
-        ],
+        children: [Text(Copywriting.security_no_data, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal))],
       ),
     ),
   );
@@ -112,7 +110,13 @@ class TheaterListView extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: Wrap(alignment: WrapAlignment.start, runAlignment: WrapAlignment.start, spacing: 4.w, runSpacing: 4.w, children: tags.map((e) => _buildTagItem(e)).toList()),
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            runAlignment: WrapAlignment.start,
+                            spacing: 4.w,
+                            runSpacing: 4.w,
+                            children: tags.map((e) => _buildTagItem(e)).toList(),
+                          ),
                         ),
 
                         SizedBox(width: 4.w),
@@ -130,7 +134,10 @@ class TheaterListView extends StatelessWidget {
                 ),
               ),
             ),
-            ClipRRect(borderRadius: BorderRadius.circular(16.w), child: CachedNetImage(imageUrl: coverUrl, height: 184.w, width: 112.w, fit: BoxFit.cover)),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16.w),
+              child: CachedNetImage(imageUrl: coverUrl, height: 184.w, width: 112.w, fit: BoxFit.cover),
+            ),
           ],
         ),
       ),

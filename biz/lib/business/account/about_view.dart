@@ -25,7 +25,7 @@ class AboutView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 100),
-              Image.asset(ImagePath.logo512, width: 94, height: 94),
+              ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.asset(ImagePath.logo512, width: 94, height: 94)),
               SizedBox(height: 6),
               Text(
                 'V ${AppManager.instance.appVersion} (${AppManager.instance.appBuild})',

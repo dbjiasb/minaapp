@@ -245,12 +245,13 @@ class LoginChannelView extends StatelessWidget {
             },
             child: Column(
               children: [
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: SizedBox(width: 88, height: 88, child: Image.asset(ImagePath.logo512, fit: BoxFit.fill)),
-                  ),
-                ),
+                // Expanded(
+                //   child: Container(
+                //     alignment: Alignment.center,
+                //     child: SizedBox(width: 88, height: 88, child: Image.asset(ImagePath.logo512, fit: BoxFit.fill)),
+                //   ),
+                // ),
+                Spacer(),
                 _buildNetworkEnvMode(),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,

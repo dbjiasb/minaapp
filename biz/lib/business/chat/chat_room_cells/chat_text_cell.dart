@@ -88,6 +88,7 @@ class ChatTextMessage extends ChatMessage {
         nativeId: (const Uuid().v4()).replaceAll('-', ''),
       ) {
     sendState = ChatMessageSendStatus.sending.obs;
+    sessionId = sessionType == 0 ? (senderId == ownerId ? receiverId : senderId).toString() : session?.sessionId ?? '';
   }
 
   @override

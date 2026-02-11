@@ -236,6 +236,9 @@ class ChatTheaterBottomBarController extends GetxController {
 
   void sendText(String text) {
     if (text.isEmpty) return;
+    if (roomViewController.isGenerating()) {
+      return;
+    }
     textController.clear();
     onTextChanged('');
     roomViewController.sendText(text, specifyRepliers: null, bannedRepliers: null);
@@ -258,6 +261,9 @@ class ChatTheaterBottomBarController extends GetxController {
     ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_queryInspirationWords, params: params));
     List rawData = rsp.data[Security.security_options] ?? [];
     List<Map> dataList = rawData.cast<Map>().safeSublist(0, 2);
+    if (dataList.isNotEmpty) {
+      templateTexts.clear();
+    }
     for (var item in dataList) {
       String text = item["text"] ?? "";
       if (text.isNotEmpty) {

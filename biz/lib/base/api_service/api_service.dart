@@ -139,12 +139,14 @@ class ApiService {
         ),
       );
 
+      int requestTime = DateTime.now().millisecondsSinceEpoch;
       final response = await dio.post(ApiConfig.path, data: data);
+      int responseTime = DateTime.now().millisecondsSinceEpoch;
       ApiResponse apiResponse = ApiResponse.withResponse(response.data);
       if (isDebug) {
-        L.i('[apiService] ${request.method} end, response: ${apiResponse.toString()}');
+        L.i('[apiService] ${request.method} end, time: ${responseTime - requestTime}ms, response: ${apiResponse.toString()}');
       } else {
-        L.i('[apiService] ${request.method} end, netCode: ${apiResponse.statusCode}, biz code: ${apiResponse.bsnsCode}, description: ${apiResponse.description}');
+        L.i('[apiService] ${request.method} end, time: ${responseTime - requestTime}ms, netCode: ${apiResponse.statusCode}, biz code: ${apiResponse.bsnsCode}, description: ${apiResponse.description}');
       }
       return apiResponse;
     } catch (e) {

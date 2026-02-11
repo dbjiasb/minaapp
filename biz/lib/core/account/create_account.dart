@@ -168,10 +168,11 @@ class CreateAccountView extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(140, 140, 140, 0),
-                      child: SizedBox(width: 88, height: 88, child: Image.asset(ImagePath.apple_icon, fit: BoxFit.fill)),
-                    ),
+                    // Container(
+                    //   padding: EdgeInsets.fromLTRB(140, 140, 140, 0),
+                    //   child: SizedBox(width: 88, height: 88, child: Image.asset(ImagePath.apple_icon, fit: BoxFit.fill)),
+                    // ),
+                    Container(height: 228),
                     SizedBox(height: 40),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,

@@ -194,6 +194,7 @@ class SkeletonViewController extends GetxController {
     EventCenter.instance.addListener(kEventCenterDidDeleteSession, (event) => updateUnreadCount());
     EventCenter.instance.addListener(kEventCenterDidClearSessionNumber, (event) => unreadCount.value = 0);
     updateUnreadCount();
+    Get.put(TheaterHistoryListViewLogic());
   }
 
   @override
@@ -209,6 +210,7 @@ class SkeletonViewController extends GetxController {
   @override
   void dispose() {
     super.dispose();
+    Get.delete<TheaterHistoryListViewLogic>();
   }
 
   void onTabClicked(int index) {
