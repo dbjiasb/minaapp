@@ -67,11 +67,11 @@ class CreateAccountView extends StatelessWidget {
                 ),
               ),
             ),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: viewController.canSendCode.value ? viewController.onObtainCodeButtonClicked : null,
-              child: Obx(
-                    () => Container(
+            Obx(() {
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: viewController.canSendCode.value ? viewController.onObtainCodeButtonClicked : null,
+                child: Container(
                   margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                   width: 100,
                   height: 40,
@@ -87,8 +87,8 @@ class CreateAccountView extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
           ],
         ),
       ),
@@ -99,24 +99,25 @@ class CreateAccountView extends StatelessWidget {
     return GestureDetector(
       onTap: viewController.login,
       child: Obx(
-            () => Container(
-          height: 54,
-          margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
-          decoration: BoxDecoration(
-            color: viewController.canContinue.value ? AppColors.mainLightColor : AppColors.mainLightColor.withValues(alpha: 0.5),
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
-          ),
-          child: Center(
-            child: Text(
-              Security.security_Continue,
-              style: TextStyle(
-                color: viewController.canContinue.value ? Color(0xFF0F0F0F) : const Color(0x800F0F0F),
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            () =>
+            Container(
+              height: 54,
+              margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+              decoration: BoxDecoration(
+                color: viewController.canContinue.value ? AppColors.mainLightColor : AppColors.mainLightColor.withValues(alpha: 0.5),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+              ),
+              child: Center(
+                child: Text(
+                  Security.security_Continue,
+                  style: TextStyle(
+                    color: viewController.canContinue.value ? Color(0xFF0F0F0F) : const Color(0x800F0F0F),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
       ),
     );
   }

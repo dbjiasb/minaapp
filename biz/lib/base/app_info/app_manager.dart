@@ -1,5 +1,7 @@
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../api_service/api_config.dart';
+
 class AppManager {
   //生成单利
   static final AppManager _instance = AppManager._internal();
@@ -21,14 +23,13 @@ class AppManager {
   String get appVersion => packageInfo.version;
   String get appBuild => packageInfo.buildNumber;
 
-  static const cdn = 'cdn.miratales.online';
   // static const appRes = 'https://$cdn/soulink/app/';
 
   // String get createOcHtml => 'https://$cdn/soulink/createoc.html';
 
-  String get privacyHtml => 'https://$cdn/mina/privacy.html';
+  String get privacyHtml => '${ApiConfig.cdn}/mina/privacy.html';
 
-  String get termsHtml => 'https://$cdn/mina/term.html';
+  String get termsHtml => '${ApiConfig.cdn}/mina/term.html';
 
   // String get feedBackUrl => 'https://discord.gg/qdRqGq5WDG?external=1';
 
