@@ -76,7 +76,7 @@ def replace_security_strings(enable_backup=False):
         import_statements.add(f"import 'package:biz/base/crypt/{config['import']}.dart';")
 
     # 配置工程目录（根据实际项目结构调整）
-    project_dir = Path(__file__).parent.parent.parent / "modules"
+    project_dir = Path(__file__).parent.parent.parent / "biz"
     total_replacements = 0
     
     # 需要排除的文件列表

@@ -7,9 +7,9 @@ import argparse
 import json
 
 # 修正为32字节的密钥（数下面这行字符正好32个）
-KEY = b'32bytes-long-secret-key-12345678'  # 32字符（32字节）
+KEY = b'CDhvMci5g7ExnCT885TqT7LT9S9I2A5l'  # 32字符（32字节）
 # 修正IV为16字节（数下面字符正好16个）
-IV = b'16bytes-iv-strin'  # 16字节（注意去掉最后的g）
+IV = b'xm7uIbAfnoq8TxCJ'  # 16字节（注意去掉最后的g）
 
 def encrypt_string(plaintext: str) -> str:
     cipher = AES.new(KEY, AES.MODE_CBC, IV)
@@ -20,7 +20,7 @@ def encrypt_string(plaintext: str) -> str:
 def generate_security_constants(prefix='security'):
     script_dir = Path(__file__).parent
     # 新增目标目录定义
-    target_dir = script_dir.parent.parent / 'modules/lib/base/crypt'
+    target_dir = script_dir.parent.parent / 'biz/lib/base/crypt'
     target_dir.mkdir(parents=True, exist_ok=True)
     input_file = script_dir / 'scan_result.json'
     

@@ -6,7 +6,7 @@ import argparse
 def extract_dart_strings():
 
     # 新路径配置
-    root_dir = Path(__file__).parent.parent.parent / "modules"
+    root_dir = Path(__file__).parent.parent.parent / "biz"
     
     # 添加路径验证
     if not root_dir.exists():

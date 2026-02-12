@@ -10,11 +10,13 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 
 # 文件路径配置
-DECRYPT_PATH = '../modules/lib/base/crypt/decrypt.dart'
+DECRYPT_PATH = '../../biz/lib/base/crypt/decrypt.dart'
 TARGET_FILES = [
-    '../modules/lib/base/crypt/security.dart',
-    '../modules/lib/base/crypt/apis.dart',
-    '../modules/lib/base/crypt/copywriting.dart'
+    '../../biz/lib/base/crypt/security.dart',
+    '../../biz/lib/base/crypt/apis.dart',
+    '../../biz/lib/base/crypt/copywriting.dart',
+    '../../biz/lib/base/crypt/other.dart',
+    '../../biz/lib/base/crypt/routes.dart'
 ]
 
 # 生成符合Dart端要求的随机密钥（32位字母数字）
@@ -54,6 +56,7 @@ def update_encrypted_strings(old_key, old_iv, new_key, new_iv):
 
         # 解密后重新加密并替换
         for encrypted_str in matches:
+            print(f'encrypted_str: {encrypted_str}，{old_key}, {old_iv}')
             decrypted = decrypt_string(encrypted_str, old_key, old_iv)
             new_encrypted = encrypt_string(decrypted, new_key, new_iv)
             content = content.replace(f'decrypt(\'{encrypted_str}\')', f'decrypt(\'{new_encrypted}\')')
@@ -68,8 +71,19 @@ def update_decrypt_file(new_key, new_iv):
         content = f.read()
 
     # 只替换密钥和IV，保留其他内容
-    content = re.sub(r'(final _aesKey = Key\.fromUtf8\(["\']).*?(["\']\\))', f'\\1{new_key}\\2', content)
-    content = re.sub(r'(final _iv = IV\.fromUtf8\(["\']).*?(["\']\\))', f'\\1{new_iv}\\2', content)
+    # content = re.sub(r'(final _aesKey = Key\.fromUtf8\(["\']).*?(["\']\))', f'\\1{re.escape(new_key)}\\2', content)
+    # content = re.sub(r'(final _iv = IV\.fromUtf8\(["\']).*?(["\']\))', f'\\1{re.escape(new_iv)}\\2', content)
+
+    content = re.sub(
+        r'(final _aesKey = Key\.fromUtf8\(["\']).*?(["\']\))',
+        r'\g<1>{}\g<2>'.format(re.escape(new_key)),
+        content
+    )
+    content = re.sub(
+        r'(final _iv = IV\.fromUtf8\(["\']).*?(["\']\))',
+        r'\g<1>{}\g<2>'.format(re.escape(new_iv)),
+        content
+    )
 
     with open(DECRYPT_PATH, 'w') as f:
         f.write(content)
