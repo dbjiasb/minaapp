@@ -277,9 +277,9 @@ class Preferences {
     return appConfig[key];
   }
 
-  String get dcLink {
-    return appConfig[Security.security_dc_link] ?? AppManager.instance.feedBackUrl;
-  }
+  // String get dcLink {
+  //   return appConfig[Security.security_dc_link] ?? AppManager.instance.feedBackUrl;
+  // }
 
   List get askPicTips {
     String tips =

@@ -236,7 +236,7 @@ abstract final class Copywriting {
   static late final String security_you__re_now_a_premium_member__nYour_benefits_are_unlocked__nExplore_your_new_perks_ = decrypt('51jWhtzsBllfgUsMFPQlcrd+XNXLfFAL8ACtVL5mxkC7UWvswsyEJs905huUNOrbqZR3KGW1YiAHsL4d/arO3e2Npp6WEbL/Wy+6a0q+mV4DIzf7YrXSums9VFgn/Kai'); // You\'re now a premium member!\nYour benefits are unlocked.\nExplore your new perks!
   static late final String security_by_clicking_subscribe__you_will_be_charged__and_your_subscription_will_automatically_renew_at_the_same_price_and_duration_until_canceled_through_App_Store_settings__By_proceeding__you_agree_to_our_terms_ = decrypt('tGdfFXBLh2UG8EiIaDbKBwuVFBVeCckqy0pWLAel8nvcOSF3SvStko+xy6jHCh71h2MCCqgFg72m4ideiwOKa1Sf9orOuHXW++weReK9anSaZGwllfc3kEZB8wWfMNSGGf5v57AKaIVaeew4GWGcbTwmML5rvyJ6Ap91TgX/jURIFlrDuEEAhABS+alHPp0Htzp0ZrGwMCFyBM5+QCE26FThge0+vD8uLBU54zfbSWnlan4iWYSDD0xclUHKM/X3koGc64kfQEzLlwsNaXQg8w=='); // By clicking subscribe, you will be charged, and your subscription will automatically renew at the same price and duration until canceled through App Store settings. By proceeding, you agree to our terms.
   static late final String security_daily_Task = decrypt('A7A/swFlhYnmmzrYA/G3ug=='); // Daily Task
-  static late final String security_soulink_Premium = decrypt('nWWgzu6a2JT/d6SDc0xOQg=='); // Soulink Premium
+  // static late final String security_soulink_Premium = decrypt('nWWgzu6a2JT/d6SDc0xOQg=='); // Soulink Premium
   static late final String security_premium_Only = decrypt('FST9+JS6yO/UkrYXwB026w=='); // Premium Only
   static late final String security_introduction = decrypt('4dDtQKXXSKTdteSwF/YbWQ=='); // Introduction 
   static late final String security_premium_Free = decrypt('unINfjCPx+vYOnwhJJspsw=='); // Premium Free

@@ -13,8 +13,8 @@ import 'package:path_provider/path_provider.dart';
 import '../../base/crypt/security.dart';
 import 'file_upload.dart';
 
-class SoulinkLogPrinter extends PrettyPrinter {
-  SoulinkLogPrinter() : super(
+class MinaLogPrinter extends PrettyPrinter {
+  MinaLogPrinter() : super(
       methodCount: 0,
       errorMethodCount: 8,
       noBoxingByDefault: true,
@@ -40,8 +40,8 @@ class AppLog {
   static String _logDirPath = '';
 
   static init() async {
-    _logDirPath = '${(await getTemporaryDirectory()).path}/soulink_logs';
-    String fileName = 'soulink_log_${DateFormat('MM-dd-yyyy').format(DateTime.now())}.log';
+    _logDirPath = '${(await getTemporaryDirectory()).path}/mina_logs';
+    String fileName = 'mina_log_${DateFormat('MM-dd-yyyy').format(DateTime.now())}.log';
     final path = '$_logDirPath/$fileName';
     File file = await File(path).create(recursive: true);
     FileOutput output = FileOutput(file: file);
@@ -49,7 +49,7 @@ class AppLog {
     _logger = Logger(
         filter: ProductionFilter(),
         output: output,
-        printer: SoulinkLogPrinter()
+        printer: MinaLogPrinter()
     );
   }
 

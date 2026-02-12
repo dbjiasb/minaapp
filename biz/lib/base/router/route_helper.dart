@@ -155,9 +155,9 @@ class RouteHelper {
     return await toPage(Routers.webView, args: {Security.security_title: title ?? '', Security.security_url: url, Security.security_hideHeader: hideHeader});
   }
 
-  static Future toTask() async {
-    return await toWeb(AppManager.instance.taskUrl, title: '', hideHeader: 1);
-  }
+  // static Future toTask() async {
+  //   return await toWeb(AppManager.instance.taskUrl, title: '', hideHeader: 1);
+  // }
 
   static Future toPersonalView({required int uid, required int accountType, String name = '', String avatar = ''}) async {
     return await RouteHelper.toPage(

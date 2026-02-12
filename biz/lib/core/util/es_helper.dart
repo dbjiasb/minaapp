@@ -191,23 +191,23 @@ class Dic {
 
   static String get rcg_iapYrly => '';
 
-  static List get rcg_coiProds => [
-    {Security.security_id: 'com.soulink.aibot.coin_1.99', Security.security_price: '\$1.99', Security.security_value: 200},
-    {Security.security_id: 'com.soulink.aibot.coin_9.99', Security.security_price: '\$9.99', Security.security_value: 1000},
-    {Security.security_id: 'com.soulink.aibot.coin_19.99', Security.security_price: '\$19.99', Security.security_value: 2000},
-    {Security.security_id: 'com.soulink.aibot.coin_59.99', Security.security_price: '\$59.99', Security.security_value: 6000},
-  ];
-
-  static List get rcg_gmProds => [
-    {Security.security_id: 'com.soulink.aibot.gems_9.99', Security.security_price: '\$9.99', Security.security_value: 80},
-    {Security.security_id: 'com.soulink.aibot.gems_19.99', Security.security_price: '\$19.99', Security.security_value: 160},
-    {Security.security_id: 'com.soulink.aibot.gems_59.99', Security.security_price: '\$59.99', Security.security_value: 480},
-  ];
+  // static List get rcg_coiProds => [
+  //   {Security.security_id: 'com.soulink.aibot.coin_1.99', Security.security_price: '\$1.99', Security.security_value: 200},
+  //   {Security.security_id: 'com.soulink.aibot.coin_9.99', Security.security_price: '\$9.99', Security.security_value: 1000},
+  //   {Security.security_id: 'com.soulink.aibot.coin_19.99', Security.security_price: '\$19.99', Security.security_value: 2000},
+  //   {Security.security_id: 'com.soulink.aibot.coin_59.99', Security.security_price: '\$59.99', Security.security_value: 6000},
+  // ];
+  //
+  // static List get rcg_gmProds => [
+  //   {Security.security_id: 'com.soulink.aibot.gems_9.99', Security.security_price: '\$9.99', Security.security_value: 80},
+  //   {Security.security_id: 'com.soulink.aibot.gems_19.99', Security.security_price: '\$19.99', Security.security_value: 160},
+  //   {Security.security_id: 'com.soulink.aibot.gems_59.99', Security.security_price: '\$59.99', Security.security_value: 480},
+  // ];
 
   // Helper Methods
-  static String rcg_savPct(int pct) => 'Save $pct%';
-
-  static String rcg_dailyPrc(double price) => '\$$price/day';
-
-  static String rcg_geRcgBalns(int rcgType) => rcgType == 0 ? rcg_coiBalns : rcg_gmBalns;
+  // static String rcg_savPct(int pct) => 'Save $pct%';
+  //
+  // static String rcg_dailyPrc(double price) => '\$$price/day';
+  //
+  // static String rcg_geRcgBalns(int rcgType) => rcgType == 0 ? rcg_coiBalns : rcg_gmBalns;
 }
