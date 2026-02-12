@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.soulink.aibot.release.MESSAGE_CLICK_ACTION" />
+                <action android:name="com.miratales.mina.MESSAGE_CLICK_ACTION" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -39,15 +39,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="761030003317322" />
-        <meta-data
-            android:name="com.facebook.sdk.ClientToken"
-            android:value="dee76152025d3478c17db6e34e50c9a4" />
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4918666966348278~3633376875" />
 
     </application>
     <!-- Required to query activities that can process text, see:

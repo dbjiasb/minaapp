@@ -1,4 +1,4 @@
-package com.soulink.aibot.release
+package com.miratales.mina
 
 import io.flutter.embedding.android.FlutterActivity
 
