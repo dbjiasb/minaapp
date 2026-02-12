@@ -21,14 +21,14 @@ class AppManager {
   String get appVersion => packageInfo.version;
   String get appBuild => packageInfo.buildNumber;
 
-  static const cdn = 'cdn.heartink.online';
+  static const cdn = 'cdn.miratales.online';
   // static const appRes = 'https://$cdn/soulink/app/';
 
   // String get createOcHtml => 'https://$cdn/soulink/createoc.html';
 
-  String get privacyHtml => 'https://$cdn/soulink/soulink_privacy.html';
+  String get privacyHtml => 'https://$cdn/mina/privacy.html';
 
-  String get termsHtml => 'https://$cdn/soulink/soulink_terms_of_service.html';
+  String get termsHtml => 'https://$cdn/mina/term.html';
 
   // String get feedBackUrl => 'https://discord.gg/qdRqGq5WDG?external=1';
 
