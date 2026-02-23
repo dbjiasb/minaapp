@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -21,6 +22,7 @@ import '../../../base/api_service/api_service.dart';
 import '../../../base/crypt/apis.dart';
 import '../../../base/push_service/push_service.dart';
 import '../../../base/router/route_helper.dart';
+import '../../../core/report/report_helper.dart';
 import '../../../core/util/cached_image.dart';
 import '../../../shared/toast/toast.dart';
 import '../chat_manager.dart';
@@ -142,7 +144,7 @@ class ChatTheaterRoomView extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: _onBackButtonClicked,
-            child: Container(width: 32, height: 32, alignment: Alignment.center, child: Image.asset(ImagePath.ic_arrow_left_circle, width: 32, height: 32)),
+            child: Container(width: 32, height: 32, alignment: Alignment.center, child: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, width: 32, height: 32)),
           ),
           SizedBox(width: 10),
           GetBuilder<ChatRoomViewController>(
@@ -188,13 +190,20 @@ class ChatTheaterRoomView extends StatelessWidget {
                           style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
                           maxLines: 1,
                         ),
-                        Text("Theater", style: TextStyle(color: Color(0xFFFFE407), fontSize: 12)),
+                        Text(Security.security_theater, style: TextStyle(color: Color(0xFFFFE407), fontSize: 12)),
                       ],
-                    ),
+                    )
                   ],
                 ),
               );
             },
+          ),
+          Spacer(),
+          IconButton(
+            onPressed: () {
+              ReportHelper.showReportDialog(viewController.session.id.safeParse());
+            },
+            icon: Icon(Icons.more_horiz, color: Colors.white, size: 20),
           ),
           SizedBox(width: 5),
         ],
@@ -415,7 +424,7 @@ class ChatRoomViewController extends GetxController {
   }
 
   static createSession(Map<String, dynamic> arguments) {
-    if (arguments["isTheater"] == true) {
+    if (arguments[Security.security_isTheater] == true) {
       return ChatSession.fromStory(arguments);
     }
 
@@ -745,9 +754,9 @@ class ChatRoomViewController extends GetxController {
 
     if (lastMessage is ChatTheaterBriefMessage) return;
 
-    Map params = {"sessionId": session.sessionId, "userId": MyAccount.userId};
-    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest("getSceneMergedInfo", params: params));
-    String brief = rsp.data[Security.security_info]?["storyBackground"] ?? "";
+    Map params = {Security.security_sessionId: session.sessionId, Security.security_userId: MyAccount.userId};
+    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getSceneMergedInfo, params: params));
+    String brief = rsp.data[Security.security_info]?[Security.security_storyBackground] ?? "";
 
     if (brief.isEmpty) return;
 

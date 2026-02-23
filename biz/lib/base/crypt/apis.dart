@@ -102,4 +102,7 @@ abstract final class Apis {
   static late final String security_slideRight = decrypt('48MXK4ljvClGlHj1DwvAiw=='); // slideRight
   static late final String security_startVideoCallMatch = decrypt('xwA2IbzLsQGur7uCTLrDyFVJRYxkFvPche3HfQQct/4='); // startVideoCallMatch
   static late final String security_getMsgDetail = decrypt('FmmVk/srKHFimiAKb+A93w=='); // getMsgDetail
+  static late final String security_getRecommendSceneList = decrypt('Gj41QcgbySO1+Tn7aJ+fR69Cy1MPdq+MdV8OgsBHarg='); // getRecommendSceneList
+  static late final String security_getSceneMergedInfo = decrypt('REa/Pxdg8atfT8bEpVaNZXG9NuVqAcEAxqTHKKGW++A='); // getSceneMergedInfo
+  static late final String security_getSceneSessionList = decrypt('OfGbVS3xjnQqyqr18dxk749fW8VGAgnRMsHVSfbP9v0='); // getSceneSessionList
 }

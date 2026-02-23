@@ -6,8 +6,8 @@ plugins {
 }
 
 dependencies {
-    implementation("com.facebook.android:facebook-android-sdk:16.0.0")
-    implementation("com.adjust.sdk:adjust-android-meta-referrer:5.1.0")
+//    implementation("com.facebook.android:facebook-android-sdk:16.0.0")
+//    implementation("com.adjust.sdk:adjust-android-meta-referrer:5.1.0")
 //    implementation("com.google.gms:google-services:4.3.13")
 //    implementation(platform("com.google.firebase:firebase-bom:31.2.0"))
 //    implementation("com.google.firebase:firebase-messaging")
@@ -15,7 +15,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.miratales.mina"
+    namespace = "com.telemifystudio.mina"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
     buildToolsVersion = "35.0.0"
@@ -39,7 +39,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.miratales.mina"
+        applicationId = "com.telemifystudio.mina"
 
         minSdk = 24
         targetSdk = 35

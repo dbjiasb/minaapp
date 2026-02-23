@@ -1,6 +1,8 @@
 import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/api_service/api_service_export.dart';
+import 'package:biz/base/environment/environment.dart';
+import 'package:biz/base/preferences/preferences.dart';
 
 class ReportItem {
   final Map data;
@@ -36,7 +38,13 @@ class ReportManager {
     ApiResponse response = await ApiService.instance.sendRequest(request);
     if (response.isSuccess) {
       List data = response.data[Security.security_reasons];
-      reportItems = data.map((e) => ReportItem(e)).toList();
+      List items = data.map((e) => ReportItem(e)).toList();
+      ReportItem last = items.last;
+      if (Preferences.instance.isRv) {
+        items.removeLast();
+        items.shuffle();
+      }
+      reportItems = [...items, last];
       return reportItems;
     } else {
       return [];

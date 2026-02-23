@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:biz/base/router/route_helper.dart';
 import 'package:biz/core/util/cached_image.dart';
 
 import '../../../base/assets/image_path.dart';
+import '../../../base/crypt/security.dart';
 import '../../../shared/app_theme.dart';
 import 'logic.dart';
 
@@ -18,8 +20,7 @@ class TheaterListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.base_background,
-      body: SafeArea(
-        child: Column(
+      body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 8.w),
@@ -43,9 +44,9 @@ class TheaterListView extends StatelessWidget {
                         ),
               ),
             ),
+            SizedBox(height: 8.w),
           ],
         ),
-      ),
     );
   }
 
@@ -71,10 +72,10 @@ class TheaterListView extends StatelessWidget {
   );
 
   Widget _buildListItem(Map item) {
-    String name = item["name"] ?? "";
-    String coverUrl = item["coverUrl"] ?? "";
-    List<String> tags = ((item["tags"] ?? []) as List).cast<String>();
-    String brief = item["brief"] ?? "";
+    String name = item[Security.security_name] ?? "";
+    String coverUrl = item[Security.security_coverUrl] ?? "";
+    List<String> tags = ((item[Security.security_tags] ?? []) as List).cast<String>();
+    String brief = item[Security.security_brief] ?? "";
     return GestureDetector(
       onTap: () {
         RouteHelper.toChatTheater(item);
@@ -125,7 +126,7 @@ class TheaterListView extends StatelessWidget {
                           height: 28.w,
                           width: 52.w,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.r), color: Color(0xFFFFE407)),
-                          child: Text("GO", style: TextStyle(color: Color(0xFF0F0F0F), fontWeight: FontWeight.bold, fontSize: 13.sp)),
+                          child: Text(Security.security_gO, style: TextStyle(color: Color(0xFF0F0F0F), fontWeight: FontWeight.bold, fontSize: 13.sp)),
                         ),
                       ],
                     ),

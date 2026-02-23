@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 import '../../../base/router/route_helper.dart';
 import '../../../core/util/cached_image.dart';
 import '../../../core/util/log_util.dart';
+import '../chat_room/chat_theater_room_view.dart';
 import '../chat_session.dart';
 import '../chat_voice_player.dart';
 import './chat_message.dart';
@@ -464,18 +465,18 @@ class ChatTextAudioView extends StatelessWidget {
     ChatTextAudioStatus status = textMessage.audioStatus.value;
     switch (status) {
       case ChatTextAudioStatus.unlock:
-        return Image.asset(ImagePath.play_icon, width: 16, height: 16);
+        return CachedImage(imageUrl: ImagePath.play_icon, width: 16, height: 16);
       case ChatTextAudioStatus.loading:
         return Container(
           padding: EdgeInsets.all(2),
           child: SizedBox(width: 12, height: 12, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)),
         );
       case ChatTextAudioStatus.ready:
-        return Image.asset(ImagePath.play_icon, width: 16, height: 16);
+        return CachedImage(imageUrl: ImagePath.play_icon, width: 16, height: 16);
       case ChatTextAudioStatus.playing:
-        return Image.asset(ImagePath.play_icon, width: 16, height: 16);
+        return CachedImage(imageUrl: ImagePath.play_icon, width: 16, height: 16);
       case ChatTextAudioStatus.pause:
-        return Image.asset(ImagePath.play_icon, width: 16, height: 16);
+        return CachedImage(imageUrl: ImagePath.play_icon, width: 16, height: 16);
     }
   }
 
@@ -519,13 +520,16 @@ class ChatTextAudioView extends StatelessWidget {
   }
 
   void unlockMessage(int usePrem) async {
-    textMessage.audioStatus.value = ChatTextAudioStatus.loading; //解锁中
-    bool success = await unlock?.call(message);
-    L.i('unlockMessage success: $success');
-    if (!success) {
-      textMessage.audioStatus.value = ChatTextAudioStatus.unlock;
-      return;
-    }
+    play();
+    // textMessage.audioStatus.value = ChatTextAudioStatus.unlock;
+    //
+    // textMessage.audioStatus.value = ChatTextAudioStatus.loading; //解锁中
+    // bool success = await unlock?.call(message);
+    // L.i('unlockMessage success: $success');
+    // if (!success) {
+    //   textMessage.audioStatus.value = ChatTextAudioStatus.unlock;
+    //   return;
+    // }
     // if (usePrem == 1) {
     //   if (MyAccount.isWkPrem) {
     //     Toast.show('Premium Benefits for Audio, used: ${MyAccount.freeAdoUsedTimes},total: ${MyAccount.freeAdoLeftTimes + MyAccount.freeAdoUsedTimes}');
@@ -540,8 +544,9 @@ class ChatTextAudioView extends StatelessWidget {
     String? path = ChatVoiceManager.instance.voicePathForUrl(textMessage.audioUrl);
 
     if (path == null) {
-      //下载
-      await download?.call(message);
+      await Get.find<ChatRoomViewController>().downloadMessage(textMessage);
+      //
+      // await download?.call(message);
     }
 
     ChatVoicePlayer.instance.play(textMessage);

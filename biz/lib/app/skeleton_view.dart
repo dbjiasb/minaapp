@@ -15,6 +15,7 @@ import '../business/home_page_lists/home_page.dart';
 import '../business/theater/theater_history_list/logic.dart';
 import '../business/theater/theater_history_list/view.dart';
 import '../business/theater/theater_list/view.dart';
+import '../core/util/cached_image.dart';
 import '../shared/app_theme.dart';
 import '../shared/formatters/date_formatter.dart';
 
@@ -150,40 +151,40 @@ class SkeletonViewController extends GetxController {
       pageBuilder: () {
         return KeepAliveWrapper(child: HomePageView()); //TheaterListView()
       },
-      selectedBuilder: () => Image.asset(ImagePath.bt_0_1, width: 28, height: 28),
-      normalBuilder: () => Image.asset(ImagePath.bt_0_0, width: 28, height: 28),
+      selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_1, width: 28, height: 28),
+      normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_0, width: 28, height: 28),
     ),
     // BottomBarItem(
     //   name: Security.security_Discovery,
     //   pageBuilder: () {
     //     return KeepAliveWrapper(child: DiscoveryView());
     //   },
-    //   selectedBuilder: () => Image.asset(ImagePath.explore_selected, width: 28, height: 28),
-    //   normalBuilder: () => Image.asset(ImagePath.explore_normal, width: 28, height: 28),
+    //   selectedBuilder: () => child: CachedImage(imageUrl: ImagePath.explore_selected, width: 28, height: 28),
+    //   normalBuilder: () => child: CachedImage(imageUrl: ImagePath.explore_normal, width: 28, height: 28),
     // ),
     // BottomBarItem(
     //   name: Security.security_createoc,
     //   pageBuilder: () {
     //     return Container();
     //   },
-    //   selectedBuilder: () => Image.asset(ImagePath.create_oc, width: 28, height: 28),
-    //   normalBuilder: () => Image.asset(ImagePath.create_oc, width: 28, height: 28),
+    //   selectedBuilder: () => child: CachedImage(imageUrl: ImagePath.create_oc, width: 28, height: 28),
+    //   normalBuilder: () => child: CachedImage(imageUrl: ImagePath.create_oc, width: 28, height: 28),
     // ),
     BottomBarItem(
       name: Security.security_chat,
       pageBuilder: () {
         return KeepAliveWrapper(child: TheaterHistoryListView());
       },
-      selectedBuilder: () => Image.asset(ImagePath.bt_1_1, width: 28, height: 28),
-      normalBuilder: () => Image.asset(ImagePath.bt_1_0, width: 28, height: 28),
+      selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_1_1, width: 28, height: 28),
+      normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_1_0, width: 28, height: 28),
     ),
     BottomBarItem(
       name: Security.security_personal,
       pageBuilder: () {
         return KeepAliveWrapper(child: AccountView());
       },
-      selectedBuilder: () => Image.asset(ImagePath.bt_2_1, width: 28, height: 28),
-      normalBuilder: () => Image.asset(ImagePath.bt_2_0, width: 28, height: 28),
+      selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_2_1, width: 28, height: 28),
+      normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_2_0, width: 28, height: 28),
     ),
   ];
 

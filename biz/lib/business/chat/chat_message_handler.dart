@@ -39,30 +39,6 @@ class ChatMessageHandler {
   }
 
   Future<void> upgradeToVersion(int toVersion) async {
-    if (toVersion == 2) {
-      database.execute(
-        'ALTER TABLE ${ChatMessage.tableName} ADD COLUMN ${Security.security_lockInfo}  TEXT',
-      );
-      database.execute(
-        'ALTER TABLE ${ChatMessage.tableName} ADD COLUMN ${Security.security_uuid}  TEXT',
-      );
-      database.execute(
-        'ALTER TABLE ${ChatMessage.tableName} ADD COLUMN ${Security.security_renewInfo}  TEXT',
-      );
-    } else if (toVersion == 4) {
-      database.execute(
-        'ALTER TABLE ${ChatMessage.tableName} ADD COLUMN  ${Security.security_like}  INTEGER DEFAULT 0',
-      );
-      database.execute(
-        'ALTER TABLE ${ChatMessage.tableName} ADD COLUMN ${Security.security_name}  TEXT',
-      );
-      database.execute(
-        'ALTER TABLE ${ChatMessage.tableName} ADD COLUMN ${Security.security_avatar}  TEXT',
-      );
-      database.execute(
-        'ALTER TABLE ${ChatMessage.tableName} ADD COLUMN  ${Security.security_sessionType}  INTEGER DEFAULT 0',
-      );
-    }
   }
 
   Future<int> insertMessage(ChatMessage message) async {

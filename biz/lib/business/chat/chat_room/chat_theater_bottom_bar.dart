@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import '../../../base/api_service/api_request.dart';
 import '../../../base/api_service/api_response.dart';
 import '../../../base/api_service/api_service.dart';
 import '../../../base/crypt/security.dart';
+import '../../../core/util/cached_image.dart';
 import 'chat_theater_room_view.dart';
 
 enum ChatRoomBottomBarState { simple, detailed, muse, gift }
@@ -104,7 +106,7 @@ class ChatTheaterBottomBar extends StatelessWidget {
                       onTap: () {
                         viewController.sendText(viewController.textController.text);
                       },
-                      child: Image.asset(ImagePath.ic_send_theater, height: 28, width: 28),
+                      child: CachedImage(imageUrl: ImagePath.ic_send_theater, height: 28, width: 28),
                     ),
                   ],
                 ),
@@ -148,8 +150,8 @@ class ChatTheaterBottomBar extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(left: 12, child: Image.asset(ImagePath.ic_theater_template_text_star, height: 24, width: 24)),
-        Positioned(bottom: 0, right: 12, child: Image.asset(ImagePath.ic_theater_template_text_star, height: 24, width: 24)),
+        Positioned(left: 12, child: CachedImage(imageUrl: ImagePath.ic_theater_template_text_star, height: 24, width: 24)),
+        Positioned(bottom: 0, right: 12, child: CachedImage(imageUrl: ImagePath.ic_theater_template_text_star, height: 24, width: 24)),
       ],
     );
   }
@@ -161,7 +163,7 @@ class ChatTheaterBottomBar extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (icon != null) Image.asset(icon, height: 16, width: 16),
+          if (icon != null) CachedImage(imageUrl: icon, height: 16, width: 16),
           if (icon != null) SizedBox(width: 4),
           Text(name, style: TextStyle(color: Color(0xFFB1AEAC), fontSize: 12)),
         ],
@@ -175,21 +177,21 @@ class ChatTheaterBottomBar extends StatelessWidget {
         children: [
           SizedBox(width: 16),
 
-          buildFunctionItem(viewController.isHideView.value ? "Show" : "Hide", ImagePath.ic_theater_hide, viewController.toggleHide),
+          buildFunctionItem(viewController.isHideView.value ? Security.security_show : Security.security_hide, ImagePath.ic_theater_hide, viewController.toggleHide),
 
           SizedBox(width: 24),
 
           if (!viewController.isHideView.value)
-            buildFunctionItem(viewController.isReview.value ? "Back" : "Review", ImagePath.ic_theater_review, viewController.toggleReview),
+            buildFunctionItem(viewController.isReview.value ? Security.security_back : Security.security_review, ImagePath.ic_theater_review, viewController.toggleReview),
 
           Spacer(),
 
           if (viewController.isShowEnter)
             viewController.isEnter.value
-                ? buildFunctionItem("Quick", ImagePath.ic_theater_quick, viewController.toggleEnter)
-                : buildFunctionItem("Enter", ImagePath.ic_theater_enter, viewController.toggleEnter),
+                ? buildFunctionItem(Security.security_quick, ImagePath.ic_theater_quick, viewController.toggleEnter)
+                : buildFunctionItem(Security.security_enter, ImagePath.ic_theater_enter, viewController.toggleEnter),
 
-          if (viewController.isShowContinue) buildFunctionItem("Tap to continue...", null, viewController.tapContinue),
+          if (viewController.isShowContinue) buildFunctionItem(Copywriting.security_tap_to_continue___, null, viewController.tapContinue),
 
           SizedBox(width: 16),
         ],
@@ -257,7 +259,7 @@ class ChatTheaterBottomBarController extends GetxController {
   void toggleEnter() => isEnter.value = !isEnter.value;
 
   Future<void> requestTemplateText() async {
-    Map params = {"targetUid": roomViewController.userId, "chatTo": roomViewController.userId, "targetAccountStatus": 2};
+    Map params = {Security.security_targetUid: roomViewController.userId, Security.security_chatTo: roomViewController.userId, Security.security_targetAccountStatus: 2};
     ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_queryInspirationWords, params: params));
     List rawData = rsp.data[Security.security_options] ?? [];
     List<Map> dataList = rawData.cast<Map>().safeSublist(0, 2);
@@ -265,7 +267,7 @@ class ChatTheaterBottomBarController extends GetxController {
       templateTexts.clear();
     }
     for (var item in dataList) {
-      String text = item["text"] ?? "";
+      String text = item[Security.security_text] ?? "";
       if (text.isNotEmpty) {
         templateTexts.add(text);
       }

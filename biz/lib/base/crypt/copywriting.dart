@@ -382,4 +382,9 @@ abstract final class Copywriting {
   static late final String security_turn_toward_me_slowly__like_I_just_arrived_ = decrypt('+JFm6jWnqdig46pQY/fjhuR+uNWicphoPULxsJtSmdUu/NowjBF8I27FNVtIhXjy'); // Turn toward me slowly, like I just arrived.
   static late final String security_twist_the_ring_on_your_finger_gently__eyes_thoughtful_as_you_fix_your_gaze_on_me_ = decrypt('8S4P1I2bmeCpmfA4fJxA18eHZ1SNuWwH44pQf/CRU/YF0fVlH03FejqUxVgvUDayg5ec1klIy84gZbqBYbFalFKzTwJNLHoKYHuX/SUooM3eYqW4r1CE2tRt+yTm6nBU'); // Twist the ring on your finger gently, eyes thoughtful as you fix your gaze on me.
   static late final String security_wrap_your_arms_around_your_knees__sitting_curled_up_slightly__eyes_warm_on_me_ = decrypt('KJbulitvX//0HUVmBs2j+DTPcwpkcJsyUqq+IKrXFhFeyPw4DZUKgtVvjem/F0LATqBpl0YMLdPSUAZvu0Wb8jtVILgX/YXkd3tstJo4xGE='); // Wrap your arms around your knees, sitting curled up slightly, eyes warm on me.
+  static late final String security_create_your_account = decrypt('B3/2y3lzkUbRh7P8fHU+eUM2LEeU8LOXYftMGXy1yb4='); // Create your account
+  static late final String security_input_content_here__Option_ = decrypt('00WQZCaXimRDywSMByfOqzFE6RIE4ZsAmB2ZXyKpvmM='); // Input content here (Option)
+  static late final String security_mina_Team = decrypt('NVlKHbr46BTBAtw3+S4zkQ=='); // Mina Team
+  static late final String security_story_background = decrypt('kCeSRjXKbdWVNDEWZNXjhLnd6kQXjInicaEc01XTed0='); // Story background
+  static late final String security_tap_to_continue___ = decrypt('CwDDQ1OW5mtJYJDnZkmHz4Qx5JhUeWP0r/lc67TdNFo='); // Tap to continue...
 }

@@ -12,7 +12,7 @@ class UiUtils {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Image.asset(ImagePath.img_empty, width: 156, height: 156),
+          // child: CachedImage(imageUrl: ImagePath.img_empty, width: 156, height: 156),
           Text(
             tips ?? Copywriting.security_no_data,
             style: TextStyle(

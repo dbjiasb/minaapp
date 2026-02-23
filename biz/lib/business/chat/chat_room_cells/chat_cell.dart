@@ -187,7 +187,7 @@ class ChatCell extends StatelessWidget {
   //           onTap: () {
   //             onContinue?.call(message);
   //           },
-  //           child: Image.asset(IMGP.ai_continue, width: 24, height: 24),
+  //           child: CachedImage(imageUrl: ImagePath.ai_continue, width: 24, height: 24),
   //         ).marginOnly(left: 8)
   //         : SizedBox.shrink();
   //   });

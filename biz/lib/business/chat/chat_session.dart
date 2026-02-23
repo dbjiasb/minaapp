@@ -167,11 +167,11 @@ class ChatSession {
     draft = (router[Security.security_draft] as String? ?? '').obs;
 
   ChatSession.fromStory(Map router)
-      : id = "${router["targetRoleInfo"]?["targetUid"]}",
+      : id = "${router["targetRoleInfo"]?[Security.security_targetUid]}",
         name = router[Security.security_name],
-        avatar = router["backgroundUrl"],
+        avatar = router[Security.security_backgroundUrl],
         // backgroundUrl = (router[Security.security_backgroundUrl] as String? ?? '').obs,
-        backgroundUrl = (router['coverUrl'] as String? ?? '').obs,
+        backgroundUrl = (router[Security.security_coverUrl] as String? ?? '').obs,
         lastMessageTime =
         router[Security.security_lastMessageTime] == null
             ? DateTime.now()
@@ -206,7 +206,7 @@ class ChatSession {
   static ChatSession get offChatSession => ChatSession(
     id: '$kOffChatSessionId',
     // name: Copywriting.security_soulink_Team,
-    name: "Mina Team",
+    name: Copywriting.security_mina_Team,
     avatar: "",
     // avatar: "${ApiConfig.cdn}/services/${Security.security_client_config}/icon/soulink_team_v2.png",
     lastMessageText: Copywriting.security_contact_us_for_support_,

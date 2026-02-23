@@ -23,13 +23,13 @@ class DataCenter {
 
   static DataCenter get instance => _instance;
 
-  static int version = 4;
-  static String name = Security.security_soulink_db;
+  static int version = 1;
+  static String name = 'mina.db';
 
   Map<String, int> upgradeInfo = {};
   Map<String, int> createInfo = {};
 
-  static String faker = Security.security_helloworld;
+  static String faker = Security.security_mina;
 
   late Database database;
 

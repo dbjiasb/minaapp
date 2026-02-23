@@ -39,6 +39,6 @@ abstract final class Routers {
   static String createPostImage = Routes.security__moment_create_post_image;
   static String createMoment = Routes.security__moment_create_moment;
   static String detailMoment = Routes.security__moment_detail_moment;
-  static String chatTheater = "/chatTheater";
+  static String chatTheater = Routes.security__chatTheater;
 
 }

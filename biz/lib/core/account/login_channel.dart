@@ -16,6 +16,7 @@ import 'package:biz/core/account/account_service.dart';
 
 import '../../shared/app_theme.dart';
 import '../../shared/toast/toast.dart';
+import '../util/cached_image.dart';
 
 class LoginChannel {
   LoginChannel(this.channel, this.channelName, this.channelIcon, this.channelColor, this.channelTextColor, this.onTap);
@@ -59,8 +60,8 @@ class LoginChannelView extends StatelessWidget {
         child: IconButton(
           padding: const EdgeInsets.all(0),
           onPressed: null,
-          icon: Image.asset(ImagePath.selecet_0),
-          selectedIcon: Image.asset(ImagePath.selecet_1),
+          icon: CachedImage(imageUrl: ImagePath.selecet_0),
+          selectedIcon: CachedImage(imageUrl: ImagePath.selecet_1),
           iconSize: 12,
           isSelected: viewController.checked.value,
         ),
@@ -122,7 +123,7 @@ class LoginChannelView extends StatelessWidget {
     LoginChannel email = LoginChannel(
       Security.security_email,
       Copywriting.security_sign_in_with_E_mail,
-      Image.asset(IMGP.email_icon, width: 24, height: 24),
+      CachedImage(imageUrl: ImagePath.email_icon, width: 24, height: 24),
       Color(0xFF333333),
       Colors.white,
           () {
@@ -132,7 +133,7 @@ class LoginChannelView extends StatelessWidget {
     LoginChannel apple = LoginChannel(
       Security.security_apple,
       Copywriting.security_sign_in_with_Apple,
-      Image.asset(IMGP.apple_icon, width: 24, height: 24),
+      CachedImage(imageUrl: ImagePath.apple_icon, width: 24, height: 24),
       Color(0xFF333333),
       Colors.white,
           () async {
@@ -225,7 +226,7 @@ class LoginChannelView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(ImagePath.loginbg, height: double.infinity, width: double.infinity, fit: BoxFit.cover),
+        CachedImage(imageUrl: ImagePath.loginbg, height: double.infinity, width: double.infinity, fit: BoxFit.cover),
         Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
@@ -248,7 +249,7 @@ class LoginChannelView extends StatelessWidget {
                 // Expanded(
                 //   child: Container(
                 //     alignment: Alignment.center,
-                //     child: SizedBox(width: 88, height: 88, child: Image.asset(ImagePath.logo512, fit: BoxFit.fill)),
+                //     child: SizedBox(width: 88, height: 88, child: CachedImage(imageUrl: ImagePath.logo512, fit: BoxFit.fill)),
                 //   ),
                 // ),
                 Spacer(),

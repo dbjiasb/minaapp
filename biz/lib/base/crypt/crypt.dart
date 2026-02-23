@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:encrypt/encrypt.dart' as Encrypt;
 import 'package:biz/base/crypt/security.dart';
 
-String cryptTag = 'mina';
-String cryptKey = 'tF7sV9kS8zJ5yP9p';
+String cryptTag = Security.security_mina;
+String cryptKey = Security.security_tF7sV9kS8zJ5yP9p;
 
 //加密器
 class Encryptor {

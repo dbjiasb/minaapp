@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
+import '../../core/util/cached_image.dart';
 import '../../core/util/log_util.dart';
 import '../../shared/app_theme.dart';
 import '../assets/image_path.dart';
@@ -132,7 +133,7 @@ class _WebViewState extends State<WebView> {
                 systemOverlayStyle: SystemUiOverlayStyle.light,
                 title: Text(title, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
                 backgroundColor: AppColors.base_background,
-                leading: IconButton(icon: Image.asset(ImagePath.ic_arrow_left_circle, width: 32, height: 32), onPressed: () => RH.back()),
+                leading: IconButton(icon: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, width: 32, height: 32), onPressed: () => RH.back()),
                 actions: [
                   if (_isLoading)
                     Padding(

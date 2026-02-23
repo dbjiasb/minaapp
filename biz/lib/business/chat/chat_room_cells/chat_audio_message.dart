@@ -12,6 +12,7 @@ import 'package:biz/shared/app_theme.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/account/account_service.dart';
+import '../../../core/util/cached_image.dart';
 import '../chat_voice_manager.dart';
 import '../chat_voice_player.dart';
 
@@ -311,8 +312,7 @@ class ChatAudioView extends StatelessWidget {
             fontWeight: AppFonts.medium,
           ),
         ),
-        // Obx(() => Image.asset(imagePaths[currentIndex.value], height: 20, width: 20)),
-        Image.asset(ImagePath.play_icon, height: 20, width: 20),
+        CachedImage(imageUrl: ImagePath.play_icon, height: 20, width: 20),
       ],
     );
   }

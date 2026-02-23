@@ -125,15 +125,6 @@ class ChatSessionHandler {
   }
 
   Future<void> upgradeToVersion(int toVersion) async {
-    if (toVersion == 3) {
-      database.execute('ALTER TABLE $tableName ADD COLUMN ${Security.security_accountType}  INTEGER DEFAULT 1;');
-    }
-    if (toVersion == 4) {
-      database.execute('ALTER TABLE $tableName ADD COLUMN ${Security.security_type}  INTEGER DEFAULT 0;');
-      database.execute('ALTER TABLE $tableName ADD COLUMN ${Security.security_level} INTEGER DEFAULT 1;');
-      database.execute('ALTER TABLE $tableName ADD COLUMN ${Security.security_nextLevelRatio} INTEGER DEFAULT 0;');
-      database.execute('ALTER TABLE $tableName ADD COLUMN ${Security.security_draft} TEXT;');
-    }
   }
 
   Future<int> unreadCount() async {

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -58,7 +59,7 @@ class RouteHelper {
   static Route<dynamic>? lastChatRoute;
 
   static Future toChatTheater(Map map) async {
-    map["isTheater"] = true;
+    map[Security.security_isTheater] = true;
     toPage(Routers.chatTheater, args: map);
   }
 

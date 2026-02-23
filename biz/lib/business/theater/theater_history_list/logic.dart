@@ -1,9 +1,11 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/api_service/api_request.dart';
 import 'package:biz/base/api_service/api_response.dart';
 
 import '../../../base/api_service/api_service.dart';
+import '../../../base/crypt/apis.dart';
 import '../../../base/crypt/security.dart';
 
 class TheaterHistoryListViewLogic extends GetxController {
@@ -39,10 +41,10 @@ class TheaterHistoryListViewLogic extends GetxController {
 
   void getListData() async {
     Map<String, dynamic> args = {};
-    args["pageIndex"] = page;
-    args["pageSize"] = pageSize;
+    args[Security.security_pageIndex] = page;
+    args[Security.security_pageSize] = pageSize;
     try {
-      ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest("getSceneSessionList", params: args));
+      ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getSceneSessionList, params: args));
       List rawData = rsp.data[Security.security_param] ?? [];
       List<Map> data = rawData.cast<Map>();
       if (page == 0) {

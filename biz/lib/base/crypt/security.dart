@@ -403,7 +403,6 @@ abstract final class Security {
   static late final String security_kHasVideoPrompted = decrypt('SV1cJbrq0qdpmXy/YTAXr8IWZv3enWJURbK618EiCd4='); // kHasVideoPrompted
   static late final String security_kPhoneId = decrypt('L3wS5ST0gY3YnO8x80/gXQ=='); // kPhoneId
   static late final String security_kUser = decrypt('zcKp4PbCqk+jvDDYljgCFw=='); // kUser
-  static late final String security_soulink_db = decrypt('9SwVA8Y1snoVCY/IRoi91g=='); // soulink.db
   static late final String security_kEventCenterRefreshCurrency = decrypt('Y6y7jvSmQGSR4KqFUvjoU0JJ1mDjpjJpUdjDIqgE2FM='); // kEventCenterRefreshCurrency
   static late final String security_canceled = decrypt('ueMRfdUdh75HyWsKceTCVA=='); // Canceled
   static late final String security_eNV = decrypt('koul4i6jpgtvkZhtmYAn1A=='); // ENV
@@ -896,4 +895,21 @@ abstract final class Security {
   static late final String security_isSuccess = decrypt('zP0CBzDfJV11e5OsqfsELw=='); // isSuccess
   static late final String security_generate_video_prompts = decrypt('Yhwmo0Mzj6cRQ+UyjB1a5tfWtWK199BM8zjL1DDkT38='); // generate_video_prompts
   static late final String security_kPrefLastRefreshTime = decrypt('jJuQeu/Wsm7bvX4RDZY9/r3q7QnSTvongZ6bHJTa3w0='); // kPrefLastRefreshTime
+  static late final String security_back = decrypt('bmuiaJGI+uKOFZwzQb7W7Q=='); // Back
+  static late final String security_gO = decrypt('DykW1cxRAWuMLU4ZkBlTnQ=='); // GO
+  static late final String security_hide = decrypt('ZrUDOVyUdWDQGzq0C0PA6g=='); // Hide
+  static late final String security_history = decrypt('yNzxEBz7iBWHBMenw2fwnQ=='); // History
+  static late final String security_quick = decrypt('iaeU0TcPj0PFPJeQoBTVhg=='); // Quick
+  static late final String security_review = decrypt('POl05nC5h3BHtrxVJeoIWg=='); // Review
+  static late final String security_show = decrypt('qIViN2L7T7m7pNKyw8OwWA=='); // Show
+  static late final String security_story = decrypt('6L8U79pIZAWHWYhCVb1DxA=='); // Story
+  static late final String security_theater = decrypt('zO0TYSvigOv0qT9Qx+m/iw=='); // Theater
+  static late final String security_brief = decrypt('sn6Uelq3pakl9r9C6mSEhg=='); // brief
+  static late final String security_chatTo = decrypt('hlm5OBQKKy3yfrKtd6QePA=='); // chatTo
+  static late final String security_isTheater = decrypt('JsOTy4rsTUhw5518sfZlkA=='); // isTheater
+  static late final String security_mina = decrypt('tEYzUW+nW9yrpqMZ3grakA=='); // mina
+  static late final String security_normal = decrypt('K2R6f2JaiuG5eTk/X2LCDA=='); // normal
+  static late final String security_pageReal = decrypt('lglgvdRs7S/+inoHKe+7dA=='); // pageReal
+  static late final String security_storyBackground = decrypt('wZawld808H4yTX3Yh9RFYw=='); // storyBackground
+  static late final String security_tF7sV9kS8zJ5yP9p = decrypt('6/Qeg/AQU5k+tX8BvxrBzV/X7/0pYlWpJiQk7r+9DyY='); // tF7sV9kS8zJ5yP9p
 }

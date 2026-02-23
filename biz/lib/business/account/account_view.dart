@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/assets/image_path.dart';
@@ -14,6 +15,7 @@ import '../../base/api_service/api_response.dart';
 import '../../base/app_info/app_manager.dart';
 import '../../base/event_center/event_center.dart';
 import '../../base/router/route_helper.dart';
+import '../../core/util/cached_image.dart';
 import '../../core/util/log_util.dart';
 import '../../shared/alert.dart';
 import '../../shared/interactions.dart';
@@ -65,11 +67,11 @@ class AccountView extends StatelessWidget {
                               decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.circular(12)),
                               child: Column(
                                 children: [
-                                  _settingItem("About", ImagePath.set_about, toAbout),
-                                  _settingItem("Terms of service", ImagePath.set_tos, checkTermsOfService),
-                                  _settingItem("Privacy policy", ImagePath.set_privacy, checkPrivacyPolicy),
+                                  _settingItem(Security.security_about, ImagePath.set_about, toAbout),
+                                  _settingItem(Copywriting.security_terms_of_service, ImagePath.set_tos, checkTermsOfService),
+                                  _settingItem(Copywriting.security_privacy_policy, ImagePath.set_privacy, checkPrivacyPolicy),
                                   // _settingItem("Feedback log", ImagePath.ic_feedback_log, feedbackLog),
-                                  _settingItem("Account Deletion", ImagePath.set_delete, deleteAccount),
+                                  _settingItem(Copywriting.security_account_Deletion, ImagePath.set_delete, deleteAccount),
                                 ],
                               ),
                             ),
@@ -106,7 +108,7 @@ class AccountView extends StatelessWidget {
           //               child: Center(
           //                 child: Row(
           //                   children: [
-          //                     Image.asset(ImagePath.ic_edit, width: 16, height: 16),
+          //                     child: CachedImage(imageUrl: ImagePath.ic_edit, width: 16, height: 16),
           //                     Text(Copywriting.security_edit, style: TextStyle(color: Color(0xFFC1C5CD), fontSize: 12, fontWeight: FontWeight.w500)),
           //                   ],
           //                 ),
@@ -133,12 +135,12 @@ class AccountView extends StatelessWidget {
           children: [
             SizedBox(width: 12),
 
-            Image.asset(icon, width: 20, height: 20),
+            CachedImage(imageUrl: icon, width: 20, height: 20),
             SizedBox(width: 8),
 
             Text(name, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
             Spacer(),
-            Image.asset(ImagePath.ic_arrow_right_circle, width: 20, height: 20),
+            CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
 
             SizedBox(width: 12),
           ],
@@ -157,7 +159,7 @@ class AccountView extends StatelessWidget {
         width: double.infinity,
         alignment: Alignment.center,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color(0xFF261F1F)),
-        child: Text("Log out", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFFF8397D))),
+        child: Text(Copywriting.security_log_out, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFFF8397D))),
       ),
     );
   }
@@ -243,7 +245,7 @@ class AccountView extends StatelessWidget {
                 spacing: 2,
                 children: [
                   Text('ID:$ID', style: TextStyle(color: Color(0xFF7F848F), fontSize: 10, fontWeight: FontWeight.w500)),
-                  Image.asset(ImagePath.ic_copy, height: 14, width: 14),
+                  CachedImage(imageUrl: ImagePath.ic_copy, height: 14, width: 14),
                 ],
               ),
             ),
@@ -278,11 +280,11 @@ class AccountView extends StatelessWidget {
   //           child: Row(
   //             children: [
   //               SizedBox(width: 12),
-  //               Image.asset(ImagePath.ic_diamond, width: 24, height: 24),
+  //               child: CachedImage(imageUrl: ImagePath.ic_diamond, width: 24, height: 24),
   //               SizedBox(width: 4),
   //               Obx(() => Text(MyAccount.gems.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
   //               Spacer(),
-  //               Image.asset(ImagePath.ic_arrow_right_circle, width: 16, height: 16),
+  //               child: CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 16, height: 16),
   //               SizedBox(width: 12),
   //             ],
   //           ),
@@ -301,11 +303,11 @@ class AccountView extends StatelessWidget {
   //           child: Row(
   //             children: [
   //               SizedBox(width: 12),
-  //               Image.asset(ImagePath.ic_coin, width: 24, height: 24),
+  //               child: CachedImage(imageUrl: ImagePath.ic_coin, width: 24, height: 24),
   //               SizedBox(width: 4),
   //               Obx(() => Text(MyAccount.coins.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
   //               Spacer(),
-  //               Image.asset(ImagePath.ic_arrow_right_circle, width: 16, height: 16),
+  //               child: CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 16, height: 16),
   //               SizedBox(width: 12),
   //             ],
   //           ),
@@ -397,7 +399,7 @@ class AccountView extends StatelessWidget {
   //         child: Row(
   //           spacing: 8,
   //           children: [
-  //             Image.asset(ImagePath.ic_freelie_pro, height: 24, width: 24),
+  //             child: CachedImage(imageUrl: ImagePath.ic_freelie_pro, height: 24, width: 24),
   //             Expanded(
   //               child: Text(
   //                 !MyAccount.isSubscribed ? "Feelie Pro" : MyAccount.premName,
@@ -416,7 +418,7 @@ class AccountView extends StatelessWidget {
   //                     style: const TextStyle(color: AppColors.mainLightColor, fontSize: 14, fontWeight: FontWeight.bold),
   //                   ),
   //                   SizedBox(width: 4),
-  //                   Image.asset(ImagePath.ic_arrow_right_circle, height: 16, width: 16),
+  //                   child: CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, height: 16, width: 16),
   //                 ],
   //               )
   //                   : Container(
@@ -449,7 +451,7 @@ class AccountView extends StatelessWidget {
   //       //   onTap: () {
   //       //     CreateOcDialog.show();
   //       //   },
-  //       //   child: Image.asset(ImagePath.ic_mine_create, height: 24, width: 24),
+  //       //   child: CachedImage(imageUrl: ImagePath.ic_mine_create, height: 24, width: 24),
   //       // ),
   //     ],
   //   );
@@ -462,7 +464,7 @@ class AccountView extends StatelessWidget {
   //         ? SliverToBoxAdapter(
   //       child: Column(
   //         children: [
-  //           Image.asset(ImagePath.img_empty, height: 180, width: 180),
+  //           child: CachedImage(imageUrl: ImagePath.img_empty, height: 180, width: 180),
   //           GestureDetector(
   //             onTap: () {
   //               CreateOcDialog.show();
@@ -510,7 +512,7 @@ class AccountView extends StatelessWidget {
   //                 children: [
   //                   Column(
   //                     children: [
-  //                       Image.asset(ImagePath.ic_mine_task, width: 28, height: 28),
+  //                       child: CachedImage(imageUrl: ImagePath.ic_mine_task, width: 28, height: 28),
   //                       // Icon(Icons.task, color: Colors.white),
   //                       SizedBox(height: 4),
   //                       Text(Copywriting.security_daily_Task, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
@@ -539,7 +541,7 @@ class AccountView extends StatelessWidget {
   //                 children: [
   //                   Column(
   //                     children: [
-  //                       Image.asset(ImagePath.ic_mine_notification, width: 28, height: 28),
+  //                       child: CachedImage(imageUrl: ImagePath.ic_mine_notification, width: 28, height: 28),
   //                       SizedBox(height: 4),
   //                       Text(Security.security_notifications, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
   //                     ],
@@ -562,7 +564,7 @@ class AccountView extends StatelessWidget {
   //               },
   //               child: Column(
   //                 children: [
-  //                   Image.asset(ImagePath.ic_mine_collection, width: 28, height: 28),
+  //                   child: CachedImage(imageUrl: ImagePath.ic_mine_collection, width: 28, height: 28),
   //                   SizedBox(height: 4),
   //                   Text(Security.security_collections, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
   //                 ],
@@ -576,7 +578,7 @@ class AccountView extends StatelessWidget {
   //               child: Column(
   //                 children: [
   //                   // Icon(Icons.feedback, color: Colors.white),
-  //                   Image.asset(ImagePath.ic_mine_feedback, width: 28, height: 28),
+  //                   child: CachedImage(imageUrl: ImagePath.ic_mine_feedback, width: 28, height: 28),
   //                   SizedBox(height: 4),
   //                   Text(Security.security_feedback, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
   //                 ],

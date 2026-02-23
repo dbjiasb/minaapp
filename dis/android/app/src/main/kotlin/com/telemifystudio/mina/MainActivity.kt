@@ -1,4 +1,4 @@
-package com.miratales.mina
+package com.telemifystudio.mina
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,4 +1,6 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/copywriting.dart';
+import 'package:biz/core/util/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/core/report/report_manager.dart';
@@ -48,7 +50,7 @@ class _ReportContentViewState extends State<ReportContentView> {
                 children: [
                   Row(
                     children: [
-                      Image.asset(selectedIndex == index ? ImagePath.selecet_1 : ImagePath.selecet_0, width: 16, height: 16),
+                      CachedImage(imageUrl: selectedIndex == index ? ImagePath.selecet_1 : ImagePath.selecet_0, width: 16, height: 16),
                       SizedBox(width: 4),
                       Text(item.desc, style: TextStyle(color: Color(0xFF999999), fontSize: 13, fontWeight: FontWeight.w500)),
                     ],
@@ -63,7 +65,7 @@ class _ReportContentViewState extends State<ReportContentView> {
                         },
                         controller: textEditingController,
                         decoration: InputDecoration(
-                          hintText: Copywriting.security_describe_the_issue,
+                          hintText: Copywriting.security_input_content_here__Option_,
                           hintStyle: TextStyle(color: Color(0xFFAFAFAF), fontSize: 11, fontWeight: FontWeight.w500),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.all(12),

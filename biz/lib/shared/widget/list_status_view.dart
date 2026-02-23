@@ -17,7 +17,7 @@ class ListStatusView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Image.asset(ImagePath.img_empty, width: 180, height: 180),
+          // child: CachedImage(imageUrl: ImagePath.img_empty, width: 180, height: 180),
           // Text(emptyDesc ?? Copywriting.security_no_data, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF9EA1A8))),
           // Text(description ?? Copywriting.security_no_data, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF9EA1A8))),
           // >>>>>>> feature/feature_1.0.0
@@ -31,7 +31,7 @@ class ListStatusView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Image.asset(ImagePath.img_empty, width: 156, height: 156),
+          // child: CachedImage(imageUrl: ImagePath.img_empty, width: 156, height: 156),
           Text(
             errorDesc ?? Copywriting.security_network_exception__please_try_again_later,
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF9EA1A8)),

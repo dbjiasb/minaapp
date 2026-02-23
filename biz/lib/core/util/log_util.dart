@@ -40,17 +40,17 @@ class AppLog {
   static String _logDirPath = '';
 
   static init() async {
-    _logDirPath = '${(await getTemporaryDirectory()).path}/mina_logs';
-    String fileName = 'mina_log_${DateFormat('MM-dd-yyyy').format(DateTime.now())}.log';
-    final path = '$_logDirPath/$fileName';
-    File file = await File(path).create(recursive: true);
-    FileOutput output = FileOutput(file: file);
-    debugPrint('app log path: $path');
-    _logger = Logger(
-        filter: ProductionFilter(),
-        output: output,
-        printer: MinaLogPrinter()
-    );
+    // _logDirPath = '${(await getTemporaryDirectory()).path}/mina_logs';
+    // String fileName = 'mina_log_${DateFormat('MM-dd-yyyy').format(DateTime.now())}.log';
+    // final path = '$_logDirPath/$fileName';
+    // File file = await File(path).create(recursive: true);
+    // FileOutput output = FileOutput(file: file);
+    // debugPrint('app log path: $path');
+    // _logger = Logger(
+    //     filter: ProductionFilter(),
+    //     output: output,
+    //     printer: MinaLogPrinter()
+    // );
   }
 
   void imp_d(String msg) {
@@ -68,9 +68,9 @@ class AppLog {
     _logger.e('[VCE] $msg');
   }
 
-  static void d(String msg) => AppLog().imp_d(msg);
-  static void i(String msg) => AppLog().imp_i(msg);
-  static void e(String msg) => AppLog().imp_e(msg);
+  static void d(String msg) {}//=> AppLog().imp_d(msg);
+  static void i(String msg) {}//=> AppLog().imp_i(msg);
+  static void e(String msg) {}//=> AppLog().imp_e(msg);
 
   //// upload
   static Future<bool> upload() async {

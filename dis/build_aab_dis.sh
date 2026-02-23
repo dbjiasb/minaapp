@@ -1,8 +1,8 @@
 #!/bin/bash -l
 
 echo " ------------- Build AAB Release --------------------"
-#export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
-alias flutter329='/Users/roll/Roll/Library/flutter3.29/bin/flutter'
+export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
+alias flutter329='/Users/roll/Roll/Library/flutter3.35/bin/flutter'
 
 flutter329 --version
 

@@ -6,6 +6,7 @@ import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/shared/app_theme.dart';
 
 import '../base/crypt/security.dart';
+import '../core/util/cached_image.dart';
 
 typedef AsyncContentWidgetBuilder<T> = Widget Function(T data, BuildContext context);
 
@@ -15,7 +16,7 @@ extension AppBarExt on AppBar {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Image.asset(ImagePath.img_empty, width: 172, height: 146),
+          // child: CachedImage(imageUrl: ImagePath.img_empty, width: 172, height: 146),
           Text(
             tips ?? Security.security_empty,
             // style: const TextStyle(color: SWColors.t1, fontSize: 16, fontWeight: FontWeight.normal),
@@ -74,7 +75,7 @@ extension AppBarExt on AppBar {
           leading ??
           Padding(
             padding: const EdgeInsets.only(left: 8),
-            child: IconButton(onPressed: onPressed ?? () => Get.back(), icon: Image.asset(ImagePath.ic_arrow_left_circle, fit: BoxFit.cover, height: 24, width: 24)),
+            child: IconButton(onPressed: onPressed ?? () => Get.back(), icon: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, fit: BoxFit.cover, height: 24, width: 24)),
           ),
     );
   }
@@ -87,7 +88,7 @@ extension AppBarExt on AppBar {
       elevation: 0,
       actions: actions,
       leadingWidth: leadingWidth,
-      leading: IconButton(icon: Image.asset(ImagePath.ic_arrow_left_circle, fit: BoxFit.cover, height: 24, width: 24), onPressed: Get.back),
+      leading: IconButton(icon: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, fit: BoxFit.cover, height: 24, width: 24), onPressed: Get.back),
     );
   }
 }

@@ -1,6 +1,8 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../base/crypt/security.dart';
 import '../../shared/widget/keep_alive_wrapper.dart';
 import '../theater/theater_list/view.dart';
 
@@ -51,7 +53,7 @@ class HomePageView extends StatelessWidget {
                     // Positioned(
                     //     bottom: -8,
                     //     child: isSelected
-                    //         ? Image.asset(ImagePath.tab_selected, width: 40, height: 10)
+                    //         ? child: CachedImage(imageUrl: ImagePath.tab_selected, width: 40, height: 10)
                     //         : SizedBox()
                     // )
                   ],
@@ -66,7 +68,7 @@ class HomePageView extends StatelessWidget {
           bottom: false,
           child: Column(
             children: [
-              SizedBox(height: 40,child: tabBar,).marginOnly(bottom: 8),
+              SizedBox(height: 40,child: tabBar,),
               Expanded(
                 child: PageView.builder(
                   itemBuilder: (context, index) {
@@ -103,7 +105,7 @@ class HomePageViewController extends GetxController with GetTickerProviderStateM
 
   void initTabs() {
     items = [
-      RoleListItem('Story', () => KeepAliveWrapper(child: TheaterListView())),
+      RoleListItem(Security.security_story, () => KeepAliveWrapper(child: TheaterListView())),
       // RoleListItem('Character', () => KeepAliveWrapper(child: RoleListView(type: RoleListType.ai_and_script))),
       // RoleListItem(Security.security_community, () => KeepAliveWrapper(child: RoleListView(type: RoleListType.ugc))),
       // RoleListItem(Security.security_anime, () => KeepAliveWrapper(child: RoleListView(type: RoleListType.anime))),

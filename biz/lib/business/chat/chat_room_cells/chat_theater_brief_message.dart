@@ -1,5 +1,7 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 
+import '../../../base/crypt/copywriting.dart';
 import '../../../base/crypt/security.dart';
 import './chat_cell.dart';
 import 'chat_message.dart';
@@ -54,7 +56,7 @@ class ChatTheaterBriefCell extends ChatCell {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Story background", style: TextStyle(fontSize: 11, color: Color(0xFF0F0F0F), fontWeight: FontWeight.bold)),
+              Text(Copywriting.security_story_background, style: TextStyle(fontSize: 11, color: Color(0xFF0F0F0F), fontWeight: FontWeight.bold)),
               SizedBox(height: 10,),
               Text(chatTheaterBriefMessage.brief, style: TextStyle(fontSize: 11, color: Color(0x9F0F0F0F), fontWeight: FontWeight.bold)),
             ],

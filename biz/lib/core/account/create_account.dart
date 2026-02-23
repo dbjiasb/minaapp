@@ -1,5 +1,7 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 
+import 'package:biz/core/util/cached_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -164,14 +166,14 @@ class CreateAccountView extends StatelessWidget {
         },
         child: Stack(
           children: [
-            Image.asset(ImagePath.loginbg, height: double.infinity, width: double.infinity, fit: BoxFit.cover),
+            CachedImage(imageUrl: ImagePath.loginbg, height: double.infinity, width: double.infinity, fit: BoxFit.cover),
             SafeArea(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     // Container(
                     //   padding: EdgeInsets.fromLTRB(140, 140, 140, 0),
-                    //   child: SizedBox(width: 88, height: 88, child: Image.asset(ImagePath.apple_icon, fit: BoxFit.fill)),
+                    //   child: SizedBox(width: 88, height: 88, child: CachedImage(imageUrl: ImagePath.apple_icon, fit: BoxFit.fill)),
                     // ),
                     Container(height: 228),
                     SizedBox(height: 40),
@@ -181,7 +183,7 @@ class CreateAccountView extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           alignment: Alignment.centerLeft,
-                          child: Text("Create your account", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
+                          child: Text(Copywriting.security_create_your_account, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
                         ),
                         SizedBox(height: 32),
                         _buildMailInputView(),
@@ -204,7 +206,7 @@ class CreateAccountView extends StatelessWidget {
                     width: 36,
                     height: 36,
                     alignment: Alignment.center,
-                    child: Image.asset(ImagePath.ic_arrow_left_circle, width: 36, height: 36),
+                    child: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, width: 36, height: 36),
                   ),
                 ),
               ),

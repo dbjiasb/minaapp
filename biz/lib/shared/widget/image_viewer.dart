@@ -46,7 +46,7 @@ class ImageViewer extends StatelessWidget {
               onTap: () {
                 EventCenter.instance.sendEvent(kChatImageViewGenerateVideo, {Security.security_imageUrl: imageUrl, Security.security_desc: imageDes});
               },
-              child: Image.asset(ImagePath.play_icon, height: 24, width: 24),
+              child: CachedImage(imageUrl: ImagePath.play_icon, height: 24, width: 24),
             ),
 
           if (canDownload == 1)

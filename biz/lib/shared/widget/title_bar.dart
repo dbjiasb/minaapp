@@ -69,7 +69,7 @@ class StyleTabBars extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Text(title, style: selectedStyle ?? _defaultSelectedStyle, textScaler: TextScaler.noScaling),
-          // Positioned(bottom: -5, child: Image.asset(ImagePath.tab_selected, width: 40, height: 10)),
+          // Positioned(bottom: -5, child: CachedImage(imageUrl: ImagePath.tab_selected, width: 40, height: 10)),
         ],
       ),
     );

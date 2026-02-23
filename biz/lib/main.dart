@@ -34,11 +34,11 @@ void startApp(List<String> args) async {
   ]);
   try {
     await AppLog.init();
-    await AppManager.instance.init();
     await Preferences.instance.init();
     await DeviceUtil.init();
-    await FileManager.instance.init();
+    await AppManager.instance.init();
     await DataCenter.instance.init();
+    await FileManager.instance.init();
     // await Firebase.initializeApp();
   } catch (e) {
     debugPrint('startApp error: $e');

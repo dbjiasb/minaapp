@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -6,6 +7,7 @@ import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/core/util/cached_image.dart';
 
 import '../../../base/assets/image_path.dart';
+import '../../../base/crypt/security.dart';
 import '../../../base/router/route_helper.dart';
 import '../../../shared/app_theme.dart';
 import 'logic.dart';
@@ -25,7 +27,7 @@ class TheaterHistoryListView extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 16.w),
-              child: Text("History", style: TextStyle(color: Color(0xFFFFE407), fontSize: 16.sp, fontWeight: FontWeight.bold)),
+              child: Text(Security.security_history, style: TextStyle(color: Color(0xFFFFE407), fontSize: 16.sp, fontWeight: FontWeight.bold)),
             ),
             SizedBox(height: 20.w),
             Expanded(
@@ -67,7 +69,7 @@ class TheaterHistoryListView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Image.asset(ImagePath.img_empty, width: 172, height: 146),
+          // child: CachedImage(imageUrl: ImagePath.img_empty, width: 172, height: 146),
           Text(Copywriting.security_no_data, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal)),
         ],
       ),
@@ -75,8 +77,8 @@ class TheaterHistoryListView extends StatelessWidget {
   );
 
   Widget _buildListItem(Map item) {
-    String imageUrl = item["coverUrl"] ?? "";
-    String name = item["name"] ?? "";
+    String imageUrl = item[Security.security_coverUrl] ?? "";
+    String name = item[Security.security_name] ?? "";
     return GestureDetector(
       onTap: () {
         RouteHelper.toChatTheater(item);
@@ -89,7 +91,7 @@ class TheaterHistoryListView extends StatelessWidget {
             child: Stack(
               children: [
                 ClipRRect(borderRadius: BorderRadius.circular(8), child: CachedNetImage(imageUrl: imageUrl, width: 112.w, height: 180.w, fit: BoxFit.cover)),
-                Positioned(bottom: 6.w, right: 6.w, child: Image.asset(ImagePath.ic_film, height: 16.w, width: 16.w)),
+                Positioned(bottom: 6.w, right: 6.w, child: CachedImage(imageUrl: ImagePath.ic_film, height: 16.w, width: 16.w)),
               ],
             ),
           ),

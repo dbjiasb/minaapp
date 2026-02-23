@@ -1,9 +1,11 @@
+import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/api_service/api_request.dart';
 import 'package:biz/base/api_service/api_response.dart';
 
 import '../../../base/api_service/api_service.dart';
+import '../../../base/crypt/apis.dart';
 import '../../../base/crypt/security.dart';
 
 class StoryListViewLogic extends GetxController {
@@ -39,12 +41,12 @@ class StoryListViewLogic extends GetxController {
 
   void getListData() async {
     Map<String, dynamic> args = {};
-    args["pageIndex"] = page;
-    args['pageReal'] = 1;
-    args['normal'] = 100;
-    args["pageSize"] = pageSize;
+    args[Security.security_pageIndex] = page;
+    args[Security.security_pageReal] = 1;
+    args[Security.security_normal] = 100;
+    args[Security.security_pageSize] = pageSize;
     try {
-      ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest("getRecommendSceneList", params: args));
+      ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getRecommendSceneList, params: args));
       List rawData = rsp.data[Security.security_param] ?? [];
       List<Map> data = rawData.cast<Map>();
       if (page == 0) {
