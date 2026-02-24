@@ -133,9 +133,9 @@ class LoginChannelView extends StatelessWidget {
     LoginChannel apple = LoginChannel(
       Security.security_apple,
       Copywriting.security_sign_in_with_Apple,
-      CachedImage(imageUrl: ImagePath.apple_icon, width: 24, height: 24, color: Colors.white),
-      Color(0xFF333333),
-      Colors.white,
+      CachedImage(imageUrl: ImagePath.apple_icon, width: 24, height: 24, color: Colors.black),
+      Colors.white,//Color(0xFF333333),
+      Colors.black,
           () async {
         Toast.loading(status: Copywriting.security_signing_in___);
         ApiResponse response = await AccountService.instance.loginWithApple();
