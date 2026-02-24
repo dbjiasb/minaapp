@@ -165,38 +165,32 @@ class CreateAccountView extends StatelessWidget {
           FocusScope.of(context).unfocus();
         },
         child: Stack(
+          alignment: Alignment.bottomCenter,
           children: [
             CachedImage(imageUrl: ImagePath.loginbg, height: double.infinity, width: double.infinity, fit: BoxFit.cover),
             SafeArea(
               child: SingleChildScrollView(
-                child: Column(
+                child:Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // Container(
-                    //   padding: EdgeInsets.fromLTRB(140, 140, 140, 0),
-                    //   child: SizedBox(width: 88, height: 88, child: CachedImage(imageUrl: ImagePath.apple_icon, fit: BoxFit.fill)),
-                    // ),
-                    Container(height: 228),
-                    SizedBox(height: 40),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          alignment: Alignment.centerLeft,
-                          child: Text(Copywriting.security_create_your_account, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
-                        ),
-                        SizedBox(height: 32),
-                        _buildMailInputView(),
-                        const SizedBox(height: 12),
-                        _buildVerifyCodeView(),
-                        _buildContinueButton(),
-                      ],
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      alignment: Alignment.centerLeft,
+                      child: Text(Copywriting.security_create_your_account, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
                     ),
+                    SizedBox(height: 32),
+                    _buildMailInputView(),
+                    const SizedBox(height: 12),
+                    _buildVerifyCodeView(),
+                    _buildContinueButton(),
+                    SizedBox(height: 128,)
                   ],
                 ),
               ),
             ),
-            SafeArea(
+            Positioned(
+                left: 0, top: 0,
+                child: SafeArea(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 12),
                 height: 44,
@@ -210,7 +204,7 @@ class CreateAccountView extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+            )),
           ],
         ),
       ),

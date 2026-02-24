@@ -162,16 +162,18 @@
         "adjust_sdk",
         "archive",
         "audioplayers",
-        "bot_toast",
         "cached_network_image",
         "cached_video_player_plus",
         "device_info_plus",
         "dio",
+        "dynamic_color",
         "encrypt",
         "extended_nested_scroll_view",
+        "file_picker",
         "flutter",
         "flutter_easyloading",
         "flutter_image_compress",
+        "flutter_native_splash",
         "flutter_reorderable_grid_view",
         "flutter_screenutil",
         "flutter_secure_storage",
@@ -187,16 +189,20 @@
         "intl",
         "just_audio",
         "logger",
+        "mobile_scanner",
+        "package_info_plus",
         "path_provider",
         "permission_handler",
+        "photo_manager",
+        "pro_image_editor",
         "qcloud_cos_client",
         "record",
         "sign_in_with_apple",
         "sqflite_sqlcipher",
         "url_launcher",
-        "wakelock_plus",
         "web_socket_channel",
-        "webview_flutter"
+        "webview_flutter",
+        "zego_uikit_prebuilt_call"
       ]
     },
     {
@@ -218,7 +224,7 @@
     },
     {
       "name": "async",
-      "version": "2.13.0",
+      "version": "2.12.0",
       "dependencies": [
         "collection",
         "meta"
@@ -258,7 +264,7 @@
     },
     {
       "name": "source_span",
-      "version": "1.10.2",
+      "version": "1.10.1",
       "dependencies": [
         "collection",
         "path",
@@ -285,6 +291,119 @@
         "path_drawing",
         "path_provider",
         "protobuf"
+      ]
+    },
+    {
+      "name": "zego_uikit_prebuilt_call",
+      "version": "4.19.0",
+      "dependencies": [
+        "audioplayers",
+        "floating",
+        "flutter",
+        "flutter_callkit_incoming",
+        "flutter_ringtone_player",
+        "flutter_volume_controller",
+        "just_audio",
+        "package_info_plus",
+        "permission_handler",
+        "plugin_platform_interface",
+        "shared_preferences",
+        "statemachine",
+        "uuid",
+        "vibration",
+        "zego_plugin_adapter",
+        "zego_uikit",
+        "zego_uikit_signaling_plugin"
+      ]
+    },
+    {
+      "name": "mobile_scanner",
+      "version": "7.2.0",
+      "dependencies": [
+        "collection",
+        "flutter",
+        "flutter_web_plugins",
+        "meta",
+        "plugin_platform_interface",
+        "web"
+      ]
+    },
+    {
+      "name": "file_picker",
+      "version": "10.3.10",
+      "dependencies": [
+        "cross_file",
+        "dbus",
+        "ffi",
+        "flutter",
+        "flutter_plugin_android_lifecycle",
+        "flutter_web_plugins",
+        "path",
+        "plugin_platform_interface",
+        "web",
+        "win32"
+      ]
+    },
+    {
+      "name": "dynamic_color",
+      "version": "1.8.1",
+      "dependencies": [
+        "flutter",
+        "flutter_test",
+        "material_color_utilities"
+      ]
+    },
+    {
+      "name": "flutter_native_splash",
+      "version": "2.3.2",
+      "dependencies": [
+        "args",
+        "flutter",
+        "flutter_web_plugins",
+        "html",
+        "image",
+        "js",
+        "meta",
+        "path",
+        "universal_io",
+        "xml",
+        "yaml"
+      ]
+    },
+    {
+      "name": "pro_image_editor",
+      "version": "11.23.0",
+      "dependencies": [
+        "flutter",
+        "http",
+        "plugin_platform_interface",
+        "shared_preferences",
+        "vector_math",
+        "web"
+      ]
+    },
+    {
+      "name": "photo_manager",
+      "version": "3.8.3",
+      "dependencies": [
+        "flutter",
+        "path"
+      ]
+    },
+    {
+      "name": "package_info_plus",
+      "version": "8.3.1",
+      "dependencies": [
+        "clock",
+        "ffi",
+        "flutter",
+        "flutter_web_plugins",
+        "http",
+        "meta",
+        "package_info_plus_platform_interface",
+        "path",
+        "web",
+        "win32"
       ]
     },
     {
@@ -367,7 +486,7 @@
     },
     {
       "name": "device_info_plus",
-      "version": "12.3.0",
+      "version": "11.5.0",
       "dependencies": [
         "device_info_plus_platform_interface",
         "ffi",
@@ -407,20 +526,6 @@
       ]
     },
     {
-      "name": "wakelock_plus",
-      "version": "1.3.2",
-      "dependencies": [
-        "dbus",
-        "flutter",
-        "flutter_web_plugins",
-        "meta",
-        "package_info_plus",
-        "wakelock_plus_platform_interface",
-        "web",
-        "win32"
-      ]
-    },
-    {
       "name": "path_provider",
       "version": "2.1.4",
       "dependencies": [
@@ -453,7 +558,7 @@
     },
     {
       "name": "sqflite_sqlcipher",
-      "version": "3.4.0",
+      "version": "3.3.0",
       "dependencies": [
         "flutter",
         "path",
@@ -584,7 +689,7 @@
     },
     {
       "name": "webview_flutter",
-      "version": "4.13.1",
+      "version": "4.13.0",
       "dependencies": [
         "flutter",
         "webview_flutter_android",
@@ -655,13 +760,6 @@
       ]
     },
     {
-      "name": "bot_toast",
-      "version": "4.1.3",
-      "dependencies": [
-        "flutter"
-      ]
-    },
-    {
       "name": "get",
       "version": "4.7.2",
       "dependencies": [
@@ -671,7 +769,7 @@
     },
     {
       "name": "vm_service",
-      "version": "15.0.2",
+      "version": "14.3.1",
       "dependencies": []
     },
     {
@@ -711,8 +809,233 @@
       ]
     },
     {
+      "name": "floating",
+      "version": "6.0.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "flutter_callkit_incoming",
+      "version": "2.5.8",
+      "dependencies": [
+        "flutter",
+        "json_annotation"
+      ]
+    },
+    {
+      "name": "flutter_ringtone_player",
+      "version": "4.0.0+4",
+      "dependencies": [
+        "flutter",
+        "path_provider",
+        "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "flutter_volume_controller",
+      "version": "1.3.4",
+      "dependencies": [
+        "flutter",
+        "flutter_plugin_android_lifecycle"
+      ]
+    },
+    {
+      "name": "plugin_platform_interface",
+      "version": "2.1.8",
+      "dependencies": [
+        "meta"
+      ]
+    },
+    {
+      "name": "shared_preferences",
+      "version": "2.5.3",
+      "dependencies": [
+        "flutter",
+        "shared_preferences_android",
+        "shared_preferences_foundation",
+        "shared_preferences_linux",
+        "shared_preferences_platform_interface",
+        "shared_preferences_web",
+        "shared_preferences_windows"
+      ]
+    },
+    {
+      "name": "uuid",
+      "version": "4.5.2",
+      "dependencies": [
+        "crypto",
+        "fixnum",
+        "meta"
+      ]
+    },
+    {
+      "name": "statemachine",
+      "version": "3.4.0",
+      "dependencies": [
+        "meta"
+      ]
+    },
+    {
+      "name": "vibration",
+      "version": "3.1.7",
+      "dependencies": [
+        "flutter",
+        "plugin_platform_interface",
+        "vibration_platform_interface"
+      ]
+    },
+    {
+      "name": "zego_uikit_signaling_plugin",
+      "version": "2.8.20",
+      "dependencies": [
+        "flutter",
+        "flutter_logs_yoer",
+        "plugin_platform_interface",
+        "shared_preferences",
+        "zego_callkit",
+        "zego_plugin_adapter",
+        "zego_zim",
+        "zego_zpns"
+      ]
+    },
+    {
+      "name": "zego_plugin_adapter",
+      "version": "2.14.2",
+      "dependencies": [
+        "flutter",
+        "flutter_logs_yoer"
+      ]
+    },
+    {
+      "name": "zego_uikit",
+      "version": "2.28.28",
+      "dependencies": [
+        "cached_network_image",
+        "connectivity_plus",
+        "device_info_plus",
+        "encrypt",
+        "file_picker",
+        "flutter",
+        "flutter_logs_yoer",
+        "native_device_orientation",
+        "path",
+        "permission_handler",
+        "plugin_platform_interface",
+        "visibility_detector",
+        "wakelock_plus",
+        "zego_express_engine",
+        "zego_plugin_adapter"
+      ]
+    },
+    {
+      "name": "web",
+      "version": "1.1.1",
+      "dependencies": []
+    },
+    {
+      "name": "flutter_web_plugins",
+      "version": "0.0.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "dbus",
+      "version": "0.7.12",
+      "dependencies": [
+        "args",
+        "ffi",
+        "meta",
+        "xml"
+      ]
+    },
+    {
+      "name": "cross_file",
+      "version": "0.3.5",
+      "dependencies": [
+        "meta",
+        "web"
+      ]
+    },
+    {
+      "name": "win32",
+      "version": "5.13.0",
+      "dependencies": [
+        "ffi"
+      ]
+    },
+    {
+      "name": "ffi",
+      "version": "2.2.0",
+      "dependencies": []
+    },
+    {
+      "name": "flutter_plugin_android_lifecycle",
+      "version": "2.0.31",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "yaml",
+      "version": "3.1.3",
+      "dependencies": [
+        "collection",
+        "source_span",
+        "string_scanner"
+      ]
+    },
+    {
+      "name": "xml",
+      "version": "6.5.0",
+      "dependencies": [
+        "collection",
+        "meta",
+        "petitparser"
+      ]
+    },
+    {
+      "name": "universal_io",
+      "version": "2.3.1",
+      "dependencies": [
+        "collection",
+        "meta",
+        "typed_data"
+      ]
+    },
+    {
+      "name": "html",
+      "version": "0.15.6",
+      "dependencies": [
+        "csslib",
+        "source_span"
+      ]
+    },
+    {
+      "name": "js",
+      "version": "0.6.7",
+      "dependencies": [
+        "meta"
+      ]
+    },
+    {
+      "name": "args",
+      "version": "2.7.0",
+      "dependencies": []
+    },
+    {
+      "name": "package_info_plus_platform_interface",
+      "version": "3.2.1",
+      "dependencies": [
+        "flutter",
+        "meta",
+        "plugin_platform_interface"
+      ]
+    },
+    {
       "name": "url_launcher_windows",
-      "version": "3.1.5",
+      "version": "3.1.4",
       "dependencies": [
         "flutter",
         "url_launcher_platform_interface"
@@ -738,7 +1061,7 @@
     },
     {
       "name": "url_launcher_macos",
-      "version": "3.2.5",
+      "version": "3.2.3",
       "dependencies": [
         "flutter",
         "url_launcher_platform_interface"
@@ -746,7 +1069,7 @@
     },
     {
       "name": "url_launcher_linux",
-      "version": "3.2.2",
+      "version": "3.2.1",
       "dependencies": [
         "flutter",
         "url_launcher_platform_interface"
@@ -754,7 +1077,7 @@
     },
     {
       "name": "url_launcher_ios",
-      "version": "6.3.6",
+      "version": "6.3.4",
       "dependencies": [
         "flutter",
         "url_launcher_platform_interface"
@@ -762,7 +1085,7 @@
     },
     {
       "name": "url_launcher_android",
-      "version": "6.3.28",
+      "version": "6.3.20",
       "dependencies": [
         "flutter",
         "url_launcher_platform_interface"
@@ -780,11 +1103,6 @@
     {
       "name": "asn1lib",
       "version": "1.6.5",
-      "dependencies": []
-    },
-    {
-      "name": "args",
-      "version": "2.7.0",
       "dependencies": []
     },
     {
@@ -806,15 +1124,6 @@
       ]
     },
     {
-      "name": "xml",
-      "version": "6.6.1",
-      "dependencies": [
-        "collection",
-        "meta",
-        "petitparser"
-      ]
-    },
-    {
       "name": "convert",
       "version": "3.1.2",
       "dependencies": [
@@ -831,36 +1140,12 @@
       ]
     },
     {
-      "name": "win32",
-      "version": "5.15.0",
-      "dependencies": [
-        "ffi"
-      ]
-    },
-    {
-      "name": "web",
-      "version": "1.1.1",
-      "dependencies": []
-    },
-    {
-      "name": "flutter_web_plugins",
-      "version": "0.0.0",
-      "dependencies": [
-        "flutter"
-      ]
-    },
-    {
       "name": "file",
       "version": "7.0.1",
       "dependencies": [
         "meta",
         "path"
       ]
-    },
-    {
-      "name": "ffi",
-      "version": "2.1.5",
-      "dependencies": []
     },
     {
       "name": "device_info_plus_platform_interface",
@@ -961,41 +1246,6 @@
       ]
     },
     {
-      "name": "package_info_plus",
-      "version": "8.3.1",
-      "dependencies": [
-        "clock",
-        "ffi",
-        "flutter",
-        "flutter_web_plugins",
-        "http",
-        "meta",
-        "package_info_plus_platform_interface",
-        "path",
-        "web",
-        "win32"
-      ]
-    },
-    {
-      "name": "dbus",
-      "version": "0.7.12",
-      "dependencies": [
-        "args",
-        "ffi",
-        "meta",
-        "xml"
-      ]
-    },
-    {
-      "name": "wakelock_plus_platform_interface",
-      "version": "1.3.0",
-      "dependencies": [
-        "flutter",
-        "meta",
-        "plugin_platform_interface"
-      ]
-    },
-    {
       "name": "path_provider_windows",
       "version": "2.3.0",
       "dependencies": [
@@ -1027,7 +1277,7 @@
     },
     {
       "name": "path_provider_foundation",
-      "version": "2.5.1",
+      "version": "2.4.2",
       "dependencies": [
         "flutter",
         "path_provider_platform_interface"
@@ -1035,7 +1285,7 @@
     },
     {
       "name": "path_provider_android",
-      "version": "2.2.22",
+      "version": "2.2.19",
       "dependencies": [
         "flutter",
         "path_provider_platform_interface"
@@ -1084,7 +1334,7 @@
     },
     {
       "name": "sqflite_common",
-      "version": "2.5.6",
+      "version": "2.5.5",
       "dependencies": [
         "meta",
         "path",
@@ -1093,7 +1343,7 @@
     },
     {
       "name": "synchronized",
-      "version": "3.4.0",
+      "version": "3.3.1",
       "dependencies": []
     },
     {
@@ -1164,7 +1414,7 @@
     },
     {
       "name": "image_picker_macos",
-      "version": "0.2.2+1",
+      "version": "0.2.2",
       "dependencies": [
         "file_selector_macos",
         "file_selector_platform_interface",
@@ -1184,7 +1434,7 @@
     },
     {
       "name": "image_picker_ios",
-      "version": "0.8.13+3",
+      "version": "0.8.13",
       "dependencies": [
         "flutter",
         "image_picker_platform_interface"
@@ -1192,7 +1442,7 @@
     },
     {
       "name": "image_picker_for_web",
-      "version": "3.1.1",
+      "version": "3.1.0",
       "dependencies": [
         "flutter",
         "flutter_web_plugins",
@@ -1203,7 +1453,7 @@
     },
     {
       "name": "image_picker_android",
-      "version": "0.8.13+13",
+      "version": "0.8.13+1",
       "dependencies": [
         "flutter",
         "flutter_plugin_android_lifecycle",
@@ -1220,28 +1470,6 @@
         "video_player_avfoundation",
         "video_player_platform_interface",
         "video_player_web"
-      ]
-    },
-    {
-      "name": "shared_preferences",
-      "version": "2.5.4",
-      "dependencies": [
-        "flutter",
-        "shared_preferences_android",
-        "shared_preferences_foundation",
-        "shared_preferences_linux",
-        "shared_preferences_platform_interface",
-        "shared_preferences_web",
-        "shared_preferences_windows"
-      ]
-    },
-    {
-      "name": "uuid",
-      "version": "4.5.2",
-      "dependencies": [
-        "crypto",
-        "fixnum",
-        "meta"
       ]
     },
     {
@@ -1332,7 +1560,7 @@
     },
     {
       "name": "record_macos",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "dependencies": [
         "flutter",
         "record_platform_interface"
@@ -1348,7 +1576,7 @@
     },
     {
       "name": "record_android",
-      "version": "1.5.0",
+      "version": "1.5.1",
       "dependencies": [
         "flutter",
         "record_platform_interface"
@@ -1390,7 +1618,7 @@
     },
     {
       "name": "webview_flutter_wkwebview",
-      "version": "3.23.6",
+      "version": "3.23.0",
       "dependencies": [
         "flutter",
         "meta",
@@ -1409,7 +1637,7 @@
     },
     {
       "name": "webview_flutter_android",
-      "version": "4.10.11",
+      "version": "4.10.1",
       "dependencies": [
         "flutter",
         "meta",
@@ -1491,153 +1719,10 @@
       ]
     },
     {
-      "name": "plugin_platform_interface",
-      "version": "2.1.8",
+      "name": "json_annotation",
+      "version": "4.11.0",
       "dependencies": [
         "meta"
-      ]
-    },
-    {
-      "name": "js",
-      "version": "0.6.7",
-      "dependencies": [
-        "meta"
-      ]
-    },
-    {
-      "name": "petitparser",
-      "version": "7.0.1",
-      "dependencies": [
-        "collection",
-        "meta"
-      ]
-    },
-    {
-      "name": "package_info_plus_platform_interface",
-      "version": "3.2.1",
-      "dependencies": [
-        "flutter",
-        "meta",
-        "plugin_platform_interface"
-      ]
-    },
-    {
-      "name": "platform",
-      "version": "3.1.6",
-      "dependencies": []
-    },
-    {
-      "name": "xdg_directories",
-      "version": "1.1.0",
-      "dependencies": [
-        "meta",
-        "path"
-      ]
-    },
-    {
-      "name": "sqflite",
-      "version": "2.4.2",
-      "dependencies": [
-        "flutter",
-        "path",
-        "sqflite_android",
-        "sqflite_common",
-        "sqflite_darwin",
-        "sqflite_platform_interface"
-      ]
-    },
-    {
-      "name": "cross_file",
-      "version": "0.3.5+2",
-      "dependencies": [
-        "meta",
-        "web"
-      ]
-    },
-    {
-      "name": "file_selector_windows",
-      "version": "0.9.3+5",
-      "dependencies": [
-        "cross_file",
-        "file_selector_platform_interface",
-        "flutter"
-      ]
-    },
-    {
-      "name": "file_selector_platform_interface",
-      "version": "2.7.0",
-      "dependencies": [
-        "cross_file",
-        "flutter",
-        "http",
-        "plugin_platform_interface"
-      ]
-    },
-    {
-      "name": "file_selector_macos",
-      "version": "0.9.5",
-      "dependencies": [
-        "cross_file",
-        "file_selector_platform_interface",
-        "flutter"
-      ]
-    },
-    {
-      "name": "file_selector_linux",
-      "version": "0.9.4",
-      "dependencies": [
-        "cross_file",
-        "file_selector_platform_interface",
-        "flutter"
-      ]
-    },
-    {
-      "name": "flutter_plugin_android_lifecycle",
-      "version": "2.0.33",
-      "dependencies": [
-        "flutter"
-      ]
-    },
-    {
-      "name": "video_player_web",
-      "version": "2.4.0",
-      "dependencies": [
-        "flutter",
-        "flutter_web_plugins",
-        "video_player_platform_interface",
-        "web"
-      ]
-    },
-    {
-      "name": "video_player_platform_interface",
-      "version": "6.6.0",
-      "dependencies": [
-        "flutter",
-        "plugin_platform_interface"
-      ]
-    },
-    {
-      "name": "video_player_avfoundation",
-      "version": "2.8.9",
-      "dependencies": [
-        "flutter",
-        "video_player_platform_interface"
-      ]
-    },
-    {
-      "name": "video_player_android",
-      "version": "2.9.1",
-      "dependencies": [
-        "flutter",
-        "video_player_platform_interface"
-      ]
-    },
-    {
-      "name": "html",
-      "version": "0.15.6",
-      "dependencies": [
-        "csslib",
-        "source_span"
       ]
     },
     {
@@ -1684,7 +1769,7 @@
     },
     {
       "name": "shared_preferences_foundation",
-      "version": "2.5.6",
+      "version": "2.5.4",
       "dependencies": [
         "flutter",
         "shared_preferences_platform_interface"
@@ -1692,10 +1777,235 @@
     },
     {
       "name": "shared_preferences_android",
-      "version": "2.4.20",
+      "version": "2.4.13",
       "dependencies": [
         "flutter",
         "shared_preferences_platform_interface"
+      ]
+    },
+    {
+      "name": "vibration_platform_interface",
+      "version": "0.1.1",
+      "dependencies": [
+        "device_info_plus",
+        "flutter",
+        "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "flutter_logs_yoer",
+      "version": "2.2.1",
+      "dependencies": [
+        "flutter",
+        "platform"
+      ]
+    },
+    {
+      "name": "zego_callkit",
+      "version": "1.0.0+6",
+      "dependencies": [
+        "flutter",
+        "plugin_platform_interface",
+        "uuid"
+      ]
+    },
+    {
+      "name": "zego_zpns",
+      "version": "2.8.0",
+      "dependencies": [
+        "flutter",
+        "flutter_web_plugins",
+        "js",
+        "universal_io"
+      ]
+    },
+    {
+      "name": "zego_zim",
+      "version": "2.27.0",
+      "dependencies": [
+        "flutter",
+        "flutter_web_plugins",
+        "js"
+      ]
+    },
+    {
+      "name": "connectivity_plus",
+      "version": "6.1.5",
+      "dependencies": [
+        "collection",
+        "connectivity_plus_platform_interface",
+        "flutter",
+        "flutter_web_plugins",
+        "meta",
+        "nm",
+        "web"
+      ]
+    },
+    {
+      "name": "wakelock_plus",
+      "version": "1.3.3",
+      "dependencies": [
+        "dbus",
+        "flutter",
+        "flutter_web_plugins",
+        "meta",
+        "package_info_plus",
+        "wakelock_plus_platform_interface",
+        "web",
+        "win32"
+      ]
+    },
+    {
+      "name": "native_device_orientation",
+      "version": "2.1.0",
+      "dependencies": [
+        "flutter",
+        "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "zego_express_engine",
+      "version": "3.23.0",
+      "dependencies": [
+        "flutter",
+        "flutter_web_plugins",
+        "js"
+      ]
+    },
+    {
+      "name": "petitparser",
+      "version": "6.1.0",
+      "dependencies": [
+        "collection",
+        "meta"
+      ]
+    },
+    {
+      "name": "csslib",
+      "version": "1.0.2",
+      "dependencies": [
+        "source_span"
+      ]
+    },
+    {
+      "name": "platform",
+      "version": "3.1.6",
+      "dependencies": []
+    },
+    {
+      "name": "xdg_directories",
+      "version": "1.1.0",
+      "dependencies": [
+        "meta",
+        "path"
+      ]
+    },
+    {
+      "name": "sqflite",
+      "version": "2.4.2",
+      "dependencies": [
+        "flutter",
+        "path",
+        "sqflite_android",
+        "sqflite_common",
+        "sqflite_darwin",
+        "sqflite_platform_interface"
+      ]
+    },
+    {
+      "name": "file_selector_windows",
+      "version": "0.9.3+4",
+      "dependencies": [
+        "cross_file",
+        "file_selector_platform_interface",
+        "flutter"
+      ]
+    },
+    {
+      "name": "file_selector_platform_interface",
+      "version": "2.7.0",
+      "dependencies": [
+        "cross_file",
+        "flutter",
+        "http",
+        "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "file_selector_macos",
+      "version": "0.9.4+4",
+      "dependencies": [
+        "cross_file",
+        "file_selector_platform_interface",
+        "flutter"
+      ]
+    },
+    {
+      "name": "file_selector_linux",
+      "version": "0.9.3+2",
+      "dependencies": [
+        "cross_file",
+        "file_selector_platform_interface",
+        "flutter"
+      ]
+    },
+    {
+      "name": "video_player_web",
+      "version": "2.4.0",
+      "dependencies": [
+        "flutter",
+        "flutter_web_plugins",
+        "video_player_platform_interface",
+        "web"
+      ]
+    },
+    {
+      "name": "video_player_platform_interface",
+      "version": "6.6.0",
+      "dependencies": [
+        "flutter",
+        "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "video_player_avfoundation",
+      "version": "2.8.4",
+      "dependencies": [
+        "flutter",
+        "video_player_platform_interface"
+      ]
+    },
+    {
+      "name": "video_player_android",
+      "version": "2.8.15",
+      "dependencies": [
+        "flutter",
+        "video_player_platform_interface"
+      ]
+    },
+    {
+      "name": "nm",
+      "version": "0.5.0",
+      "dependencies": [
+        "dbus"
+      ]
+    },
+    {
+      "name": "connectivity_plus_platform_interface",
+      "version": "2.0.1",
+      "dependencies": [
+        "flutter",
+        "meta",
+        "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "wakelock_plus_platform_interface",
+      "version": "1.3.0",
+      "dependencies": [
+        "flutter",
+        "meta",
+        "plugin_platform_interface"
       ]
     },
     {
@@ -1722,19 +2032,12 @@
     },
     {
       "name": "sqflite_android",
-      "version": "2.4.2+2",
+      "version": "2.4.1",
       "dependencies": [
         "flutter",
         "path",
         "sqflite_common",
         "sqflite_platform_interface"
-      ]
-    },
-    {
-      "name": "csslib",
-      "version": "1.0.2",
-      "dependencies": [
-        "source_span"
       ]
     }
   ],

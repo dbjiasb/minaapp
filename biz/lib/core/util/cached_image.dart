@@ -45,6 +45,7 @@ class CachedImage extends StatelessWidget {
   Alignment alignment = Alignment.center;
   ImageRepeat repeat;
   BorderRadiusGeometry borderRadius = BorderRadius.zero;
+  Color? color;
 
   CachedImage({
     super.key,
@@ -58,6 +59,7 @@ class CachedImage extends StatelessWidget {
     this.alignment = Alignment.center,
     this.repeat = ImageRepeat.noRepeat,
     this.borderRadius = BorderRadius.zero,
+      this.color,
   });
 
 
@@ -108,6 +110,7 @@ class CachedImage extends StatelessWidget {
         fit: fit,
         alignment: alignment,
         repeat: repeat,
+        color: color,
       )
     );
   }
@@ -137,6 +140,7 @@ class CachedNetImage extends CachedNetworkImage {
     super.fit,
     super.alignment,
     super.repeat,
+    super.color
   });
 
   factory CachedNetImage({
@@ -151,6 +155,7 @@ class CachedNetImage extends CachedNetworkImage {
     Alignment alignment = Alignment.center,
     ImageRepeat repeat = ImageRepeat.noRepeat,
     int borderRadius = 0,
+    Color? color,
   }) {
 
     String processedUrl = CachedImage.processedImageUrl(imageUrl);
@@ -165,6 +170,7 @@ class CachedNetImage extends CachedNetworkImage {
       fit: fit,
       alignment: alignment,
       repeat: repeat,
+      color: color,
     );
   }
 }

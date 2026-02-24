@@ -108,7 +108,7 @@ class LoginChannelView extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 46),
       child: GestureDetector(
         onTap: () {
-          _onCheckButtonClicked();
+          // _onCheckButtonClicked();
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -133,7 +133,7 @@ class LoginChannelView extends StatelessWidget {
     LoginChannel apple = LoginChannel(
       Security.security_apple,
       Copywriting.security_sign_in_with_Apple,
-      CachedImage(imageUrl: ImagePath.apple_icon, width: 24, height: 24),
+      CachedImage(imageUrl: ImagePath.apple_icon, width: 24, height: 24, color: Colors.white),
       Color(0xFF333333),
       Colors.white,
           () async {
@@ -258,6 +258,7 @@ class LoginChannelView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [_buildLoginChannels(), SizedBox(height: 65), _buildAgreeText(), if (Platform.isAndroid) SizedBox(height: 24)],
                 ),
+                SafeArea(top: false, child: SizedBox())
               ],
             ),
           ),
