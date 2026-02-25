@@ -6,7 +6,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
-import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+// import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/core/util/cached_image.dart';
 import 'package:biz/core/util/log_util.dart';
@@ -163,13 +163,13 @@ class VideoPlayerViewController extends GetxController {
 
       final File videoFile = fileInfo.file;
 
-      final result = await ImageGallerySaverPlus.saveFile(videoFile.path, name: 'video_${DateTime.now().millisecondsSinceEpoch}');
-
-      if (result[Security.security_isSuccess] == true) {
-        Toast.show(Copywriting.security_saved_successfully);
-      } else {
-        Toast.show(Copywriting.security_failed_to_save__try_again_later_Data_Empty_);
-      }
+      // final result = await ImageGallerySaverPlus.saveFile(videoFile.path, name: 'video_${DateTime.now().millisecondsSinceEpoch}');
+      //
+      // if (result[Security.security_isSuccess] == true) {
+      //   Toast.show(Copywriting.security_saved_successfully);
+      // } else {
+      //   Toast.show(Copywriting.security_failed_to_save__try_again_later_Data_Empty_);
+      // }
     } catch (e) {
       Toast.show(Copywriting.security_failed_to_save__try_again_later_Data_Empty_);
     }

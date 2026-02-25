@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
-import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+// import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/event_center/event_center.dart';
@@ -115,7 +115,7 @@ class ImageViewer extends StatelessWidget {
       return;
     }
 
-    await ImageGallerySaverPlus.saveImage(imgData, quality: 100);
+    // await ImageGallerySaverPlus.saveImage(imgData, quality: 100);
     Toast.show(Copywriting.security_saved_successfully);
   }
 }
