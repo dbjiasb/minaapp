@@ -31,7 +31,7 @@ dependencies:
 
   # ========== 多媒体处理 ==========
   ## 音频
-  record: #6.0.0  # 高性能录音  <<  record: ^6.0.0
+#  record: #6.0.0  # 高性能录音  <<  record: ^6.0.0
   just_audio: #0.10.4  # 音频播放核心  <<  just_audio: ^0.10.4
   audioplayers: #6.5.0  # 音频功能扩展  <<  audioplayers: ^5.2.1
 
@@ -40,11 +40,11 @@ dependencies:
   cached_video_player_plus: #^4.1.0
 
   ## 图像
-  image_picker: 1.1.2  # 图片选择器  <<  image_picker: ^1.1.2
+#  image_picker: 1.1.2  # 图片选择器  <<  image_picker: ^1.1.2
   image_cropper: #9.1.0  # 图片裁剪  <<  image_cropper: ^9.1.0
   image: #4.0.17  # 图像处理库  <<  image: ^4.0.17
   flutter_image_compress: 2.0.4  # 图片压缩  <<  flutter_image_compress: ^2.0.4
-  image_gallery_saver_plus: ^4.0.1
+#  image_gallery_saver_plus: ^4.0.1
   # ========== 数据管理 ==========
   get_storage: #2.1.1  # 轻量级键值存储  <<  shared_preferences: ^2.5.3
   sqflite_sqlcipher: ^3.2.1  # SQLite数据库  <<  sqflite: ^2.4.2
@@ -84,7 +84,7 @@ dependencies:
   pro_image_editor: #^12.0.2
   flutter_native_splash: #^2.4.7
   dynamic_color: #^1.8.1
-  file_picker: #^10.3.10
+#  file_picker: #^10.3.10
   mobile_scanner: #^7.2.0
   zego_uikit_prebuilt_call: #^4.22.3
 

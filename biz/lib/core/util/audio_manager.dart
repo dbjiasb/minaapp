@@ -8,16 +8,16 @@ import 'dart:typed_data';
 import 'package:biz/core/util/file_upload.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:record/record.dart';
+// import 'package:record/record.dart';
 
 import '../../shared/toast/toast.dart';
 
 // Audio recording configuration constants
-const RecordConfig config = RecordConfig(
-  encoder: AudioEncoder.aacLc, // Audio codec
-  bitRate: 64000, // Bitrate (64 kbps)
-  sampleRate: 44100, // Sample rate (44.1 kHz)
-);
+// const RecordConfig config = RecordConfig(
+//   encoder: AudioEncoder.aacLc, // Audio codec
+//   bitRate: 64000, // Bitrate (64 kbps)
+//   sampleRate: 44100, // Sample rate (44.1 kHz)
+// );
 
 class AudioManager {
   // Singleton instance
@@ -34,7 +34,7 @@ class AudioManager {
   bool working = false;
 
   // Audio recording components
-  AudioRecorder? recorder;
+  // AudioRecorder? recorder;
   DateTime? beginTime; // Recording start time
   int? recordLength; // Recording duration in milliseconds
   Timer? _recordingTimer; // Timer for max recording duration
@@ -73,28 +73,28 @@ class AudioManager {
 
   /// Starts audio recording
   Future begin() async {
-    if (audioPath.isEmpty) await getTemp();
-
-    working = true;
-    beginTime = DateTime.now();
-    recorder = AudioRecorder();
-
-    // Check and request recording permission
-    if (await recorder?.hasPermission() == true) {
-      // Start recording with predefined config
-      await recorder?.start(path: audioPath, config);
-
-      // Set timer for automatic stop after max duration
-      _recordingTimer = Timer(
-        Duration(milliseconds: maxDurationMs),
-        () => finish(), // Auto-finish when timer expires
-      );
-    } else {
-      // Reset state if permission denied
-      working = false;
-      beginTime = null;
-      recorder = null;
-    }
+    // if (audioPath.isEmpty) await getTemp();
+    //
+    // working = true;
+    // beginTime = DateTime.now();
+    // recorder = AudioRecorder();
+    //
+    // // Check and request recording permission
+    // if (await recorder?.hasPermission() == true) {
+    //   // Start recording with predefined config
+    //   await recorder?.start(path: audioPath, config);
+    //
+    //   // Set timer for automatic stop after max duration
+    //   _recordingTimer = Timer(
+    //     Duration(milliseconds: maxDurationMs),
+    //     () => finish(), // Auto-finish when timer expires
+    //   );
+    // } else {
+    //   // Reset state if permission denied
+    //   working = false;
+    //   beginTime = null;
+    //   // recorder = null;
+    // }
   }
 
   /// Stops recording and uploads audio file
@@ -115,14 +115,14 @@ class AudioManager {
     // Calculate recording duration   ms
     recordLength = DateTime.now().millisecondsSinceEpoch - (beginTime ?? DateTime.now()).millisecondsSinceEpoch;
 
-    await recorder?.stop(); // Stop recording
+    // await recorder?.stop(); // Stop recording
 
     // Read and upload audio file
     Uint8List data = await src.readAsBytes();
     String dataUrl = await FilePushService.instance.upload(data, FileType.im, ext: Security.security_m4a) ?? '';
 
     beginTime = null; // Reset start time
-    recorder = null; // Reset recorder
+    // recorder = null; // Reset recorder
 
     return (dataUrl, recordLength!);
   }
@@ -133,8 +133,8 @@ class AudioManager {
       working = false;
       beginTime = null;
       _recordingTimer?.cancel(); // Cancel timer
-      await recorder?.stop(); // Stop recording
-      recorder = null;
+      // await recorder?.stop(); // Stop recording
+      // recorder = null;
     }
   }
 }
