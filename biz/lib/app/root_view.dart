@@ -11,6 +11,7 @@ import 'package:biz/core/account/login_channel.dart';
 import 'package:biz/shared/widget/image_viewer.dart';
 import 'package:biz/shared/widget/video_player_view.dart';
 
+import '../business/account/edit_my_info_view.dart';
 import '../business/chat/chat_room/chat_theater_room_view.dart';
 import '../shared/toast/toast.dart';
 import './skeleton_view.dart';
@@ -37,7 +38,7 @@ class RootView extends StatelessWidget {
             GetPage(name: Routers.webView, page: () => WebView()),
             GetPage(name: Routers.loginChannel, page: () => LoginChannelView()),
             GetPage(name: Routers.imageBrowser, page: () => ImageViewer()),
-            // GetPage(name: Routers.editMe, page: () => EditMyInfoPage()),
+            GetPage(name: Routers.editMe, page: () => EditMyInfoPage()),
             GetPage(name: Routers.videoPlayer, page: () => VideoPlayerView()),
           ],
           routingCallback: (route) {

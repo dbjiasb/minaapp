@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+    <string>App needs to access your camera to allow you to take a photo for your profile image.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>App needs to access your photo album to allow you to pick a photo for your profile image.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

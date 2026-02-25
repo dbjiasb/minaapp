@@ -1,5 +1,6 @@
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/copywriting.dart';
@@ -38,6 +39,12 @@ class AccountView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.base_background,
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: AppColors.base_background,
+        elevation: 0,
+        toolbarHeight: 0,
+      ),
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
@@ -87,39 +94,40 @@ class AccountView extends StatelessWidget {
               ),
             ),
           ),
-          // Positioned(
-          //   top: 0,
-          //   right: 0,
-          //   left: 0,
-          //   child: SafeArea(
-          //     bottom: false,
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.end,
-          //       children: [
-          //         Padding(
-          //           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          //           child: GestureDetector(
-          //             onTap: () {
-          //               Get.toNamed(Routers.editMe);
-          //             },
-          //             child: Container(
-          //               decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Color(0xFF272533)),
-          //               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-          //               child: Center(
-          //                 child: Row(
-          //                   children: [
-          //                     child: CachedImage(imageUrl: ImagePath.ic_edit, width: 16, height: 16),
-          //                     Text(Copywriting.security_edit, style: TextStyle(color: Color(0xFFC1C5CD), fontSize: 12, fontWeight: FontWeight.w500)),
-          //                   ],
-          //                 ),
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+          Positioned(
+            top: 0,
+            right: 0,
+            left: 0,
+            child: SafeArea(
+              bottom: false,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routers.editMe);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Color(0xFF272533)),
+                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        child: Center(
+                          child: Row(
+                            children: [
+                              CachedImage(imageUrl: ImagePath.ic_edit, width: 16, height: 16, color: Colors.white,),
+                              SizedBox(width: 2),
+                              Text(Copywriting.security_edit, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
