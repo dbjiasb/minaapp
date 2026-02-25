@@ -40,12 +40,12 @@ class AppLog {
   static String _logDirPath = '';
 
   static init() async {
-    _logDirPath = '${(await getTemporaryDirectory()).path}/mina_logs';
+    // _logDirPath = '${(await getTemporaryDirectory()).path}/mina_logs';
     // String fileName = 'mina_log_${DateFormat('MM-dd-yyyy').format(DateTime.now())}.log';
     // final path = '$_logDirPath/$fileName';
     // File file = await File(path).create(recursive: true);
     // FileOutput output = FileOutput(file: file);
-    debugPrint('app log path: $_logDirPath');
+    // debugPrint('app log path: $_logDirPath');
     // _logger = Logger(
     //     filter: ProductionFilter(),
     //     output: output,

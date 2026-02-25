@@ -1,5 +1,6 @@
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/crypt/copywriting.dart';
@@ -19,6 +20,12 @@ class TheaterListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.base_background,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        elevation: 0,
+        toolbarHeight: 0,
+      ),
       backgroundColor: AppColors.base_background,
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

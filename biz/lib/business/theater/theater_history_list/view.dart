@@ -1,5 +1,6 @@
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,12 @@ class TheaterHistoryListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.base_background,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        elevation: 0,
+        toolbarHeight: 0,
+      ),
       backgroundColor: AppColors.base_background,
       body: SafeArea(
         child: Column(

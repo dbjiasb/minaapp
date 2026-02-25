@@ -1,8 +1,10 @@
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../base/crypt/security.dart';
+import '../../shared/app_theme.dart';
 import '../../shared/widget/keep_alive_wrapper.dart';
 import '../theater/theater_list/view.dart';
 
@@ -64,6 +66,12 @@ class HomePageView extends StatelessWidget {
 
       return Scaffold(
         backgroundColor: const Color(0xFF0A0B12),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0A0B12),
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          elevation: 0,
+          toolbarHeight: 0,
+        ),
         body: SafeArea(
           bottom: false,
           child: Column(
