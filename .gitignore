@@ -2,3 +2,6 @@
 /debug/build/
 /debug/.dart_tool/flutter_build/
 /.dart_tool/
+/debug/pubspec.lock
+/debug/.flutter-plugins-dependencies
+/debug/.dart_tool/
