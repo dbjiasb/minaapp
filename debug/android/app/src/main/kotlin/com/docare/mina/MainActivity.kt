@@ -1,4 +1,4 @@
-package com.example.soulinkapp
+package com.docare.mina
 
 import io.flutter.embedding.android.FlutterActivity
 
