@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__figma__get_design_context",
+      "Bash(cd /Users/ios/StudioProjects/minaapp/biz && flutter analyze lib/business/home_page_lists/ 2>&1 | head -50)",
+      "Bash(flutter analyze:*)",
+      "Bash(cd /Users/ios/StudioProjects/minaapp/debug && flutter pub get 2>&1 | tail -20)",
+      "Bash(flutter run:*)",
+      "mcp__figma__get_screenshot",
+      "Bash(curl -o /tmp/ic_add_create.png \"https://www.figma.com/api/mcp/asset/4c4416e1-c6cf-4d4a-85c6-6291695938be\" 2>&1 | tail -5)",
+      "Bash(curl -o /tmp/ic_add_create_raw.png \"https://www.figma.com/api/mcp/asset/4c4416e1-c6cf-4d4a-85c6-6291695938be\" && file /tmp/ic_add_create_raw.png)",
+      "Bash(sips -s format png /tmp/ic_add_create_raw.png --out /tmp/ic_add_create.png 2>&1 && file /tmp/ic_add_create.png)",
+      "Bash(cd /Users/ios/StudioProjects/minaapp/biz && flutter pub get 2>&1 | tail -10)",
+      "Bash(cd /Users/ios/StudioProjects/minaapp/external_modules && flutter pub get 2>&1 | tail -10)"
+    ]
+  }
+}

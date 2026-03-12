@@ -1,140 +1,237 @@
-import 'package:biz/base/crypt/routes.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../base/crypt/security.dart';
-import '../../shared/app_theme.dart';
-import '../../shared/widget/keep_alive_wrapper.dart';
 import '../theater/theater_list/view.dart';
-
-class RoleListItem {
-  String title;
-  final Widget Function() builder;
-
-  RoleListItem(this.title, this.builder);
-}
+import 'category_tabs_widget.dart';
+import 'role_list_logic.dart';
+import 'role_list_view.dart';
 
 class HomePageView extends StatelessWidget {
   HomePageView({super.key});
 
-  HomePageViewController viewController = Get.put(HomePageViewController());
-
   @override
   Widget build(BuildContext context) {
-    // return Obx((){
-      viewController.initTabs();
-      final selectedStyle = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900);
-      final unselectedStyle = TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 16, fontWeight: FontWeight.bold);
+    final controller = Get.put(
+      HomePageViewController(),
+      tag: 'home_page_${DateTime.now().millisecondsSinceEpoch}',
+    );
 
-      final tabBar = TabBar(
-          padding: EdgeInsets.only(right: 16),
-          tabAlignment: TabAlignment.start,
-          isScrollable: true,
-          labelPadding: EdgeInsets.symmetric(horizontal: 8),
-          controller: viewController.tabController,
-          onTap: (index) {
-            viewController.onTabClicked(index);
-          },
-          labelStyle: selectedStyle,
-          labelColor: Colors.white,
-          unselectedLabelStyle: unselectedStyle,
-          unselectedLabelColor: const Color(0xFFBBC1CA),
-          dividerColor: Colors.transparent,
-          indicator: const BoxDecoration(), indicatorPadding: EdgeInsets.zero, indicatorWeight: 0,
-          tabs: viewController.items.map((e) {
-            final index  = viewController.items.indexOf(e);
-            return Tab(
-              child: Obx(() {
-                bool isSelected = viewController.currentIndex.value == index;
-                return Stack(
-                  alignment: Alignment.bottomRight,
-                  clipBehavior: Clip.none,
-                  children: [
-                    Text(e.title, style: isSelected ? selectedStyle : unselectedStyle),
-                    // Positioned(
-                    //     bottom: -8,
-                    //     child: isSelected
-                    //         ? child: CachedImage(imageUrl: ImagePath.tab_selected, width: 40, height: 10)
-                    //         : SizedBox()
-                    // )
-                  ],
-                );
-              }),
-            ).marginOnly(left: 8);
-          }).toList());
+    return Scaffold(
+      backgroundColor: Color(0xFF07070a),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF07070a),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        elevation: 0,
+        toolbarHeight: 0,
+      ),
+      body: SafeArea(
+        bottom: false,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                // Top bar
+                _buildTopBar(),
 
-      return Scaffold(
-        backgroundColor: const Color(0xFF0A0B12),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF0A0B12),
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-          elevation: 0,
-          toolbarHeight: 0,
+                // Category tabs
+                Obx(() => CategoryTabsWidget(
+                  categories: controller.categories,
+                  selectedIndex: controller.selectedCategoryIndex.value,
+                  onTap: (index) => controller.onCategoryChanged(index),
+                )),
+
+                SizedBox(height: 8.w),
+
+                // Content area with TabBarView
+                Expanded(
+                  child: TabBarView(
+                    controller: controller.tabController,
+                    children: [
+                      // Story tab - linear list
+                      TheaterListView(
+                        scrollController: controller.scrollController,
+                      ),
+                      // Discovery tab - waterfall grid
+                      RoleListView(
+                        type: RoleListType.ai,
+                        scrollController: controller.scrollController,
+                      ),
+                      // Real tab - waterfall grid
+                      RoleListView(
+                        type: RoleListType.real,
+                        scrollController: controller.scrollController,
+                      ),
+                      // OC tab - waterfall grid
+                      RoleListView(
+                        type: RoleListType.ugc,
+                        scrollController: controller.scrollController,
+                      ),
+                      // Pro only tab - waterfall grid
+                      RoleListView(
+                        type: RoleListType.proOnly,
+                        scrollController: controller.scrollController,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            // Floating Create button
+            Positioned(
+              bottom: 16.w,
+              left: 0,
+              right: 0,
+              child: Obx(() => AnimatedOpacity(
+                opacity: controller.showCreateButton.value ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 200),
+                child: AnimatedSlide(
+                  offset: controller.showCreateButton.value ? Offset.zero : Offset(0, 0.5),
+                  duration: Duration(milliseconds: 200),
+                  child: _buildCreateButton(),
+                ),
+              )),
+            ),
+          ],
         ),
-        body: SafeArea(
-          bottom: false,
-          child: Column(
+      ),
+    );
+  }
+
+  Widget _buildTopBar() {
+    return Container(
+      height: 44.w,
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Recommend',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'HYPangDunDun',
+            ),
+          ),
+          Icon(
+            Icons.search,
+            color: Colors.white,
+            size: 24.w,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCreateButton() {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          Get.snackbar(
+            '',
+            '功能开发中',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.black87,
+            colorText: Colors.white,
+            margin: EdgeInsets.only(bottom: 100.w, left: 20.w, right: 20.w),
+            duration: Duration(seconds: 2),
+          );
+        },
+        child: Container(
+          width: 86.w,
+          height: 36.w,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFFffee6b), Color(0xFFfff8bf)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(18.r),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFFffee6b).withValues(alpha: 0.3),
+                blurRadius: 8.w,
+                offset: Offset(0, 2.w),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 40,child: tabBar,),
-              Expanded(
-                child: PageView.builder(
-                  itemBuilder: (context, index) {
-                    return viewController.items[index].builder();
-                  },
-                  itemCount: viewController.items.length,
-                  controller: viewController.pageController,
-                  onPageChanged: (int index) {
-                    viewController.onPageChanged(index);
-                  },
+              Image.asset(
+                'assets/images/ic_add_create.png',
+                width: 20.w,
+                height: 20.w,
+                package: 'biz',
+              ),
+              SizedBox(width: 4.w),
+              Text(
+                'Create',
+                style: TextStyle(
+                  color: Color(0xFF07070a),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
           ),
         ),
-      );
-    // });
+      ),
+    );
   }
 }
 
-class HomePageViewController extends GetxController with GetTickerProviderStateMixin {
+class HomePageViewController extends GetxController with GetSingleTickerProviderStateMixin {
+  final List<String> categories = ['Story', 'Discovery', 'Real', 'OC', 'Pro only'];
+  final RxInt selectedCategoryIndex = 0.obs;
+  final RxBool showCreateButton = true.obs;
+  final ScrollController scrollController = ScrollController();
+  Timer? _scrollTimer;
+  late TabController tabController;
+
   @override
   void onInit() {
     super.onInit();
-    initTabs();
+    tabController = TabController(length: categories.length, vsync: this);
+    tabController.addListener(() {
+      if (!tabController.indexIsChanging) {
+        selectedCategoryIndex.value = tabController.index;
+      }
+    });
+    _setupScrollListener();
   }
 
-  PageController pageController = PageController();
-  late TabController tabController;
-  bool isTabClicking = false;
-  RxInt currentIndex = 0.obs;
-
-  late List<RoleListItem> items;
-
-  void initTabs() {
-    items = [
-      RoleListItem(Security.security_story, () => KeepAliveWrapper(child: TheaterListView())),
-      // RoleListItem('Character', () => KeepAliveWrapper(child: RoleListView(type: RoleListType.ai_and_script))),
-      // RoleListItem(Security.security_community, () => KeepAliveWrapper(child: RoleListView(type: RoleListType.ugc))),
-      // RoleListItem(Security.security_anime, () => KeepAliveWrapper(child: RoleListView(type: RoleListType.anime))),
-      // RoleListItem(Security.security_featured, () => KeepAliveWrapper(child: RoleListView(type: RoleListType.dating))),
-      // RoleListItem(Copywriting.security_premium_Only, () => KeepAliveWrapper(child: RoleListView(type: RoleListType.pro_only))),
-    ];
-    tabController = TabController(vsync: this, length: items.length);
-    currentIndex.value = 0;
+  @override
+  void onClose() {
+    _scrollTimer?.cancel();
+    scrollController.dispose();
+    tabController.dispose();
+    super.onClose();
   }
 
-  void onTabClicked(int index) async {
-    isTabClicking = true;
-    currentIndex.value = index;
-    await pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.linearToEaseOut);
-    isTabClicking = false;
+  void _setupScrollListener() {
+    scrollController.addListener(() {
+      if (showCreateButton.value) {
+        showCreateButton.value = false;
+      }
+
+      _scrollTimer?.cancel();
+
+      _scrollTimer = Timer(Duration(milliseconds: 150), () {
+        if (!isClosed) {
+          showCreateButton.value = true;
+        }
+      });
+    });
   }
 
-  void onPageChanged(int index) {
-    if (!isTabClicking) {
+  void onCategoryChanged(int index) {
+    if (!tabController.indexIsChanging && tabController.index != index) {
+      selectedCategoryIndex.value = index;
       tabController.animateTo(index);
-      currentIndex.value = index;
     }
   }
 }

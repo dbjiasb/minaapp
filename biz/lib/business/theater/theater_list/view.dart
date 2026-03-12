@@ -13,9 +13,14 @@ import '../../../shared/app_theme.dart';
 import 'logic.dart';
 
 class TheaterListView extends StatelessWidget {
-  TheaterListView({super.key});
+  final ScrollController? scrollController;
 
-  final controller = Get.put(StoryListViewLogic());
+  TheaterListView({super.key, this.scrollController});
+
+  late final controller = Get.put(
+    StoryListViewLogic(externalScrollController: scrollController),
+    tag: scrollController?.hashCode.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {

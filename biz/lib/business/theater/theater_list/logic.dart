@@ -9,7 +9,11 @@ import '../../../base/crypt/apis.dart';
 import '../../../base/crypt/security.dart';
 
 class StoryListViewLogic extends GetxController {
-  final scrollController = ScrollController();
+  final ScrollController? externalScrollController;
+
+  StoryListViewLogic({this.externalScrollController});
+
+  late final ScrollController scrollController;
   final RxBool isLoading = true.obs;
   final RxList dataList = RxList<Map>();
   bool isLoadingMore = false;
@@ -19,6 +23,8 @@ class StoryListViewLogic extends GetxController {
 
   @override
   void onInit() {
+    scrollController = externalScrollController ?? ScrollController();
+
     scrollController.addListener(() {
       if ((scrollController.position.pixels >= scrollController.position.maxScrollExtent)) {
         loadMoreData();
@@ -27,6 +33,14 @@ class StoryListViewLogic extends GetxController {
     super.onInit();
 
     initData();
+  }
+
+  @override
+  void onClose() {
+    if (externalScrollController == null) {
+      scrollController.dispose();
+    }
+    super.onClose();
   }
 
   void initData() {
