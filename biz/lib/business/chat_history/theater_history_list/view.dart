@@ -1,4 +1,3 @@
-import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,40 +28,28 @@ class TheaterHistoryListView extends StatelessWidget {
       ),
       backgroundColor: AppColors.base_background,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 16.w),
-              child: Text(Security.security_history, style: TextStyle(color: Color(0xFFFFE407), fontSize: 16.sp, fontWeight: FontWeight.bold)),
-            ),
-            SizedBox(height: 20.w),
-            Expanded(
-              child: Obx(
-                () =>
-                    controller.isLoading.value
-                        ? Center(child: CircularProgressIndicator())
-                        : RefreshIndicator(
-                          child:
-                              controller.dataList.isEmpty
-                                  ? emptyView()
-                                  : MasonryGridView.count(
-                                    physics: AlwaysScrollableScrollPhysics(),
-                                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                    crossAxisCount: 3,
-                                    crossAxisSpacing: 8.w,
-                                    mainAxisSpacing: 12.w,
-                                    controller: controller.scrollController,
-                                    itemBuilder: (context, index) => _buildListItem(controller.dataList[index]),
-                                    itemCount: controller.dataList.length,
-                                  ),
-                          onRefresh: () async {
-                            controller.refreshData();
-                          },
-                        ),
-              ),
-            ),
-          ],
+        child: Obx(
+          () =>
+              controller.isLoading.value
+                  ? Center(child: CircularProgressIndicator())
+                  : RefreshIndicator(
+                    child:
+                        controller.dataList.isEmpty
+                            ? emptyView()
+                            : MasonryGridView.count(
+                              physics: AlwaysScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 8.w,
+                              mainAxisSpacing: 12.w,
+                              controller: controller.scrollController,
+                              itemBuilder: (context, index) => _buildListItem(controller.dataList[index]),
+                              itemCount: controller.dataList.length,
+                            ),
+                    onRefresh: () async {
+                      controller.refreshData();
+                    },
+                  ),
         ),
       ),
     );

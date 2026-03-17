@@ -1,3 +1,4 @@
+import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/router/route_helper.dart';
@@ -13,8 +14,10 @@ import '../../../base/router/router_names.dart';
 import 'chat_generating_message.dart';
 import 'chat_gift_cell.dart';
 // import 'chat_image_message.dart';
+import 'chat_image_message.dart';
 import 'chat_system_message.dart';
 import 'chat_text_cell.dart';
+import 'chat_video_message.dart';
 // import 'chat_video_message.dart';
 
 enum ChatCellType {
@@ -59,12 +62,12 @@ class ChatCell extends StatelessWidget {
         );
       case ChatMessageType.generating:
         return ChatGeneratingCell(message: message as ChatGeneratingMessage);
-      // case ChatMessageType.image:
-      //   return ChatImageCell(message as ChatImageMessage, unlock: unlock, reload: reload, onTap: onTap, onContinue: onContinue, generateVideo: generateVideo)
-      //     ..type = type;
-      // case ChatMessageType.video:
-      //   return ChatVideoCell(message as ChatVideoMessage, unlock: unlock, reload: reload, onTap: onTap, onContinue: onContinue, generateVideo: generateVideo)
-      //     ..type = type;
+      case ChatMessageType.image:
+        return ChatImageCell(message as ChatImageMessage, unlock: unlock, reload: reload, onTap: onTap, onContinue: onContinue, generateVideo: generateVideo)
+          ..type = type;
+      case ChatMessageType.video:
+        return ChatVideoCell(message as ChatVideoMessage, unlock: unlock, reload: reload, onTap: onTap, onContinue: onContinue, generateVideo: generateVideo)
+          ..type = type;
       case ChatMessageType.gift:
         return ChatGiftCell(message as ChatGiftMessage, onTap: onTap);
       case ChatMessageType.voice:
@@ -180,18 +183,18 @@ class ChatCell extends StatelessWidget {
     return Container();
   }
 
-  // Widget buildContinueView() {
-  //   return Obx(() {
-  //     return message.showContinue.value
-  //         ? GestureDetector(
-  //           onTap: () {
-  //             onContinue?.call(message);
-  //           },
-  //           child: CachedImage(imageUrl: ImagePath.ai_continue, width: 24, height: 24),
-  //         ).marginOnly(left: 8)
-  //         : SizedBox.shrink();
-  //   });
-  // }
+  Widget buildContinueView() {
+    return Obx(() {
+      return message.showContinue.value
+          ? GestureDetector(
+            onTap: () {
+              onContinue?.call(message);
+            },
+            child: ImageView("ai_continue.png", width: 24, height: 24),
+          ).marginOnly(left: 8)
+          : SizedBox.shrink();
+    });
+  }
 }
 
 class ChatUnsupportedCell extends ChatCell {

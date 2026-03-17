@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/core/report/report_manager.dart';
 
+import '../../base/assets/image_view.dart';
+
 class ReportContentView extends StatefulWidget {
   final int reportedUserId;
 
@@ -50,7 +52,7 @@ class _ReportContentViewState extends State<ReportContentView> {
                 children: [
                   Row(
                     children: [
-                      CachedImage(imageUrl: selectedIndex == index ? ImagePath.selecet_1 : ImagePath.selecet_0, width: 16, height: 16),
+                      ImageView(selectedIndex == index ? ImagePath.selecet_1 : ImagePath.selecet_0, width: 16, height: 16),
                       SizedBox(width: 4),
                       Text(item.desc, style: TextStyle(color: Color(0xFF999999), fontSize: 13, fontWeight: FontWeight.w500)),
                     ],
@@ -58,7 +60,7 @@ class _ReportContentViewState extends State<ReportContentView> {
                   if (index == items.length - 1)
                     Container(
                       margin: const EdgeInsets.only(top: 18),
-                      decoration: BoxDecoration(color: Color(0xFFF1F0F4), borderRadius: BorderRadius.all(Radius.circular(8))),
+                      decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.all(Radius.circular(8))),
                       child: TextField(
                         onChanged: (value) {
                           widget.extra = value;
@@ -78,6 +80,7 @@ class _ReportContentViewState extends State<ReportContentView> {
           );
         },
         separatorBuilder: (context, index) {
+          return Container();
           return Divider(height: 1, color: Color(0xFFF1F0F4));
         },
         itemCount: items.length,

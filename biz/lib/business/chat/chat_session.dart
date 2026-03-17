@@ -11,7 +11,7 @@ import '../../base/crypt/copywriting.dart';
 
 const kOffChatSessionId = 100000;
 
-enum SessionType { all, ai, real, group }
+enum SessionType { all, ai, real, group, privateChat }
 enum AccType {
   real,
   ai,
@@ -118,7 +118,8 @@ class ChatSession {
       Security.security_level: level.value,
       Security.security_nextLevelRatio: nextLevelRatio.value,
       Security.security_draft: draft.value,
-      Security.security_lastMessageText: lastMessageText
+      Security.security_lastMessageText: lastMessageText,
+      Security.security_bio: bio,
     };
 
     return dbMap;
@@ -137,6 +138,7 @@ class ChatSession {
       unreadNumber = (map[Security.security_unreadNumber] as int? ?? 0).obs,
       accountType = map[Security.security_accountType] as int,
       type = (map[Security.security_type] as int? ?? 0),
+      bio = map[Security.security_bio] as String? ?? '',
       greeted = true {
     level.value = map[Security.security_level] as int? ?? 1;
     nextLevelRatio.value = map[Security.security_nextLevelRatio] as int? ?? 0;
@@ -162,6 +164,7 @@ class ChatSession {
       greeted = router[Security.security_greeted] ?? false,
       accountType = router[Security.security_accountType] ?? 1,
       type = router[Security.security_type] ?? 0,
+      bio = router[Security.security_bio] ?? '',
     level = (router[Security.security_level] as int? ?? 1).obs,
     nextLevelRatio = (router[Security.security_nextLevelRatio] as int? ?? 0).obs,
     draft = (router[Security.security_draft] as String? ?? '').obs;
@@ -182,6 +185,24 @@ class ChatSession {
         accountType = 0,
         type = 1,
         sessionId = router[Security.security_sessionId] ?? "",
+        draft = (router[Security.security_draft] as String? ?? '').obs;
+
+  // 从角色数据创建私聊会话
+  ChatSession.fromAIRole(Map router)
+      : id = router[Security.security_id] ?? "${router[Security.security_uid] ?? ''}",
+        name = router[Security.security_name] ?? '',
+        avatar = router[Security.security_avatar] ?? '',
+        backgroundUrl = (router[Security.security_backgroundUrl] as String? ?? '').obs,
+        lastMessageTime =
+        router[Security.security_lastMessageTime] == null
+            ? DateTime.now()
+            : DateTime.fromMillisecondsSinceEpoch(
+          router[Security.security_lastMessageTime],
+        ),
+        lastMessageText = router[Security.security_lastMessageText] ?? '',
+        accountType = router[Security.security_accountType] ?? 1,
+        type = 3, // 私聊
+        sessionId = router[Security.security_id] ?? "${router[Security.security_uid] ?? ''}",
         draft = (router[Security.security_draft] as String? ?? '').obs;
 
   String toRouter() {
@@ -218,6 +239,7 @@ class ChatSession {
 
   bool get isGroup => type == 2;
   bool get isTheater => type == 1;
+  bool get isPrivateChat => type == 3;
 
   int get groupId => safeExtractId(id) ?? 0;
 

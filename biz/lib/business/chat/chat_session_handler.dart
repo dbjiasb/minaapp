@@ -52,7 +52,8 @@ class ChatSessionHandler {
       ${Security.security_type}  INTEGER DEFAULT 0,
       ${Security.security_level}  INTEGER DEFAULT 1,
       ${Security.security_nextLevelRatio} INTEGER DEFAULT 0,
-      ${Security.security_draft} TEXT
+      ${Security.security_draft} TEXT,
+      ${Security.security_bio} TEXT
     )
   ''';
 
@@ -74,6 +75,8 @@ class ChatSessionHandler {
         return " AND ${Security.security_accountType} = 0 AND ${Security.security_type} <> 2";
       case SessionType.group:
         return " AND ${Security.security_type} = 2";
+      case SessionType.privateChat:
+        return " AND ${Security.security_type} = 3";
       case SessionType.all:
         return "";
     }
@@ -113,6 +116,15 @@ class ChatSessionHandler {
     return sessions.firstOrNull;
   }
 
+  // 查询私聊会话列表
+  Future<List<ChatSession>> queryPrivateChatSessions({int? limit, int? offset}) async {
+    return await querySessions(
+      type: SessionType.privateChat,
+      limit: limit,
+      offset: offset,
+    );
+  }
+
   Future<void> upgradeTable() async {
     Map upgradeInfo = DataCenter.instance.upgradeInfo;
     int oldVersion = upgradeInfo[Security.security_oldVersion] as int;
@@ -125,6 +137,14 @@ class ChatSessionHandler {
   }
 
   Future<void> upgradeToVersion(int toVersion) async {
+    // 添加 bio 列（如果不存在）
+    try {
+      await database.execute(
+        'ALTER TABLE $tableName ADD COLUMN ${Security.security_bio} TEXT'
+      );
+    } catch (e) {
+      // 列可能已存在，忽略错误
+    }
   }
 
   Future<int> unreadCount() async {

@@ -201,7 +201,7 @@ class ChatTheaterBottomBar extends StatelessWidget {
 }
 
 class ChatTheaterBottomBarController extends GetxController {
-  final roomViewController = Get.find<ChatRoomViewController>();
+  final roomViewController = Get.find<ChatTheaterRoomViewController>();
   late TextEditingController textController;
   final FocusNode focusNode = FocusNode();
 

@@ -223,3 +223,4 @@ flutter test
 - 图片无需放在ImagePath里面
 - 下拉刷新和上拉加载更多使用pull_to_refresh插件
 - 总结文档都用中文命名
+- Plan mode时使用中文

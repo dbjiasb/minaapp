@@ -88,6 +88,9 @@ class ChatAudioMessage extends ChatMessage {
   }
 
   @override
+  String get externalText => '[Audio]';
+
+  @override
   Map<String, Object?> toDatabase() {
     return {...super.toDatabase()};
   }

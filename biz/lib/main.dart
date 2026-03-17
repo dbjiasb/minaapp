@@ -15,6 +15,7 @@ import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/push_service/push_service.dart';
 import 'package:biz/business/chat/chat_manager.dart';
 import 'package:biz/core/account/account_service.dart';
+import 'base/file_manager/zip_image_manager.dart';
 import 'core/util/device_util.dart';
 import 'core/util/log_util.dart';
 
@@ -23,7 +24,8 @@ void startApp(List<String> args) async {
 
   if (Platform.isAndroid) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.black, // 导航栏背景色
+      systemNavigationBarColor: Colors.transparent, // 导航栏背景色
+      systemNavigationBarContrastEnforced: false,
       systemNavigationBarIconBrightness: Brightness.light, // 图标亮度（暗色图标）
       // systemNavigationBarDividerColor: Colors.transparent, // 分割线颜色
     ));
@@ -38,6 +40,7 @@ void startApp(List<String> args) async {
     await DeviceUtil.init();
     await AppManager.instance.init();
     await DataCenter.instance.init();
+    await ZipImageManager.instance.init();
     await FileManager.instance.init();
     // await Firebase.initializeApp();
   } catch (e) {

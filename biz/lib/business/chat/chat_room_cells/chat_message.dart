@@ -10,8 +10,11 @@ import 'package:biz/business/chat/chat_session.dart';
 
 import '../../../core/account/account_service.dart';
 import './chat_text_cell.dart';
+import 'chat_call_cell.dart';
 import 'chat_gift_cell.dart';
+import 'chat_image_message.dart';
 import 'chat_theater_brief_message.dart';
+import 'chat_video_message.dart';
 
 //为ChatTextAudioStatus添加构造方法
 enum ChatTextAudioStatus {
@@ -248,12 +251,12 @@ class ChatMessage implements AudioInfoInterface {
       case ChatMessageType.text:
       case ChatMessageType.desc:
         return ChatTextMessage.fromDatabase(map);
-      // case ChatMessageType.call:
-      //   return ChatCallMessage.fromDatabase(map);
-      // case ChatMessageType.image:
-      //   return ChatImageMessage.fromDatabase(map);
-      // case ChatMessageType.video:
-      //   return ChatVideoMessage.fromDatabase(map);
+      case ChatMessageType.call:
+        return ChatCallMessage.fromDatabase(map);
+      case ChatMessageType.image:
+        return ChatImageMessage.fromDatabase(map);
+      case ChatMessageType.video:
+        return ChatVideoMessage.fromDatabase(map);
       case ChatMessageType.gift:
         return ChatGiftMessage.fromDatabase(map);
       case ChatMessageType.voice:
@@ -323,14 +326,18 @@ class ChatMessage implements AudioInfoInterface {
       case ChatMessageType.text:
       case ChatMessageType.desc:
         return ChatTextMessage.fromServer(map);
-      // case ChatMessageType.video:
-      //   return ChatVideoMessage.fromServer(map);
+      case ChatMessageType.image:
+        return ChatImageMessage.fromServer(map);
+      case ChatMessageType.video:
+        return ChatVideoMessage.fromServer(map);
       case ChatMessageType.gift:
         return ChatGiftMessage.fromServer(map);
       case ChatMessageType.voice:
         return ChatAudioMessage.fromServer(map);
       case ChatMessageType.tip:
         return ChatTipsMessage.fromServer(map);
+      case ChatMessageType.call:
+        return ChatCallMessage.fromServer(map);
       default:
         return ChatMessage.none(); //不支持的消息类型，返回默认值
     }

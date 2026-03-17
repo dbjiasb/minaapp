@@ -9,6 +9,7 @@ import 'package:biz/base/event_center/event_center.dart';
 import 'package:biz/shared/widget/list_status_view.dart';
 
 import '../chat_manager.dart';
+import 'chat_room_view.dart';
 import 'chat_theater_room_view.dart';
 
 class ChatMuseView extends StatelessWidget {

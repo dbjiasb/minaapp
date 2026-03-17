@@ -85,13 +85,18 @@ class UserManager {
   }
 
   Future<UserProfileInfo?> getUserInfo(int userId) async {
-    ApiRequest request = ApiRequest(Apis.security_fetchUserData, params: {Security.security_userId: userId});
-    ApiResponse response = await ApiService.instance.sendRequest(request);
+    ApiResponse response = await queryUserInfo(userId);
     if (response.isSuccess) {
       return UserProfileInfo(response.data[Security.security_param]);
     } else {
       return null;
     }
+  }
+
+  Future<ApiResponse> queryUserInfo(int userId) async {
+    ApiRequest request = ApiRequest(Apis.security_fetchUserData, params: {Security.security_userId: userId});
+    ApiResponse response = await ApiService.instance.sendRequest(request);
+    return response;
   }
 
   Future<ApiResponse> getUserSettings(int userId) async {

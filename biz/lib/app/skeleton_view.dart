@@ -3,21 +3,16 @@ import 'package:get/get.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/event_center/event_center.dart';
-import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/business/account/account_view.dart';
-import 'package:biz/core/account/account_service.dart';
 import 'package:biz/core/user_manager/user_manager.dart';
 import 'package:biz/shared/widget/keep_alive_wrapper.dart';
 
-import '../base/router/route_helper.dart';
 import '../business/chat/chat_session_handler.dart';
 import '../business/home_page_lists/home_page.dart';
-import '../business/theater/theater_history_list/logic.dart';
-import '../business/theater/theater_history_list/view.dart';
-import '../business/theater/theater_list/view.dart';
+import '../business/chat_history/chat_history_view.dart';
+import '../business/chat_history/chat_history_logic.dart';
 import '../core/util/cached_image.dart';
 import '../shared/app_theme.dart';
-import '../shared/formatters/date_formatter.dart';
 
 class BottomBarItem {
   final String name;
@@ -173,7 +168,7 @@ class SkeletonViewController extends GetxController {
     BottomBarItem(
       name: Security.security_chat,
       pageBuilder: () {
-        return KeepAliveWrapper(child: TheaterHistoryListView());
+        return KeepAliveWrapper(child: ChatHistoryView());
       },
       selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_1_1, width: 28, height: 28),
       normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_1_0, width: 28, height: 28),
@@ -195,7 +190,7 @@ class SkeletonViewController extends GetxController {
     EventCenter.instance.addListener(kEventCenterDidDeleteSession, (event) => updateUnreadCount());
     EventCenter.instance.addListener(kEventCenterDidClearSessionNumber, (event) => unreadCount.value = 0);
     updateUnreadCount();
-    Get.put(TheaterHistoryListViewLogic());
+    Get.put(ChatHistoryViewController());
   }
 
   @override
@@ -211,7 +206,7 @@ class SkeletonViewController extends GetxController {
   @override
   void dispose() {
     super.dispose();
-    Get.delete<TheaterHistoryListViewLogic>();
+    Get.delete<ChatHistoryViewController>();
   }
 
   void onTabClicked(int index) {
@@ -223,8 +218,7 @@ class SkeletonViewController extends GetxController {
     selectedIndex.value = index;
     if (index == MESSAGE_INDEX) {
       // FcmService.instance.requestPermission();
-      Get.find<TheaterHistoryListViewLogic>().getListData();
-
+      // 刷新聊天历史视图（如果需要）
     } else if (index == MINE_INDEX) {
       try {
         Get.find<AccountViewController>().refreshDataIfNeed();

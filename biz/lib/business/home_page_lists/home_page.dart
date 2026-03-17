@@ -15,7 +15,7 @@ class HomePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(
       HomePageViewController(),
-      tag: 'home_page_${DateTime.now().millisecondsSinceEpoch}',
+      tag: 'home_page_controller',
     );
 
     return Scaffold(
@@ -229,6 +229,7 @@ class HomePageViewController extends GetxController with GetSingleTickerProvider
   }
 
   void onCategoryChanged(int index) {
+    if (isClosed) return;
     if (!tabController.indexIsChanging && tabController.index != index) {
       selectedCategoryIndex.value = index;
       tabController.animateTo(index);

@@ -198,6 +198,7 @@ class ChatTextCell extends ChatCell {
           ),
         ),
         if (isMine) Obx(() => buildSendStatusView()),
+        buildContinueView(),
         Obx(() {
           return SizedBox(width: message.showContinue.value ? 32 : 64);
         }),
@@ -544,7 +545,7 @@ class ChatTextAudioView extends StatelessWidget {
     String? path = ChatVoiceManager.instance.voicePathForUrl(textMessage.audioUrl);
 
     if (path == null) {
-      await Get.find<ChatRoomViewController>().downloadMessage(textMessage);
+      await Get.find<ChatTheaterRoomViewController>().downloadMessage(textMessage);
       //
       // await download?.call(message);
     }

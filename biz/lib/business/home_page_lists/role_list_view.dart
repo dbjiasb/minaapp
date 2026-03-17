@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/router/route_helper.dart';
+import 'package:biz/base/crypt/security.dart';
 import '../../shared/app_theme.dart';
 import 'role_card_widget.dart';
 import 'role_list_logic.dart';
@@ -48,7 +49,17 @@ class RoleListView extends StatelessWidget {
                         item: controller.dataList[index],
                         isRealType: type == RoleListType.real,
                         onTap: () {
-                          RouteHelper.toChatTheater(controller.dataList[index]);
+                          final item = controller.dataList[index];
+                          // 路由到私聊（type = 3）
+                          RouteHelper.toChat(
+                            id: item[Security.security_uid].toString() ?? '',
+                            name: item[Security.security_nickname] ?? '',
+                            avatar: item[Security.security_avatarUrl] ?? '',
+                            coverUrl: item[Security.security_coverUrl] ?? item[Security.security_backgroundUrl] ?? '',
+                            accountType: item[Security.security_accountType] ?? 1,
+                            type: 3, // 私聊
+                            bio: item[Security.security_bio] ?? '',
+                          );
                         },
                       ),
                       itemCount: controller.dataList.length,

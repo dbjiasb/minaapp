@@ -45,7 +45,7 @@ import 'package:biz/core/util/collections_util.dart';
 class ChatTheaterRoomView extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  ChatRoomViewController viewController = Get.put(ChatRoomViewController(Get.arguments));
+  ChatTheaterRoomViewController viewController = Get.put(ChatTheaterRoomViewController(Get.arguments));
   ChatTheaterBottomBarController bottomBarController = Get.put(ChatTheaterBottomBarController());
 
   List get messages => viewController.messages;
@@ -147,7 +147,7 @@ class ChatTheaterRoomView extends StatelessWidget {
             child: Container(width: 32, height: 32, alignment: Alignment.center, child: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, width: 32, height: 32)),
           ),
           SizedBox(width: 10),
-          GetBuilder<ChatRoomViewController>(
+          GetBuilder<ChatTheaterRoomViewController>(
             id: Security.security_kTagChatRoomHeader,
             builder: (_) {
               return Container(
@@ -281,7 +281,7 @@ class ChatTheaterRoomView extends StatelessWidget {
 }
 
 
-class ChatRoomViewController extends GetxController {
+class ChatTheaterRoomViewController extends GetxController {
   final ScrollController messageListScrollController = ScrollController();
 
   final isShowAudioInputAnim = false.obs;
@@ -318,7 +318,7 @@ class ChatRoomViewController extends GetxController {
 
   bool get isAiChat => !isRealChat && !isTheater;
 
-  ChatRoomViewController(Map<String, dynamic> arguments) : session = createSession(arguments);
+  ChatTheaterRoomViewController(Map<String, dynamic> arguments) : session = createSession(arguments);
 
   final String kChatImageViewGenerateVideo = Security.security_kChatImageViewGenerateVideo;
   final String kRequestGenerateVideoSuccess = Security.security_kRequestGenerateVideoSuccess;
@@ -432,6 +432,13 @@ class ChatRoomViewController extends GetxController {
     Map<String, dynamic> sessionMap = jsonDecode(sessionJson);
 
     ChatSession chatSession = ChatSession.fromRouter(sessionMap);
+
+    // 如果是私聊类型（type=3），确保正确设置
+    if (sessionMap[Security.security_type] == 3) {
+      chatSession.type = 3;
+      chatSession.sessionId = chatSession.id; // 私聊使用简单ID作为sessionId
+    }
+
     return chatSession;
   }
 
