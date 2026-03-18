@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 import '../../../base/router/route_helper.dart';
 import '../../../core/util/cached_image.dart';
 import '../../../core/util/log_util.dart';
+import '../chat_room/chat_room_view.dart';
 import '../chat_room/chat_theater_room_view.dart';
 import '../chat_session.dart';
 import '../chat_voice_player.dart';
@@ -267,7 +268,7 @@ class ChatTextCell extends ChatCell {
       children: [
         Obx(() => Container(padding: EdgeInsets.only(bottom: 8, top: textMessage.focused.value ? 16 : 0), child: renderMainView())),
         Obx(
-          () => textMessage.focused.value ? Positioned(child: ChatTextAudioView(message: textMessage, unlock: unlock, download: download)) : SizedBox.shrink(),
+          () => textMessage.focused.value && textMessage.isText ? Positioned(child: ChatTextAudioView(message: textMessage, unlock: unlock, download: download)) : SizedBox.shrink(),
         ),
       ],
     );
@@ -423,7 +424,7 @@ class ChatTheaterTextCell extends ChatCell {
             ),
             textMessage.isMine() ? renderMineInfoView() : renderAiInfoView(),
 
-            !textMessage.isMine()
+            !textMessage.isMine() && textMessage.isText
                 ? Positioned(
                   right: 0,
                   child: Transform.translate(offset: Offset(0, 10), child: ChatTextAudioView(message: textMessage, unlock: unlock, download: download)),
@@ -545,7 +546,11 @@ class ChatTextAudioView extends StatelessWidget {
     String? path = ChatVoiceManager.instance.voicePathForUrl(textMessage.audioUrl);
 
     if (path == null) {
-      await Get.find<ChatTheaterRoomViewController>().downloadMessage(textMessage);
+      if (textMessage.isTheater) {
+        await Get.find<ChatTheaterRoomViewController>().downloadMessage(textMessage);
+      } else {
+        await Get.find<ChatRoomViewController>().downloadMessage(textMessage);
+      }
       //
       // await download?.call(message);
     }

@@ -120,6 +120,7 @@ class ChatMessage implements AudioInfoInterface {
   final int sessionType;//0普通私聊，1剧场，2群聊
 
   bool get isGroup => sessionType == 2;
+  bool get isTheater => sessionType == 1;
 
   RxBool showContinue = false.obs;
   int chatStatus = 0;   ///发消息给剧本时，需要将chatStatus设置为2（AI），否则不回消息，其他场景暂时没用，后面状态切换之后需要用
