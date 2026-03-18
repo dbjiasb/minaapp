@@ -90,7 +90,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                       RH.toWeb('${ApiConfig.cdn}/app/h5/terms/about_mode.html', title: Copywriting.security_about_AI_MODE);
                     },
                     child: ImageView(
-                      "mode_question.webp",
+                      "ic_question.png",
                       width: 28,
                       height: 28,
                     ).marginOnly(right: 16),

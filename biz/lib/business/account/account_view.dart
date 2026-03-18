@@ -1,8 +1,5 @@
-import 'package:biz/base/crypt/routes.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:biz/base/assets/image_path.dart';
+import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/preferences/preferences.dart';
@@ -11,18 +8,27 @@ import 'package:biz/core/account/account_service.dart';
 import 'package:biz/core/user_manager/user_manager.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/shared/widget/avatar_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../../base/api_service/api_response.dart';
 import '../../base/app_info/app_manager.dart';
 import '../../base/event_center/event_center.dart';
 import '../../base/router/route_helper.dart';
 import '../../core/util/cached_image.dart';
+import '../../core/util/calendar_helper.dart';
 import '../../core/util/log_util.dart';
 import '../../shared/alert.dart';
 import '../../shared/interactions.dart';
 import '../../shared/toast/toast.dart';
+import '../../shared/widget/keep_alive_wrapper.dart';
+import '../../shared/widget/title_bar.dart';
 import '../chat/setting/message_setting.dart';
+import '../create_center/create_oc_dialog.dart';
+import '../create_center/create_oc_rv_dialog.dart';
 import 'about_view.dart';
+import 'companion_view.dart';
 
 class AccountView extends StatelessWidget {
   AccountView({super.key});
@@ -37,14 +43,17 @@ class AccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    StyleTabBars tabBar = StyleTabBars(
+      selectedStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900),
+      unselectedStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 14, fontWeight: FontWeight.bold),
+      titles: controller.tabNames,
+      onTabSelected: (index) {
+        controller.pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.linearToEaseOut);
+      },
+    );
     return Scaffold(
       backgroundColor: AppColors.base_background,
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        backgroundColor: AppColors.base_background,
-        elevation: 0,
-        toolbarHeight: 0,
-      ),
+      appBar: AppBar(systemOverlayStyle: SystemUiOverlayStyle.light, backgroundColor: AppColors.base_background, elevation: 0, toolbarHeight: 0),
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
@@ -60,36 +69,43 @@ class AccountView extends StatelessWidget {
                 onRefresh: () async {
                   await controller.refreshData();
                 },
-                child: CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Container(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 32),
-                        child: Column(
-                          // spacing: 16,
-                          children: [
-                            InfoArea(),
-                            SizedBox(height: 32),
-                            Container(
-                              decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.circular(12)),
-                              child: Column(
-                                children: [
-                                  _settingItem(Security.security_about, ImagePath.set_about, toAbout),
-                                  _settingItem(Copywriting.security_terms_of_service, ImagePath.set_tos, checkTermsOfService),
-                                  _settingItem(Copywriting.security_privacy_policy, ImagePath.set_privacy, checkPrivacyPolicy),
-                                  // _settingItem("Feedback log", ImagePath.ic_feedback_log, feedbackLog),
-                                  _settingItem(Copywriting.security_account_Deletion, ImagePath.set_delete, deleteAccount),
-                                ],
+                child: NestedScrollView(
+                  headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                    return [
+                      SliverToBoxAdapter(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16, right: 16, top: 32, bottom: 8),
+                          child: Column(
+                            // spacing: 16,
+                            children: [
+                              InfoArea(),
+                              SizedBox(height: 24),
+                              premiumArea(),
+                              buildCurrencyRow(),
+                              SizedBox(height: 4),
+                              Container(
+                                decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.circular(12)),
+                                child: Column(
+                                  children: [
+                                    _settingItem(Security.security_about, ImagePath.set_about, toAbout),
+                                    // _settingItem(Copywriting.security_terms_of_service, ImagePath.set_tos, checkTermsOfService),
+                                    // _settingItem(Copywriting.security_privacy_policy, ImagePath.set_privacy, checkPrivacyPolicy),
+                                    // _settingItem("Feedback", "", feedbackLog),
+                                    // _settingItem(Copywriting.security_account_Deletion, ImagePath.set_delete, deleteAccount),
+                                    _settingItem(Security.security_Setting, "ic_setting.png", toSetting),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 12),
-                            _logoutView(),
-                          ],
+                              // SizedBox(height: 12),
+                              // _logoutView(),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    // _buildFeatureView(),
-                  ],
+                      SliverPersistentHeader(pinned: true, floating: true, delegate: _TabBarDelegate(tabBar)),
+                    ];
+                  },
+                  body: _buildFeatureView(tabBar),
                 ),
               ),
             ),
@@ -115,7 +131,7 @@ class AccountView extends StatelessWidget {
                         child: Center(
                           child: Row(
                             children: [
-                              CachedImage(imageUrl: ImagePath.ic_edit, width: 16, height: 16, color: Colors.white,),
+                              CachedImage(imageUrl: ImagePath.ic_edit, width: 16, height: 16, color: Colors.white),
                               SizedBox(width: 2),
                               Text(Copywriting.security_edit, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
                             ],
@@ -142,10 +158,8 @@ class AccountView extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(width: 12),
-
-            CachedImage(imageUrl: icon, width: 20, height: 20),
-            SizedBox(width: 8),
-
+            // ImageView(icon, width: 20, height: 20),
+            // SizedBox(width: 8),
             Text(name, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
             Spacer(),
             CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
@@ -215,6 +229,10 @@ class AccountView extends StatelessWidget {
     );
   }
 
+  void toSetting() {
+    Get.toNamed(Routers.setting);
+  }
+
   void messageSettings() {
     RH.toView(MessageSettingView());
   }
@@ -275,55 +293,85 @@ class AccountView extends StatelessWidget {
   //   );
   // }
 
-  // buildCurrencyRow() => Row(
-  //   children: [
-  //     Expanded(
-  //       child: GestureDetector(
-  //         onTap: () async {
-  //           await RH.toGems();
-  //         },
-  //         child: Container(
-  //           height: 48,
-  //           decoration: BoxDecoration(color: Color(0xFF1F222E), borderRadius: BorderRadius.all(Radius.circular(12))),
-  //           child: Row(
-  //             children: [
-  //               SizedBox(width: 12),
-  //               child: CachedImage(imageUrl: ImagePath.ic_diamond, width: 24, height: 24),
-  //               SizedBox(width: 4),
-  //               Obx(() => Text(MyAccount.gems.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
-  //               Spacer(),
-  //               child: CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 16, height: 16),
-  //               SizedBox(width: 12),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //     SizedBox(width: 11),
-  //     Expanded(
-  //       child: GestureDetector(
-  //         onTap: () async {
-  //           await RH.toCoins();
-  //         },
-  //         child: Container(
-  //           height: 48,
-  //           decoration: BoxDecoration(color: Color(0xFF1F222E), borderRadius: BorderRadius.all(Radius.circular(12))),
-  //           child: Row(
-  //             children: [
-  //               SizedBox(width: 12),
-  //               child: CachedImage(imageUrl: ImagePath.ic_coin, width: 24, height: 24),
-  //               SizedBox(width: 4),
-  //               Obx(() => Text(MyAccount.coins.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
-  //               Spacer(),
-  //               child: CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 16, height: 16),
-  //               SizedBox(width: 12),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   ],
-  // );
+  buildCurrencyRow() => Row(
+    children: [
+      Expanded(
+        flex: 1,
+        child: GestureDetector(
+          onTap: () async {
+            await RH.toGems();
+          },
+          child: Container(
+            height: 72,
+            decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.all(Radius.circular(12))),
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("My Gems", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                    const Spacer(),
+                    CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ImageView("gem.png", width: 24, height: 24),
+                    SizedBox(width: 4),
+                    Obx(() => Text(MyAccount.gems.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      SizedBox(width: 4),
+      Expanded(
+        flex: 1,
+        child: GestureDetector(
+          onTap: () async {
+            await RH.toCoins();
+          },
+          child: Container(
+            height: 72,
+            decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.all(Radius.circular(12))),
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("My Coins", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                    const Spacer(),
+                    CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ImageView("coin.png", width: 24, height: 24),
+                    SizedBox(width: 4),
+                    Obx(() => Text(MyAccount.coins.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
 
   // Widget connectionArea() {
   //   return Row(
@@ -381,68 +429,52 @@ class AccountView extends StatelessWidget {
   //   );
   // }
 
-  // Widget premiumArea() {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       Get.toNamed(Routers.rechargePremium);
-  //     },
-  //     child: Container(
-  //       padding: EdgeInsets.all(1),
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.all(Radius.circular(12)),
-  //         gradient: LinearGradient(
-  //           colors: [
-  //             Colors.white.withValues(alpha: 0),
-  //             Colors.white.withValues(alpha: 0),
-  //             Colors.white.withValues(alpha: 0.6),
-  //             Colors.white.withValues(alpha: 0),
-  //             Colors.white.withValues(alpha: 0),
-  //           ],
-  //         ),
-  //       ),
-  //       child: Container(
-  //         height: 54,
-  //         padding: EdgeInsets.symmetric(horizontal: 12),
-  //         decoration: BoxDecoration(gradient: LinearGradient(colors: [Color(0xFFF8E588), Color(0xffF66CAB)]), borderRadius: BorderRadius.circular(12)),
-  //         child: Row(
-  //           spacing: 8,
-  //           children: [
-  //             child: CachedImage(imageUrl: ImagePath.ic_freelie_pro, height: 24, width: 24),
-  //             Expanded(
-  //               child: Text(
-  //                 !MyAccount.isSubscribed ? "Feelie Pro" : MyAccount.premName,
-  //                 style: TextStyle(color: Color(0xFFE83887), fontSize: 14, fontWeight: FontWeight.bold),
-  //               ),
-  //             ),
-  //             Obx(
-  //                   () =>
-  //               MyAccount.isSubscribed
-  //                   ? Row(
-  //                 spacing: 4,
-  //                 children: [
-  //                   Text(Copywriting.security_expires_on, style: TextStyle(color: AppColors.mainLightColor, fontSize: 14, fontWeight: FontWeight.bold)),
-  //                   Text(
-  //                     CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? EncHelper.rcg_err,
-  //                     style: const TextStyle(color: AppColors.mainLightColor, fontSize: 14, fontWeight: FontWeight.bold),
-  //                   ),
-  //                   SizedBox(width: 4),
-  //                   child: CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, height: 16, width: 16),
-  //                 ],
-  //               )
-  //                   : Container(
-  //                 height: 32,
-  //                 padding: EdgeInsets.symmetric(horizontal: 12),
-  //                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
-  //                 alignment: Alignment.center,
-  //                 child: Text(Security.security_Subscribe, style: TextStyle(color: Color(0xFFE83887), fontSize: 14, fontWeight: FontWeight.bold)),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget premiumArea() {
+    return GestureDetector(
+      onTap: () {
+        RH.toPremium();
+      },
+      child: Container(
+        height: 54,
+        padding: EdgeInsets.only(left: 12, right: 12),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [Color(0xffdac6ae), Color(0xffe3b5e5), Color(0xffc4b2ea)]),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            ImageView("premium.png", height: 24, width: 24).marginOnly(right: 8),
+            Text(
+              !MyAccount.isSubscribed ? "premium" : MyAccount.premName,
+              style: TextStyle(color: AppColors.base_background, fontSize: 14, fontWeight: FontWeight.bold),
+            ).marginOnly(right: 8),
+            Spacer(),
+            Obx(
+                  () =>
+              MyAccount.isSubscribed
+                  ? Text(
+                '${Copywriting.security_expires_on} ${CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? ''}',
+                style: const TextStyle(color: Color(0xFFFFEF3B), fontSize: 12, fontWeight: FontWeight.bold),
+              )
+                  : Container(
+                height: 32,
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [Color(0xfff4a07f), Color(0xffea5076)]),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                alignment: Alignment.center,
+                child: Text(Security.security_Subscribe, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            Obx(
+                  () => !MyAccount.isSubscribed ? Container() : ImageView("arrow_right.png", height: 16, width: 16, color: Colors.black.withValues(alpha: 0.5)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   // Widget _buildTitleView() {
   //   return Row(
@@ -465,41 +497,19 @@ class AccountView extends StatelessWidget {
   //   );
   // }
 
-  // _buildFeatureView() {
-  //   return Obx(
-  //         () =>
-  //     controller.myCompanionViewController.myCompanions.isEmpty
-  //         ? SliverToBoxAdapter(
-  //       child: Column(
-  //         children: [
-  //           child: CachedImage(imageUrl: ImagePath.img_empty, height: 180, width: 180),
-  //           GestureDetector(
-  //             onTap: () {
-  //               CreateOcDialog.show();
-  //             },
-  //             child: Container(
-  //               alignment: Alignment.center,
-  //               height: 42,
-  //               width: 134,
-  //               decoration: BoxDecoration(color: Color(0xFFFFE407), borderRadius: BorderRadius.all(Radius.circular(12))),
-  //               child: Text("Go Create", style: TextStyle(color: Color(0xFF0F0F0F), fontSize: 16, fontWeight: FontWeight.bold)),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     )
-  //         : SliverPadding(
-  //       padding: EdgeInsets.only(bottom: 16, right: 16, left: 16, top: 8),
-  //       sliver: SliverGrid.count(
-  //         crossAxisCount: 3,
-  //         crossAxisSpacing: 8,
-  //         mainAxisSpacing: 8,
-  //         childAspectRatio: 112 / 180,
-  //         children: controller.myCompanionViewController.myCompanions.map((item) => _buildCompanionItem(item)).toList(),
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _buildFeatureView(StyleTabBars tabBar) {
+    return Container(
+      padding: EdgeInsets.only(top: 4),
+      color: AppColors.base_background,
+      child: PageView(
+        controller: controller.pageController,
+        onPageChanged: (index) {
+          tabBar.switchToTab(index);
+        },
+        children: controller.tabPage,
+      ),
+    );
+  }
 
   // Widget menuArea() {
   //   return Container(
@@ -656,14 +666,68 @@ class AccountView extends StatelessWidget {
   // }
 }
 
+// Tab栏的委托类
+class _TabBarDelegate extends SliverPersistentHeaderDelegate {
+  final StyleTabBars tabBar;
+
+  _TabBarDelegate(this.tabBar);
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: AppColors.base_background,
+      height: 40,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Stack(
+        children: [
+          tabBar,
+          Positioned(
+            top: 0,
+            right: 0,
+            bottom: 0,
+            child: GestureDetector(
+              onTap: () {
+                if (Preferences.instance.isRv) {
+                  CreateOcRvDialog.show();
+                } else {
+                  CreateOcDialog.show();
+                }
+              },
+              behavior: HitTestBehavior.opaque,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ImageView("chat_add.png", width: 16, height: 16, color: Color(0xFFA19C9A)),
+                  SizedBox(width: 4),
+                  Text("Create", style: TextStyle(color: Color(0xFFA19C9A), fontSize: 12, fontWeight: FontWeight.w500)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 40;
+
+  @override
+  double get minExtent => 40;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
+}
+
 class AccountViewController extends GetxController with GetTickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
   late TabController tabController;
+  PageController pageController = PageController();
 
-  var tabNames = [
-    // Copywriting.security_my_Companion,
-    // , Copywriting.security_group_Chat
-  ];
+  List<String> tabNames = ["My Own Character"];
+  RxList<Widget> tabPage = [KeepAliveWrapper(child: MyCompanionView(viewAll: 0))].obs;
 
   @override
   void onInit() {

@@ -12,6 +12,7 @@ import 'package:biz/shared/widget/image_viewer.dart';
 import 'package:biz/shared/widget/video_player_view.dart';
 
 import '../business/account/edit_my_info_view.dart';
+import '../business/account/settings.dart';
 import '../business/chat/ai_mode/my_mode/binding.dart';
 import '../business/chat/ai_mode/my_mode/view.dart';
 import '../business/chat/ai_mode/store/view.dart';
@@ -22,6 +23,11 @@ import '../business/chat/chat_room/chat_room_view.dart';
 import '../business/chat/chat_room/chat_theater_room_view.dart';
 import '../business/chat/chat_room/chat_private_room_view.dart';
 import '../business/chat_history/chat_history_view.dart';
+import '../business/create_center/advance_page.dart';
+import '../business/create_center/basic_page.dart';
+import '../business/create_center/edit_oc_page.dart';
+import '../business/create_center/gen_page.dart';
+import '../business/create_center/voice_page.dart';
 import '../business/crowd/info/binding.dart';
 import '../business/crowd/info/view.dart';
 import '../business/user_page/person_view.dart';
@@ -61,6 +67,13 @@ class RootView extends StatelessWidget {
             GetPage(name: Routers.modeStore, page: () => AIModeStoreView()),
             GetPage(name: Routers.modeList, page: () => MyAIModeView(), binding: MyAIModeBinding()),
             // GetPage(name: Routers.datingList, page: () => SceneListView(), binding: SceneListBinding()),
+            GetPage(name: Routers.createBasic, page: () => BasicPage()),
+            GetPage(name: Routers.createVoice, page: () => OCVoicePage()),
+            GetPage(name: Routers.editOC, page: () => EditAiPage()),
+            GetPage(name: Routers.createAdvance, page: () => AdvancePage()),
+            GetPage(name: Routers.createGen, page: () => GenPage()),
+            GetPage(name: Routers.setting, page: () => AccountSettings()),
+            // GetPage(name: Routers.myOC, page: () => MyCompanionView(), binding: ScenePlayBinding()),
           ],
           routingCallback: (route) {
             Toast.dismiss();

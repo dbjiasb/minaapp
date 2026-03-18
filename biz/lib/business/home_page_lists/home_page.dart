@@ -1,8 +1,13 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../base/preferences/preferences.dart';
+import '../create_center/create_oc_dialog.dart';
+import '../create_center/create_oc_rv_dialog.dart';
 import '../theater/theater_list/view.dart';
 import 'category_tabs_widget.dart';
 import 'role_list_logic.dart';
@@ -13,19 +18,11 @@ class HomePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(
-      HomePageViewController(),
-      tag: 'home_page_controller',
-    );
+    final controller = Get.put(HomePageViewController(), tag: 'home_page_controller');
 
     return Scaffold(
       backgroundColor: Color(0xFF07070a),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF07070a),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        elevation: 0,
-        toolbarHeight: 0,
-      ),
+      appBar: AppBar(backgroundColor: Color(0xFF07070a), systemOverlayStyle: SystemUiOverlayStyle.light, elevation: 0, toolbarHeight: 0),
       body: SafeArea(
         bottom: false,
         child: Stack(
@@ -36,11 +33,13 @@ class HomePageView extends StatelessWidget {
                 _buildTopBar(),
 
                 // Category tabs
-                Obx(() => CategoryTabsWidget(
-                  categories: controller.categories,
-                  selectedIndex: controller.selectedCategoryIndex.value,
-                  onTap: (index) => controller.onCategoryChanged(index),
-                )),
+                Obx(
+                  () => CategoryTabsWidget(
+                    categories: controller.categories,
+                    selectedIndex: controller.selectedCategoryIndex.value,
+                    onTap: (index) => controller.onCategoryChanged(index),
+                  ),
+                ),
 
                 SizedBox(height: 8.w),
 
@@ -50,29 +49,15 @@ class HomePageView extends StatelessWidget {
                     controller: controller.tabController,
                     children: [
                       // Story tab - linear list
-                      TheaterListView(
-                        scrollController: controller.scrollController,
-                      ),
+                      TheaterListView(scrollController: controller.scrollController),
                       // Discovery tab - waterfall grid
-                      RoleListView(
-                        type: RoleListType.ai,
-                        scrollController: controller.scrollController,
-                      ),
+                      RoleListView(type: RoleListType.ai, scrollController: controller.scrollController),
                       // Real tab - waterfall grid
-                      RoleListView(
-                        type: RoleListType.real,
-                        scrollController: controller.scrollController,
-                      ),
+                      RoleListView(type: RoleListType.real, scrollController: controller.scrollController),
                       // OC tab - waterfall grid
-                      RoleListView(
-                        type: RoleListType.ugc,
-                        scrollController: controller.scrollController,
-                      ),
+                      RoleListView(type: RoleListType.ugc, scrollController: controller.scrollController),
                       // Pro only tab - waterfall grid
-                      RoleListView(
-                        type: RoleListType.proOnly,
-                        scrollController: controller.scrollController,
-                      ),
+                      RoleListView(type: RoleListType.proOnly, scrollController: controller.scrollController),
                     ],
                   ),
                 ),
@@ -84,15 +69,17 @@ class HomePageView extends StatelessWidget {
               bottom: 16.w,
               left: 0,
               right: 0,
-              child: Obx(() => AnimatedOpacity(
-                opacity: controller.showCreateButton.value ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 200),
-                child: AnimatedSlide(
-                  offset: controller.showCreateButton.value ? Offset.zero : Offset(0, 0.5),
+              child: Obx(
+                () => AnimatedOpacity(
+                  opacity: controller.showCreateButton.value ? 1.0 : 0.0,
                   duration: Duration(milliseconds: 200),
-                  child: _buildCreateButton(),
+                  child: AnimatedSlide(
+                    offset: controller.showCreateButton.value ? Offset.zero : Offset(0, 0.5),
+                    duration: Duration(milliseconds: 200),
+                    child: _buildCreateButton(),
+                  ),
                 ),
-              )),
+              ),
             ),
           ],
         ),
@@ -107,20 +94,8 @@ class HomePageView extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Recommend',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'HYPangDunDun',
-            ),
-          ),
-          Icon(
-            Icons.search,
-            color: Colors.white,
-            size: 24.w,
-          ),
+          Text('Recommend', style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, fontFamily: 'HYPangDunDun')),
+          Icon(Icons.search, color: Colors.white, size: 24.w),
         ],
       ),
     );
@@ -130,52 +105,26 @@ class HomePageView extends StatelessWidget {
     return Center(
       child: GestureDetector(
         onTap: () {
-          Get.snackbar(
-            '',
-            '功能开发中',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.black87,
-            colorText: Colors.white,
-            margin: EdgeInsets.only(bottom: 100.w, left: 20.w, right: 20.w),
-            duration: Duration(seconds: 2),
-          );
+          if (Preferences.instance.isRv) {
+            CreateOcRvDialog.show();
+          } else {
+            CreateOcDialog.show();
+          }
         },
         child: Container(
           width: 86.w,
           height: 36.w,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFFffee6b), Color(0xFFfff8bf)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
+            gradient: LinearGradient(colors: [Color(0xFFffee6b), Color(0xFFfff8bf)], begin: Alignment.centerLeft, end: Alignment.centerRight),
             borderRadius: BorderRadius.circular(18.r),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0xFFffee6b).withValues(alpha: 0.3),
-                blurRadius: 8.w,
-                offset: Offset(0, 2.w),
-              ),
-            ],
+            boxShadow: [BoxShadow(color: Color(0xFFffee6b).withValues(alpha: 0.3), blurRadius: 8.w, offset: Offset(0, 2.w))],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/ic_add_create.png',
-                width: 20.w,
-                height: 20.w,
-                package: 'biz',
-              ),
+              Image.asset('assets/images/ic_add_create.png', width: 20.w, height: 20.w, package: 'biz'),
               SizedBox(width: 4.w),
-              Text(
-                'Create',
-                style: TextStyle(
-                  color: Color(0xFF07070a),
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              Text('Create', style: TextStyle(color: Color(0xFF07070a), fontSize: 14.sp, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
