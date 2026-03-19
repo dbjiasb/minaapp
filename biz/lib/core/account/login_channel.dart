@@ -1,18 +1,20 @@
 import 'dart:core';
 import 'dart:io';
 
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:biz/base/api_service/api_response.dart';
 import 'package:biz/base/app_info/app_manager.dart';
 import 'package:biz/base/assets/image_path.dart';
+import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/environment/environment.dart';
 import 'package:biz/base/router/router_names.dart';
 import 'package:biz/core/account/account_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../../shared/app_theme.dart';
 import '../../shared/toast/toast.dart';
@@ -54,7 +56,7 @@ class LoginChannelView extends StatelessWidget {
 
   Widget _buildCheckButton() {
     return Obx(
-          () => SizedBox(
+      () => SizedBox(
         width: 14,
         height: 14,
         child: IconButton(
@@ -82,10 +84,10 @@ class LoginChannelView extends StatelessWidget {
             text: Copywriting.security_privacy_Policy,
             style: linkStyle,
             recognizer:
-            TapGestureRecognizer()
-              ..onTap = () {
-                _onPrivacyPolicyClicked();
-              },
+                TapGestureRecognizer()
+                  ..onTap = () {
+                    _onPrivacyPolicyClicked();
+                  },
           ),
           const TextSpan(text: ' '),
           const TextSpan(text: 'and '),
@@ -93,10 +95,10 @@ class LoginChannelView extends StatelessWidget {
             text: Copywriting.security_terms_of_Service,
             style: linkStyle,
             recognizer:
-            TapGestureRecognizer()
-              ..onTap = () {
-                _onTermsOfServiceClicked();
-              },
+                TapGestureRecognizer()
+                  ..onTap = () {
+                    _onTermsOfServiceClicked();
+                  },
           ),
         ],
       ),
@@ -126,7 +128,7 @@ class LoginChannelView extends StatelessWidget {
       CachedImage(imageUrl: ImagePath.email_icon, width: 24, height: 24),
       Color(0xFF333333),
       Colors.white,
-          () {
+      () {
         Get.toNamed(Routers.login);
       },
     );
@@ -134,9 +136,9 @@ class LoginChannelView extends StatelessWidget {
       Security.security_apple,
       Copywriting.security_sign_in_with_Apple,
       CachedImage(imageUrl: ImagePath.apple_icon, width: 24, height: 24, color: Colors.black),
-      Colors.white,//Color(0xFF333333),
+      Colors.white, //Color(0xFF333333),
       Colors.black,
-          () async {
+      () async {
         Toast.loading(status: Copywriting.security_signing_in___);
         ApiResponse response = await AccountService.instance.loginWithApple();
         if (response.isSuccess) {
@@ -148,7 +150,28 @@ class LoginChannelView extends StatelessWidget {
         }
       },
     );
-    List<LoginChannel> channels = [if (Platform.isIOS) apple, email];
+    LoginChannel google = LoginChannel(
+      Security.security_google,
+      Copywriting.security_sign_in_with_Google,
+      ImageView("login_google.png", width: 24, height: 24),
+      Colors.white,
+      AppColors.base_background,
+      () async {
+        bool isDebug = kDebugMode || Environment.instance.isDebug;
+        if (isDebug) {
+          return;
+        }
+        ApiResponse? response = await AccountService.instance.loginWithGoogle();
+        if (response?.isSuccess == true) {
+          Toast.dismiss();
+          //弹出所有页面并进入主页
+          Get.offAllNamed(Routers.root);
+        } else {
+          Toast.error(response?.description ?? Copywriting.security_an_error_occurred__please_try_again_later_);
+        }
+      },
+    );
+    List<LoginChannel> channels = [if (Platform.isIOS) apple, if (Platform.isAndroid) google, email];
 
     return Column(children: [for (var channel in channels) Padding(padding: const EdgeInsets.only(bottom: 12), child: _buildLoginChannel(channel))]);
   }
@@ -192,17 +215,17 @@ class LoginChannelView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children:
-          NetworkType.values.map((e) {
-            return TextButton(
-              onPressed: () {
-                Environment.instance.updateNetworkType(e);
-              },
-              child: Text(
-                e.name,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: e == Environment.instance.networkType ? Colors.red : Colors.white),
-              ),
-            );
-          }).toList(),
+              NetworkType.values.map((e) {
+                return TextButton(
+                  onPressed: () {
+                    Environment.instance.updateNetworkType(e);
+                  },
+                  child: Text(
+                    e.name,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: e == Environment.instance.networkType ? Colors.red : Colors.white),
+                  ),
+                );
+              }).toList(),
         ),
       ),
     );
@@ -211,14 +234,14 @@ class LoginChannelView extends StatelessWidget {
   Widget _buildNetworkEnvMode() {
     return Environment.instance.isDebug
         ? GestureDetector(
-      onTap: () {
-        showNetworkSheet();
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Text(Environment.instance.networkType.name, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 16)),
-      ),
-    )
+          onTap: () {
+            showNetworkSheet();
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Text(Environment.instance.networkType.name, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 16)),
+          ),
+        )
         : Container();
   }
 
@@ -258,7 +281,7 @@ class LoginChannelView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [_buildLoginChannels(), SizedBox(height: 65), _buildAgreeText(), if (Platform.isAndroid) SizedBox(height: 24)],
                 ),
-                SafeArea(top: false, child: SizedBox())
+                SafeArea(top: false, child: SizedBox()),
               ],
             ),
           ),

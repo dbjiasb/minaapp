@@ -23,20 +23,67 @@ class RechargeCurrencyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: const Color(0xFF07070A),
+        extendBody: true,
       appBar: AppBar(
         leading: InkWell(onTap: Get.back, child: Container(padding: EdgeInsets.all(16), child: ImageView("back.png", fit: BoxFit.fill))),
         centerTitle: true,
-        backgroundColor: AppColors.base_background,
+        backgroundColor: Colors.transparent,
         title: Text(
           controller.rcgType == 0 ? EncHelper.rcg_titlCois : EncHelper.rcg_titlGms,
           style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
-      body: GetBuilder<RechargeCurrencyViewController>(
-        builder: (controller) {
-          return _rechargeCurrencyView();
-        },
+      body: Stack(
+        children: [
+          _buildBgDecoration(),
+          GetBuilder<RechargeCurrencyViewController>(
+            builder: (controller) {
+              return _rechargeCurrencyView();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBgDecoration() {
+    return SizedBox(
+      width: double.infinity,
+      height: 220,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+
+          // 右上角旋转矩形装饰
+          Positioned(
+            right: -134,
+            top: -95,
+            child: Transform.rotate(
+              angle: -60 * 3.14159265 / 180,
+              child: Container(
+                width: 243,
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: Color(0xFFFCC8FF).withValues(alpha: 0.6),
+                    width: 1,
+                  ),
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    stops: [0.355, 0.962],
+                    colors: [
+                      Color(0xFFFF89EB).withValues(alpha: 0),
+                      Color(0xFFE888FF).withValues(alpha: 0.5),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -50,40 +97,48 @@ class RechargeCurrencyView extends StatelessWidget {
           children: [
             Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(vertical: 17, horizontal: 24),
-              child: Column(
-                spacing: 12,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding: EdgeInsets.symmetric(vertical: 17, horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ImageView(rcgImage, height: 44, width: 44),
-                  Obx(() => Text(
-                    '${controller.rcgType == 0 ? MyAccount.coins : MyAccount.gems}',
-                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: AppFonts.medium),
-                  )),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.rcgType == 0 ? 'Coins balance' : 'Gems balance',
+                        style: TextStyle(color: Color(0xFFA19C9A), fontSize: 14, fontWeight: AppFonts.medium),
+                      ),
+                      Obx(() => Text(
+                        '${controller.rcgType == 0 ? MyAccount.coins : MyAccount.gems}',
+                        style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: AppFonts.bold),
+                      )),
+                    ],
+                  ),
+                  Spacer(),
+                  ImageView(rcgImage, height: 56, width: 56),
                 ],
               ),
             ),
 
             SizedBox(height: 18),
             _buildProducts(rcgImage),
+            SizedBox(height: 16),
             GestureDetector(
               onTap: controller.onStartPurchase,
               child: Container(
                 height: 48,
-                decoration: BoxDecoration(color: AppColors.ocMain, borderRadius: BorderRadius.circular(12)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(() => Text(
-                      controller.selectedPro.iapPriceStr,
-                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: AppFonts.black),
-                    )),
-                    SizedBox(width: 4),
-                    Text(Security.security_Recharge, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                  ],
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF37C),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  Security.security_Recharge,
+                  style: TextStyle(color: const Color(0xFF07070A), fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
+            SizedBox(height: 8),
           ],
         ),
       ),
@@ -96,9 +151,9 @@ class RechargeCurrencyView extends StatelessWidget {
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 10,
-            childAspectRatio: 110 / 120
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 110 / 80
         ),
         itemCount: controller.rechargeList.length,
         itemBuilder: (context, index) {
@@ -113,67 +168,38 @@ class RechargeCurrencyView extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFF272533),
-                      borderRadius: BorderRadius.circular(12),
-                      border: controller.selectedPro == product ? Border.all(width: 2, color: isGem ? Color(0xffF84652) : Color(0xffFFEF3B)) : null,
+                      color: const Color(0xFF2A2A23),
+                      borderRadius: BorderRadius.circular(8),
+                      border: controller.selectedPro == product ? Border.all(width: 1, color: Color(0xffFFF37C)) : null,
                     ),
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 24),
-                        Image.asset(rcgImage, height: 24, width: 24),
-                        SizedBox(height: 5),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('${product.iapValue}', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: AppFonts.black)),
-                            if (product.iapExtra > 0) SizedBox(width: 2),
-                            if (product.iapExtra > 0) Text('+${product.iapExtra}', style: TextStyle(color: Color(0xffF84652), fontSize: 12, fontWeight: AppFonts.black)),
+                            ImageView(rcgImage, height: 24, width: 24),
+                            SizedBox(width: 4),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('${product.iapValue}', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                                if (product.iapExtra > 0) SizedBox(width: 2),
+                                if (product.iapExtra > 0) Text('+${product.iapExtra}', style: TextStyle(color: Color(0xffF84652), fontSize: 11, fontWeight: AppFonts.black)),
+                              ],
+                            ),
                           ],
                         ),
-                        SizedBox(height: 5),
-                        Text(product.iapPriceStr, style: TextStyle(color: Color(0xffABABAD), fontSize: 14, fontWeight: FontWeight.bold)),
-                        const Spacer(),
-                        if (product.flagText.isNotEmpty) Container(
-                          width: 86, height: 16,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0xff8761F1).withValues(alpha: 0),
-                                Color(0xff8761F1),
-                                Color(0xff8761F1),
-                                Color(0xff8761F1).withValues(alpha: 0),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight
-                            )
-                          ),
-                          child: Text(product.flagText, style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                        ),
+                        SizedBox(height: 8),
+                        Text(product.iapPriceStr, style: TextStyle(color: controller.selectedPro == product ? Color(0xffFFF37C) : Color(0xFFA19C9A), fontSize: 12, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
-                  if (product.iapGiftRatio > 0)
-                    Positioned(
-                      top: -6,
-                      left: 0,
-                      child: Container(
-                        width: 76, height: 20,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: ImageView.getImageProvider(isGem ? "gem_extra_bg.webp" : "coin_extra_bg.webp"),
-                            fit: BoxFit.fill
-                          )
-                        ),
-                        child: Text(
-                          'Extra ${(product.iapGiftRatio * 100).toInt()}%',
-                          style: TextStyle(color: isGem ? Colors.white : Color(0xff070512), fontSize: 10, fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    )
                 ],
               ),
             ),

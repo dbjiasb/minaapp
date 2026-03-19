@@ -11,6 +11,8 @@ import 'package:biz/base/push_service/push_service.dart';
 import 'package:biz/base/router/route_helper.dart';
 import 'package:biz/shared/toast/toast.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../base/api_service/api_service_export.dart';
 import '../../base/crypt/copywriting.dart';
@@ -233,6 +235,31 @@ class AccountService {
     ApiRequest request = ApiRequest(Apis.security_fetchVerificationCode, params: {Security.security_account: account, Security.security_type: type.value});
     ApiResponse response = await ApiService.instance.sendRequest(request);
     return response;
+  }
+
+  Future<ApiResponse?> loginWithGoogle() async {
+    Toast.loading(status: Copywriting.security_signing_in___);
+
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      L.i('[Login] login google, user: ${googleUser?.email}, id: ${googleUser?.displayName}');
+      if (googleUser == null) {
+        Toast.dismiss();
+        return null;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      L.i('[Login] login google, accessToken: ${googleAuth.accessToken}, idToken: ${googleAuth.idToken}');
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      L.i('[Login] login google, credential: $credential');
+      return await login('', credential.idToken ?? '', AccountType.google, thirdName: '');
+    } catch (e) {
+      Toast.dismiss();
+      L.e('[Login] login google, error: $e');
+      return ApiResponse.withError({Security.security_code: -1, Security.security_description: 'Sign in failed, $e'});
+    }
   }
 
   Future<ApiResponse> loginWithApple() async {

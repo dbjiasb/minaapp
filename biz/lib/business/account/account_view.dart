@@ -337,7 +337,7 @@ class AccountView extends StatelessWidget {
         flex: 1,
         child: GestureDetector(
           onTap: () async {
-            await RH.toCoins();
+            // await RH.toCoins();
           },
           child: Container(
             height: 72,
@@ -352,8 +352,8 @@ class AccountView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text("My Coins", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
-                    const Spacer(),
-                    CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
+                    // const Spacer(),
+                    // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
                   ],
                 ),
                 SizedBox(height: 8),

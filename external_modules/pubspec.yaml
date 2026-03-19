@@ -66,6 +66,8 @@ dependencies:
   tencent_trtc_cloud: 2.9.9  # 腾讯云TRTC  <<  tencent_trtc_cloud: ^2.9.9
   qcloud_cos_client: 0.0.7  # 腾讯云COS  <<  qcloud_cos_client: ^0.0.7
   sign_in_with_apple: 7.0.1  # Apple登录  <<  sign_in_with_apple: ^7.0.1
+  google_sign_in: 6.3.0
+  firebase_auth: 6.0.0
 #  firebase_messaging: 16.0.2  # 消息推送
 
   # ========== 工具类 ==========

@@ -15,6 +15,7 @@ import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/router/route_helper.dart';
 
 import '../../base/api_service/api_service_export.dart';
+import '../../base/environment/environment.dart';
 import '../../core/account/account_service.dart';
 import '../../shared/alert.dart';
 import '../../shared/toast/toast.dart';
@@ -278,7 +279,8 @@ class PurchaseManager {
   }
 
   Future<void> purchaseItem(Map item) async {
-    if (kDebugMode) {
+    bool isDebug = kDebugMode || Environment.instance.isDebug;
+    if (isDebug) {
       Toast.show(Copywriting.security_purchasing___);
       Future.delayed(const Duration(seconds: 1), () {
         showConfirmAlert(Copywriting.security_payment_successful, '${item.iapName} purchased successfully');
