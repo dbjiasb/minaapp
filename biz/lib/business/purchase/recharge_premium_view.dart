@@ -75,26 +75,33 @@ class RechargePremiumView extends StatelessWidget {
         _buildSuccessHeader(),
         const SizedBox(height: 32),
         _buildUserSubscriptionCard(controller),
-        const SizedBox(height: 82)
+        const SizedBox(height: 48)
       ],
     );
   }
 
   Widget _buildSuccessHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(EncHelper.rcg_fuAces, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.premMain)),
-      ],
+    return ShaderMask(
+      shaderCallback: (bounds) => const LinearGradient(
+        colors: [Color(0xFFFFBD92), Color(0xFFFF8190), Color(0xFFFF59D9)],
+        stops: [0.0, 0.538, 1.0],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+      ).createShader(bounds),
+      child: Text(
+        EncHelper.rcg_fuAces,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+      ),
     );
   }
 
   Widget _buildUserSubscriptionCard(RechargePremiumViewController controller) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xff232015),
+        // color: Color(0xff232015),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(width: 1, color: Color(0xFFFFF1C0).withValues(alpha: 0.30)),
+        border: Border.all(width: 1, color: Color(0xFFFFF37C).withValues(alpha: 0.40)),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -135,10 +142,10 @@ class RechargePremiumView extends StatelessWidget {
             Row(
               spacing: 4,
               children: [
-                Text(EncHelper.rcg_expOn, style: TextStyle(color: Color(0xFFAD9BAF), fontSize: 13, fontWeight: FontWeight.w400)),
+                Text(EncHelper.rcg_expOn, style: TextStyle(color: Color(0xFFA19C9A), fontSize: 13, fontWeight: FontWeight.w600)),
                 Text(
                   CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? EncHelper.rcg_err,
-                  style: const TextStyle(color: AppColors.premMain, fontSize: 13, fontWeight: FontWeight.w400),
+                  style: const TextStyle(color: Color(0xFFFFF37C), fontSize: 13, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -161,7 +168,7 @@ class RechargePremiumView extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ImageView("premium_benefit_head.png", height: 16, width: 16),
+            ImageView("premium_item_right.png", height: 16, width: 16),
             const SizedBox(width: 4),
             Expanded(child: Text(name, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500))),
             // const Spacer(),
@@ -177,9 +184,9 @@ class RechargePremiumView extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          Expanded(child: Text(feature, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500))),
-          const SizedBox(width: 4),
           ImageView("premium_item_right.png", height: 16, width: 16),
+          const SizedBox(width: 4),
+          Expanded(child: Text(feature, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600))),
         ],
       ),
     );
