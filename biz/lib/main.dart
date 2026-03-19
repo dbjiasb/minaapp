@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:biz/base/environment/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
 import 'package:biz/app/root_view.dart';
@@ -16,6 +17,10 @@ import 'package:biz/base/push_service/push_service.dart';
 import 'package:biz/business/chat/chat_manager.dart';
 import 'package:biz/core/account/account_service.dart';
 import 'base/file_manager/zip_image_manager.dart';
+import 'business/chat/call/call_manager.dart';
+import 'business/crowd/crowd_manager.dart';
+import 'business/discovery/services/match_service.dart';
+import 'business/moment/moment_service.dart';
 import 'core/util/device_util.dart';
 import 'core/util/log_util.dart';
 
@@ -42,15 +47,22 @@ void startApp(List<String> args) async {
     await DataCenter.instance.init();
     await ZipImageManager.instance.init();
     await FileManager.instance.init();
-    // await Firebase.initializeApp();
+    if (Environment.instance.isRelease) {
+      await Firebase.initializeApp();
+    }
   } catch (e) {
     debugPrint('startApp error: $e');
   }
   Preferences.instance.initAppConfig();
+  // FcmService.instance.init();
   ReportManager.instance.init();
   EventCenter.instance.init();
   PushService.instance.init();
   AccountService.instance.init();
+  CrowedManager.instance.init();
+  CallManager.instance.init();
   ChatManager.instance.init();
+  Get.put<MatchService>(MatchService());
+  Get.put(MomentService());
   runApp(const RootView());
 }

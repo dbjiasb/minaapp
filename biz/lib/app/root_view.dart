@@ -28,10 +28,20 @@ import '../business/create_center/basic_page.dart';
 import '../business/create_center/edit_oc_page.dart';
 import '../business/create_center/gen_page.dart';
 import '../business/create_center/voice_page.dart';
+import '../business/crowd/create_crowed_binding.dart';
+import '../business/crowd/create_crowed_page.dart';
 import '../business/crowd/info/binding.dart';
 import '../business/crowd/info/view.dart';
+import '../business/moment/create_moment_view/create_moment_view_binding.dart';
+import '../business/moment/create_moment_view/create_moment_view_view.dart';
+import '../business/moment/create_post_image/create_post_image_binding.dart';
+import '../business/moment/create_post_image/create_post_image_view.dart';
+import '../business/moment/moment_detail_view/moment_detail_view_binding.dart';
+import '../business/moment/moment_detail_view/moment_detail_view_view.dart';
 import '../business/purchase/recharge_currency_view.dart';
 import '../business/purchase/recharge_premium_view.dart';
+import '../business/search/binding.dart';
+import '../business/search/view.dart';
 import '../business/user_page/person_view.dart';
 import '../shared/toast/toast.dart';
 import './skeleton_view.dart';
@@ -78,6 +88,24 @@ class RootView extends StatelessWidget {
             // GetPage(name: Routers.myOC, page: () => MyCompanionView(), binding: ScenePlayBinding()),
             GetPage(name: Routers.rechargePremium, page: () => RechargePremiumView()),
             GetPage(name: Routers.rechargeCurrency, page: () => RechargeCurrencyView()),
+            GetPage(
+              name: Routers.createPostImage,
+              page: () => const CreatePostImagePage(),
+              binding: CreatePostImageBinding(),
+            ),
+            GetPage(
+              name: Routers.createMoment,
+              page: () => const CreateMomentViewPage(),
+              binding: CreateMomentViewBinding(),
+            ),
+            GetPage(
+              name: Routers.detailMoment,
+              page: () => const MomentDetailViewPage(),
+              binding: MomentDetailViewBinding(),
+            ),
+            GetPage(name: Routers.createCrowed, page: () => CreateCrowedPage(), binding: CreateCrowedBinding()),
+            GetPage(name: Routers.crowedInfo, page: () => CrowedInfoView(), binding: CrowedInfoBinding()),
+            GetPage(name: Routers.search, page: () => SearchView(), binding: SearchBinding()),
           ],
           routingCallback: (route) {
             Toast.dismiss();

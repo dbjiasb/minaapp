@@ -7,7 +7,9 @@ import 'package:biz/business/account/account_view.dart';
 import 'package:biz/core/user_manager/user_manager.dart';
 import 'package:biz/shared/widget/keep_alive_wrapper.dart';
 
+import '../base/preferences/preferences.dart';
 import '../business/chat/chat_session_handler.dart';
+import '../business/discovery/discovery_view.dart';
 import '../business/home_page_lists/home_page.dart';
 import '../business/chat_history/chat_history_view.dart';
 import '../business/chat_history/chat_history_logic.dart';
@@ -154,8 +156,8 @@ class SkeletonViewController extends GetxController {
     //   pageBuilder: () {
     //     return KeepAliveWrapper(child: DiscoveryView());
     //   },
-    //   selectedBuilder: () => child: CachedImage(imageUrl: ImagePath.explore_selected, width: 28, height: 28),
-    //   normalBuilder: () => child: CachedImage(imageUrl: ImagePath.explore_normal, width: 28, height: 28),
+    //   selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_1, width: 28, height: 28),
+    //   normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_0, width: 28, height: 28),
     // ),
     // BottomBarItem(
     //   name: Security.security_createoc,
@@ -191,6 +193,16 @@ class SkeletonViewController extends GetxController {
     EventCenter.instance.addListener(kEventCenterDidClearSessionNumber, (event) => unreadCount.value = 0);
     updateUnreadCount();
     Get.put(ChatHistoryViewController());
+    if (!Preferences.instance.isRv) {
+      items.insert(1, BottomBarItem(
+        name: Security.security_Discovery,
+        pageBuilder: () {
+          return KeepAliveWrapper(child: DiscoveryView());
+        },
+        selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_1, width: 28, height: 28),
+        normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_0, width: 28, height: 28),
+      ));
+    }
   }
 
   @override

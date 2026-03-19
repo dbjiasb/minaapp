@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../base/preferences/preferences.dart';
+import '../../base/router/router_names.dart';
 import '../create_center/create_oc_dialog.dart';
 import '../create_center/create_oc_rv_dialog.dart';
 import '../theater/theater_list/view.dart';
@@ -95,7 +96,12 @@ class HomePageView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('Recommend', style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, fontFamily: 'HYPangDunDun')),
-          Icon(Icons.search, color: Colors.white, size: 24.w),
+          InkWell(
+            onTap: () {
+              Get.toNamed(Routers.search);
+            },
+            child: Icon(Icons.search, color: Colors.white, size: 24.w),
+          ),
         ],
       ),
     );
