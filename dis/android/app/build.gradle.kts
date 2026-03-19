@@ -2,16 +2,16 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
-//    id("com.google.gms.google-services")
+    id("com.google.gms.google-services")
 }
 
 dependencies {
-//    implementation("com.facebook.android:facebook-android-sdk:16.0.0")
-//    implementation("com.adjust.sdk:adjust-android-meta-referrer:5.1.0")
-//    implementation("com.google.gms:google-services:4.3.13")
-//    implementation(platform("com.google.firebase:firebase-bom:31.2.0"))
-//    implementation("com.google.firebase:firebase-messaging")
-//    implementation("com.android.billingclient:billing:7.0.0")
+    implementation("com.facebook.android:facebook-android-sdk:16.0.0")
+    implementation("com.adjust.sdk:adjust-android-meta-referrer:5.1.0")
+    implementation("com.google.gms:google-services:4.3.13")
+    implementation(platform("com.google.firebase:firebase-bom:31.2.0"))
+    implementation("com.google.firebase:firebase-messaging")
+    implementation("com.android.billingclient:billing:7.0.0")
 }
 
 android {
