@@ -23,7 +23,10 @@
       "Bash(flutter pub:*)",
       "mcp__figma__get_metadata",
       "Bash(cat /Users/ios/.claude/projects/-Users-ios-StudioProjects-minaapp/32e688e5-9a91-404f-928d-e166c882d522/tool-results/toolu_0141acc63ce440718d7602f8.json | python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); text=data[0]['text']; print\\(text[text.find\\('0:15'\\):text.find\\('0:15'\\)+8000]\\)\")",
-      "Bash(cat /Users/ios/.claude/projects/-Users-ios-StudioProjects-minaapp/32e688e5-9a91-404f-928d-e166c882d522/tool-results/toolu_0141acc63ce440718d7602f8.json | python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); text=data[0]['text']; idx=text.find\\('0:113'\\); print\\(text[idx:idx+3000]\\)\")"
+      "Bash(cat /Users/ios/.claude/projects/-Users-ios-StudioProjects-minaapp/32e688e5-9a91-404f-928d-e166c882d522/tool-results/toolu_0141acc63ce440718d7602f8.json | python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); text=data[0]['text']; idx=text.find\\('0:113'\\); print\\(text[idx:idx+3000]\\)\")",
+      "Bash(which flutter:*)",
+      "Bash(/Users/ios/flutterSdk/flutter3.35.7/bin/flutter analyze:*)",
+      "Bash(/Users/ios/flutterSdk/flutter3.35.7/bin/dart /Users/ios/StudioProjects/minaapp/biz/lib/core/util/calendar_helper.dart 2>&1 | head -5; grep -n 'static\\\\|expir\\\\|format\\\\|expiredAt\\\\|\\\\.to\\\\b' /Users/ios/StudioProjects/minaapp/biz/lib/core/util/calendar_helper.dart | head -20)"
     ]
   }
 }

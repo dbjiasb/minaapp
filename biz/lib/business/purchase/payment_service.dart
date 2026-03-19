@@ -278,14 +278,14 @@ class PurchaseManager {
   }
 
   Future<void> purchaseItem(Map item) async {
-    // if (kDebugMode) {
-    //   Toast.show(Copywriting.security_purchasing___);
-    //   Future.delayed(const Duration(seconds: 1), () {
-    //     showConfirmAlert(Copywriting.security_payment_successful, '${item.iapName} purchased successfully');
-    //     completion?.call(true, null);
-    //   });
-    //   return;
-    // }
+    if (kDebugMode) {
+      Toast.show(Copywriting.security_purchasing___);
+      Future.delayed(const Duration(seconds: 1), () {
+        showConfirmAlert(Copywriting.security_payment_successful, '${item.iapName} purchased successfully');
+        completion?.call(true, null);
+      });
+      return;
+    }
 
     if (!_isAvailable) {
       L.e("[Payment] IAP Service Not Available");

@@ -1,14 +1,11 @@
-import 'package:biz/base/crypt/routes.dart';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/business/purchase/payment_service.dart';
 import 'package:biz/core/account/account_service.dart';
 import 'package:biz/core/util/calendar_helper.dart';
 import 'package:biz/core/util/es_helper.dart';
 import 'package:biz/shared/app_theme.dart';
+import 'package:bordered_text/bordered_text.dart';
 
 import '../../base/assets/image_view.dart';
 import '../../base/crypt/copywriting.dart';
@@ -192,7 +189,7 @@ class RechargePremiumView extends StatelessWidget {
     return Column(spacing: 12, children: [
       const Spacer(),
       _buildFeatureList(controller),
-      ..._buildPlanOptions(controller),
+      _buildPlanOptions(controller),
       ..._buildFooter(controller)]
     );
   }
@@ -204,8 +201,14 @@ class RechargePremiumView extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildPlanOptions(RechargePremiumViewController controller) {
-    return [...controller.allPlans.map((plan) => _buildPlanOption(plan, controller))];
+  Widget _buildPlanOptions(RechargePremiumViewController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: controller.allPlans.map<Widget>((plan) => Expanded(child: _buildPlanOption(plan, controller))).toList(),
+      ),
+    );
   }
 
   double calculateDailyPay(dynamic cardType, dynamic price) {
@@ -264,75 +267,83 @@ class RechargePremiumView extends StatelessWidget {
 
     Map rcgItem = plan[Security.security_rechargeItem] ?? {};
     final prodName = rcgItem.iapName;
-
-    // 优惠卡
     final cdType = rcgItem[Security.security_premiumPeriodType] ?? 1;
     final dailyPay = calculateDailyPay(cdType, rcgItem.iapPrice);
     final dscnt = rcgItem[EncHelper.rcg_dsct];
+    final hasSave = dscnt != null && (dscnt as num) > 0;
+    // 原价（未折扣价）
+    final origPrice = rcgItem[Security.security_originalValue];
+    final hasOrig = origPrice != null && origPrice != 0;
 
     return GestureDetector(
       onTap: () => controller.selectPlan(plan),
-      child: SizedBox(
-        height: 68,
-        child: Container(
-          padding: isSelected ? null : const EdgeInsets.all(1),
-          decoration: BoxDecoration(
-            color: isSelected ? Color(0xff342F1C) : Color(0xFF1C1C1E),
-            borderRadius: BorderRadius.circular(16),
-            border: !isSelected ? Border.all(width: 1, color: Color(0xFF999999)) : Border.all(width: 2, color: AppColors.premMain),
-          ),
+      child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              Positioned.fill(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(prodName, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-                          Text('${rcgItem.iapCurrencySymbol}$dailyPay/day', style: TextStyle(color: const Color(0x99FFFFFF), fontSize: 11, fontWeight: FontWeight.w500)),
-                        ],
+              Container(
+                height: 104,
+                width: 110,
+                decoration: BoxDecoration(
+                  color: isSelected ? const Color(0xFF2A2A23) : const Color(0xFF19191E),
+                  borderRadius: BorderRadius.circular(16),
+                  border: isSelected
+                      ? Border.all(width: 2, color: const Color(0xFFFFF37C))
+                      : Border.all(width: 1, color: const Color(0x4DFFFFFF)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      prodName,
+                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${rcgItem.iapCurrencySymbol}$dailyPay/day',
+                      style: const TextStyle(color: Color(0x99FFFFFF), fontSize: 11, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      rcgItem.iapPriceStr,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: isSelected ? const Color(0xFFFFF37C) : const Color(0xFF999999),
                       ),
-                      const Spacer(),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            rcgItem.iapPriceStr,
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: isSelected ? AppColors.premMain : const Color(0xFF999999)),
-                          ),
-                        ],
+                    ),
+                    if (hasOrig) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        '${rcgItem.iapCurrencySymbol}${(origPrice * 0.01).toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0x66FFFFFF),
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Color(0x66FFFFFF),
+                        ),
                       ),
                     ],
-                  ),
+                  ],
                 ),
               ),
-              if (isSelected && dscnt != null && dscnt > 0)
+              if (hasSave)
                 Positioned(
-                  left: 4,
-                  top: -8,
-                  child: Container(
-                    height: 20,
-                    width: 87,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [Color(0xFFF1BD8D), Color(0xFFF43F7C)], begin: Alignment.centerLeft, end: Alignment.centerRight),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Save ${(dscnt * 100).toInt()}%',
-                        style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-                      ),
+                  right: 0,
+                  top: -10,
+                  child: BorderedText(
+                    strokeWidth: 2,
+                    strokeColor: Color(0xFFFFF37C),
+                    child: Text(
+                      'Save ${(dscnt * 100).toInt()}%',
+                      style: const TextStyle(color: Color(0xFF07070A), fontSize: 11, fontWeight: FontWeight.w900),
                     ),
                   ),
                 ),
             ],
           ),
         ),
-      ),
     );
   }
 
