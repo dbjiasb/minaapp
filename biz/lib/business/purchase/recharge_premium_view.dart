@@ -179,11 +179,10 @@ class RechargePremiumView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ImageView("premium_benefit_head.png", height: 16, width: 16),
-          const SizedBox(width: 4),
           Expanded(child: Text(feature, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500))),
+          const SizedBox(width: 4),
+          ImageView("premium_item_right.png", height: 16, width: 16),
         ],
       ),
     );
