@@ -30,6 +30,7 @@ import '../business/create_center/gen_page.dart';
 import '../business/create_center/voice_page.dart';
 import '../business/crowd/info/binding.dart';
 import '../business/crowd/info/view.dart';
+import '../business/purchase/recharge_premium_view.dart';
 import '../business/user_page/person_view.dart';
 import '../shared/toast/toast.dart';
 import './skeleton_view.dart';
@@ -74,6 +75,7 @@ class RootView extends StatelessWidget {
             GetPage(name: Routers.createGen, page: () => GenPage()),
             GetPage(name: Routers.setting, page: () => AccountSettings()),
             // GetPage(name: Routers.myOC, page: () => MyCompanionView(), binding: ScenePlayBinding()),
+            GetPage(name: Routers.rechargePremium, page: () => RechargePremiumView()),
           ],
           routingCallback: (route) {
             Toast.dismiss();

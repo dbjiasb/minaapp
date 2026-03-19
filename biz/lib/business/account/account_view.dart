@@ -435,44 +435,50 @@ class AccountView extends StatelessWidget {
         RH.toPremium();
       },
       child: Container(
-        height: 54,
-        padding: EdgeInsets.only(left: 12, right: 12),
+        height: 48,
+        padding: EdgeInsets.only(left: 16, right: 16),
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [Color(0xffdac6ae), Color(0xffe3b5e5), Color(0xffc4b2ea)]),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
+          image: DecorationImage(image: ImageView.getImageProvider("premium_bg.png"), fit: BoxFit.cover),
         ),
         child: Row(
           children: [
             ImageView("premium.png", height: 24, width: 24).marginOnly(right: 8),
             Text(
-              !MyAccount.isSubscribed ? "premium" : MyAccount.premName,
-              style: TextStyle(color: AppColors.base_background, fontSize: 14, fontWeight: FontWeight.bold),
-            ).marginOnly(right: 8),
+              'VIP',
+              style: TextStyle(color: Color(0xFF07070A), fontSize: 16, fontWeight: FontWeight.w600),
+            ),
             Spacer(),
             Obx(
-                  () =>
-              MyAccount.isSubscribed
-                  ? Text(
-                '${Copywriting.security_expires_on} ${CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? ''}',
-                style: const TextStyle(color: Color(0xFFFFEF3B), fontSize: 12, fontWeight: FontWeight.bold),
-              )
+              () => MyAccount.isSubscribed
+                  ? Row(
+                      children: [
+                        Text(
+                          '${Copywriting.security_expires_on} ${CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? ''}',
+                          style: const TextStyle(color: Color(0xFF07070A), fontSize: 14, fontWeight: FontWeight.w600),
+                        ).marginOnly(right: 8),
+                        ImageView("arrow_right.png", height: 16, width: 16, color: Colors.black.withValues(alpha: 0.5)),
+                      ],
+                    )
                   : Container(
-                height: 32,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [Color(0xfff4a07f), Color(0xffea5076)]),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                alignment: Alignment.center,
-                child: Text(Security.security_Subscribe, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-              ),
-            ),
-            Obx(
-                  () => !MyAccount.isSubscribed ? Container() : ImageView("arrow_right.png", height: 16, width: 16, color: Colors.black.withValues(alpha: 0.5)),
+                      height: 24,
+                      width: 84,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF171411), Color(0xFF84786C), Color(0xFF07070A)],
+                          stops: [0.049, 0.361, 0.879],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(Security.security_Subscribe, style: TextStyle(color: Color(0xFFFFEFDA), fontSize: 14, fontWeight: FontWeight.w600)),
+                    ),
             ),
           ],
         ),
-      ),
+      ).marginOnly(bottom: 12),
     );
   }
 

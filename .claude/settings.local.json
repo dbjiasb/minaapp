@@ -20,7 +20,10 @@
       "Bash(find /Users/ios/StudioProjects/minaapp/biz/lib/business/theater* -name \"*.dart\" -type f | head -20)",
       "Bash(find /Users/ios/StudioProjects/minaapp/biz/lib/business -name \"*message*\" -o -name \"*session*\" | grep -E \"\\(view|logic\\)\\\\.dart$\" | head -20)",
       "Bash(cd /Users/ios/StudioProjects/minaapp/biz && flutter pub get)",
-      "Bash(flutter pub:*)"
+      "Bash(flutter pub:*)",
+      "mcp__figma__get_metadata",
+      "Bash(cat /Users/ios/.claude/projects/-Users-ios-StudioProjects-minaapp/32e688e5-9a91-404f-928d-e166c882d522/tool-results/toolu_0141acc63ce440718d7602f8.json | python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); text=data[0]['text']; print\\(text[text.find\\('0:15'\\):text.find\\('0:15'\\)+8000]\\)\")",
+      "Bash(cat /Users/ios/.claude/projects/-Users-ios-StudioProjects-minaapp/32e688e5-9a91-404f-928d-e166c882d522/tool-results/toolu_0141acc63ce440718d7602f8.json | python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); text=data[0]['text']; idx=text.find\\('0:113'\\); print\\(text[idx:idx+3000]\\)\")"
     ]
   }
 }
