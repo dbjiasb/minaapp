@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svga/flutter_svga.dart';
@@ -32,7 +33,7 @@ class MatchScanPage extends GetView<MatchScanLogic> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
-              icon: ImageView("back.png", fit: BoxFit.cover, width: 24, height: 24),
+              icon: ImageView(Images.security_back_png, fit: BoxFit.cover, width: 24, height: 24),
               onPressed: () {
                 controller.cancelVideoMatch();
               },

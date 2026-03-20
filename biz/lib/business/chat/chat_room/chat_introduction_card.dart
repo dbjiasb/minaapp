@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/copywriting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -58,7 +59,7 @@ class ChatIntroductionCard extends StatelessWidget {
                     ),
                     if (session.isAiChat)
                       Text(
-                        'AI Character',
+                        Copywriting.security_aI_Character,
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.6),
                           fontSize: 12.sp,

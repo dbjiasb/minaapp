@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import '../../../../base/assets/image_view.dart';
 class ModeWidget {
 
   static Widget wealthIcon(int type, {double width = 16, double height = 16}) {
-    return ImageView(type == 0 ? "coin.png" : "gem.png", width: width, height: height);
+    return ImageView(type == 0 ? Images.security_coin_png : Images.security_gem_png, width: width, height: height);
   }
 
   static Widget wealthView(int type, int value) {
@@ -23,7 +24,7 @@ class ModeWidget {
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             child: Row(
               children: [
-                ImageView(type == 0 ? "coin.png" : "gem.png", width: 16, height: 16),
+                ImageView(type == 0 ? Images.security_coin_png : Images.security_gem_png, width: 16, height: 16),
                 4.horizontalSpace,
                 Text('$value', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))
               ],
@@ -39,7 +40,7 @@ class ModeWidget {
       children: List.generate(
           5,
               (index) => ImageView(
-            index < stars ? "mode_star_light.webp" : "mode_star_unlight.webp",
+            index < stars ? Images.security_mode_star_light_webp : Images.security_mode_star_unlight_webp,
             width: 18,
             height: 18,
           )

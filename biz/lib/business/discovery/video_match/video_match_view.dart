@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/report/report_manager.dart';
@@ -29,7 +30,7 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: CachedImageProvider(MatchRes.base + 'ic_match_bg.png'), // 替换为你的图片路径
+          image: CachedImageProvider(MatchRes.base + Images.security_ic_match_bg_png), // 替换为你的图片路径
           fit: BoxFit.cover, // 图片填充整个屏幕
         ),
       ),
@@ -177,7 +178,7 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
                   const SizedBox(width: 4),
                   Text(Copywriting.security_get_30s_Free_Trial, style: TextStyle(color: Color(0xFFDCC3FF), fontSize: 13)),
                   const SizedBox(width: 4),
-                  ImageView("arrow_right.png", width: 16, height: 16, fit: BoxFit.cover, color: const Color(0xFFDCC3FF)),
+                  ImageView(Images.security_arrow_right_png, width: 16, height: 16, fit: BoxFit.cover, color: const Color(0xFFDCC3FF)),
                 ],
               ),
             ),

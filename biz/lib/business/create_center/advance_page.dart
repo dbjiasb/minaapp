@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/api_service/api_response.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -353,7 +354,7 @@ class AdvanceCore extends StatelessWidget {
                             runAlignment: WrapAlignment.center,
                             spacing: 4,
                             children: [
-                              ImageView("chat_add.png", height: 16, width: 16),
+                              ImageView(Images.security_chat_add_png, height: 16, width: 16),
                               Text(Copywriting.security_add_rounds, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
                               Text(
                                 '(${_logic.dialogStyle.length ~/ 2}/5）',
@@ -395,7 +396,7 @@ class AdvancePage extends StatelessWidget {
             CharacterService.instance.save();
             Get.back();
           },
-          icon: ImageView("back.png", height: 24, width: 24),
+          icon: ImageView(Images.security_back_png, height: 24, width: 24),
         ),
         title: Text(
           textAlign: TextAlign.center,
@@ -470,7 +471,7 @@ class AdvancePage extends StatelessWidget {
                 CharacterService.instance.save();
                 Get.back();
               },
-              icon: ImageView("back.png", height: 24, width: 24),
+              icon: ImageView(Images.security_back_png, height: 24, width: 24),
             ),
             Expanded(
               child: Text(

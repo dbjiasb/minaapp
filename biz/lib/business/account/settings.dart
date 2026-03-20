@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/other.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,7 @@ class AccountSettings extends StatelessWidget {
                                 children: [
                                   Text(e.title, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
                                   Spacer(),
-                                  ImageView("arrow_right.png", height: 16, width: 16),
+                                  ImageView(Images.security_arrow_right_png, height: 16, width: 16),
                                 ],
                               ),
                             ),

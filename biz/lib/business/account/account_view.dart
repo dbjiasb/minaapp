@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/copywriting.dart';
@@ -95,7 +96,7 @@ class AccountView extends StatelessWidget {
                                     // _settingItem(Copywriting.security_privacy_policy, ImagePath.set_privacy, checkPrivacyPolicy),
                                     // _settingItem("Feedback", "", feedbackLog),
                                     // _settingItem(Copywriting.security_account_Deletion, ImagePath.set_delete, deleteAccount),
-                                    _settingItem(Security.security_Setting, "ic_setting.png", toSetting),
+                                    _settingItem(Security.security_Setting, Images.security_ic_setting_png, toSetting),
                                   ],
                                 ),
                               ),
@@ -316,7 +317,7 @@ class AccountView extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("My Gems", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                    Text(Copywriting.security_my_Gems, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
                     const Spacer(),
                     CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
                   ],
@@ -325,7 +326,7 @@ class AccountView extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ImageView("gem.png", width: 24, height: 24),
+                    ImageView(Images.security_gem_png, width: 24, height: 24),
                     SizedBox(width: 4),
                     Obx(() => Text(MyAccount.gems.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
                   ],
@@ -354,7 +355,7 @@ class AccountView extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("My Coins", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                    Text(Copywriting.security_my_Coins, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
                     // const Spacer(),
                     // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
                   ],
@@ -363,7 +364,7 @@ class AccountView extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ImageView("coin.png", width: 24, height: 24),
+                    ImageView(Images.security_coin_png, width: 24, height: 24),
                     SizedBox(width: 4),
                     Obx(() => Text(MyAccount.coins.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
                   ],
@@ -442,13 +443,13 @@ class AccountView extends StatelessWidget {
         padding: EdgeInsets.only(left: 16, right: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
-          image: DecorationImage(image: ImageView.getImageProvider("premium_bg.png"), fit: BoxFit.cover),
+          image: DecorationImage(image: ImageView.getImageProvider(Images.security_premium_bg_png), fit: BoxFit.cover),
         ),
         child: Row(
           children: [
-            ImageView("premium.png", height: 24, width: 24).marginOnly(right: 8),
+            ImageView(Images.security_premium_png, height: 24, width: 24).marginOnly(right: 8),
             Text(
-              'VIP',
+              Security.security_vIP,
               style: TextStyle(color: Color(0xFF07070A), fontSize: 16, fontWeight: FontWeight.w600),
             ),
             Spacer(),
@@ -460,7 +461,7 @@ class AccountView extends StatelessWidget {
                           '${Copywriting.security_expires_on} ${CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? ''}',
                           style: const TextStyle(color: Color(0xFF07070A), fontSize: 14, fontWeight: FontWeight.w600),
                         ).marginOnly(right: 8),
-                        ImageView("arrow_right.png", height: 16, width: 16, color: Colors.black.withValues(alpha: 0.5)),
+                        ImageView(Images.security_arrow_right_png, height: 16, width: 16, color: Colors.black.withValues(alpha: 0.5)),
                       ],
                     )
                   : Container(
@@ -706,9 +707,9 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ImageView("chat_add.png", width: 16, height: 16, color: Color(0xFFA19C9A)),
+                  ImageView(Images.security_chat_add_png, width: 16, height: 16, color: Color(0xFFA19C9A)),
                   SizedBox(width: 4),
-                  Text("Create", style: TextStyle(color: Color(0xFFA19C9A), fontSize: 12, fontWeight: FontWeight.w500)),
+                  Text(Security.security_create, style: TextStyle(color: Color(0xFFA19C9A), fontSize: 12, fontWeight: FontWeight.w500)),
                 ],
               ),
             ),
@@ -735,7 +736,7 @@ class AccountViewController extends GetxController with GetTickerProviderStateMi
   late TabController tabController;
   PageController pageController = PageController();
 
-  List<String> tabNames = ["Character"];
+  List<String> tabNames = [Security.security_character];
   RxList<Widget> tabPage = [KeepAliveWrapper(child: MyCompanionView(viewAll: 0))].obs;
 
   @override

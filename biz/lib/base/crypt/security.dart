@@ -912,4 +912,24 @@ abstract final class Security {
   static late final String security_pageReal = decrypt('lglgvdRs7S/+inoHKe+7dA=='); // pageReal
   static late final String security_storyBackground = decrypt('wZawld808H4yTX3Yh9RFYw=='); // storyBackground
   static late final String security_tF7sV9kS8zJ5yP9p = decrypt('6/Qeg/AQU5k+tX8BvxrBzV/X7/0pYlWpJiQk7r+9DyY='); // tF7sV9kS8zJ5yP9p
+  static late final String security_aI = decrypt('GGJHxL81SvK3wga5w6ALTw=='); // AI
+  static late final String security_collected = decrypt('Yq10m7Ra6F36riIfMLxPBw=='); // Collected
+  static late final String security_create = decrypt('Lnzhd+0xrF9t0qRsUk9cFw=='); // Create
+  static late final String security_discovery = decrypt('bGo9DygI52+aw9kq76OeGA=='); // Discovery
+  static late final String security_gROUP = decrypt('wHa3YpeSCJlfWblztDNmSg=='); // GROUP
+  static late final String security_hH = decrypt('AMuW7Jxy+C/c7w0iJAbmeQ=='); // HH
+  static late final String security_hYPangDunDun = decrypt('I5zmpALzpWOx3jpSKJFndQ=='); // HYPangDunDun
+  static late final String security_mM = decrypt('2YewOhZ50cs/4Z8nqOWBAg=='); // MM
+  static late final String security_oC = decrypt('9z5E/n0r9dpn9C4IyZFwng=='); // OC
+  static late final String security_sSS = decrypt('h1IoIr7KgBrXRPo+LIsXNg=='); // SSS
+  static late final String security_vIP = decrypt('8BI8OKp1qAF6PPwXYAbr3A=='); // VIP
+  static late final String security_biz = decrypt('ZhPT8iL3s/uGR4qDbMz24Q=='); // biz
+  static late final String security_dd = decrypt('UWmVAkoM4bsOaDuDJuk2yQ=='); // dd
+  static late final String security_home_page_controller = decrypt('tgysdIamy+7PsJjWjhIYDEXHGO6WQgxcRUfvRrmxSgY='); // home_page_controller
+  static late final String security_images_v = decrypt('wrt+bxgFK7w7FBO5QHcpCQ=='); // images_v
+  static late final String security_online = decrypt('R1bCTmOxPTwpV1cxcvZ92A=='); // online
+  static late final String security_ordinary = decrypt('TpETbo6vUboAHfc7n53cGg=='); // ordinary
+  static late final String security_slim = decrypt('aZDfizbm5SzGggTBMtbSmw=='); // slim
+  static late final String security_yy = decrypt('yR1AdB2H+vr1cc+CWDakRg=='); // yy
+  static late final String security_yyyy = decrypt('30iicW0VnoxswU+DB3cGFw=='); // yyyy
 }

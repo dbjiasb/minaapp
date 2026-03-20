@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'dart:math';
 
 import 'package:biz/base/crypt/routes.dart';
@@ -61,7 +62,7 @@ class GenerateVideoDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(child: Center(child: Text(Copywriting.security_generate_Video, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.w)))),
-              GestureDetector(onTap: Get.back, child: ImageView("ic_close.png", width: 22, height: 22)),
+              GestureDetector(onTap: Get.back, child: ImageView(Images.security_ic_close_png, width: 22, height: 22)),
             ],
           ),
           16.w.verticalSpace,
@@ -96,7 +97,7 @@ class GenerateVideoDialog extends StatelessWidget {
             },
             child: Row(
               children: [
-                ImageView("tip_on.png", width: 16.w, height: 16.w),
+                ImageView(Images.security_tip_on_png, width: 16.w, height: 16.w),
                 4.w.horizontalSpace,
                 Text(
                   Copywriting.security_aI_Writer,

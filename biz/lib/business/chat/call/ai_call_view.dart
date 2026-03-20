@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/other.dart';
 import 'package:biz/base/crypt/copywriting.dart';
@@ -81,7 +82,7 @@ class AICallView extends StatelessWidget {
       case AICallState.aiSpeaking:
         return Column(
           children: [
-            ImageView("triangle_arrow.png", width: 24, height: 12),
+            ImageView(Images.security_triangle_arrow_png, width: 24, height: 12),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 43),
               child: Container(
@@ -99,7 +100,7 @@ class AICallView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 40),
-            GestureDetector(onTap: viewController.interruptAI, child: ImageView("interrupt_task.png", width: 32, height: 32)),
+            GestureDetector(onTap: viewController.interruptAI, child: ImageView(Images.security_interrupt_task_png, width: 32, height: 32)),
             SizedBox(height: 4),
             Text(Copywriting.security_interrupt_AI, style: TextStyle(fontSize: 14, color: Color(0xFFABABAD), fontWeight: FontWeight.w500)),
           ],
@@ -133,7 +134,7 @@ class AICallView extends StatelessWidget {
             children: [
               TextSpan(text: '${viewController.callInfo.value?.costEveryMinute ?? 15} '),
               WidgetSpan(
-                child: ImageView(viewController.callInfo.value?.currencyType == 1 ? 'gem.png' : 'coin.png', height: 16, width: 16),
+                child: ImageView(viewController.callInfo.value?.currencyType == 1 ? Images.security_gem_png : Images.security_coin_png, height: 16, width: 16),
                 alignment: PlaceholderAlignment.middle, // 图片对齐方式
               ),
               TextSpan(text: Copywriting.security_per_minute),
@@ -204,7 +205,7 @@ class AICallView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          GestureDetector(onTap: viewController.onCallCancel, child: ImageView("hang_up.png", width: 64, height: 64)),
+                          GestureDetector(onTap: viewController.onCallCancel, child: ImageView(Images.security_hang_up_png, width: 64, height: 64)),
                           SizedBox(width: 60),
                           GestureDetector(
                             onTap: () {
@@ -213,7 +214,7 @@ class AICallView extends StatelessWidget {
                             child: Obx(
                               () =>
                                   !viewController.muted.value
-                                      ? ImageView("open_mic.png", width: 64, height: 64)
+                                      ? ImageView(Images.security_open_mic_png, width: 64, height: 64)
                                       : Container(
                                         height: 64,
                                         width: 64,

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/gestures.dart';
@@ -41,20 +42,20 @@ class CreateOcRvDialog extends StatelessWidget {
   Widget _buildHeaderSection() {
     return Stack(
       children: [
-        ImageView("oc_dialog_rv_bg.png", width: double.infinity),
+        ImageView(Images.security_oc_dialog_rv_bg_png, width: double.infinity),
         Positioned(
           top: 30,
           left: 0,
           right: 0,
           child: Row(
             children: [
-              IconButton(onPressed: Get.back, icon: ImageView(width: 32, height: 32, "ic_close.png")),
+              IconButton(onPressed: Get.back, icon: ImageView(width: 32, height: 32, Images.security_ic_close_png)),
               Spacer(),
               IconButton(
                 onPressed: () {
                   _showCopyrightAgreement();
                 },
-                icon: ImageView(width: 32, height: 32, "ic_question.png"),
+                icon: ImageView(width: 32, height: 32, Images.security_ic_question_png),
               ),
             ],
           ),
@@ -78,7 +79,7 @@ class CreateOcRvDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                _logic.canContinue ? Security.security_Continue : "Start Create",
+                _logic.canContinue ? Security.security_Continue : Copywriting.security_start_Create,
                 style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
               ),
               if (!_logic.canContinue)
@@ -90,7 +91,7 @@ class CreateOcRvDialog extends StatelessWidget {
                           ? RichText(
                             text: TextSpan(
                               children: [
-                                if (_logic.premiumFree == 1) WidgetSpan(child: ImageView("premium.png", width: 18, height: 18).marginOnly(right: 4)),
+                                if (_logic.premiumFree == 1) WidgetSpan(child: ImageView(Images.security_premium_png, width: 18, height: 18).marginOnly(right: 4)),
                                 WidgetSpan(
                                   child: Text(
                                     _logic.freeText,
@@ -103,7 +104,7 @@ class CreateOcRvDialog extends StatelessWidget {
                           : RichText(
                             text: TextSpan(
                               children: [
-                                WidgetSpan(child: ImageView(_logic.costType == 0 ? "coin.png" : "gem.png", width: 18, height: 18)),
+                                WidgetSpan(child: ImageView(_logic.costType == 0 ? Images.security_coin_png : Images.security_gem_png, width: 18, height: 18)),
                                 TextSpan(
                                   text: ' ${_logic.costValue}',
                                   style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
@@ -141,7 +142,7 @@ class CreateOcRvDialog extends StatelessWidget {
                     onTap: () {
                       _logic.consent.value = !_logic.consent.value;
                     },
-                    child: ImageView(_logic.consent.value == true ? "ic_check.png" : "ic_uncheck.png"),
+                    child: ImageView(_logic.consent.value == true ? Images.security_ic_check_png : Images.security_ic_uncheck_png),
                   ),
                 ),
               ),
@@ -153,7 +154,7 @@ class CreateOcRvDialog extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "Before creation, please review ",
+                        text: Copywriting.security_before_creation__please_review,
                         style: TextStyle(color: const Color(0xFFABABAD), fontSize: 11, fontWeight: AppFonts.medium),
                       ),
                       TextSpan(

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/preferences/preferences.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class FreeCardUseTip extends StatelessWidget {
                             isAgree.value = !isAgree.value;
                             Preferences.instance.setBool(kFreeCardTipKey, isAgree.value);
                           },
-                          child: ImageView(isAgree.value ? "ic_check.png" : "ic_uncheck.png", height: 16, width: 16).marginOnly(right: 4),
+                          child: ImageView(isAgree.value ? Images.security_ic_check_png : Images.security_ic_uncheck_png, height: 16, width: 16).marginOnly(right: 4),
                         ),
                         alignment: PlaceholderAlignment.middle,
                       ),

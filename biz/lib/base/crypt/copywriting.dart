@@ -387,4 +387,19 @@ abstract final class Copywriting {
   static late final String security_mina_Team = decrypt('NVlKHbr46BTBAtw3+S4zkQ=='); // Mina Team
   static late final String security_story_background = decrypt('kCeSRjXKbdWVNDEWZNXjhLnd6kQXjInicaEc01XTed0='); // Story background
   static late final String security_tap_to_continue___ = decrypt('CwDDQ1OW5mtJYJDnZkmHz4Qx5JhUeWP0r/lc67TdNFo='); // Tap to continue...
+  static late final String security_aI_Character = decrypt('hIhi92tbWiNP84PpPUqLbQ=='); // AI Character
+  static late final String security_ask_for_pic = decrypt('zet23EruSh1FILoTYG5WKw=='); // Ask for pic
+  static late final String security_ask_for_video = decrypt('SY3CmMNx1+1YzN0YpmLBQg=='); // Ask for video
+  static late final String security_before_creation__please_review = decrypt('zMAZOi7QcdjunmJ+9ybwazQ1SwlVjK4Q6y1vc0AtfI4='); // Before creation, please review 
+  static late final String security_coins_balance = decrypt('ebYn/OSZJ9KnhJRDBA1kXg=='); // Coins balance
+  static late final String security_fail_to_collect = decrypt('jhOayqcRojd+A7yCSZoIoA=='); // Fail to collect
+  static late final String security_gems_balance = decrypt('+OH3ilZN8fV27rhWB0T9Cg=='); // Gems balance
+  static late final String security_mM_dd__HH_mm_ = decrypt('F0toYP69ucsuTDalbhR25EHn6hLGk9dhISH4XLF0o4k='); // MM月dd日 HH时mm分
+  static late final String security_my_Coins = decrypt('jxF75WPG6sDonPPBZKps6A=='); // My Coins
+  static late final String security_my_Gems = decrypt('9tEpVgqnHhwnmMEPLZYkGQ=='); // My Gems
+  static late final String security_notice__AI_responses_are_fictional_and_for_entertainment_only = decrypt('aE2f66KrgIHLzT9KQvXtl0g3tKqiTT+jjMIU8Yf5zDzJkailSNoHEeUJO922uVbDXDFZ2rxVsmVWjMvPPZHKlA=='); // Notice: AI responses are fictional and for entertainment only
+  static late final String security_plus_button_tapped = decrypt('9x5KK1emUfVZXahkkDae+B5N7MPYeMskm5ROV7CHh84='); // Plus button tapped
+  static late final String security_start_Create = decrypt('D9nLW5WIJeVcVVlIx+Nvkg=='); // Start Create
+  static late final String security_unsupported_message_type = decrypt('eIqQnKKw4h0V3K/eUsUXElx9v5iaRHcKZlOMRR0B86Y='); // Unsupported message type
+  static late final String security_voice_button_tapped = decrypt('J3oPqKeghGbJeVEzCs/pQvbpEZnN+27fmRSMp+HcM4Q='); // Voice button tapped
 }

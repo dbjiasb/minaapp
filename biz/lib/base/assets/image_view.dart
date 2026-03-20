@@ -1,3 +1,5 @@
+import 'package:biz/base/crypt/security.dart';
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -31,11 +33,11 @@ class ImageView extends StatelessWidget {
     if (Environment.instance.isDebug && !name.startsWith(ApiConfig.cdnApp)) {
       String pathPre = '../assets/images/';
       if (Platform.isAndroid) {
-        pathPre = 'packages/biz/assets/images/';
+        pathPre = Images.security_packages_biz_assets_images_;
       }
       return Image.asset('$pathPre$name', width: width, height: height, color: color, fit: fit);
     }
-    final path = !name.startsWith("http") ? ZipImageManager.instance.getImagePathOrUrl(name) : name;
+    final path = !name.startsWith(Security.security_http) ? ZipImageManager.instance.getImagePathOrUrl(name) : name;
     if (ZipImageManager.instance.isLocalImage(path)) {
       return Image.file(File(path), fit: fit, color: color, width: width, height: height);
     } else {
@@ -54,7 +56,7 @@ class ImageView extends StatelessWidget {
 
   static ImageProvider getImageProvider(String name) {
     if (Environment.instance.isDebug) {
-      return AssetImage('assets/images/$name', package: 'biz');
+      return AssetImage('assets/images/$name', package: Security.security_biz);
     }
     final path = ZipImageManager.instance.getImagePathOrUrl(name);
     if (ZipImageManager.instance.isLocalImage(path)) {

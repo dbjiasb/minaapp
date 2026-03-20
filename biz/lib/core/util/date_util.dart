@@ -13,7 +13,7 @@ extension DateTimeExt on DateTime {
   String onlineDescription() {
     int timestamp = DateTime.now().secondsSinceEpoch;
     if (timestamp - secondsSinceEpoch < kOnlineCheckInterval) {
-      return "online";
+      return Security.security_online;
     } else if (timestamp - secondsSinceEpoch < 10 * 60) {
       return "last seen just now";
     } else if (timestamp - secondsSinceEpoch < 60 * 60) {
@@ -49,7 +49,7 @@ class DateFormats {
   static String zh_y_mo_d = 'yyyy年MM月dd日';
   static String zh_y_mo = 'yyyy年MM月';
   static String zh_mo_d = 'MM月dd日';
-  static String zh_mo_d_h_m = "MM月dd日 HH时mm分";
+  static String zh_mo_d_h_m = Copywriting.security_mM_dd__HH_mm_;
   static String zh_h_m_s = 'HH时mm分ss秒';
   static String zh_h_m = 'HH时mm分';
 }
@@ -129,22 +129,22 @@ class DateUtil {
   static String formatDate(DateTime? dateTime, {String? format}) {
     if (dateTime == null) return '';
     format = format ?? DateFormats.full;
-    if (format.contains("yy")) {
+    if (format.contains(Security.security_yy)) {
       String year = dateTime.year.toString();
-      if (format.contains("yyyy")) {
-        format = format.replaceAll("yyyy", year);
+      if (format.contains(Security.security_yyyy)) {
+        format = format.replaceAll(Security.security_yyyy, year);
       } else {
         format = format.replaceAll(
-            "yy", year.substring(year.length - 2, year.length));
+            Security.security_yy, year.substring(year.length - 2, year.length));
       }
     }
 
-    format = _comFormat(dateTime.month, format, 'M', "MM");
-    format = _comFormat(dateTime.day, format, 'd', "dd");
-    format = _comFormat(dateTime.hour, format, 'H', "HH");
-    format = _comFormat(dateTime.minute, format, 'm', "MM");
-    format = _comFormat(dateTime.second, format, 's', "SSS");
-    format = _comFormat(dateTime.millisecond, format, 'S', "SSS");
+    format = _comFormat(dateTime.month, format, 'M', Security.security_mM);
+    format = _comFormat(dateTime.day, format, 'd', Security.security_dd);
+    format = _comFormat(dateTime.hour, format, 'H', Security.security_hH);
+    format = _comFormat(dateTime.minute, format, 'm', Security.security_mM);
+    format = _comFormat(dateTime.second, format, 's', Security.security_sSS);
+    format = _comFormat(dateTime.millisecond, format, 'S', Security.security_sSS);
 
     return format;
   }

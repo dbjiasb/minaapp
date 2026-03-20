@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
@@ -83,7 +84,7 @@ class _ReorderResGridViewState extends State<ReorderResGridView> {
                             onPointerDown: (_) {
                               _removeItem(e);
                             },
-                            child: CachedImage(imageUrl: MomentRes.base+'iic_pics_remove.webp', width: 16, height: 16),
+                            child: CachedImage(imageUrl: MomentRes.base+Images.security_iic_pics_remove_webp, width: 16, height: 16),
                           ),
                         ),
                       ],
@@ -100,7 +101,7 @@ class _ReorderResGridViewState extends State<ReorderResGridView> {
                             child: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(color: const Color(0xFF1B1E25), borderRadius: BorderRadius.circular(12)),
-                              child: CachedImage(imageUrl: MomentRes.base+'iic_pic_add.webp', width: 24, height: 24),
+                              child: CachedImage(imageUrl: MomentRes.base+Images.security_iic_pic_add_webp, width: 24, height: 24),
                             ),
                           ),
                         ),

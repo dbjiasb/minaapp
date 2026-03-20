@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class ChatRecordView extends StatelessWidget {
           onTap: () => Get.back(),
           child: Container(
               // color: Colors.blue,
-              alignment: Alignment.center, child: ImageView("back.png", width: 24, height: 24)),
+              alignment: Alignment.center, child: ImageView(Images.security_back_png, width: 24, height: 24)),
         ),
         backgroundColor: Colors.transparent,
         centerTitle: true,

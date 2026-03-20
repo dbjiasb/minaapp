@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -190,7 +191,7 @@ class ChatCell extends StatelessWidget {
             onTap: () {
               onContinue?.call(message);
             },
-            child: ImageView("ai_continue.png", width: 24, height: 24),
+            child: ImageView(Images.security_ai_continue_png, width: 24, height: 24),
           ).marginOnly(left: 8)
           : SizedBox.shrink();
     });

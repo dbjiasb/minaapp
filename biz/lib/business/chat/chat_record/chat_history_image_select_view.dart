@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,7 +31,7 @@ class ChatHistoryImageSelectView extends GetView<ChatHistoryImageSelectControlle
           child: Container(
             // color: Colors.blue,
             alignment: Alignment.center,
-            child: ImageView('back.png', width: 24, height: 24),
+            child: ImageView(Images.security_back_png, width: 24, height: 24),
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -93,7 +94,7 @@ class ChatHistoryImageSelectView extends GetView<ChatHistoryImageSelectControlle
       ),
       ImageView(
         controller.selectedResInfoList.indexWhere((element) => element[Security.security_url] == msg.imageUrl) >= 0
-            ? "ic_check.png" : "ic_uncheck.png",
+            ? Images.security_ic_check_png : Images.security_ic_uncheck_png,
         height: 24,
         width: 24,
       ),

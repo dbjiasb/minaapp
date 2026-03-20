@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +27,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: Get.back,
-          icon: ImageView("back.png", height: 24, width: 24),
+          icon: ImageView(Images.security_back_png, height: 24, width: 24),
         ),
         backgroundColor: Colors.transparent,
         title: StyleTabBars(
@@ -290,7 +291,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                         ).marginOnly(left: 4),
                       if (isPremiumOnly)
                         ImageView(
-                          "premium.png",
+                          Images.security_premium_png,
                           width: 16,
                           height: 16,
                         ).marginOnly(left: 4),
@@ -353,7 +354,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                               horizontal: 6,
                             ),
                             child: ImageView(
-                              "ic_chat_msg_delete.png",
+                              Images.security_ic_chat_msg_delete_png,
                               color: Color(0xFFF84652),
                               width: 16,
                               height: 16,
@@ -398,7 +399,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
               borderRadius: BorderRadius.all(Radius.circular(28)),
             ),
             child: Center(
-              child: ImageView("chat_add.png", width: 24, height: 24),
+              child: ImageView(Images.security_chat_add_png, width: 24, height: 24),
             ),
           ).marginOnly(right: 8),
           Text(

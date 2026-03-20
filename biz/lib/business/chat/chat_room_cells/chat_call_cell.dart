@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -50,7 +51,7 @@ class ChatCallMessage extends ChatMessage {
     return _data ?? {};
   }
 
-  String get callIcon => (data[Security.security_audio] as int? ?? 0) == 1 ? "audio_msg.png" : "video_msg.png";
+  String get callIcon => (data[Security.security_audio] as int? ?? 0) == 1 ? Images.security_audio_msg_png : Images.security_video_msg_png;
 
   int get callType => data[Security.security_audio] ?? 0;
 

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:convert';
@@ -156,7 +157,7 @@ class ChatVideoCell extends ChatCell {
 
   bool get isGenerateVideoNotFree => videoConfigCost > 0;
 
-  String get generateVideoCostIcon => videoConfigCostType == 0 ? "coin.png" : 'gem.png';
+  String get generateVideoCostIcon => videoConfigCostType == 0 ? Images.security_coin_png : Images.security_gem_png;
 
   String get refreshId => 'VEO_${videoMessage.uuid}';
 
@@ -217,7 +218,7 @@ class ChatVideoCell extends ChatCell {
         if (!videoMessage.unlocked && !isMine) {
           return Stack(
             alignment: Alignment.center,
-            children: [ImageView("chat_img_placeholder.png", fit: BoxFit.cover, width: 172, height: 256), renderUnlockMaskIfNeeded()],
+            children: [ImageView(Images.security_chat_img_placeholder_png, fit: BoxFit.cover, width: 172, height: 256), renderUnlockMaskIfNeeded()],
           );
         }
 
@@ -406,9 +407,9 @@ class ChatVideoCell extends ChatCell {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ImageView("refresh.png", width: 12, height: 12),
+                ImageView(Images.security_refresh_png, width: 12, height: 12),
                 SizedBox(width: 4),
-                if (isPremiumFreeReload && videoMessage.reloadPrice != 0) ImageView("premium.png", width: 16, height: 16),
+                if (isPremiumFreeReload && videoMessage.reloadPrice != 0) ImageView(Images.security_premium_png, width: 16, height: 16),
                 SizedBox(width: 4),
                 Text(text, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: AppFonts.medium)),
               ],
@@ -446,7 +447,7 @@ class ChatVideoCell extends ChatCell {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ImageView("btn_video.png", width: 36, height: 36),
+              ImageView(Images.security_btn_video_png, width: 36, height: 36),
               SizedBox(height: 8),
 
               //解锁
@@ -454,7 +455,7 @@ class ChatVideoCell extends ChatCell {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ImageView(videoMessage.currencyType == 1 ? "gem.png" : "coin.png", width: 24, height: 24),
+                    ImageView(videoMessage.currencyType == 1 ? Images.security_gem_png : Images.security_coin_png, width: 24, height: 24),
                     SizedBox(width: 4),
                     Text('${videoMessage.unlockPrice}', style: TextStyle(color: Colors.white, fontWeight: AppFonts.black, fontSize: 16)),
                   ],
@@ -503,7 +504,7 @@ class ChatVideoCell extends ChatCell {
             spacing: 7,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ImageView("premium.png", width: 16, height: 16),
+              ImageView(Images.security_premium_png, width: 16, height: 16),
               Text(Copywriting.security_premium_Free, style: TextStyle(color: Color(0xFFFFE96F), fontSize: 12, fontWeight: AppFonts.medium)),
             ],
           ),
@@ -543,7 +544,7 @@ class ChatVideoCell extends ChatCell {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ImageView("unlock.png", width: 16, height: 16),
+          ImageView(Images.security_unlock_png, width: 16, height: 16),
           SizedBox(width: 4),
           Text(Security.security_Unlock, style: TextStyle(color: Colors.white, fontWeight: AppFonts.medium, fontSize: 14)),
         ],
@@ -586,7 +587,7 @@ class ChatVideoCell extends ChatCell {
             spacing: 7,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (isGenerateVideoPremiumFree) ImageView("premium.png", width: 16, height: 16),
+              if (isGenerateVideoPremiumFree) ImageView(Images.security_premium_png, width: 16, height: 16),
               Text(
                 isGenerateVideoPremiumFree ? Copywriting.security_premium_Free : Security.security_Free,
                 style: TextStyle(color: Color(0xFFFFE96F), fontSize: 12, fontWeight: AppFonts.medium),
@@ -602,7 +603,7 @@ class ChatVideoCell extends ChatCell {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ImageView("unlock.png", width: 16, height: 16),
+          ImageView(Images.security_unlock_png, width: 16, height: 16),
           SizedBox(width: 4),
           Text(Security.security_Unlock, style: TextStyle(color: Colors.white, fontWeight: AppFonts.medium, fontSize: 14)),
         ],
@@ -625,7 +626,7 @@ class ChatVideoCell extends ChatCell {
     return Stack(
       fit: StackFit.expand,
       children: [
-        ImageView("chat_img_placeholder.png", fit: BoxFit.cover, width: 172, height: 256),
+        ImageView(Images.security_chat_img_placeholder_png, fit: BoxFit.cover, width: 172, height: 256),
         Center(child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2)),
       ],
     );

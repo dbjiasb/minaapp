@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:biz/core/util/cached_image.dart';
@@ -16,10 +17,10 @@ class RoleCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String name = item['nickname'] ?? "";
-    String coverUrl = item['coverUrl'] ?? "";
-    String avatarUrl = item['avatarUrl'] ?? "";
-    String bio = item['bio'] ?? "";
+    String name = item[Security.security_nickname] ?? "";
+    String coverUrl = item[Security.security_coverUrl] ?? "";
+    String avatarUrl = item[Security.security_avatarUrl] ?? "";
+    String bio = item[Security.security_bio] ?? "";
 
     // 如果是真人类型且 coverUrl 为空，使用 avatarUrl
     String imageUrl = coverUrl;
@@ -30,13 +31,13 @@ class RoleCardWidget extends StatelessWidget {
     // Handle tags - they might be strings or maps
     List<String> tags = [];
     try {
-      List rawTags = item['tags'] ?? [];
+      List rawTags = item[Security.security_tags] ?? [];
       for (var tag in rawTags) {
         if (tag is String) {
           tags.add(tag);
         } else if (tag is Map) {
           // If it's a map, try to get a name or title field
-          String tagName = tag['name'] ?? tag['title'] ?? tag.toString();
+          String tagName = tag[Security.security_name] ?? tag[Security.security_title] ?? tag.toString();
           tags.add(tagName);
         }
       }

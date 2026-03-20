@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/report/report_manager.dart';
 import 'package:biz/core/util/cached_image.dart';
@@ -28,7 +29,7 @@ class MatchScanResultPage extends GetView<MatchScanLogic> {
           backgroundColor: Color(0xFF12151C),
           elevation: 0,
           leading: IconButton(
-            icon: ImageView("back.png", fit: BoxFit.fill),
+            icon: ImageView(Images.security_back_png, fit: BoxFit.fill),
             onPressed: () {
               controller.cancelAndRejectVideoMatch(callNotice[Security.security_callId]);
             },

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 // 用Getx库实现一个视频播放器，播放器接受 videoUrl 作为参数，并播放视频
 import 'dart:io';
 
@@ -124,7 +125,7 @@ class VideoPlayerViewController extends GetxController {
   }
 
   bool isImageFileUrl(String url) {
-    return url.isImageFileName || url.endsWith(".webp");
+    return url.isImageFileName || url.endsWith(Images.security__webp);
   }
 
   Future<void> saveVideoToGallery() async {

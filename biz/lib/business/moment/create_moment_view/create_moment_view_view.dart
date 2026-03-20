@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/business/moment/constant_state.dart';
 import 'package:biz/business/moment/create_moment_view/post_as_page.dart';
@@ -199,7 +200,7 @@ class CreateMomentViewPage extends GetView<CreateMomentViewLogic> {
                 style: TextStyle(color: controller.characterUid != 0 ? Colors.white : const Color(0xFFABABAD), fontSize: 14, fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              ImageView("arrow_right.png", width: 16, height: 16, fit: BoxFit.cover),
+              ImageView(Images.security_arrow_right_png, width: 16, height: 16, fit: BoxFit.cover),
             ],
           ),
         );
@@ -241,11 +242,11 @@ class CreateMomentViewPage extends GetView<CreateMomentViewLogic> {
         decoration: BoxDecoration(color: Color(0xFF1B1E25), borderRadius: BorderRadius.circular(12)),
         child: Row(
           children: [
-            CachedImage(imageUrl: MomentRes.base + 'iic_create_from_gen.webp', width: 44, height: 44),
+            CachedImage(imageUrl: MomentRes.base + Images.security_iic_create_from_gen_webp, width: 44, height: 44),
             const SizedBox(width: 10),
             Text(Copywriting.security_create_an_image_with_Generator, style: TextStyle(color: Color(0xFFABABAD), fontSize: 14)),
             const Spacer(),
-            ImageView("arrow_right.png", width: 16, height: 16, fit: BoxFit.cover),
+            ImageView(Images.security_arrow_right_png, width: 16, height: 16, fit: BoxFit.cover),
           ],
         ),
       ),
@@ -284,7 +285,7 @@ class CreateMomentViewPage extends GetView<CreateMomentViewLogic> {
             const SizedBox(width: 8),
             Text(Copywriting.security_select_From_Chat_History_Album, style: TextStyle(color: Color(0xFFABABAD), fontSize: 14)),
             const Spacer(),
-            ImageView("arrow_right.png", width: 16, height: 16, fit: BoxFit.cover),
+            ImageView(Images.security_arrow_right_png, width: 16, height: 16, fit: BoxFit.cover),
           ],
         ),
       ),

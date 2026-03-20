@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/router/router_names.dart';
@@ -122,7 +123,7 @@ class PersonViewPage extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: Get.back,
-                    child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView("back.png", width: 24, height: 24)),
+                    child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView(Images.security_back_png, width: 24, height: 24)),
                   ),
                   Obx(
                     () =>
@@ -148,7 +149,7 @@ class PersonViewPage extends StatelessWidget {
                         width: 32,
                         height: 44,
                         alignment: Alignment.center,
-                        child: ImageView(controller.isStarred ? "user_collected.png" : "user_collect.png", width: 24, height: 24),
+                        child: ImageView(controller.isStarred ? Images.security_user_collected_png : Images.security_user_collect_png, width: 24, height: 24),
                       ),
                     ),
                   ),
@@ -258,10 +259,10 @@ class PersonViewPage extends StatelessWidget {
                                           children: [
                                             Row(
                                               children: [
-                                                ImageView("linknum.webp", width: 12, height: 12).marginOnly(right: 2),
+                                                ImageView(Images.security_linknum_webp, width: 12, height: 12).marginOnly(right: 2),
                                                 Text(linkNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
                                                 SizedBox(width: 4),
-                                                Image.asset("heart_count.webp", width: 12, height: 12).marginOnly(right: 2),
+                                                Image.asset(Images.security_heart_count_webp, width: 12, height: 12).marginOnly(right: 2),
                                                 Text(heatNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
                                               ],
                                             ),
@@ -719,12 +720,12 @@ class PersonViewController extends GetxController {
     Toast.loading(status: Copywriting.security_loading___);
     final rtn = await PersonManager.instance.collectUser(uid, 1);
     if (rtn == false) {
-      Toast.error("Fail to collect");
+      Toast.error(Copywriting.security_fail_to_collect);
       return;
     }
     // getPersonInfo(uid);
     isStarred = true;
-    Toast.success("Collected");
+    Toast.success(Security.security_collected);
   }
 
   Future<void> unCollectUser() async {

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:biz/core/util/cached_image.dart';
@@ -53,7 +54,7 @@ class LevelUpPopUp extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   children: [
                     ImageView(
-                      "level_up.webp",
+                      Images.security_level_up_webp,
                       width: 115,
                       height: 120,
                     ),
@@ -98,7 +99,7 @@ class LevelUpPopUp extends StatelessWidget {
                     // height: 254, width: double.infinity,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: ImageView.getImageProvider("level_up_bg.webp"),
+                        image: ImageView.getImageProvider(Images.security_level_up_bg_webp),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -106,7 +107,7 @@ class LevelUpPopUp extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         ImageView(
-                          "level_up_avatar_frame.webp",
+                          Images.security_level_up_avatar_frame_webp,
                           width: 172,
                           height: 142,
                         ),
@@ -142,7 +143,7 @@ class LevelUpPopUp extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ImageView("coin.png", width: 36, height: 36,),
+                    ImageView(Images.security_coin_png, width: 36, height: 36,),
                     Text('x$rewardCoin', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.white)),
                   ],
                 ),

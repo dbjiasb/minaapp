@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'dart:core';
 import 'dart:io';
 
@@ -153,7 +154,7 @@ class LoginChannelView extends StatelessWidget {
     LoginChannel google = LoginChannel(
       Security.security_google,
       Copywriting.security_sign_in_with_Google,
-      ImageView("login_google.png", width: 24, height: 24),
+      ImageView(Images.security_login_google_png, width: 24, height: 24),
       Colors.white,
       AppColors.base_background,
       () async {

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:biz/business/chat/chat_session.dart';
@@ -30,7 +31,7 @@ class PrivateChatSessionCell extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.w),
         ),
         child: Text(
-          'AI',
+          Security.security_aI,
           style: TextStyle(
             color: Colors.white,
             fontSize: 12.sp,
@@ -53,7 +54,7 @@ class PrivateChatSessionCell extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.w),
         ),
         child: Text(
-          'Real',
+          Security.security_real,
           style: TextStyle(
             color: Colors.white,
             fontSize: 12.sp,

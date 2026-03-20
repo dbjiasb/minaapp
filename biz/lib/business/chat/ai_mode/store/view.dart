@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -96,7 +97,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
 
   Widget drawBG() {
     return ImageView(
-      "mode_store_top_bg.webp",
+      Images.security_mode_store_top_bg_webp,
       fit: BoxFit.cover,
     );
   }
@@ -173,7 +174,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
                                     children: List.generate(
                                         5,
                                             (index) => ImageView(
-                                            index < (mode[Security.security_star]?[Security.security_star] ?? 1) ? "mode_star_light.webp" : "mode_star_unlight.webp",
+                                            index < (mode[Security.security_star]?[Security.security_star] ?? 1) ? Images.security_mode_star_light_webp : Images.security_mode_star_unlight_webp,
                                             width: 18,
                                             height: 18,
                                         )),
@@ -194,7 +195,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
                               )
                           ),
                         ImageView(
-                          "mode_frame.webp", fit: BoxFit.fill,
+                          Images.security_mode_frame_webp, fit: BoxFit.fill,
                           width: double.infinity,
                           height: double.infinity,
                         ),
@@ -220,7 +221,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
                     height: 32,
                     decoration: mode[Security.security_own] == 0 ? BoxDecoration(
                         image: DecorationImage(
-                            image: ImageView.getImageProvider("mode_buy.webp"),
+                            image: ImageView.getImageProvider(Images.security_mode_buy_webp),
                             fit: BoxFit.fill
                         )
                     ) : null,
@@ -243,7 +244,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ImageView(mode[ES.costType] == 0 ? "coin.png" : "gem.png", width: 16, height: 16),
+            ImageView(mode[ES.costType] == 0 ? Images.security_coin_png : Images.security_gem_png, width: 16, height: 16),
             const SizedBox(width: 2),
             Text('${hasDiscount ? mode[ES.dp] : mode[Security.security_price]}', style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold))
           ],
@@ -251,7 +252,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
         if (hasDiscount) Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ImageView(mode[ES.costType] == 0 ?  "coin.png" : "gem.png", width: 10, height: 10),
+            ImageView(mode[ES.costType] == 0 ?  Images.security_coin_png : Images.security_gem_png, width: 10, height: 10),
             const SizedBox(width: 1),
             Text('${mode[Security.security_price]}', style: const TextStyle(color: Colors.white, fontSize: 9, decoration: TextDecoration.lineThrough, height: 1))
           ],

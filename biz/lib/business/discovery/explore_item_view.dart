@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -139,7 +140,7 @@ class ExploreItemView extends StatelessWidget {
               borderRadius: BorderRadius.circular(24),
               gradient: const LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [Color(0xFFFFF288), Color(0xFFF9C07D)]),
             ),
-            child: ImageView("discovery_call.webp", width: 48, height: 48),
+            child: ImageView(Images.security_discovery_call_webp, width: 48, height: 48),
           ),
         ),
         Expanded(child: _buildItemButton()),

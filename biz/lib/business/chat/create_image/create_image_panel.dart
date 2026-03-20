@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:flutter/material.dart';
@@ -290,9 +291,9 @@ class CreateImagePanelController extends GetxController  with GetTickerProviderS
 
   String get currencyIcon {
     if (config.value.type == 1) {
-      return "gem.png";
+      return Images.security_gem_png;
     } else {
-      return "coin.png";
+      return Images.security_coin_png;
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,7 +43,7 @@ class AIModePopup extends StatelessWidget {
                   ).marginOnly(left: 24)
                 ],
               ),
-              if (isNew) ImageView("mode_get_new.webp", height: 60, fit: BoxFit.fitHeight),
+              if (isNew) ImageView(Images.security_mode_get_new_webp, height: 60, fit: BoxFit.fitHeight),
               Container(
                   padding: const EdgeInsets.all(10),
                   decoration: const BoxDecoration(
@@ -86,7 +87,7 @@ class AIModePopup extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         aiPersonality[Security.security_selected] == 0 ?  ImageView(
-          "mode_buy.webp",
+          Images.security_mode_buy_webp,
           width: 184.w,
           height: 44.w
         ) : Container(

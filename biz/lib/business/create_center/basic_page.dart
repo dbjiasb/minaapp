@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -193,7 +194,7 @@ class BasicCore extends StatelessWidget {
                             );
                           }
 
-                          return Center(child: ImageView("chat_add.png", height: 24, width: 24));
+                          return Center(child: ImageView(Images.security_chat_add_png, height: 24, width: 24));
                         }),
                       ),
                     ],
@@ -314,7 +315,7 @@ class BasicCore extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ImageView(width: 24, height: 24, "female.png"),
+                              ImageView(width: 24, height: 24, Images.security_female_png),
                               const SizedBox(width: 4),
                               Text(
                                 Security.security_Female,
@@ -349,7 +350,7 @@ class BasicCore extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ImageView(width: 24, height: 24, "male.png"),
+                              ImageView(width: 24, height: 24, Images.security_male_png),
                               const SizedBox(width: 4),
                               Text(
                                 Security.security_Male,
@@ -403,7 +404,7 @@ class BasicCore extends StatelessWidget {
                       child: Row(
                         children: [
                           const SizedBox(width: 12),
-                          Obx(() => _controller.soundPlaying.value ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: AppColors.ocMain)).marginOnly(left: 8) : ImageView("sound_play.png"),),
+                          Obx(() => _controller.soundPlaying.value ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: AppColors.ocMain)).marginOnly(left: 8) : ImageView(Images.security_sound_play_png),),
                           const SizedBox(width: 8),
                           Text(Copywriting.security_click_to_play, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xFF999999))),
                         ],
@@ -430,7 +431,7 @@ class BasicCore extends StatelessWidget {
                                 )
                                 : Container(),
                             SizedBox(width: 4),
-                            ImageView(height: 16, width: 16, "arrow_right.png"),
+                            ImageView(height: 16, width: 16, Images.security_arrow_right_png),
                             const SizedBox(width: 12),
                           ],
                         ),
@@ -546,7 +547,7 @@ class BasicCore extends StatelessWidget {
             children: [
               Text(Copywriting.security_more_Details, style: TextStyle(color: Color(0xffababad), fontSize: 11, fontWeight: FontWeight.w500)),
               SizedBox(width: 4),
-              RotatedBox(quarterTurns: _controller.expandPhysiqueRotate.value, child: ImageView("arrow_down.png", width: 16, height: 16)),
+              RotatedBox(quarterTurns: _controller.expandPhysiqueRotate.value, child: ImageView(Images.security_arrow_down_png, width: 16, height: 16)),
             ],
           ),
         ),
@@ -732,7 +733,7 @@ class BasicPage extends StatelessWidget {
             CharacterService.instance.save();
             Get.back();
           },
-          icon: ImageView("back.png", height: 24, width: 24),
+          icon: ImageView(Images.security_back_png, height: 24, width: 24),
         ),
         title: Text(
           textAlign: TextAlign.center,
@@ -899,12 +900,12 @@ class BasicController extends GetxController {
       optimismLevel.value = double.parse(physiqueAttributes[EncHelper.cr_pesi].toString());
     }
 
-    if (physiqueAttributes['ordinary'] != null) {
-      mysteryLevel.value = double.parse(physiqueAttributes['ordinary'].toString());
+    if (physiqueAttributes[Security.security_ordinary] != null) {
+      mysteryLevel.value = double.parse(physiqueAttributes[Security.security_ordinary].toString());
     }
 
-    if (physiqueAttributes['slim'] != null) {
-      bodyType.value = double.parse(physiqueAttributes['slim'].toString());
+    if (physiqueAttributes[Security.security_slim] != null) {
+      bodyType.value = double.parse(physiqueAttributes[Security.security_slim].toString());
     }
 
     isPublicShare.value = (characterConfig[Security.security_shared] ?? 0) == 1;
@@ -979,12 +980,12 @@ class BasicController extends GetxController {
 
   void adjustMysteryLevel(double level) {
     mysteryLevel.value = level;
-    characterConfig[EncHelper.cr_cfg]['ordinary'] = level.toInt();
+    characterConfig[EncHelper.cr_cfg][Security.security_ordinary] = level.toInt();
   }
 
   void adjustBodyType(double type) {
     bodyType.value = type;
-    characterConfig[EncHelper.cr_cfg]['slim'] = type.toInt();
+    characterConfig[EncHelper.cr_cfg][Security.security_slim] = type.toInt();
   }
 
   void selectPhysiqueAttribute(String key, String value) {

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -29,7 +30,7 @@ class GiftItem {
 
   int get currency => info[Security.security_currencyType] ?? 0;
 
-  String get currencyIcon => currency == 1 ? "gem.png" : "coin.png";
+  String get currencyIcon => currency == 1 ? Images.security_gem_png : Images.security_coin_png;
 
   int get price => info[Security.security_price] ?? 0;
 

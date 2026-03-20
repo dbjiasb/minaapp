@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                       RH.toWeb('${ApiConfig.cdn}/app/h5/terms/about_mode.html', title: Copywriting.security_about_AI_MODE);
                     },
                     child: ImageView(
-                      "ic_question.png",
+                      Images.security_ic_question_png,
                       width: 28,
                       height: 28,
                     ).marginOnly(right: 16),
@@ -153,7 +154,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: ImageView(
-                    "mode_lock.webp",
+                    Images.security_mode_lock_webp,
                     width: 50,
                     height: 53,
                   ),
@@ -187,7 +188,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                       controller.expand.value = true;
                     },
                     icon: ImageView(
-                      "mode_story.webp",
+                      Images.security_mode_story_webp,
                       width: 34,
                       fit: BoxFit.fitWidth,
                     )),
@@ -211,7 +212,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                   height: 40,
                   width: 288,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider("mode_name_bg.webp"))),
+                  decoration: BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider(Images.security_mode_name_bg_webp))),
                   child: Obx(() {
                     return Text('${curMode[Security.security_name]}'.tr, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold))
                         .marginOnly(bottom: 2);
@@ -290,9 +291,9 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
           bool showTimeLimit = !isOwned && mode[Security.security_timeLimited] == 1;
           String btnBg() {
             // if (inUsing || showTimeLimit) return '$modeResPath/btn_mode_store_owe.webp';
-            if (inUsing || showTimeLimit || toDating) return "mode_used.webp";
-            if (toBuy) return "mode_buy.webp";
-            return "mode_buy.webp";
+            if (inUsing || showTimeLimit || toDating) return Images.security_mode_used_webp;
+            if (toBuy) return Images.security_mode_buy_webp;
+            return Images.security_mode_buy_webp;
           }
 
           String aText() {
@@ -399,20 +400,20 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                               height: 100,
                               width: 57,
                               child: ImageView(
-                                "mode_lock.webp",
+                                Images.security_mode_lock_webp,
                                 width: 18,
                                 height: 20,
                               ),
                             ),
                           ClipRRect(
                               borderRadius: BorderRadius.circular(4),
-                              child: ImageView(mode[Security.security_selected] == 1 ? "mode_frame_using.webp" : "mode_frame.webp",
+                              child: ImageView(mode[Security.security_selected] == 1 ? Images.security_mode_frame_using_webp : Images.security_mode_frame_webp,
                                   height: 100, width: 57, fit: BoxFit.fill)),
                           if (mode[Security.security_selected] == 1)
                             Positioned(
                               right: 4,
                               bottom: 4,
-                              child: ImageView("mode_select.webp", width: 16, height: 16),
+                              child: ImageView(Images.security_mode_select_webp, width: 16, height: 16),
                             )
                         ],
                       ),

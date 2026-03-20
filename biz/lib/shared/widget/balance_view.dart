@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/assets/image_path.dart';
@@ -46,9 +47,9 @@ class BalanceView extends StatelessWidget {
     this.style = BalanceViewStyle.defaultStyle, // 使用const常量
   });
 
-  String get icon => type == BalanceType.coin ? "coin.png" : "gem.png";
+  String get icon => type == BalanceType.coin ? Images.security_coin_png : Images.security_gem_png;
 
-  String get addIcon => "chat_add.png";
+  String get addIcon => Images.security_chat_add_png;
 
   @override
   Widget build(BuildContext context) {

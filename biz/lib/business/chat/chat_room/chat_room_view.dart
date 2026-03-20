@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -248,7 +249,7 @@ class ChatRoomView extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 decoration: BoxDecoration(
                   color: Colors.transparent,
-                  image: DecorationImage(image: ImageView.getImageProvider("audio_mask.png"), fit: BoxFit.fitWidth, alignment: Alignment.topCenter),
+                  image: DecorationImage(image: ImageView.getImageProvider(Images.security_audio_mask_png), fit: BoxFit.fitWidth, alignment: Alignment.topCenter),
                 ),
                 child: Column(
                   children: [
@@ -260,7 +261,7 @@ class ChatRoomView extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: isAudioCanceled.value ? Color(0xFFF84652).withValues(alpha: 0.4) : Color(0xFF29D97F).withValues(alpha: 0.4),
                       ),
-                      child: ImageView(isAudioCanceled.value ? "audio_cancel.png" : "audio_on.webp"),
+                      child: ImageView(isAudioCanceled.value ? Images.security_audio_cancel_png : Images.security_audio_on_webp),
                     ),
                     Spacer(),
                   ],
@@ -287,7 +288,7 @@ class ChatRoomView extends StatelessWidget {
           children: [
             Text(title, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
             Spacer(),
-            tail ?? ImageView("arrow_right.png", height: 16, width: 16),
+            tail ?? ImageView(Images.security_arrow_right_png, height: 16, width: 16),
           ],
         ),
       ),
@@ -332,7 +333,7 @@ class ChatRoomView extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: _onBackButtonClicked,
-            child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView('back.png', width: 24, height: 24)),
+            child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView(Images.security_back_png, width: 24, height: 24)),
           ),
           SizedBox(width: 8),
           Flexible(
@@ -368,7 +369,7 @@ class ChatRoomView extends StatelessWidget {
                                   maxLines: 1,
                                 ),
                               ),
-                              ImageView("arrow_right.png", height: 16, width: 16),
+                              ImageView(Images.security_arrow_right_png, height: 16, width: 16),
                               if (session.isPrivateAI)
                                 Container(
                                   alignment: Alignment.center,
@@ -436,7 +437,7 @@ class ChatRoomView extends StatelessWidget {
                                           ),
                                         ),
                                         SizedBox(width: 2),
-                                        ImageView("mode_change.png", height: 12, width: 12),
+                                        ImageView(Images.security_mode_change_png, height: 12, width: 12),
                                       ],
                                     ),
                                   ),
@@ -464,7 +465,7 @@ class ChatRoomView extends StatelessWidget {
               child: Row(
                 spacing: 6,
                 children: [
-                  ImageView(session.isAiChat || session.isGroup ? 'coin.png' : 'gem.png', height: 16, width: 16),
+                  ImageView(session.isAiChat || session.isGroup ? Images.security_coin_png : Images.security_gem_png, height: 16, width: 16),
                   Obx(
                     () => Text(
                       session.isAiChat || session.isGroup ? MyAccount.coins.toFixString : MyAccount.gems.toFixString,
@@ -480,7 +481,7 @@ class ChatRoomView extends StatelessWidget {
               UserManager.instance.getUserSettings(session.userId);
               _scaffoldKey.currentState?.openEndDrawer();
             },
-            icon: ImageView('more.png', width: 24, height: 24),
+            icon: ImageView(Images.security_more_png, width: 24, height: 24),
           ),
           SizedBox(width: 5),
         ],
@@ -621,7 +622,7 @@ class ChatRoomViewController extends GetxController {
     super.onInit();
 
     /// 修复异常sesstion type导致群聊不正常显示和发言问题
-    if (session.id.contains('GROUP') && session.type == 0) {
+    if (session.id.contains(Security.security_gROUP) && session.type == 0) {
       session.type = 2;
     }
 

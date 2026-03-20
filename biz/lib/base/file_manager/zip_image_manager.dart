@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/security.dart';
 import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
@@ -72,7 +73,7 @@ class ZipImageManager {
   ) async {
     final entries = await tempDir.list().toList();
     for (final entity in entries) {
-      if (entity is Directory && entity.path.contains("images_v")) {
+      if (entity is Directory && entity.path.contains(Security.security_images_v)) {
         if (!entity.path.contains('images_v$currentVersion')) {
           try {
             await entity.delete(recursive: true);
@@ -110,7 +111,7 @@ class ZipImageManager {
       final bytes = await File(zipPath).readAsBytes();
       final archive = ZipDecoder().decodeBytes(
         bytes,
-        password: "mina",
+        password: Security.security_mina,
       );
 
       await Directory(extractPath).create(recursive: true);

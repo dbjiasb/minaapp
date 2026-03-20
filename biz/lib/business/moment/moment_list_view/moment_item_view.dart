@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'dart:async';
 
 import 'package:biz/base/assets/image_view.dart';
@@ -130,7 +131,7 @@ class _MomentItemViewState extends State<MomentItemView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ImageView("empty_list.png", width: 172, height: 146),
+          ImageView(Images.security_empty_list_png, width: 172, height: 146),
           const SizedBox(height: 16),
           if (widget.listType == 2 && (widget.baseInfo != null || widget.targetUid == 0))
           GestureDetector(
@@ -294,7 +295,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                   );
                 },
                 pressType: PressType.singleClick,
-                child: CachedImage(imageUrl: MomentRes.base + 'iic__share.webp', width: 20, height: 20),
+                child: CachedImage(imageUrl: MomentRes.base + Images.security_iic__share_webp, width: 20, height: 20),
               ),
             ],
           ),
@@ -428,7 +429,7 @@ class _MomentItemViewState extends State<MomentItemView> {
       child: Row(
         children: [
           CachedImage(
-            imageUrl: momentInfo[Security.security_isLike] == 1 ? MomentRes.base + 'iic_like.webp' : MomentRes.base + 'iic_unlike.webp',
+            imageUrl: momentInfo[Security.security_isLike] == 1 ? MomentRes.base + Images.security_iic_like_webp : MomentRes.base + Images.security_iic_unlike_webp,
             width: 24,
             height: 24,
             fit: BoxFit.cover,

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -259,7 +260,7 @@ class CallView extends GetView<CallController> {
                         ),
                         child: Row(
                           children: [
-                            ImageView('gem.png', height: 16, width: 16),
+                            ImageView(Images.security_gem_png, height: 16, width: 16),
                             SizedBox(width: 4),
                             Obx(() {
                               return Text('${MyAccount.gems}', style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)).marginOnly(right: 2);
@@ -489,7 +490,7 @@ class CallView extends GetView<CallController> {
             ),
             padding: const EdgeInsets.all(6),
             child: ImageView(
-              "func_gift.png",
+              Images.security_func_gift_png,
               width: 28,
               height: 28,
               color: Colors.white,

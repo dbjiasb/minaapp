@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/business/create_center/character_service.dart';
@@ -46,20 +47,20 @@ class CreateOcDialog extends StatelessWidget {
   Widget _buildHeaderSection() {
     return Stack(
       children: [
-        ImageView("oc_dialog_bg.png", width: double.infinity),
+        ImageView(Images.security_oc_dialog_bg_png, width: double.infinity),
         Positioned(
           top: 0,
           left: 0,
           right: 0,
           child: Row(
             children: [
-              IconButton(onPressed: Get.back, icon: ImageView(width: 32, height: 32, "ic_close.png")),
+              IconButton(onPressed: Get.back, icon: ImageView(width: 32, height: 32, Images.security_ic_close_png)),
               Spacer(),
               IconButton(
                 onPressed: () {
                   _showCopyrightAgreement();
                 },
-                icon: ImageView(width: 32, height: 32, "ic_question.png"),
+                icon: ImageView(width: 32, height: 32, Images.security_ic_question_png),
               ),
             ],
           ),
@@ -82,7 +83,7 @@ class CreateOcDialog extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ImageView("oc_moment_door.webp", width: 36, height: 36),
+              ImageView(Images.security_oc_moment_door_webp, width: 36, height: 36),
               SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -105,7 +106,7 @@ class CreateOcDialog extends StatelessWidget {
                                     ? RichText(
                                       text: TextSpan(
                                         children: [
-                                          if (_logic.premiumFree == 1) WidgetSpan(child: ImageView("premium.png", width: 18, height: 18).marginOnly(right: 4)),
+                                          if (_logic.premiumFree == 1) WidgetSpan(child: ImageView(Images.security_premium_png, width: 18, height: 18).marginOnly(right: 4)),
                                           WidgetSpan(
                                             child: Text(
                                               _logic.freeText,
@@ -118,7 +119,7 @@ class CreateOcDialog extends StatelessWidget {
                                     : RichText(
                                       text: TextSpan(
                                         children: [
-                                          WidgetSpan(child: ImageView(_logic.costType == 0 ? "coin.png" : "gem.png", width: 18, height: 18)),
+                                          WidgetSpan(child: ImageView(_logic.costType == 0 ? Images.security_coin_png : Images.security_gem_png, width: 18, height: 18)),
                                           TextSpan(
                                             text: ' ${_logic.costValue}',
                                             style: const TextStyle(color: AppColors.base_background, fontWeight: FontWeight.bold, fontSize: 14),
@@ -128,7 +129,7 @@ class CreateOcDialog extends StatelessWidget {
                                     ),
                           ),
                         Spacer(),
-                        ImageView("arrow_right.png", width: 16, height: 16),
+                        ImageView(Images.security_arrow_right_png, width: 16, height: 16),
                       ],
                     ),
                     SizedBox(height: 3),
@@ -163,7 +164,7 @@ class CreateOcDialog extends StatelessWidget {
           decoration: BoxDecoration(color: Color(0xFFFFF2D8), borderRadius: BorderRadius.circular(16)),
           child: Row(
             children: [
-              ImageView("oc_create_door.webp", width: 36, height: 36),
+              ImageView(Images.security_oc_create_door_webp, width: 36, height: 36),
               SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -187,7 +188,7 @@ class CreateOcDialog extends StatelessWidget {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  ImageView("premium.png", width: 18, height: 18).marginOnly(right: 4),
+                                  ImageView(Images.security_premium_png, width: 18, height: 18).marginOnly(right: 4),
                                   Text(Copywriting.security_premium_Only, style: TextStyle(color: Colors.white, fontSize: 8)),
                                 ],
                               ),
@@ -200,7 +201,7 @@ class CreateOcDialog extends StatelessWidget {
                                       ? Row(
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          if (MyAccount.isSubscribed) ImageView("premium.png", width: 18, height: 18).marginOnly(right: 4),
+                                          if (MyAccount.isSubscribed) ImageView(Images.security_premium_png, width: 18, height: 18).marginOnly(right: 4),
                                           Text(
                                             MyAccount.isSubscribed
                                                 ? (MyAccount.freeCrowedLeftTimes == -1
@@ -216,7 +217,7 @@ class CreateOcDialog extends StatelessWidget {
                                           children: [
                                             WidgetSpan(
                                               child: ImageView(
-                                                CrowedManager.instance.createCostType == 0 ? "coin.png" : "gem.png",
+                                                CrowedManager.instance.createCostType == 0 ? Images.security_coin_png : Images.security_gem_png,
                                                 width: 18,
                                                 height: 18,
                                               ).marginOnly(right: 4),
@@ -230,7 +231,7 @@ class CreateOcDialog extends StatelessWidget {
                                       )),
                             ),
                         Spacer(),
-                        ImageView("arrow_right.png", width: 16, height: 16),
+                        ImageView(Images.security_arrow_right_png, width: 16, height: 16),
                       ],
                     ),
                     SizedBox(height: 3),
@@ -262,7 +263,7 @@ class CreateOcDialog extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ImageView("oc_group_door.webp", width: 36, height: 36),
+            ImageView(Images.security_oc_group_door_webp, width: 36, height: 36),
             SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -278,7 +279,7 @@ class CreateOcDialog extends StatelessWidget {
                 ],
               ),
             ),
-            ImageView("arrow_right.png", width: 16, height: 16),
+            ImageView(Images.security_arrow_right_png, width: 16, height: 16),
           ],
         ),
       ),
@@ -306,7 +307,7 @@ class CreateOcDialog extends StatelessWidget {
                       onTap: () {
                         _logic.consent.value = !_logic.consent.value;
                       },
-                      child: ImageView(_logic.consent.value == true ? "ic_check.png" : "ic_uncheck.png"),
+                      child: ImageView(_logic.consent.value == true ? Images.security_ic_check_png : Images.security_ic_uncheck_png),
                     ),
                   ),
                 ),

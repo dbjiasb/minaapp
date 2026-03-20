@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -157,7 +158,7 @@ class ChatBottomBar extends StatelessWidget {
                         },
                         child: Container(
                           margin: EdgeInsets.only(left: 12, right: 8),
-                          child: Obx(() => ImageView(_audioInputMode.value ? "keyboard.png" : "audio_mode.png", width: 24, height: 24)),
+                          child: Obx(() => ImageView(_audioInputMode.value ? Images.security_keyboard_png : Images.security_audio_mode_png, width: 24, height: 24)),
                         ),
                       );
                 }),
@@ -226,7 +227,7 @@ class ChatBottomBar extends StatelessWidget {
                                       margin: EdgeInsets.only(right: 6),
                                       child: Obx(
                                         () => ImageView(
-                                          viewController.barState == ChatRoomBottomBarState.muse ? "tip_on.png" : "tip_off.png",
+                                          viewController.barState == ChatRoomBottomBarState.muse ? Images.security_tip_on_png : Images.security_tip_off_png,
                                           width: 28,
                                           height: 28,
                                         ),
@@ -244,7 +245,7 @@ class ChatBottomBar extends StatelessWidget {
                                   child: Container(
                                     margin: EdgeInsets.only(right: 12),
                                     child: ImageView(
-                                      viewController.barState == ChatRoomBottomBarState.detailed ? "chat_add.png" : "chat_add.png",
+                                      viewController.barState == ChatRoomBottomBarState.detailed ? Images.security_chat_add_png : Images.security_chat_add_png,
                                       width: 28,
                                       height: 28,
                                     ),
@@ -307,7 +308,7 @@ class ChatBottomBar extends StatelessWidget {
               child: Row(
                 spacing: 4,
                 children: [
-                  ImageView("btn_pic.png", width: 16, height: 16, fit: BoxFit.cover),
+                  ImageView(Images.security_btn_pic_png, width: 16, height: 16, fit: BoxFit.cover),
                   Text(Security.security_Ask, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
                 ],
               ),
@@ -327,7 +328,7 @@ class ChatBottomBar extends StatelessWidget {
                     child: Row(
                       spacing: 4,
                       children: [
-                        Image.asset("btn_video.png", width: 16, height: 16, fit: BoxFit.cover),
+                        Image.asset(Images.security_btn_video_png, width: 16, height: 16, fit: BoxFit.cover),
                         Text(Security.security_Ask, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
                       ],
                     ),
@@ -349,7 +350,7 @@ class ChatBottomBar extends StatelessWidget {
                                     if (viewController.isGenerateVideoPremiumFree)
                                       Row(
                                         children: [
-                                          ImageView("premium.png", width: 12, height: 12),
+                                          ImageView(Images.security_premium_png, width: 12, height: 12),
                                           SizedBox(width: 1),
                                           Text(Security.security_Free, style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
                                         ],
@@ -376,7 +377,7 @@ class ChatBottomBar extends StatelessWidget {
               child: Row(
                 spacing: 4,
                 children: [
-                  ImageView("btn_custom.png", width: 16, height: 16, fit: BoxFit.cover),
+                  ImageView(Images.security_btn_custom_png, width: 16, height: 16, fit: BoxFit.cover),
                   Text(Security.security_Custom, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
                 ],
               ),
@@ -393,7 +394,7 @@ class ChatBottomBar extends StatelessWidget {
               child: Row(
                 spacing: 4,
                 children: [
-                  ImageView("btn_call.png", width: 16, height: 16, fit: BoxFit.cover),
+                  ImageView(Images.security_btn_call_png, width: 16, height: 16, fit: BoxFit.cover),
                   Text(Security.security_Call, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
                 ],
               ),
@@ -421,44 +422,44 @@ class ChatBottomBar extends StatelessWidget {
     List<Map<String, dynamic>> items;
     if (viewController.isGroup) {
       items = [
-        {Security.security_title: Security.security_Photo, Security.security_icon: "btn_pic.png", Security.security_action: viewController.showImageSelector},
-        {Security.security_title: Security.security_History, Security.security_icon: "btn_history.png", Security.security_action: onChatHistoryButtonClicked},
+        {Security.security_title: Security.security_Photo, Security.security_icon: Images.security_btn_pic_png, Security.security_action: viewController.showImageSelector},
+        {Security.security_title: Security.security_History, Security.security_icon: Images.security_btn_history_png, Security.security_action: onChatHistoryButtonClicked},
       ];
     } else {
       if (viewController.isAi) {
         items = [
-          {Security.security_title: "Ask for pic", Security.security_icon: "btn_pic.png", Security.security_action: viewController.askForImage},
-          {Security.security_title: "Ask for video", Security.security_icon: "btn_video.png", Security.security_action: viewController.askForVideo},
+          {Security.security_title: Copywriting.security_ask_for_pic, Security.security_icon: Images.security_btn_pic_png, Security.security_action: viewController.askForImage},
+          {Security.security_title: Copywriting.security_ask_for_video, Security.security_icon: Images.security_btn_video_png, Security.security_action: viewController.askForVideo},
           {
-            Security.security_title: "Audio Call",
-            Security.security_icon: "btn_call.png",
+            Security.security_title: Copywriting.security_audio_Call,
+            Security.security_icon: Images.security_btn_call_png,
             Security.security_action: () => viewController.toCall(StreamType.audio.index),
           },
-          {Security.security_title: Security.security_Gift, Security.security_icon: "btn_gift.png", Security.security_action: viewController.showGiftPanel},
+          {Security.security_title: Security.security_Gift, Security.security_icon: Images.security_btn_gift_png, Security.security_action: viewController.showGiftPanel},
           {
             Security.security_title: Security.security_Photo,
-            Security.security_icon: "btn_camera.png",
+            Security.security_icon: Images.security_btn_camera_png,
             Security.security_action: viewController.showImageSelector,
           },
-          {Security.security_title: Security.security_History, Security.security_icon: "btn_history.png", Security.security_action: onChatHistoryButtonClicked},
-          {Security.security_title: Security.security_Custom, Security.security_icon: "btn_custom.png", Security.security_action: onCreateImageButtonClicked},
+          {Security.security_title: Security.security_History, Security.security_icon: Images.security_btn_history_png, Security.security_action: onChatHistoryButtonClicked},
+          {Security.security_title: Security.security_Custom, Security.security_icon: Images.security_btn_custom_png, Security.security_action: onCreateImageButtonClicked},
         ];
       } else {
         items = [
-          {Security.security_title: Security.security_Photo, Security.security_icon: "btn_pic.png", Security.security_action: viewController.showImageSelector},
-          {Security.security_title: Security.security_Video, Security.security_icon: "btn_video.png", Security.security_action: viewController.onSendVideo},
+          {Security.security_title: Security.security_Photo, Security.security_icon: Images.security_btn_pic_png, Security.security_action: viewController.showImageSelector},
+          {Security.security_title: Security.security_Video, Security.security_icon: Images.security_btn_video_png, Security.security_action: viewController.onSendVideo},
           {
             Security.security_title: Copywriting.security_video_Call,
-            Security.security_icon: "btn_video_call.png",
+            Security.security_icon: Images.security_btn_video_call_png,
             Security.security_action: () => viewController.toCall(StreamType.video.index),
           },
           {
             Security.security_title: Copywriting.security_audio_Call,
-            Security.security_icon: "btn_call.png",
+            Security.security_icon: Images.security_btn_call_png,
             Security.security_action: () => viewController.toCall(StreamType.audio.index),
           },
-          {Security.security_title: Security.security_Gift, Security.security_icon: "btn_gift.png", Security.security_action: viewController.showGiftPanel},
-          {Security.security_title: Security.security_History, Security.security_icon: "btn_history.png", Security.security_action: onChatHistoryButtonClicked},
+          {Security.security_title: Security.security_Gift, Security.security_icon: Images.security_btn_gift_png, Security.security_action: viewController.showGiftPanel},
+          {Security.security_title: Security.security_History, Security.security_icon: Images.security_btn_history_png, Security.security_action: onChatHistoryButtonClicked},
         ];
       }
     }
@@ -533,7 +534,7 @@ class ChatBottomBar extends StatelessWidget {
                         color: Colors.black.withAlpha((255.0 * 0.4).round()),
                         borderRadius: const BorderRadius.all(Radius.circular(16)),
                       ),
-                      child: Center(child: ImageView("unspeaker.webp", width: 16, height: 16)),
+                      child: Center(child: ImageView(Images.security_unspeaker_webp, width: 16, height: 16)),
                     ),
                   ),
                 if (item[Security.security_state] == 2 || item[Security.security_state] == 3)
@@ -543,7 +544,7 @@ class ChatBottomBar extends StatelessWidget {
                         color: Colors.black.withAlpha((255.0 * 0.4).round()),
                         borderRadius: const BorderRadius.all(Radius.circular(16)),
                       ),
-                      child: Center(child: ImageView("deactivated.webp", width: 16, height: 16)),
+                      child: Center(child: ImageView(Images.security_deactivated_webp, width: 16, height: 16)),
                     ),
                   ),
               ],
@@ -659,7 +660,7 @@ class ChatBottomBarController extends GetxController {
 
   bool get isGenerateVideoNotFree => videoConfigCost > 0;
 
-  String get generateVideoCostIcon => videoConfigCostType == 0 ? "coin.png" : "gem.png";
+  String get generateVideoCostIcon => videoConfigCostType == 0 ? Images.security_coin_png : Images.security_gem_png;
 
   final _barState = ChatRoomBottomBarState.simple.obs;
 

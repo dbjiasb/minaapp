@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 // import 'package:jce/tudou/DailyTaskProcess.dart';
 // import 'package:jce/tudou/ETaskFinishStatus.dart';
@@ -43,7 +44,7 @@ class _MatchTaskViewState extends State<MatchTaskView> {
       decoration: const BoxDecoration(color: Color(0xFFF8F3FF), borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30))),
       child: Stack(
         children: [
-          CachedImage(imageUrl: MatchRes.base + 'ic_match_task_bg.webp', width: double.infinity, fit: BoxFit.fitHeight),
+          CachedImage(imageUrl: MatchRes.base + Images.security_ic_match_task_bg_webp, width: double.infinity, fit: BoxFit.fitHeight),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: Obx(() {
@@ -76,7 +77,7 @@ class _MatchTaskViewState extends State<MatchTaskView> {
               onTap: () {
                 Get.back();
               },
-              child: ImageView("ic_close.png", width: 24, height: 24),
+              child: ImageView(Images.security_ic_close_png, width: 24, height: 24),
             ),
           ),
         ],
@@ -94,13 +95,13 @@ class _MatchTaskViewState extends State<MatchTaskView> {
   String _getTaskIconByType(int taskType) {
     switch (taskType) {
       case 26:
-        return 'ic_match_task_chat.webp';
+        return Images.security_ic_match_task_chat_webp;
       case 27:
-        return 'ic_match_task_photo.webp';
+        return Images.security_ic_match_task_photo_webp;
       case 28:
-        return 'ic_match_task_hot.webp';
+        return Images.security_ic_match_task_hot_webp;
     }
-    return 'ic_match_task_chat.webp';
+    return Images.security_ic_match_task_chat_webp;
   }
 
   void _goTaskAction(int taskType) {

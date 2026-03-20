@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 
 import 'package:flutter/material.dart';
@@ -55,24 +56,24 @@ class MessageOptionView extends StatelessWidget {
   }
 
   static List<MsgOptionItem> _createOptionList(ChatMessage message, bool isAi) {
-    List<MsgOptionItem> optionList = [MsgOptionItem("ic_chat_msg_delete.png", Copywriting.security_delete_Message)];
+    List<MsgOptionItem> optionList = [MsgOptionItem(Images.security_ic_chat_msg_delete_png, Copywriting.security_delete_Message)];
     if (message.type == ChatMessageType.text || message.type == ChatMessageType.tip) {
-      optionList.add(MsgOptionItem("ic_chat_msg_copy.png", Security.security_copy));
+      optionList.add(MsgOptionItem(Images.security_ic_chat_msg_copy_png, Security.security_copy));
       if (message.type == ChatMessageType.text) {
         if ((message as ChatTextMessage).translationText.value.isEmpty) {
-          optionList.add(MsgOptionItem("ic_chat_msg_translate.webp", Security.security_translate));
+          optionList.add(MsgOptionItem(Images.security_ic_chat_msg_translate_webp, Security.security_translate));
         } else {
-          optionList.add(MsgOptionItem("ic_chat_msg_hide_translate.webp", 'Hide\nTranslate'));
+          optionList.add(MsgOptionItem(Images.security_ic_chat_msg_hide_translate_webp, 'Hide\nTranslate'));
         }
       }
     }
     if (message.type == ChatMessageType.text && !message.isMine() && isAi) {
-      optionList.add(MsgOptionItem("ic_chat_msg_reset.png", Copywriting.security_rewind_to_here));
-      optionList.add(MsgOptionItem("ic_chat_msg_like.png", Security.security_like));
-      optionList.add(MsgOptionItem("ic_chat_msg_unlike.png", Security.security_dislike));
+      optionList.add(MsgOptionItem(Images.security_ic_chat_msg_reset_png, Copywriting.security_rewind_to_here));
+      optionList.add(MsgOptionItem(Images.security_ic_chat_msg_like_png, Security.security_like));
+      optionList.add(MsgOptionItem(Images.security_ic_chat_msg_unlike_png, Security.security_dislike));
     }
     if (isAi && (message.type == ChatMessageType.text || message.type == ChatMessageType.image) && !message.isMine()) {
-      optionList.add(MsgOptionItem("ic_chat_msg_gen_video.png", Copywriting.security_generate_video));
+      optionList.add(MsgOptionItem(Images.security_ic_chat_msg_gen_video_png, Copywriting.security_generate_video));
     }
 
     return optionList;
@@ -80,10 +81,10 @@ class MessageOptionView extends StatelessWidget {
 
   Widget _buildOptionItem(MsgOptionItem optionItem) {
     String? replaceImage;
-    if (optionItem.icon == "ic_chat_msg_like.png" && likeStatus.value == 1) {
-      replaceImage = "ic_chat_msg_like_select.png";
-    } else if (optionItem.icon == "ic_chat_msg_unlike.png" && likeStatus.value == 2) {
-      replaceImage = "ic_chat_msg_unlike_select.png";
+    if (optionItem.icon == Images.security_ic_chat_msg_like_png && likeStatus.value == 1) {
+      replaceImage = Images.security_ic_chat_msg_like_select_png;
+    } else if (optionItem.icon == Images.security_ic_chat_msg_unlike_png && likeStatus.value == 2) {
+      replaceImage = Images.security_ic_chat_msg_unlike_select_png;
     }
     return SizedBox(
       width: 48,
@@ -105,31 +106,22 @@ class MessageOptionView extends StatelessWidget {
   }
 
   void doClickOption(MsgOptionItem optionItem) async {
-    switch (optionItem.icon) {
-      case "ic_chat_msg_delete.png":
-        await doDeleteOption();
-        break;
-      case "ic_chat_msg_copy.png":
-        doCopyOption();
-        break;
-      case "ic_chat_msg_reset.png":
-        await doResetMsgOption();
-        break;
-      case "ic_chat_msg_translate.webp":
-        await doTranslateMsg();
-        break;
-      case "ic_chat_msg_hide_translate.webp":
-        doHideTranslate();
-        break;
-      case "ic_chat_msg_like.png":
-        doLikeMsg(1);
-        break;
-      case "ic_chat_msg_unlike.png":
-        doLikeMsg(2);
-        break;
-      case "ic_chat_msg_gen_video.png":
-        _doGenerateVideo();
-        break;
+    if (optionItem.icon == Images.security_ic_chat_msg_delete_png) {
+      await doDeleteOption();
+    } else if (optionItem.icon == Images.security_ic_chat_msg_copy_png) {
+      doCopyOption();
+    } else if (optionItem.icon == Images.security_ic_chat_msg_reset_png) {
+      await doResetMsgOption();
+    } else if (optionItem.icon == Images.security_ic_chat_msg_translate_webp) {
+      await doTranslateMsg();
+    } else if (optionItem.icon == Images.security_ic_chat_msg_hide_translate_webp) {
+      doHideTranslate();
+    } else if (optionItem.icon == Images.security_ic_chat_msg_like_png) {
+      doLikeMsg(1);
+    } else if (optionItem.icon == Images.security_ic_chat_msg_unlike_png) {
+      doLikeMsg(2);
+    } else if (optionItem.icon == Images.security_ic_chat_msg_gen_video_png) {
+      _doGenerateVideo();
     }
     dismiss();
   }

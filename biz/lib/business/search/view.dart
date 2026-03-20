@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +103,7 @@ class SearchView extends GetView<SearchLogic> {
         ),
         prefixIcon: Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8),
-          child: ImageView("small_search.webp", width: 24, height: 24),
+          child: ImageView(Images.security_small_search_webp, width: 24, height: 24),
         ),
         suffixIconConstraints: BoxConstraints(maxWidth: 40, maxHeight: 24),
         suffixIcon: Padding(
@@ -176,7 +177,7 @@ class SearchView extends GetView<SearchLogic> {
                                 InkWell(
                                   onTap: () => SearchLogic.recentSearch.clear(),
                                   child: ImageView(
-                                    "ic_chat_msg_delete.png",
+                                    Images.security_ic_chat_msg_delete_png,
                                     width: 16,
                                     height: 16,
                                   ),

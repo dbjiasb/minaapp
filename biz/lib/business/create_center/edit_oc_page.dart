@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -54,7 +55,7 @@ class _EditAiPageState extends State<EditAiPage>
         onTap: Get.back,
         child: Center(
           // padding: EdgeInsets.all(16),
-          child: ImageView("back.png", fit: BoxFit.fill, width: 24, height: 24),
+          child: ImageView(Images.security_back_png, fit: BoxFit.fill, width: 24, height: 24),
         ),
       ),
       backgroundColor: Colors.transparent,

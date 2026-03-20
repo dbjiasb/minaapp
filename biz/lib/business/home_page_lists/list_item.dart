@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -151,10 +152,10 @@ class VirtualRoleItem extends RoleItem {
                             ),
                             Row(
                               children: [
-                                ImageView("linknum.webp", width: 12, height: 12).marginOnly(right: 2),
+                                ImageView(Images.security_linknum_webp, width: 12, height: 12).marginOnly(right: 2),
                                 Text(linkNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
                                 SizedBox(width: 4),
-                                ImageView("heart_count.webp", width: 12, height: 12).marginOnly(right: 2),
+                                ImageView(Images.security_heart_count_webp, width: 12, height: 12).marginOnly(right: 2),
                                 Text(heatNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
                               ],
                             ),

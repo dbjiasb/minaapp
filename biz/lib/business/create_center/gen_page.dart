@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
@@ -70,7 +71,7 @@ class GenPage extends StatelessWidget {
                 onPressed: () {
                   showStopDialog();
                 },
-                icon: ImageView("back.png", height: 24, width: 24),
+                icon: ImageView(Images.security_back_png, height: 24, width: 24),
               ),
             ],
           ),
@@ -145,7 +146,7 @@ class GenPage extends StatelessWidget {
                                       WidgetSpan(
                                         alignment: PlaceholderAlignment.middle,
                                         child: ImageView(
-                                          _logic.modifyCostInfo[Security.security_costType] == 1 ? "gem.png" : "coin.png",
+                                          _logic.modifyCostInfo[Security.security_costType] == 1 ? Images.security_gem_png : Images.security_coin_png,
                                           width: 18,
                                           height: 18,
                                         ),

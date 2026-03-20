@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -93,7 +94,7 @@ class OCVoicePage extends StatelessWidget {
                 onPressed: () {
                   Get.back();
                 },
-                icon: ImageView("back.png", height: 24, width: 24),
+                icon: ImageView(Images.security_back_png, height: 24, width: 24),
               ),
             ),
             // Expanded(
@@ -136,7 +137,7 @@ class OCVoicePage extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Wrap(
                               children: [
-                                RotatedBox(quarterTurns: _logic.expandStatus.value, child: ImageView("back.png", height: 16, width: 16)),
+                                RotatedBox(quarterTurns: _logic.expandStatus.value, child: ImageView(Images.security_back_png, height: 16, width: 16)),
                                 Text(value, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
                               ],
                             ),
@@ -192,7 +193,7 @@ class OCVoicePage extends StatelessWidget {
                           onTap: () {
                             playVoice(item);
                           },
-                          child: ImageView("sound_play.png", height: 24, width: 24),
+                          child: ImageView(Images.security_sound_play_png, height: 24, width: 24),
                         ),
               ),
               Expanded(
@@ -310,7 +311,7 @@ class OCVoiceLogic extends GetxController {
           return {
             Security.security_name: item[Security.security_name] ?? "",
             Security.security_vid: item[Security.security_vid] ?? "",
-            EncHelper.cr_eurl: item['exampleUrl'] ?? "",
+            EncHelper.cr_eurl: item[Security.security_exampleUrl] ?? "",
             Security.security_gender: item[Security.security_gender] ?? "",
             Security.security_def: item[Security.security_def] ?? "",
             Security.security_tags: item[Security.security_tags] != null ? List<String>.from(item[Security.security_tags]) : null,

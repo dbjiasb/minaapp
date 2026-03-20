@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/business/purchase/payment_service.dart';
@@ -24,7 +25,7 @@ class RechargePremiumView extends StatelessWidget {
       init: RechargePremiumViewController(),
       builder: (controller) {
         return Scaffold(body: Stack(children: [
-          ImageView("premium_buy_bg.png", fit: BoxFit.cover, width: double.infinity, height: double.infinity),
+          ImageView(Images.security_premium_buy_bg_png, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
           _buildBackButton(controller),
           _buildContent(controller)
         ]));
@@ -36,7 +37,7 @@ class RechargePremiumView extends StatelessWidget {
     return SafeArea(
       child: GestureDetector(
         onTap: controller.navigateBack,
-        child: Padding(padding: EdgeInsets.only(left: 18, top: 10), child: ImageView("back.png", height: 24, width: 24)),
+        child: Padding(padding: EdgeInsets.only(left: 18, top: 10), child: ImageView(Images.security_back_png, height: 24, width: 24)),
       ),
     );
   }
@@ -122,7 +123,7 @@ class RechargePremiumView extends StatelessWidget {
           width: 76,
           child: Stack(
             children: [
-              ImageView("premium_avatar_bg.png", fit: BoxFit.cover),
+              ImageView(Images.security_premium_avatar_bg_png, fit: BoxFit.cover),
               Padding(
                 padding: const EdgeInsets.all(6),
                 child: ClipRRect(
@@ -168,7 +169,7 @@ class RechargePremiumView extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ImageView("premium_item_right.png", height: 16, width: 16),
+            ImageView(Images.security_premium_item_right_png, height: 16, width: 16),
             const SizedBox(width: 4),
             Expanded(child: Text(name, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500))),
             // const Spacer(),
@@ -184,7 +185,7 @@ class RechargePremiumView extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          ImageView("premium_item_right.png", height: 16, width: 16),
+          ImageView(Images.security_premium_item_right_png, height: 16, width: 16),
           const SizedBox(width: 4),
           Expanded(child: Text(feature, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600))),
         ],

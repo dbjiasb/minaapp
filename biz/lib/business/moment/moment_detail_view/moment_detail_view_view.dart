@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'dart:io';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
@@ -94,7 +95,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
       },
       child: Obx(() {
         return CachedImage(imageUrl:
-          MomentRes.base + (controller.rxCollectStatus.value ? 'iic_collect.webp' : 'iic_uncollect.webp'),
+          MomentRes.base + (controller.rxCollectStatus.value ? Images.security_iic_collect_webp : Images.security_iic_uncollect_webp),
           width: 24,
           height: 24,
           fit: BoxFit.cover,

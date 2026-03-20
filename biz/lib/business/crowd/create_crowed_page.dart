@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: RouteHelper.back,
-          icon: ImageView("back.png", height: 24, width: 24),
+          icon: ImageView(Images.security_back_png, height: 24, width: 24),
         ),
         backgroundColor: Colors.transparent,
         title: Text(Copywriting.security_create_Group, style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),
@@ -185,7 +186,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
               borderRadius: BorderRadius.all(Radius.circular(28)),
             ),
             alignment: Alignment.center,
-            child: ImageView("chat_add.png", width: 24, height: 24),
+            child: ImageView(Images.security_chat_add_png, width: 24, height: 24),
           ),
         ],
       ),
@@ -252,7 +253,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                   controller.addOrRemoveRoleItem(roleItem);
                 },
                 child: ImageView(
-                  "ic_chat_msg_delete.png",
+                  Images.security_ic_chat_msg_delete_png,
                   width: 16,
                   height: 16,
                 ),
@@ -359,7 +360,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               ImageView(
-                                "premium.png",
+                                Images.security_premium_png,
                                 width: 16,
                                 height: 16,
                               ),
@@ -386,8 +387,8 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                         children: [
                           ImageView(
                             CrowedManager.instance.createCostType == 0
-                                ? "coin.png"
-                                : "gem.png",
+                                ? Images.security_coin_png
+                                : Images.security_gem_png,
                             width: 16,
                             height: 16,
                           ),
@@ -504,7 +505,7 @@ class _RolePanelViewState extends State<RolePanelView>
                 top: 0,
                 child: GestureDetector(
                   onTap: RouteHelper.back,
-                  child: ImageView("ic_close.png", width: 24, height: 24),
+                  child: ImageView(Images.security_ic_close_png, width: 24, height: 24),
               ),
             ),
           ],
@@ -604,7 +605,7 @@ class _RolePanelViewState extends State<RolePanelView>
                     (roleItem[Security.security_userBase]?[Security.security_uid] ?? 0),
               );
               return ImageView(
-                isSelect ? "ic_check.png" : "ic_uncheck.png",
+                isSelect ? Images.security_ic_check_png : Images.security_ic_uncheck_png,
                 height: 24,
                 width: 24,
               );

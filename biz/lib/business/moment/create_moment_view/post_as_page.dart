@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/business/create_center/create_oc_dialog.dart';
 import 'package:biz/business/moment/constant_state.dart';
 import 'package:biz/core/util/cached_image.dart';
@@ -68,7 +69,7 @@ class PostAsPage extends StatelessWidget {
         decoration: BoxDecoration(color: const Color(0xFFFFFFFF).withOpacity(0.05), borderRadius: const BorderRadius.all(Radius.circular(8))),
         child: Row(
           children: [
-            Image.asset('packages/modules/assets/moment/ic_group_search.webp', width: 16, height: 16),
+            Image.asset(Images.security_packages_modules_assets_moment_ic_group_search_webp, width: 16, height: 16),
             const SizedBox(width: 8),
             Expanded(
               child: Center(
@@ -127,7 +128,7 @@ class PostAsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ImageView("empty_list.png", width: 172, height: 146),
+          ImageView(Images.security_empty_list_png, width: 172, height: 146),
           const SizedBox(height: 16),
           Text(
             textAlign: TextAlign.center,
@@ -211,8 +212,8 @@ class PostAsPage extends StatelessWidget {
               return ImageView(
                 createController.characterInfo?[Security.security_userBase]?[Security.security_uid] ==
                         characterSelectInfo[Security.security_userBase][Security.security_uid]
-                    ? "ic_check.png"
-                    : "ic_uncheck.png",
+                    ? Images.security_ic_check_png
+                    : Images.security_ic_uncheck_png,
                 height: 24,
                 width: 24,
               );

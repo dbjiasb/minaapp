@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/core/util/collections_util.dart';
 import 'package:flutter/material.dart';
@@ -171,8 +172,8 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
                     },
                     child: ImageView(
                       controller.rxResInfoList.indexWhere((element) => element[Security.security_url] == res[Security.security_url]) >= 0
-                          ? "ic_check.png"
-                          : "ic_uncheck.png",
+                          ? Images.security_ic_check_png
+                          : Images.security_ic_uncheck_png,
                       height: 24,
                       width: 24,
                     ),
@@ -305,7 +306,7 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ImageView(
-                      controller.costInfo.value[Security.security_costType] == ECurrencyType.GEMS ? "gem.png" : 'coin.png',
+                      controller.costInfo.value[Security.security_costType] == ECurrencyType.GEMS ? Images.security_gem_png : Images.security_coin_png,
                       width: 12,
                       height: 12,
                       // color: Colors.red,

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -59,16 +60,16 @@ class ChatSidebar extends StatelessWidget {
 
   String imgNameFrom(int index) {
     if (SideMenuItemType.store.index == index) {
-      return "chat_side_store.webp";
+      return Images.security_chat_side_store_webp;
     }
     if (SideMenuItemType.mission.index == index) {
-      return "chat_side_task.webp";
+      return Images.security_chat_side_task_webp;
     }
     if (SideMenuItemType.dating.index == index) {
-      return "chat_side_game.webp";
+      return Images.security_chat_side_game_webp;
     }
     if (SideMenuItemType.mode.index == index) {
-      return "chat_side_mod.webp";
+      return Images.security_chat_side_mod_webp;
     }
     // if (SideMenuItemType.theater.index == index) {
     //   return 'theater';
@@ -124,10 +125,10 @@ class ChatSidebar extends StatelessWidget {
               width: 40, height: 48,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: ImageView.getImageProvider("chat_side_more_bg.webp"),
+                    image: ImageView.getImageProvider(Images.security_chat_side_more_bg_webp),
                   )
               ),
-              child: ImageView(isMenuExpand.value ? "chat_side_more_co.webp" : "chat_side_more_xp.png",  width: 32, height: 32),
+              child: ImageView(isMenuExpand.value ? Images.security_chat_side_more_co_webp : Images.security_chat_side_more_xp_png,  width: 32, height: 32),
             ),
           )
         ],

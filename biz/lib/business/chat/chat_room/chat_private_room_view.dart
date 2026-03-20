@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/copywriting.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -121,7 +122,7 @@ class ChatPrivateRoomView extends StatelessWidget {
               color: Colors.white,
               fontSize: 14.sp,
               fontWeight: FontWeight.bold,
-              fontFamily: 'SF Pro',
+              fontFamily: Copywriting.security_sF_Pro,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -144,7 +145,7 @@ class ChatPrivateRoomView extends StatelessWidget {
                       color: const Color(0xFFFFF37C),
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
-                      fontFamily: 'SF Pro',
+                      fontFamily: Copywriting.security_sF_Pro,
                     ),
                   ),
                   SizedBox(width: 4.w),
@@ -182,7 +183,7 @@ class ChatPrivateRoomView extends StatelessWidget {
         borderRadius: BorderRadius.circular(22.w),
       ),
       child: Text(
-        'Notice: AI responses are fictional and for entertainment only',
+        Copywriting.security_notice__AI_responses_are_fictional_and_for_entertainment_only,
         style: TextStyle(
           color: Colors.white,
           fontSize: 11.sp,
@@ -245,7 +246,7 @@ class ChatPrivateRoomView extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 12.w),
       child: Text(
-        'Unsupported message type',
+        Copywriting.security_unsupported_message_type,
         style: TextStyle(color: Colors.white.withOpacity(0.5)),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -200,8 +201,8 @@ class SkeletonViewController extends GetxController {
         pageBuilder: () {
           return KeepAliveWrapper(child: DiscoveryView());
         },
-        selectedBuilder: () => ImageView("tab_moment_1.png", width: 28, height: 28),
-        normalBuilder: () => ImageView("tab_moment_0.png", width: 28, height: 28),
+        selectedBuilder: () => ImageView(Images.security_tab_moment_1_png, width: 28, height: 28),
+        normalBuilder: () => ImageView(Images.security_tab_moment_0_png, width: 28, height: 28),
       ));
     }
   }

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -50,12 +51,12 @@ class _ChatHistoryViewState extends State<ChatHistoryView> with SingleTickerProv
               padding: EdgeInsets.only(left: 16.w, right: 16.w),
               alignment: Alignment.centerLeft,
               child: Text(
-                'History',
+                Security.security_history,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'HYPangDunDun',
+                  fontFamily: Security.security_hYPangDunDun,
                 ),
               ),
             ),
@@ -82,7 +83,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> with SingleTickerProv
                         borderRadius: BorderRadius.circular(14.r),
                       ),
                       child: Text(
-                        'Story',
+                        Security.security_story,
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: logic.currentTabIndex.value == 0
@@ -110,7 +111,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> with SingleTickerProv
                         borderRadius: BorderRadius.circular(14.r),
                       ),
                       child: Text(
-                        'Message',
+                        Security.security_message,
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: logic.currentTabIndex.value == 1

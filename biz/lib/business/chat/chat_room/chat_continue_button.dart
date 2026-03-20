@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -39,7 +40,7 @@ class ChatContinueButton extends StatelessWidget {
             ),
             SizedBox(width: 8.w),
             Text(
-              'Continue',
+              Security.security_continue,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15.sp,

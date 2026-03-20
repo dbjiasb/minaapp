@@ -1,3 +1,6 @@
+import 'package:biz/base/crypt/copywriting.dart';
+import 'package:biz/base/crypt/security.dart';
+import 'package:biz/base/crypt/images.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -19,7 +22,7 @@ class HomePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomePageViewController(), tag: 'home_page_controller');
+    final controller = Get.put(HomePageViewController(), tag: Security.security_home_page_controller);
 
     return Scaffold(
       backgroundColor: Color(0xFF07070a),
@@ -95,7 +98,7 @@ class HomePageView extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('Recommend', style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, fontFamily: 'HYPangDunDun')),
+          Text(Security.security_recommend, style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun)),
           InkWell(
             onTap: () {
               Get.toNamed(Routers.search);
@@ -128,9 +131,9 @@ class HomePageView extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/ic_add_create.png', width: 20.w, height: 20.w, package: 'biz'),
+              Image.asset(Images.security_assets_images_ic_add_create_png, width: 20.w, height: 20.w, package: Security.security_biz),
               SizedBox(width: 4.w),
-              Text('Create', style: TextStyle(color: Color(0xFF07070a), fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(Security.security_create, style: TextStyle(color: Color(0xFF07070a), fontSize: 14.sp, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -140,7 +143,7 @@ class HomePageView extends StatelessWidget {
 }
 
 class HomePageViewController extends GetxController with GetSingleTickerProviderStateMixin {
-  final List<String> categories = ['Story', 'Discovery', 'Real', 'OC', 'Pro only'];
+  final List<String> categories = [Security.security_story, Security.security_discovery, Security.security_real, Security.security_oC, Copywriting.security_pro_only];
   final RxInt selectedCategoryIndex = 0.obs;
   final RxBool showCreateButton = true.obs;
   final ScrollController scrollController = ScrollController();

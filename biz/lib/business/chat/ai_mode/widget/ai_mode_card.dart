@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +82,7 @@ class AiModeCardState extends State<AiModeCard> {
                   SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) => ImageView(index < (aiPersonality[Security.security_star]?[Security.security_star] ?? 1) ? "mode_star_light.webp" : "mode_star_unlight.webp", width: 18, height: 18)),
+                    children: List.generate(5, (index) => ImageView(index < (aiPersonality[Security.security_star]?[Security.security_star] ?? 1) ? Images.security_mode_star_light_webp : Images.security_mode_star_unlight_webp, width: 18, height: 18)),
                   ),
                   Text(
                     aiPersonality[Security.security_desc] ?? "",
@@ -94,8 +95,8 @@ class AiModeCardState extends State<AiModeCard> {
               ),
             ),
           ),
-          Positioned.fill(child: ImageView("mode_frame.webp", fit: BoxFit.fill)),
-          Positioned(top: 32, left: 20, child: ImageView("mode_flip.webp", height: 32, width: 32, fit: BoxFit.cover)),
+          Positioned.fill(child: ImageView(Images.security_mode_frame_webp, fit: BoxFit.fill)),
+          Positioned(top: 32, left: 20, child: ImageView(Images.security_mode_flip_webp, height: 32, width: 32, fit: BoxFit.cover)),
           if ((aiPersonality[ES.tagURL] ?? '').isNotEmpty)
             Positioned(
               right: 5,
@@ -124,7 +125,7 @@ class AiModeCardState extends State<AiModeCard> {
               decoration: BoxDecoration(color: Color(0xFF5F2F80), borderRadius: BorderRadius.all(Radius.circular(12))),
             ),
           ),
-          Positioned.fill(child: ImageView("mode_frame.webp", fit: BoxFit.fill)),
+          Positioned.fill(child: ImageView(Images.security_mode_frame_webp, fit: BoxFit.fill)),
           Positioned(
             top: 40,
             left: 24.w,
@@ -137,7 +138,7 @@ class AiModeCardState extends State<AiModeCard> {
                   width: double.infinity,
                   height: 48,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider("mode_about_bg.webp"))),
+                  decoration: BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider(Images.security_mode_about_bg_webp))),
                   child: Text(
                     Copywriting.security_about_Me,
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16, decoration: TextDecoration.none),
@@ -154,7 +155,7 @@ class AiModeCardState extends State<AiModeCard> {
                 SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(5, (index) => ImageView(index < (aiPersonality[Security.security_star]?[Security.security_star] ?? 1) ? "mode_star_light.webp" : "mode_star_unlight.webp", width: 18, height: 18)),
+                  children: List.generate(5, (index) => ImageView(index < (aiPersonality[Security.security_star]?[Security.security_star] ?? 1) ? Images.security_mode_star_light_webp : Images.security_mode_star_unlight_webp, width: 18, height: 18)),
                 ),
                 SizedBox(height: 12),
                 Text(
@@ -165,7 +166,7 @@ class AiModeCardState extends State<AiModeCard> {
               ],
             ),
           ),
-          Positioned(top: 32, left: 20, child: ImageView("mode_flip.webp", height: 32, width: 32, fit: BoxFit.cover)),
+          Positioned(top: 32, left: 20, child: ImageView(Images.security_mode_flip_webp, height: 32, width: 32, fit: BoxFit.cover)),
         ],
       ),
     );
@@ -212,7 +213,7 @@ class AiModeCardState extends State<AiModeCard> {
         alignment: Alignment.center,
         height: 44,
         width: 200,
-        decoration: curMode[Security.security_own] == 0 ? BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider("mode_buy.webp"), fit: BoxFit.fill)) : null,
+        decoration: curMode[Security.security_own] == 0 ? BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider(Images.security_mode_buy_webp), fit: BoxFit.fill)) : null,
         child:
             curMode[Security.security_own] == 0
                 ? Column(
@@ -222,7 +223,7 @@ class AiModeCardState extends State<AiModeCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ImageView(curMode[Security.security_currencyType] == 0 ? "coin.png" : "gem.png", width: 10, height: 10),
+                        ImageView(curMode[Security.security_currencyType] == 0 ? Images.security_coin_png : Images.security_gem_png, width: 10, height: 10),
                         const SizedBox(width: 2),
                         Text(
                           '${hasDiscount ? curMode[ES.dp] : curMode[Security.security_price]}',
@@ -234,7 +235,7 @@ class AiModeCardState extends State<AiModeCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ImageView(curMode[Security.security_currencyType] == 0 ? "coin.png" : "gem.png", width: 10, height: 10),
+                          ImageView(curMode[Security.security_currencyType] == 0 ? Images.security_coin_png : Images.security_gem_png, width: 10, height: 10),
                           const SizedBox(width: 1),
                           Text(
                             '${curMode[Security.security_price]}',

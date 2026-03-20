@@ -1,3 +1,5 @@
+import 'package:biz/base/crypt/copywriting.dart';
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,7 @@ class RechargeCurrencyView extends StatelessWidget {
       backgroundColor: const Color(0xFF07070A),
         extendBody: true,
       appBar: AppBar(
-        leading: InkWell(onTap: Get.back, child: Container(padding: EdgeInsets.all(16), child: ImageView("back.png", fit: BoxFit.fill))),
+        leading: InkWell(onTap: Get.back, child: Container(padding: EdgeInsets.all(16), child: ImageView(Images.security_back_png, fit: BoxFit.fill))),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         title: Text(
@@ -89,7 +91,7 @@ class RechargeCurrencyView extends StatelessWidget {
   }
 
   Widget _rechargeCurrencyView() {
-    final rcgImage = controller.rcgType == 0 ? "coin.png" : "gem.png";
+    final rcgImage = controller.rcgType == 0 ? Images.security_coin_png : Images.security_gem_png;
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -105,7 +107,7 @@ class RechargeCurrencyView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        controller.rcgType == 0 ? 'Coins balance' : 'Gems balance',
+                        controller.rcgType == 0 ? Copywriting.security_coins_balance : Copywriting.security_gems_balance,
                         style: TextStyle(color: Color(0xFFA19C9A), fontSize: 14, fontWeight: AppFonts.medium),
                       ),
                       Obx(() => Text(

@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/assets/image_path.dart';
@@ -170,7 +171,7 @@ class ChatModeView extends StatelessWidget {
                     ),
                     if (chatModel[Security.security_premiumOnly] == 1)
                       ImageView(
-                        "premium.png",
+                        Images.security_premium_png,
                         width: 16,
                         height: 16,
                       ).marginOnly(left: 4),
@@ -178,8 +179,8 @@ class ChatModeView extends StatelessWidget {
                     Obx(() {
                       return ImageView(
                         chatModel[Security.security_id] == rxModelId.value
-                            ? "ic_check.png"
-                            : "ic_uncheck.png",
+                            ? Images.security_ic_check_png
+                            : Images.security_ic_uncheck_png,
                         height: 24,
                         width: 24,
                       );

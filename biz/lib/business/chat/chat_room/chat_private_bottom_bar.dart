@@ -239,12 +239,12 @@ class ChatPrivateBottomBarController extends GetxController {
 
   void onPlusButtonTapped() {
     // TODO: 显示更多功能面板（图片、礼物等）
-    print('Plus button tapped');
+    print(Copywriting.security_plus_button_tapped);
   }
 
   void onVoiceButtonTapped() {
     // TODO: 切换到语音输入状态
     state.value = PrivateChatBottomBarState.voice;
-    print('Voice button tapped');
+    print(Copywriting.security_voice_button_tapped);
   }
 }
