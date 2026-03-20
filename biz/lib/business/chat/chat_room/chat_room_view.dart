@@ -57,7 +57,6 @@ import 'level_up_pop_up.dart';
 import 'sidebar.dart';
 
 const String kLogTag = '[ChatRoom]';
-const String chatImageDirectory = 'packages/pods/modules/assets/images/chat/';
 
 String chatRoomViewTag = Security.security_chat_room_view;
 

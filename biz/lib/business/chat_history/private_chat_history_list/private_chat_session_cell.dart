@@ -135,7 +135,7 @@ class PrivateChatSessionCell extends StatelessWidget {
                       if (session.unreadNumber.value > 0)
                         Container(
                           margin: EdgeInsets.only(left: 8.w),
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.w),
+                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.w),
                           decoration: BoxDecoration(
                             color: const Color(0xFFF0443E),
                             borderRadius: BorderRadius.circular(7.w),

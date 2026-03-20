@@ -1,3 +1,4 @@
+import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/assets/image_path.dart';
@@ -51,18 +52,18 @@ class SkeletonView extends StatelessWidget {
             isSelected: viewController.selectedIndex.value == index,
             highlightColor: Colors.transparent,
           ),
-          if (index == MINE_INDEX)
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Obx(() {
-                bool needRedot = UserManager.instance.notificationReminder.value || UserManager.instance.taskReminder.value;
-                if (!needRedot) return Container();
-                return IgnorePointer(
-                  child: Container(width: 8, height: 8, decoration: BoxDecoration(color: const Color(0xFFF84652), borderRadius: BorderRadius.circular(20))),
-                );
-              }),
-            ),
+          // if (index == MINE_INDEX)
+          //   Positioned(
+          //     top: 8,
+          //     right: 8,
+          //     child: Obx(() {
+          //       bool needRedot = UserManager.instance.notificationReminder.value || UserManager.instance.taskReminder.value;
+          //       if (!needRedot) return Container();
+          //       return IgnorePointer(
+          //         child: Container(width: 8, height: 8, decoration: BoxDecoration(color: const Color(0xFFF84652), borderRadius: BorderRadius.circular(20))),
+          //       );
+          //     }),
+          //   ),
           if (index == MESSAGE_INDEX)
             Positioned(
               top: 5,
@@ -199,8 +200,8 @@ class SkeletonViewController extends GetxController {
         pageBuilder: () {
           return KeepAliveWrapper(child: DiscoveryView());
         },
-        selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_1, width: 28, height: 28),
-        normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_0, width: 28, height: 28),
+        selectedBuilder: () => ImageView("tab_moment_1.png", width: 28, height: 28),
+        normalBuilder: () => ImageView("tab_moment_0.png", width: 28, height: 28),
       ));
     }
   }

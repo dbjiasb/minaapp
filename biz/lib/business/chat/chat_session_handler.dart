@@ -64,25 +64,23 @@ class ChatSessionHandler {
     return ret;
   }
 
-  String findSessionSqlByType(SessionType? sessionType) {
+  String findSessionSqlByType(int? sessionType) {
     if (sessionType == null) {
       return "";
     }
     switch (sessionType) {
-      case SessionType.ai:
-        return " AND ${Security.security_accountType} <> 0 AND ${Security.security_type} <> 2";
-      case SessionType.real:
-        return " AND ${Security.security_accountType} = 0 AND ${Security.security_type} <> 2";
+      case SessionType.private:
+        return "= AND ${Security.security_type} = ${SessionType.private}";
+      case SessionType.theater:
+        return " AND ${Security.security_type} = ${SessionType.theater}";
       case SessionType.group:
-        return " AND ${Security.security_type} = 2";
-      case SessionType.privateChat:
-        return " AND ${Security.security_type} = 3";
-      case SessionType.all:
+        return " AND ${Security.security_type} = ${SessionType.group}";
+      default:
         return "";
     }
   }
 
-  Future<List<ChatSession>> querySessions({String? sessionId, int? limit, int? offset, SessionType? type}) async {
+  Future<List<ChatSession>> querySessions({String? sessionId, int? limit, int? offset, int? sessionType}) async {
     String where = '${Security.security_ownerId} = ?';
     if (sessionId != null) {
       where += " AND ${Security.security_id}  = '$sessionId'";
@@ -90,7 +88,7 @@ class ChatSessionHandler {
       where += " AND ${Security.security_id} <> '$kOffChatSessionId'";
       where += " AND ${Security.security_id} <> '0' AND ${Security.security_id} <> ''";
     }
-    where += findSessionSqlByType(type);
+    where += findSessionSqlByType(sessionType);
 
     if (offset != null && offset > 0) {
       where += " OFFSET $offset";
@@ -117,9 +115,8 @@ class ChatSessionHandler {
   }
 
   // 查询私聊会话列表
-  Future<List<ChatSession>> queryPrivateChatSessions({int? limit, int? offset}) async {
+  Future<List<ChatSession>> queryAllChatSessions({int? limit, int? offset}) async {
     return await querySessions(
-      type: SessionType.privateChat,
       limit: limit,
       offset: offset,
     );

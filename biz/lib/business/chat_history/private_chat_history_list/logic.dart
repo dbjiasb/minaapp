@@ -33,7 +33,7 @@ class PrivateChatHistoryListLogic extends GetxController {
   Future<void> loadData() async {
     try {
       isLoading.value = true;
-      final sessions = await ChatSessionHandler().queryPrivateChatSessions();
+      final sessions = await ChatSessionHandler().queryAllChatSessions();
       dataList.value = sessions;
     } catch (e) {
       print('加载私聊会话列表失败: $e');

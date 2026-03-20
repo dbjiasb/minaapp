@@ -11,7 +11,11 @@ import '../../base/crypt/copywriting.dart';
 
 const kOffChatSessionId = 100000;
 
-enum SessionType { all, ai, real, group, privateChat }
+class SessionType {
+  static const int private = 0;
+  static const int theater = 1;
+  static const int group = 2;
+}
 enum AccType {
   real,
   ai,
@@ -73,7 +77,7 @@ class ChatSession {
   bool greeted = false;
   RxInt unreadNumber = 0.obs;
   int accountType = 1;
-  int type = 0;
+  int type = 0;//0私聊、1群聊、3剧场
   String bio = '';
   RxInt level = 1.obs;
   RxInt nextLevelRatio = 0.obs;
@@ -183,7 +187,7 @@ class ChatSession {
         ),
         lastMessageText = router[Security.security_lastMessageText] ?? '',
         accountType = 0,
-        type = 1,
+        type = SessionType.theater,
         sessionId = router[Security.security_sessionId] ?? "",
         draft = (router[Security.security_draft] as String? ?? '').obs;
 
@@ -201,7 +205,7 @@ class ChatSession {
         ),
         lastMessageText = router[Security.security_lastMessageText] ?? '',
         accountType = router[Security.security_accountType] ?? 1,
-        type = 3, // 私聊
+        type = SessionType.private, // 私聊
         sessionId = router[Security.security_id] ?? "${router[Security.security_uid] ?? ''}",
         draft = (router[Security.security_draft] as String? ?? '').obs;
 
@@ -237,9 +241,9 @@ class ChatSession {
 
   bool get isOffChatSession => id == kOffChatSessionId.toString();
 
-  bool get isGroup => type == 2;
-  bool get isTheater => type == 1;
-  bool get isPrivateChat => type == 3;
+  bool get isGroup => type == SessionType.group;
+  bool get isTheater => type == SessionType.theater;
+  bool get isPrivateChat => type == SessionType.private;
 
   int get groupId => safeExtractId(id) ?? 0;
 
