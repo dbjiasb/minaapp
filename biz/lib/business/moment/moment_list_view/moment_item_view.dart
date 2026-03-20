@@ -67,8 +67,13 @@ class _MomentItemViewState extends State<MomentItemView> {
       }
     });
     deleteEvent = EventCenter.instance.addListener(kDeleteMomentSuccess, (object) {
-      momentInfoList.removeWhere((element) => element.id == object.data[Security.security_momentId]);
+      momentInfoList.removeWhere((element) => element[Security.security_id]?.toString() == object.data[Security.security_momentId]?.toString());
       momentInfoList.refresh();
+      if (momentInfoList.isEmpty) {
+        setState(() {
+
+        });
+      }
     });
     updateEvent = EventCenter.instance.addListener(kUpdateMomentSuccess, (object) {
       Map data = object.data;
@@ -502,6 +507,7 @@ class _MomentItemViewState extends State<MomentItemView> {
     var rawData = rsp?[Security.security_param] ?? [];
     List<Map> listData = (rawData as List).cast<Map>();
     momentInfoList.addAll(listData);
+    momentInfoList.refresh();
     hasMore.value = rsp?[Security.security_hasMore] == 1;
     fromId = rsp?[Security.security_nextId] ?? 0;
     isLoadingMore = false;
@@ -541,11 +547,15 @@ class _MomentItemViewState extends State<MomentItemView> {
     MomentService.deleteMoment(momentId)
         .then((value) {
           EasyLoading.dismiss();
-          if (value[Security.security_tCommonRsp]?[Security.security_code] == 0) {
-            momentInfoList.removeWhere((element) => element.id == momentId);
+          if (value[Security.security_statusInfo]?[Security.security_code] == 0) {
+            momentInfoList.removeWhere((element) => element[Security.security_id]?.toString() == momentId.toString());
             momentInfoList.refresh();
+            if (momentInfoList.isEmpty) {
+              setState(() {
+              });
+            }
           } else {
-            EasyLoading.showToast(value[Security.security_tCommonRsp]?[Security.security_msg] ?? Copywriting.security_operation_failed);
+            EasyLoading.showToast(value[Security.security_statusInfo]?[Security.security_msg] ?? Copywriting.security_operation_failed);
           }
         })
         .catchError((e) {

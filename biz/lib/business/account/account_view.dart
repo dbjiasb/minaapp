@@ -27,8 +27,11 @@ import '../../shared/widget/title_bar.dart';
 import '../chat/setting/message_setting.dart';
 import '../create_center/create_oc_dialog.dart';
 import '../create_center/create_oc_rv_dialog.dart';
+import '../moment/constant_state.dart';
+import '../moment/moment_list_view/moment_item_view.dart';
 import 'about_view.dart';
 import 'companion_view.dart';
+import 'my_group.dart';
 
 class AccountView extends StatelessWidget {
   AccountView({super.key});
@@ -732,12 +735,18 @@ class AccountViewController extends GetxController with GetTickerProviderStateMi
   late TabController tabController;
   PageController pageController = PageController();
 
-  List<String> tabNames = ["My Own Character"];
+  List<String> tabNames = ["Character"];
   RxList<Widget> tabPage = [KeepAliveWrapper(child: MyCompanionView(viewAll: 0))].obs;
 
   @override
   void onInit() {
     super.onInit();
+    if (!Preferences.instance.isRv) {
+      tabNames.add(Copywriting.security_group_Chat);
+      tabNames.add(Security.security_moment);
+      tabPage.add(KeepAliveWrapper(child: MyGroupView()));
+      tabPage.add(KeepAliveWrapper(child: MomentItemView(EMomentListType.MOMENT_LIST_USER, targetUid: 0, canRefresh: false)));
+    }
     tabController = TabController(vsync: this, length: tabNames.length);
 
     EventCenter.instance.addListener(kEventCenterUserDidLogin, (_) {

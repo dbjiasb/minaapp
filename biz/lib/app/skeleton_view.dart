@@ -28,8 +28,8 @@ class BottomBarItem {
 final String kCachedKeyGoToPremiumFlag = Security.security_kCachedKeyGoToPremiumFlag;
 
 // const int CREATE_OC_INDEX = 2;
-const int MESSAGE_INDEX = 1;
-const int MINE_INDEX = 2;
+int get MESSAGE_INDEX => Preferences.instance.isRv ? 1 : 2;
+int get MINE_INDEX => Preferences.instance.isRv ? 2 : 3;
 
 class SkeletonView extends StatelessWidget {
   SkeletonView({super.key});
@@ -51,7 +51,7 @@ class SkeletonView extends StatelessWidget {
             isSelected: viewController.selectedIndex.value == index,
             highlightColor: Colors.transparent,
           ),
-          if (index == 4)
+          if (index == MINE_INDEX)
             Positioned(
               top: 8,
               right: 8,
@@ -63,7 +63,7 @@ class SkeletonView extends StatelessWidget {
                 );
               }),
             ),
-          if (index == 3)
+          if (index == MESSAGE_INDEX)
             Positioned(
               top: 5,
               right: 5,

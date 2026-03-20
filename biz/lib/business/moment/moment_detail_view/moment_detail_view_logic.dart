@@ -75,7 +75,7 @@ class MomentDetailViewLogic extends GetxController {
     ApiRequest request = ApiRequest(Apis.security_getCollectStatus, params: req);
     ApiResponse response = await ApiService.instance.sendRequest(request);
     Map data = response.data;
-    if ((data[Security.security_tCommonRsp]?[Security.security_code] ?? -1) == 0) {
+    if ((data[Security.security_statusInfo]?[Security.security_code] ?? -1) == 0) {
       rxCollectStatus.value = (data[Security.security_collectInfoList] ?? []).isNotEmpty;
     }
   }
@@ -93,11 +93,11 @@ class MomentDetailViewLogic extends GetxController {
     MomentService.deleteMoment(momentId)
         .then((value) {
           EasyLoading.dismiss();
-          if (value[Security.security_tCommonRsp]?.code == 0) {
+          if (value[Security.security_statusInfo]?[Security.security_code] == 0) {
             Get.back();
             EventCenter.instance.sendEvent(kDeleteMomentSuccess, {Security.security_momentId: momentId});
           } else {
-            EasyLoading.showToast(value[Security.security_tCommonRsp]?[Security.security_msg] ?? Copywriting.security_operation_failed);
+            EasyLoading.showToast(value[Security.security_statusInfo]?[Security.security_msg] ?? Copywriting.security_operation_failed);
           }
         })
         .catchError((e) {
@@ -171,7 +171,7 @@ class MomentDetailViewLogic extends GetxController {
     momentInfo[Security.security_likeCount] = momentInfo[Security.security_likeCount] < 0 ? 0 : momentInfo[Security.security_likeCount];
     rxMomentInfo.refresh();
     Map? rsp = await MomentService.likeMomentAction(wantLikeAction, momentInfo[Security.security_id], posterUid: momentInfo[Security.security_posterUid], authorUid: momentInfo[Security.security_authorUid]);
-    if (rsp[Security.security_tCommonRsp]?[Security.security_code] == 0) {
+    if (rsp[Security.security_statusInfo]?[Security.security_code] == 0) {
       EventCenter.instance.sendEvent(kUpdateMomentSuccess, rxMomentInfo.value);
     }
   }

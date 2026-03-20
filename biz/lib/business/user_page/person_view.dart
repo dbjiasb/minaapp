@@ -1,13 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
-import 'package:biz/base/event_center/event_center.dart';
 import 'package:biz/base/router/router_names.dart';
-
 // import 'package:biz/business/account/collections_view.dart';
 import 'package:biz/business/chat/chat_room/chat_room_view.dart';
 import 'package:biz/business/chat/person_manager.dart';
@@ -16,10 +9,15 @@ import 'package:biz/core/util/es_helper.dart';
 import 'package:biz/core/util/ui_util.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/shared/widget/title_bar.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../../../core/user_manager/user_manager.dart';
 import '../../base/api_service/api_response.dart';
 import '../../base/assets/image_view.dart';
+import '../../base/preferences/preferences.dart';
 import '../../base/router/route_helper.dart';
 import '../../core/util/cached_image.dart';
 import '../../shared/toast/toast.dart';
@@ -27,6 +25,8 @@ import '../../shared/widget/app_widgets.dart';
 import '../create_center/character_service.dart';
 import '../home_page_lists/list_item.dart';
 import '../home_page_lists/role_manager.dart';
+import '../moment/constant_state.dart';
+import '../moment/moment_list_view/moment_item_view.dart';
 
 class PersonViewPage extends StatelessWidget {
   PersonViewPage({Key? key}) : super(key: key);
@@ -39,14 +39,12 @@ class PersonViewPage extends StatelessWidget {
     controller = PersonViewController(Get.arguments[Security.security_personInfo] ?? {});
     RxInt tabSelectIndex = RxInt(0);
     Obx obxTabBars = Obx(
-          () =>
-      StyleTabBars(
+      () => StyleTabBars(
         titles: controller.tabsTitle.value,
         onTabSelected: (index) {
           pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.linearToEaseOut);
         },
-      )
-        ..selectedIndex = tabSelectIndex,
+      )..selectedIndex = tabSelectIndex,
     );
     Get.put(controller, tag: 'person_view_${controller.uid}');
     return Scaffold(
@@ -90,21 +88,14 @@ class PersonViewPage extends StatelessWidget {
                           colors: [Colors.black.withValues(alpha: 0), Colors.black, Colors.black],
                         ),
                       ),
-                      child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                        _buildHeaderSection(),
-                        _buildProfileSection()
-                      ]),
+                      child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [_buildHeaderSection(), _buildProfileSection()]),
                     ),
                   ),
-                  SliverPersistentHeader(
-                      pinned: true, floating: true, delegate: _TabBarDelegate(obxTabBars)),
+                  SliverPersistentHeader(pinned: true, floating: true, delegate: _TabBarDelegate(obxTabBars)),
                 ];
               },
               pinnedHeaderSliverHeightBuilder: () {
-                return MediaQuery
-                    .of(context)
-                    .padding
-                    .top + kToolbarHeight + 48;
+                return MediaQuery.of(context).padding.top + kToolbarHeight + 48;
               },
               body: Container(
                 color: AppColors.base_background,
@@ -113,11 +104,7 @@ class PersonViewPage extends StatelessWidget {
                   onPageChanged: (i) {
                     tabSelectIndex.value = i;
                   },
-                  children: [
-                    _buildGallerySection(),
-                    // if (controller.isReal) _buildOcSection(),
-                    // _buildMomentListSection()
-                  ],
+                  children: [_buildGallerySection(), if (controller.isReal) _buildOcSection(), _buildMomentListSection()],
                 ),
               ),
             ),
@@ -138,33 +125,32 @@ class PersonViewPage extends StatelessWidget {
                     child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView("back.png", width: 24, height: 24)),
                   ),
                   Obx(
-                        () =>
-                    controller.loading.value
-                        ? Container(
-                      width: 24,
-                      height: 24,
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                    )
-                        : Container(),
+                    () =>
+                        controller.loading.value
+                            ? Container(
+                              width: 24,
+                              height: 24,
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                            )
+                            : Container(),
                   ),
                   Obx(
-                        () =>
-                        GestureDetector(
-                          onTap: () {
-                            if (controller.isStarred) {
-                              controller.unCollectUser();
-                            } else {
-                              controller.collectUser();
-                            }
-                          },
-                          child: Container(
-                            width: 32,
-                            height: 44,
-                            alignment: Alignment.center,
-                            child: ImageView(controller.isStarred ? "user_collected.png" : "user_collect.png", width: 24, height: 24),
-                          ),
-                        ),
+                    () => GestureDetector(
+                      onTap: () {
+                        if (controller.isStarred) {
+                          controller.unCollectUser();
+                        } else {
+                          controller.collectUser();
+                        }
+                      },
+                      child: Container(
+                        width: 32,
+                        height: 44,
+                        alignment: Alignment.center,
+                        child: ImageView(controller.isStarred ? "user_collected.png" : "user_collect.png", width: 24, height: 24),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -193,239 +179,247 @@ class PersonViewPage extends StatelessWidget {
     );
   }
 
-  // Widget _buildOcSection() {
-  //   return Obx(
-  //     () =>
-  //         controller.myCompanions.isNotEmpty
-  //             ? GridView.count(
-  //               padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-  //               physics: const NeverScrollableScrollPhysics(),
-  //               // 1. 禁用GridView自身滚动
-  //               shrinkWrap: true,
-  //               // 2. 适应内容高度
-  //               crossAxisCount: 3,
-  //               mainAxisSpacing: 4,
-  //               crossAxisSpacing: 4,
-  //               childAspectRatio: 168 / 256,
-  //               children:
-  //                   controller.myCompanions.map((companion) {
-  //                     String linkNum = RoleItem.shortStringForCount(companion[Security.security_heatInfo]?[Security.security_connectors] ?? 0);
-  //                     String heatNum = RoleItem.shortStringForCount(companion[Security.security_heatInfo]?[Security.security_heatValue] ?? 0);
-  //                     String coverUrl = companion[Security.security_coverUrl];
-  //                     String nickname = companion[Security.security_nickname];
-  //                     int uid = companion[Security.security_uid];
-  //                     int accountType = companion[Security.security_accountType];
-  //                     String avatar = companion[Security.security_avatarUrl];
-  //
-  //                     return GestureDetector(
-  //                       onTap: () {
-  //                         RH.toChat(id: "$uid", name: nickname, avatar: avatar, coverUrl: coverUrl, accountType: accountType);
-  //                       },
-  //                       child: ClipRRect(
-  //                         borderRadius: BorderRadius.circular(8),
-  //                         child: Stack(
-  //                           children: [
-  //                             Positioned.fill(child: CachedImage(
-  //                                 imageUrl: coverUrl,
-  //                                 fit: BoxFit.cover,
-  //                                 errorWidget: (context, url, error) => Container(color: AppColors.ocMain)
-  //                             )),
-  //                             Column(
-  //                               children: [
-  //                                 Spacer(),
-  //                                 Container(
-  //                                   width: double.infinity,
-  //                                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-  //                                   decoration: BoxDecoration(
-  //                                     borderRadius: BorderRadius.circular(8),
-  //                                     image: DecorationImage(image: AssetImage(ImagePath.person_img_mask), fit: BoxFit.cover),
-  //                                   ),
-  //                                   child: Column(
-  //                                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                                     children: [
-  //                                       Row(
-  //                                         children: [
-  //                                           Flexible(
-  //                                             child: Text(
-  //                                               nickname,
-  //                                               maxLines: 1,
-  //                                               style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
-  //                                               overflow: TextOverflow.ellipsis,
-  //                                             ),
-  //                                           ),
-  //                                           // AppWidgets.userTag(companion[Security.security_accountType]),
-  //                                         ],
-  //                                       ),
-  //                                       SizedBox(height: 8),
-  //                                       Row(
-  //                                         mainAxisAlignment: MainAxisAlignment.start,
-  //                                         children: [
-  //                                           Row(
-  //                                             children: [
-  //                                               Image.asset(IMGP.link_num, width: 12, height: 12).marginOnly(right: 2),
-  //                                               Text(linkNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
-  //                                               SizedBox(width: 4),
-  //                                               Image.asset(IMGP.heart_count, width: 12, height: 12).marginOnly(right: 2),
-  //                                               Text(heatNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
-  //                                             ],
-  //                                           ),
-  //                                         ],
-  //                                       ),
-  //                                     ],
-  //                                   ),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     );
-  //                   }).toList(),
-  //             )
-  //             : Container(height: Get.height * 0.5, child: UiUtils.buildCommonEmptyView()),
-  //   );
-  // }
+  Widget _buildOcSection() {
+    return Obx(
+      () =>
+          controller.myCompanions.isNotEmpty
+              ? GridView.count(
+                padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+                physics: const NeverScrollableScrollPhysics(),
+                // 1. 禁用GridView自身滚动
+                shrinkWrap: true,
+                // 2. 适应内容高度
+                crossAxisCount: 3,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4,
+                childAspectRatio: 168 / 256,
+                children:
+                    controller.myCompanions.map((companion) {
+                      String linkNum = RoleItem.shortStringForCount(companion[Security.security_heatInfo]?[Security.security_connectors] ?? 0);
+                      String heatNum = RoleItem.shortStringForCount(companion[Security.security_heatInfo]?[Security.security_heatValue] ?? 0);
+                      String coverUrl = companion[Security.security_coverUrl];
+                      String nickname = companion[Security.security_nickname];
+                      int uid = companion[Security.security_uid];
+                      int accountType = companion[Security.security_accountType];
+                      String avatar = companion[Security.security_avatarUrl];
+
+                      return GestureDetector(
+                        onTap: () {
+                          RH.toChat(id: "$uid", name: nickname, avatar: avatar, coverUrl: coverUrl, accountType: accountType);
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: CachedImage(
+                                  imageUrl: coverUrl,
+                                  fit: BoxFit.cover,
+                                  errorWidget: (context, url, error) => Container(color: AppColors.ocMain),
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  Spacer(),
+                                  Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.black.withValues(alpha: 0.01),
+                                          Colors.black.withValues(alpha: 0.6),
+                                          Colors.black.withValues(alpha: 0.9),
+                                        ],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                nickname,
+                                                maxLines: 1,
+                                                style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            // AppWidgets.userTag(companion[Security.security_accountType]),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                ImageView("linknum.webp", width: 12, height: 12).marginOnly(right: 2),
+                                                Text(linkNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
+                                                SizedBox(width: 4),
+                                                Image.asset("heart_count.webp", width: 12, height: 12).marginOnly(right: 2),
+                                                Text(heatNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+              )
+              : Container(height: Get.height * 0.5, child: UiUtils.buildCommonEmptyView()),
+    );
+  }
 
   Widget _buildHeaderSection() {
     return Container(
       padding: EdgeInsets.only(top: 44),
       alignment: Alignment.bottomLeft,
       child: Obx(
-            () =>
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 4,
+          children: [
+            // Row(
+            //   children: [
+            //     CircleAvatar(
+            //       radius: 36,
+            //       backgroundColor: Colors.transparent,
+            //       child: Container(
+            //         decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1, color: Colors.white.withValues(alpha: 0.8))),
+            //         child: ClipOval(
+            //           child: CachedImage(
+            //             imageUrl: controller.avatarUrl,
+            //             fit: BoxFit.cover,
+            //             errorWidget: (context, url, error) => Container(color: Colors.grey, height: 72, width: 72),
+            //             width: 72,
+            //             height: 72,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // SizedBox(height: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 4,
               children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              controller.name,
+                              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          AppWidgets.userTag(controller.accountType, id: controller.uid.toString()),
+                          if (controller.isMyOc) CharacterService.auditTextWidget(controller.myOcShared, controller.myOcAudit, isUserPage: true),
+                        ],
+                      ),
+                    ),
+                    // Spacer(),
+                    Obx(() {
+                      return controller.isMyOc ? _buildEditOCButton() : _buildFollowButton();
+                    }),
+                  ],
+                ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: controller.uid.toString()));
+                        Toast.show(Copywriting.security_copied_ID_to_clipboard);
+                      },
+                      child: Text('ID: ${controller.uid}', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+                    ),
+                    if (!controller.isReal)
+                      GestureDetector(
+                        onTap: () {
+                          if (controller.masterUid == 0) return;
+                          RH.toPersonalView(uid: controller.masterUid, name: controller.masterName, avatar: controller.masterAvatar, accountType: 0);
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(width: 12),
+                            Text('Creator:', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                            SizedBox(width: 4),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedImage(
+                                imageUrl: controller.masterAvatar,
+                                fit: BoxFit.cover,
+                                width: 16,
+                                height: 16,
+                                errorWidget: (context, url, error) => Container(color: Colors.grey, height: 16, width: 16),
+                              ),
+                            ),
+                            SizedBox(width: 4),
+                            Text(controller.masterName, style: TextStyle(color: Color(0xFFFFEF3B), fontSize: 10, fontWeight: FontWeight.w500)),
+                            Icon(Icons.arrow_forward_ios, color: Color(0xFFFFEF3B), size: 10),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+                // SizedBox(height: 12),
                 // Row(
                 //   children: [
-                //     CircleAvatar(
-                //       radius: 36,
-                //       backgroundColor: Colors.transparent,
-                //       child: Container(
-                //         decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1, color: Colors.white.withValues(alpha: 0.8))),
-                //         child: ClipOval(
-                //           child: CachedImage(
-                //             imageUrl: controller.avatarUrl,
-                //             fit: BoxFit.cover,
-                //             errorWidget: (context, url, error) => Container(color: Colors.grey, height: 72, width: 72),
-                //             width: 72,
-                //             height: 72,
-                //           ),
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Text(controller.linkNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                //         Text(
+                //           Security.security_connectors,
+                //           style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
                 //         ),
-                //       ),
+                //       ],
+                //     ),
+                //     SizedBox(width: 12),
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Text(controller.followersNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                //         Text(
+                //           Security.security_followers,
+                //           style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
+                //         ),
+                //       ],
+                //     ),
+                //     SizedBox(width: 12),
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Text(controller.heatNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                //         Text(Security.security_heat, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500)),
+                //       ],
                 //     ),
                 //   ],
                 // ),
-                // SizedBox(height: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  controller.name,
-                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              AppWidgets.userTag(controller.accountType, id: controller.uid.toString()),
-                              if (controller.isMyOc) CharacterService.auditTextWidget(controller.myOcShared, controller.myOcAudit, isUserPage: true),
-                            ],
-                          ),
-                        ),
-                        // Spacer(),
-                        Obx(() {
-                          return controller.isMyOc ? _buildEditOCButton() : _buildFollowButton();
-                        }),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Clipboard.setData(ClipboardData(text: controller.uid.toString()));
-                            Toast.show(Copywriting.security_copied_ID_to_clipboard);
-                          },
-                          child: Text('ID: ${controller.uid}', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
-                        ),
-                        if (!controller.isReal)
-                          GestureDetector(
-                            onTap: () {
-                              if (controller.masterUid == 0) return;
-                              RH.toPersonalView(uid: controller.masterUid, name: controller.masterName, avatar: controller.masterAvatar, accountType: 0);
-                            },
-                            child: Row(
-                              children: [
-                                SizedBox(width: 12),
-                                Text('Creator:', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
-                                SizedBox(width: 4),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: CachedImage(
-                                    imageUrl: controller.masterAvatar,
-                                    fit: BoxFit.cover,
-                                    width: 16,
-                                    height: 16,
-                                    errorWidget: (context, url, error) => Container(color: Colors.grey, height: 16, width: 16),
-                                  ),
-                                ),
-                                SizedBox(width: 4),
-                                Text(controller.masterName, style: TextStyle(color: Color(0xFFFFEF3B), fontSize: 10, fontWeight: FontWeight.w500)),
-                                Icon(Icons.arrow_forward_ios, color: Color(0xFFFFEF3B), size: 10),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                    // SizedBox(height: 12),
-                    // Row(
-                    //   children: [
-                    //     Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(controller.linkNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                    //         Text(
-                    //           Security.security_connectors,
-                    //           style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     SizedBox(width: 12),
-                    //     Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(controller.followersNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                    //         Text(
-                    //           Security.security_followers,
-                    //           style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     SizedBox(width: 12),
-                    //     Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(controller.heatNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                    //         Text(Security.security_heat, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500)),
-                    //       ],
-                    //     ),
-                    //   ],
-                    // ),
-                    if (controller.characters.isNotEmpty) SizedBox(height: 12),
-                    if (controller.characters.isNotEmpty)
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children:
+                if (controller.characters.isNotEmpty) SizedBox(height: 12),
+                if (controller.characters.isNotEmpty)
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children:
                         controller.characters
                             .map(
-                              (char) =>
-                              Container(
+                              (char) => Container(
                                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
@@ -434,70 +428,64 @@ class PersonViewPage extends StatelessWidget {
                                 ),
                                 child: Text(char, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
                               ),
-                        )
+                            )
                             .toList(),
-                      ),
-                  ],
-                ),
+                  ),
               ],
             ),
+          ],
+        ),
       ),
     );
   }
 
-  // Widget _buildMomentListSection() => MomentItemView(
-  //     EMomentListType.MOMENT_LIST_USER,
-  //     targetUid: controller.uid,
-  //     canRefresh: false,
-  //     baseInfo: controller.isMyOc ? controller.baseInfo : null
-  // );
+  Widget _buildMomentListSection() =>
+      MomentItemView(EMomentListType.MOMENT_LIST_USER, targetUid: controller.uid, canRefresh: false, baseInfo: controller.isMyOc ? controller.baseInfo : null);
 
   Widget _buildGallerySection() {
     return Obx(
-          () =>
-      controller.gallery.isNotEmpty
-          ? GridView.count(
-        padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-        physics: const NeverScrollableScrollPhysics(),
-        // 1. 禁用GridView自身滚动
-        shrinkWrap: true,
-        // 2. 适应内容高度
-        crossAxisCount: 2,
-        mainAxisSpacing: 7,
-        crossAxisSpacing: 8,
-        childAspectRatio: 168 / 256,
-        children:
-        controller.gallery
-            .map(
-              (url) =>
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(
-                    Routers.imageBrowser,
-                    arguments: {Security.security_imageUrl: url, Security.security_canDownload: controller.isReal ? 0 : 1},
-                  );
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: CachedImage(imageUrl: url, fit: BoxFit.cover, errorWidget: (context, url, error) => Container(color: AppColors.ocMain)),
-                ),
-              ),
-        )
-            .toList(),
-      )
-          : Container(height: Get.height * 0.5, child: UiUtils.buildCommonEmptyView()),
+      () =>
+          controller.gallery.isNotEmpty
+              ? GridView.count(
+                padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+                physics: const NeverScrollableScrollPhysics(),
+                // 1. 禁用GridView自身滚动
+                shrinkWrap: true,
+                // 2. 适应内容高度
+                crossAxisCount: 2,
+                mainAxisSpacing: 7,
+                crossAxisSpacing: 8,
+                childAspectRatio: 168 / 256,
+                children:
+                    controller.gallery
+                        .map(
+                          (url) => GestureDetector(
+                            onTap: () {
+                              Get.toNamed(
+                                Routers.imageBrowser,
+                                arguments: {Security.security_imageUrl: url, Security.security_canDownload: controller.isReal ? 0 : 1},
+                              );
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedImage(imageUrl: url, fit: BoxFit.cover, errorWidget: (context, url, error) => Container(color: AppColors.ocMain)),
+                            ),
+                          ),
+                        )
+                        .toList(),
+              )
+              : Container(height: Get.height * 0.5, child: UiUtils.buildCommonEmptyView()),
     );
   }
 
   Widget _buildFollowButton() {
     return Obx(
-          () =>
-          GestureDetector(
-            onTap: () {
-              controller.followAction();
-            },
-            child: !controller.isFollowed ? _buildButtonContent(false) : _buildButtonContent(true),
-          ),
+      () => GestureDetector(
+        onTap: () {
+          controller.followAction();
+        },
+        child: !controller.isFollowed ? _buildButtonContent(false) : _buildButtonContent(true),
+      ),
     );
   }
 
@@ -533,9 +521,7 @@ class PersonViewPage extends StatelessWidget {
       child: Row(
         spacing: 4,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(text, style: TextStyle(color: textColor, fontSize: 14, fontWeight: AppFonts.medium)),
-        ],
+        children: [Text(text, style: TextStyle(color: textColor, fontSize: 14, fontWeight: AppFonts.medium))],
       ),
     );
   }
@@ -548,8 +534,7 @@ class PersonViewPage extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 12),
           child: Obx(
-                () =>
-                Text(controller.bio.isEmpty ? '......' : controller.bio, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+            () => Text(controller.bio.isEmpty ? '......' : controller.bio, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
           ),
         ),
       ],
@@ -579,9 +564,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Column(children: [
-      Container(color: Colors.black, padding: EdgeInsets.only(left: 16, right: 16, bottom: 4), child: tabBar)
-    ]);
+    return Column(children: [Container(color: Colors.black, padding: EdgeInsets.only(left: 16, right: 16, bottom: 4), child: tabBar)]);
   }
 
   @override
@@ -718,16 +701,14 @@ class PersonViewController extends GetxController {
     personalInfo.refresh();
     loading.value = false;
 
-    // tabsTitle.value =
-    //     isReal ? [Security.security_Gallery, Security.security_character, Security.security_moment] : [Security.security_Gallery, Security.security_moment];
+    tabsTitle.value =
+        isReal
+            ? [Security.security_Gallery, Security.security_character, if (!Preferences.instance.isRv) Security.security_moment]
+            : [Security.security_Gallery, if (!Preferences.instance.isRv) Security.security_moment];
   }
 
   Future fetchMyCompanions() async {
-    final rsp = await RoleManager.instance.getRoleList(targetUid: uid,
-        pageIndex: 0,
-        pageSize: 200,
-        version: 0,
-        type: RoleListType.custom_ai);
+    final rsp = await RoleManager.instance.getRoleList(targetUid: uid, pageIndex: 0, pageSize: 200, version: 0, type: RoleListType.custom_ai);
     if (rsp.isSuccess) {
       List rawData = rsp.data[Security.security_param] ?? [];
       myCompanions.value = rawData.cast<Map>();
