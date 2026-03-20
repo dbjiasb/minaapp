@@ -12,7 +12,7 @@ def extract_dart_strings():
     if not root_dir.exists():
         raise FileNotFoundError(f"Modules目录未找到: {root_dir}")
     unique_strings = set()
-    excluded_files = {"security.dart", "apis.dart", "copywriting.dart", "decrypt.dart", "routes.dart", "other.dart"}
+    excluded_files = {"security.dart", "apis.dart", "copywriting.dart", "decrypt.dart", "routes.dart", "other.dart", "images.dart"}
     
     # 优化后的正则表达式（移除三引号匹配，简化匹配逻辑）
     string_pattern = re.compile(
@@ -64,7 +64,7 @@ def extract_dart_strings():
 
     # 删除原有的文件初始化操作
     category_map = {
-        'assets': set(),
+        'images': set(),
         'copywriting': set(),
         'links': set(),
         'routes': set(),
@@ -87,7 +87,7 @@ def extract_dart_strings():
             category_map['apis'].add(s)
             continue
         if s.startswith("packages") or s.lower().endswith(('.png', '.webp')):
-            category_map['assets'].add(s)
+            category_map['images'].add(s)
         elif s[0].isupper() and (' ' in s or s.endswith('...')):
             category_map['copywriting'].add(s)
         elif '://' in s:

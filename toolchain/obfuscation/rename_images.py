@@ -5,7 +5,7 @@ import subprocess
 def md5_rename_and_generate_dart():
     # 定义路径
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    img_dir = os.path.join(project_root, 'biz', 'assets', 'mina')
+    img_dir = os.path.join(project_root, 'biz', 'assets', 'images')
     dart_file = os.path.join(project_root, 'biz', 'lib', 'base', 'assets', 'image_path.dart')
 
     # 创建dart文件类结构
@@ -43,7 +43,8 @@ def md5_rename_and_generate_dart():
 
             # 修改Dart常量生成逻辑
             # 新增常量行，添加原文件名注释
-            dart_line = f'  static const String {name} = \'packages/biz/assets/mina/{new_name}\'; // Original filename: {filename}\n'
+            # dart_line = f'  static const String {name} = \'packages/biz/assets/mina/{new_name}\'; // Original filename: {filename}\n'
+            dart_line = f'  static final String {name} = \'{new_name}\'; // Original filename: {filename}\n'
 
             # 插入到类结束符前
             if dart_line not in existing_content:
@@ -72,7 +73,7 @@ def run_flutter_pub_get():
         if 'roll' in script_dir:
             flutter332_path = '/Users/roll/Roll/Library/flutter3.29/bin/flutter'
         else:
-            flutter332_path = ''
+            flutter332_path = 'flutter'
 
         # 执行 flutter pub get 命令
         result = subprocess.run([flutter332_path, "pub", "get"], check=True, text=True, capture_output=True)

@@ -44,12 +44,13 @@ def generate_security_constants(prefix='security'):
         return
 
     # 白名单配置（新增）
-    allowed_keys = ['security', 'apis', 'copywriting', 'routes']
+    allowed_keys = ['security', 'apis', 'copywriting', 'routes', 'images']
     target_classes = {
         'security': ('Security', 'security'),  # (类名, 文件名)
         'apis': ('Apis', 'apis'),
         'copywriting': ('Copywriting', 'copywriting'),
         'routes': ('Routes', 'routes'),
+        'images': ('Images', 'images'),
         'other': ('Other', 'other')
     }
 
