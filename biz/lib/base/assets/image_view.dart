@@ -37,7 +37,8 @@ class ImageView extends StatelessWidget {
       }
       return Image.asset('$pathPre$name', width: width, height: height, color: color, fit: fit);
     }
-    final path = !name.startsWith(Security.security_http) ? ZipImageManager.instance.getImagePathOrUrl(name) : name;
+    // final path = !name.startsWith(Security.security_http) ? ZipImageManager.instance.getImagePathOrUrl(name) : name;
+    final path = !name.startsWith(Security.security_http) ? "${ApiConfig.cdnApp}$name" : name;
     if (ZipImageManager.instance.isLocalImage(path)) {
       return Image.file(File(path), fit: fit, color: color, width: width, height: height);
     } else {
@@ -58,7 +59,8 @@ class ImageView extends StatelessWidget {
     if (Environment.instance.isDebug) {
       return AssetImage('assets/images/$name', package: Security.security_biz);
     }
-    final path = ZipImageManager.instance.getImagePathOrUrl(name);
+    // final path = ZipImageManager.instance.getImagePathOrUrl(name);
+    final path = !name.startsWith(Security.security_http) ? "${ApiConfig.cdnApp}$name" : name;
     if (ZipImageManager.instance.isLocalImage(path)) {
       return FileImage(File(path));
     } else {

@@ -69,7 +69,7 @@ class PostAsPage extends StatelessWidget {
         decoration: BoxDecoration(color: const Color(0xFFFFFFFF).withOpacity(0.05), borderRadius: const BorderRadius.all(Radius.circular(8))),
         child: Row(
           children: [
-            Image.asset(Images.security_packages_modules_assets_moment_ic_group_search_webp, width: 16, height: 16),
+            Icon(Icons.search, color: Colors.white, size: 16),
             const SizedBox(width: 8),
             Expanded(
               child: Center(

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../base/assets/image_view.dart';
 import '../../base/preferences/preferences.dart';
 import '../../base/router/router_names.dart';
 import '../create_center/create_oc_dialog.dart';
@@ -131,7 +132,7 @@ class HomePageView extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(Images.security_assets_images_ic_add_create_png, width: 20.w, height: 20.w, package: Security.security_biz),
+              ImageView(Images.security_ic_add_create_png, width: 20.w, height: 20.w),
               SizedBox(width: 4.w),
               Text(Security.security_create, style: TextStyle(color: Color(0xFF07070a), fontSize: 14.sp, fontWeight: FontWeight.w600)),
             ],

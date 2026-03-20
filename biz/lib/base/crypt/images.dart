@@ -6,7 +6,6 @@ abstract final class Images {
   static late final String security_ai_continue_png = decrypt('6NgZjJuq9pKE+fTZHuzWqA=='); // ai_continue.png
   static late final String security_arrow_down_png = decrypt('j63nhJ84IQFDl6sG1kq9ng=='); // arrow_down.png
   static late final String security_arrow_right_png = decrypt('HpMaqZCphCIz39WrVyxbyQ=='); // arrow_right.png
-  static late final String security_assets_images_ic_add_create_png = decrypt('r2qAioEHLdrHRTU9PPyYf/uk5qBR6ntVEYXrt8V42mg='); // assets/images/ic_add_create.png
   static late final String security_audio_cancel_png = decrypt('2p2QUKeBr4eFm/EhyT5KYtaFgmYn/1W0IfzADRama9o='); // audio_cancel.png
   static late final String security_audio_mask_png = decrypt('C+uzQ+BbAzaC/nxKfPq7QA=='); // audio_mask.png
   static late final String security_audio_mode_png = decrypt('XNHQLo718tPshySkdK+DMg=='); // audio_mode.png
@@ -98,7 +97,6 @@ abstract final class Images {
   static late final String security_oc_moment_door_webp = decrypt('iTMWtdTMq5vLBuXZdEtAcw5exmHlIO5h1O6hLDfDZng='); // oc_moment_door.webp
   static late final String security_open_mic_png = decrypt('H6A+vQIIFtlbcf0jj4m9/Q=='); // open_mic.png
   static late final String security_packages_biz_assets_images_ = decrypt('yo0deaWXUJVy5j1XhMn63BBusxQgn4nGNBnZTZnxJnk='); // packages/biz/assets/images/
-  static late final String security_packages_modules_assets_moment_ic_group_search_webp = decrypt('u4HG6170mmBvcuHqb+rK2w9iDGvVRIje9hnAgIM8pzN3Mqj9xkWPbgeoLpuFgnd3Ce9UTlxSvQPwIeYy9wB77g=='); // packages/modules/assets/moment/ic_group_search.webp
   static late final String security_premium_png = decrypt('hZgERHewoSnsqMNJ9ye2nQ=='); // premium.png
   static late final String security_premium_avatar_bg_png = decrypt('0+VkUHxYt576aqRohrfgg85/8xtlGAWsmLBp+/zwdHw='); // premium_avatar_bg.png
   static late final String security_premium_bg_png = decrypt('jLc8OYQcb7s+WVIl8psUpA=='); // premium_bg.png
@@ -120,4 +118,5 @@ abstract final class Images {
   static late final String security_user_collect_png = decrypt('8X63pKXRQhgHwMQ/bKaJiWJUzFRHVfL7fe5LSWLYtnk='); // user_collect.png
   static late final String security_user_collected_png = decrypt('VZdYiMNLAcUXdWHk0DVjwefl8zq/q940lgBoZ3MxAzs='); // user_collected.png
   static late final String security_video_msg_png = decrypt('d3qMFmRnrWP1ZqxBKYD8bg=='); // video_msg.png
+  static late final String security_ic_add_create_png = decrypt('Onk7mS5/MXaMFHQ69WLLZC8Tbq39ens50WOpKlTbG68='); // ic_add_create.png
 }
