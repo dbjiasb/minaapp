@@ -11,6 +11,7 @@ dependencies {
     implementation("com.google.gms:google-services:4.3.13")
     implementation(platform("com.google.firebase:firebase-bom:31.2.0"))
     implementation("com.google.firebase:firebase-messaging")
+    implementation("com.google.firebase:firebase-analytics")
     implementation("com.android.billingclient:billing:7.0.0")
 }
 

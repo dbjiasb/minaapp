@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "240726419671",
+    "project_id": "mina-android-cdef0",
+    "storage_bucket": "mina-android-cdef0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240726419671:android:e85b5954b7b3ce1b306892",
+        "android_client_info": {
+          "package_name": "com.telemifystudio.mina"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240726419671-jd0bobhl81nh6ha7gv497t56jqhg3dmb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.telemifystudio.mina",
+            "certificate_hash": "98f664428bd8330d0c0fbc9c96552c73bf7c4422"
+          }
+        },
+        {
+          "client_id": "240726419671-oui0snag991q22ejokqe35t1digo18s5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY8bnaw607VB-mNFPQCeciHCmtCTuD5nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240726419671-96hmoqjpvk4iddgbuu202gd4g8ctfsot.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
