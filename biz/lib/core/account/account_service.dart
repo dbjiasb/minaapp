@@ -153,35 +153,35 @@ class Account {
     }
   }
 
-  int get freeImgUsedTimes => isSubscribed ? premUsedInfo['1'][Security.security_useTimes] : 0;
+  int get freeImgUsedTimes => isSubscribed ? (premUsedInfo['1']?[Security.security_useTimes] ?? 0) : 0;
 
-  int get freeImgLeftTimes => isSubscribed ? premUsedInfo['1'][Security.security_leftTimes] : 0;
+  int get freeImgLeftTimes => isSubscribed ? (premUsedInfo['1']?[Security.security_leftTimes] ?? 0) : 0;
 
   bool get hasFreeImgForAI => isSuperPrem || freeImgLeftTimes > 0;
 
-  int get freeVdoUsedTimes => isSubscribed ? premUsedInfo['3'][Security.security_useTimes] : 0;
+  int get freeVdoUsedTimes => isSubscribed ? (premUsedInfo['3']?[Security.security_useTimes] ?? 0) : 0;
 
-  int get freeVdoLeftTimes => isSubscribed ? premUsedInfo['3'][Security.security_leftTimes] : 0;
+  int get freeVdoLeftTimes => isSubscribed ? (premUsedInfo['3']?[Security.security_leftTimes] ?? 0) : 0;
 
   bool get hasFreeVdoForAI => isSuperPrem || freeVdoLeftTimes > 0;
 
-  int get freeAdoUsedTimes => isSubscribed ? premUsedInfo['2'][Security.security_useTimes] : 0;
+  int get freeAdoUsedTimes => isSubscribed ? (premUsedInfo['2']?[Security.security_useTimes] ?? 0) : 0;
 
-  int get freeAdoLeftTimes => isSubscribed ? premUsedInfo['2'][Security.security_leftTimes] : 0;
+  int get freeAdoLeftTimes => isSubscribed ? (premUsedInfo['2']?[Security.security_leftTimes] ?? 0) : 0;
 
-  int get freeOcUsedTimes => isSubscribed ? premUsedInfo['10'][Security.security_useTimes] : 0;
+  int get freeOcUsedTimes => isSubscribed ? (premUsedInfo['10']?[Security.security_useTimes] ?? 0) : 0;
 
-  int get freeOcLeftTimes => isSubscribed ? premUsedInfo['10'][Security.security_leftTimes] : 0;
+  int get freeOcLeftTimes => isSubscribed ? (premUsedInfo['10']?[Security.security_leftTimes] ?? 0) : 0;
 
   bool get isFreeUnlockScriptSleep => isSuperPrem || scriptSleepUnlockRemainTimes > 0;
 
-  int get scriptSleepUnlockRemainTimes => isSubscribed ? premUsedInfo['6'][Security.security_leftTimes] : 0;
+  int get scriptSleepUnlockRemainTimes => isSubscribed ? (premUsedInfo['6']?[Security.security_leftTimes] ?? 0) : 0;
 
-  int get freeCrowedUsedTimes => isSubscribed ? premUsedInfo['12'][Security.security_useTimes] : 0;
+  int get freeCrowedUsedTimes => isSubscribed ? (premUsedInfo['12']?[Security.security_useTimes] ?? 0) : 0;
 
-  int get freeCrowedLeftTimes => isSubscribed ? premUsedInfo['12'][Security.security_leftTimes] : 0;
+  int get freeCrowedLeftTimes => isSubscribed ? (premUsedInfo['12']?[Security.security_leftTimes] ?? 0) : 0;
 
-  int get premiumFreeReloadVideoTimes => isSubscribed ? premUsedInfo['20'][Security.security_leftTimes] : 0;
+  int get premiumFreeReloadVideoTimes => isSubscribed ? (premUsedInfo['20']?[Security.security_leftTimes] ?? 0) : 0;
 
   void setPremInfo(data) {
     if (data == null) return;

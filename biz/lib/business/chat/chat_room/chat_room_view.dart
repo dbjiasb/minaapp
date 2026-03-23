@@ -1,4 +1,5 @@
 import 'package:biz/base/crypt/images.dart';
+import 'package:biz/business/chat/chat_room/chat_introduction_card.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -86,12 +87,14 @@ class ChatRoomView extends StatelessWidget {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child:
-            viewController.messages.isEmpty
-                ? null
-                : ListView.builder(
+        child: ListView.builder(
                   controller: viewController.messageListScrollController,
                   itemBuilder: (BuildContext context, int index) {
+                    // 最后一项显示介绍卡片（列表反向，最后一项显示在顶部）
+                    if (index == viewController.messages.length) {
+                      return ChatIntroductionCard(session: session);
+                    }
+
                     OverlayPopupController overlayPopupController = OverlayPopupController();
 
                     ChatMessage message = viewController.messages[index];
@@ -138,7 +141,7 @@ class ChatRoomView extends StatelessWidget {
                       },
                     );
                   },
-                  itemCount: viewController.messages.length,
+                  itemCount: viewController.messages.length + 1,
                   padding: EdgeInsets.zero,
                   reverse: true,
                 ),
