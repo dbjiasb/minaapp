@@ -1,6 +1,7 @@
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -35,8 +36,19 @@ class ImageView extends StatelessWidget {
       if (Platform.isAndroid) {
         pathPre = Images.security_packages_biz_assets_images_;
       }
-      return Image.asset('$pathPre$name', width: width, height: height, color: color, fit: fit);
+      return Image.asset(
+        '$pathPre$name',
+        width: width,
+        height: height,
+        color: color,
+        fit: fit,
+        errorBuilder: (context, error, stackTrace) => _buildRemoteImage(),
+      );
     }
+    return _buildRemoteImage();
+  }
+
+  Widget _buildRemoteImage() {
     // final path = !name.startsWith(Security.security_http) ? ZipImageManager.instance.getImagePathOrUrl(name) : name;
     final path = !name.startsWith(Security.security_http) ? "${ApiConfig.cdnApp}$name" : name;
     if (ZipImageManager.instance.isLocalImage(path)) {
@@ -56,8 +68,14 @@ class ImageView extends StatelessWidget {
   }
 
   static ImageProvider getImageProvider(String name) {
-    if (Environment.instance.isDebug) {
-      return AssetImage('assets/images/$name', package: Security.security_biz);
+    if (Environment.instance.isDebug && !name.startsWith(ApiConfig.cdnApp)) {
+      String pathPre = '../assets/images/';
+      if (Platform.isAndroid) {
+        pathPre = Images.security_packages_biz_assets_images_;
+      }
+      if (File('$pathPre$name').existsSync()) {
+        return AssetImage('assets/images/$name', package: Security.security_biz);
+      }
     }
     // final path = ZipImageManager.instance.getImagePathOrUrl(name);
     final path = !name.startsWith(Security.security_http) ? "${ApiConfig.cdnApp}$name" : name;
