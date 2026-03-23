@@ -33,8 +33,7 @@ class AppManager {
 
   // String get feedBackUrl => 'https://discord.gg/qdRqGq5WDG?external=1';
 
-  // String get taskUrl => 'https://${ApiConfig.cdn}/h5/dailyTask/index.html#/coins?type=0';
-  String get taskUrl => '${ApiConfig.cdn}/tasks';
+  String get taskUrl => '${ApiConfig.cdn}/h5/dailyTask/index.html#/coins?type=0';
   String get createOcHtml => '${ApiConfig.cdn}/mina/createoc.html';
 
   // String get notificationUrl => 'https://$cdn/h5/notification/index.html#/';
