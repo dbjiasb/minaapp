@@ -107,7 +107,7 @@ class PrivateChatSessionCell extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       // 账号类型徽章
-                      AppWidgets.userTag(session.accountType),
+                      AppWidgets.userTag(session.accountType, id: session.id),
                       // _buildAccountTypeBadge(),
                       const Spacer(),
                       // 时间

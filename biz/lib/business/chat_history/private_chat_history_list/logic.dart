@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:biz/business/chat/chat_session.dart';
 import 'package:biz/business/chat/chat_session_handler.dart';
 import 'package:biz/business/chat/chat_manager.dart';
 import 'package:biz/base/event_center/event_center.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../../shared/alert.dart';
+
 
 class PrivateChatHistoryListLogic extends GetxController {
   int type = 0;
@@ -37,8 +40,32 @@ class PrivateChatHistoryListLogic extends GetxController {
   Future<void> loadData() async {
     try {
       isLoading.value = true;
-      final sessions = await ChatSessionHandler().queryAllChatSessions();
-      dataList.value = sessions;
+
+      // static const int all = 0;
+      // static const int ai = 1;
+      // static const int real = 2;
+      // static const int group = 3;
+      // static const int theater = 4;
+
+      int? sessionType = 0;
+      bool? isReal;
+      if (type == 0) {
+        sessionType = null;
+      } else if (type == 1) {
+        isReal = false;
+      } else if (type == 2) {
+        isReal = true;
+      } else if (type == 3) {
+        sessionType = 2;
+      }
+
+      final sessions = await ChatSessionHandler().querySessions(sessionType: sessionType, isReal: isReal);
+      ChatSession? offcialSession = (await ChatSessionHandler().querySessions(sessionId: ChatSession.offChatSession.id)).firstOrNull;
+      if (offcialSession == null) {
+        offcialSession = ChatSession.offChatSession;
+        await ChatSessionHandler().upsertSession(offcialSession);
+      }
+      dataList.value = [offcialSession, ...sessions];
     } catch (e) {
       print('加载私聊会话列表失败: $e');
     } finally {
@@ -52,6 +79,14 @@ class PrivateChatHistoryListLogic extends GetxController {
   }
 
   Future<bool> deleteSession(ChatSession session) async {
+    if (session.id == ChatSession.offChatSession.id) {
+      return false;
+    }
+    bool ret = await showConfirmAlert('Tip', 'Are you sure you want to delete your chat with ${session.name}? This action cannot be undone.', confirmText: 'Confirm', cancelText: 'Cancel', onConfirm: () async {
+    });
+
+    if (!ret) return false;
+
     try {
       // 删除数据库中的会话
       await ChatSessionHandler().deleteSessionById(session.id);
@@ -64,5 +99,6 @@ class PrivateChatHistoryListLogic extends GetxController {
       print('删除会话失败: $e');
       return false;
     }
+
   }
 }

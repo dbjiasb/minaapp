@@ -231,12 +231,10 @@ class ChatSession {
 
   static ChatSession get offChatSession => ChatSession(
     id: '$kOffChatSessionId',
-    // name: Copywriting.security_soulink_Team,
-    name: Copywriting.security_mina_Team,
-    avatar: "",
-    // avatar: "${ApiConfig.cdn}/services/${Security.security_client_config}/icon/soulink_team_v2.png",
+    name: 'Mina Support',
+    avatar: "${ApiConfig.cdn}/services/${Security.security_client_config}/icon/mina_team.png",
     lastMessageText: Copywriting.security_contact_us_for_support_,
-    lastMessageTime: DateTime.fromMillisecondsSinceEpoch(0),
+    lastMessageTime: DateTime.now(),
     accountType: 0,
   );
 

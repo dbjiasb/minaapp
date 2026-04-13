@@ -45,7 +45,8 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
         elevation: 0,
         toolbarHeight: 0,
       ),
-      body: SafeArea(
+      body:
+      SafeArea(
         bottom: false,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

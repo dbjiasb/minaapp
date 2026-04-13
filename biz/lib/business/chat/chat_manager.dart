@@ -10,6 +10,7 @@ import 'package:biz/base/event_center/event_center.dart';
 import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/push_service/push_service.dart';
 import 'package:biz/business/chat/chat_session.dart';
+import 'package:biz/business/chat/call/call_manager.dart';
 import 'package:biz/core/account/account_service.dart';
 import 'package:biz/shared/toast/toast.dart';
 
@@ -327,7 +328,7 @@ class ChatManager {
           lastMessageTime: lastMessage.date,
           lastMessageText: lastMessage.externalText,
           accountType: rawSession[Security.security_acctType] ?? 1,
-        );
+        )..type = type;
       }
 
       if ((currentSession?.id ?? '') == session.id) {
@@ -438,6 +439,7 @@ class ChatManager {
   }
 
   void onResponseCalled(Event object) {
+    CallManager.instance.handleCall(object);
   }
 
   Future updateChatSession(ChatSession session) async {

@@ -64,23 +64,14 @@ class ChatSessionHandler {
     return ret;
   }
 
-  String findSessionSqlByType(int? sessionType) {
-    if (sessionType == null) {
-      return "";
-    }
-    switch (sessionType) {
-      case SessionType.private:
-        return "= AND ${Security.security_type} = ${SessionType.private}";
-      case SessionType.theater:
-        return " AND ${Security.security_type} = ${SessionType.theater}";
-      case SessionType.group:
-        return " AND ${Security.security_type} = ${SessionType.group}";
-      default:
-        return "";
-    }
-  }
-
-  Future<List<ChatSession>> querySessions({String? sessionId, int? limit, int? offset, int? sessionType}) async {
+  /// 本方法不查剧场
+  Future<List<ChatSession>> querySessions({
+    String? sessionId,
+    int? limit,
+    int? offset,
+    int? sessionType,
+    bool? isReal
+  }) async {
     String where = '${Security.security_ownerId} = ?';
     if (sessionId != null) {
       where += " AND ${Security.security_id}  = '$sessionId'";
@@ -88,7 +79,17 @@ class ChatSessionHandler {
       where += " AND ${Security.security_id} <> '$kOffChatSessionId'";
       where += " AND ${Security.security_id} <> '0' AND ${Security.security_id} <> ''";
     }
-    where += findSessionSqlByType(sessionType);
+
+    /// 去掉剧场
+    where += " AND ${Security.security_type} <> ${SessionType.theater}";
+    if (sessionType != null) {
+      where += " AND ${Security.security_type} = $sessionType";
+    }
+
+    if (sessionType == 0) {
+      if (isReal == true) where += " AND ${Security.security_accountType} = 0";
+      if (isReal == false) where += " AND ${Security.security_accountType} <> 0";
+    }
 
     if (offset != null && offset > 0) {
       where += " OFFSET $offset";
@@ -147,7 +148,7 @@ class ChatSessionHandler {
   Future<int> unreadCount() async {
     try {
       final List<Map<String, dynamic>> ret = await database.rawQuery(
-        'SELECT SUM(${Security.security_unreadNumber}) FROM $tableName WHERE ${Security.security_ownerId} = ?',
+        'SELECT SUM(${Security.security_unreadNumber}) FROM $tableName WHERE ${Security.security_ownerId} = ? AND ${Security.security_type} <> ${SessionType.theater}',
         [ownerId.toString()],
       );
 
