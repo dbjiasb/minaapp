@@ -5,6 +5,8 @@ import 'package:biz/business/chat/chat_session.dart';
 import 'package:biz/core/util/cached_image.dart';
 import 'package:biz/shared/formatters/date_formatter.dart';
 
+import '../../../shared/widget/app_widgets.dart';
+
 class PrivateChatSessionCell extends StatelessWidget {
   final ChatSession session;
   final VoidCallback onTap;
@@ -20,7 +22,7 @@ class PrivateChatSessionCell extends StatelessWidget {
       // AI badge
       return Container(
         margin: EdgeInsets.only(left: 4.w),
-        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.w),
+        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 0.w),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [Color(0xFF556AEB), Color(0xFFB635F4)],
@@ -28,13 +30,13 @@ class PrivateChatSessionCell extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
           border: Border.all(color: const Color(0xFFAFB2FF).withOpacity(0.6), width: 1),
-          borderRadius: BorderRadius.circular(8.w),
+          borderRadius: BorderRadius.circular(6.w),
         ),
         child: Text(
           Security.security_aI,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 12.sp,
+            fontSize: 11.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -43,7 +45,7 @@ class PrivateChatSessionCell extends StatelessWidget {
       // Real badge
       return Container(
         margin: EdgeInsets.only(left: 4.w),
-        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.w),
+        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 0.w),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [Color(0xFFEB55DD), Color(0xFFF38D45)],
@@ -51,13 +53,13 @@ class PrivateChatSessionCell extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
           border: Border.all(color: const Color(0xFFFDBAA2).withOpacity(0.6), width: 1),
-          borderRadius: BorderRadius.circular(8.w),
+          borderRadius: BorderRadius.circular(6.w),
         ),
         child: Text(
           Security.security_real,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 12.sp,
+            fontSize: 11.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -105,7 +107,8 @@ class PrivateChatSessionCell extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       // 账号类型徽章
-                      _buildAccountTypeBadge(),
+                      AppWidgets.userTag(session.accountType),
+                      // _buildAccountTypeBadge(),
                       const Spacer(),
                       // 时间
                       Text(

@@ -5,6 +5,7 @@ abstract final class ApiConfig {
   static const String path = '/mina';
   static String get wsUrl => Environment.instance.isDev ? 'ws://test-ws.miratales.online' : 'ws://ws.miratales.online';
   static const String cdn = 'https://cdn.miratales.online';
+  static const String h5 = 'https://h5.miratales.online';
   static const String cdnApp = 'https://cdn.miratales.online/mina/app/';
   static String resVersion = '1.0.0';
   static String get imageZipUrl => '${cdnApp}assets/$resVersion/images.zip';

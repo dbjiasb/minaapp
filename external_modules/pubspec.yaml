@@ -42,7 +42,7 @@ dependencies:
 
   ## 图像
   image_picker: 1.1.2  # 图片选择器  <<  image_picker: ^1.1.2
-  image_cropper: #9.1.0  # 图片裁剪  <<  image_cropper: ^9.1.0
+  image_cropper: 9.1.0  # 图片裁剪  <<  image_cropper: ^9.1.0
   image: #4.0.17  # 图像处理库  <<  image: ^4.0.17
   flutter_image_compress: 2.0.4  # 图片压缩  <<  flutter_image_compress: ^2.0.4
 #  image_gallery_saver_plus: ^4.0.1
@@ -68,7 +68,8 @@ dependencies:
   sign_in_with_apple: 7.0.1  # Apple登录  <<  sign_in_with_apple: ^7.0.1
   google_sign_in: 6.3.0
   firebase_auth: 6.0.0
-#  firebase_messaging: 16.0.2  # 消息推送
+  google_mobile_ads: 6.0.0   # Admob广告google
+  #  firebase_messaging: 16.0.2  # 消息推送
 
   # ========== 工具类 ==========
   intl: 0.20.2  # 国际化(日历)  <<  intl: ^0.18.2

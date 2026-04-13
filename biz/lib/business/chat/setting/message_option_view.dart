@@ -128,7 +128,7 @@ class MessageOptionView extends StatelessWidget {
 
   _doGenerateVideo() {
     dismiss();
-    controller.generateVideoByMessage(message);
+    // controller.generateVideoByMessage(message);
   }
 
   void doLikeMsg(int status) {

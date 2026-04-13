@@ -32,7 +32,6 @@ abstract final class Images {
   static late final String security_coin_png = decrypt('9XxP4VJjBeX6kET4syvyYg=='); // coin.png
   static late final String security_deactivated_webp = decrypt('KVAuED93DMPKJcB6HnjkdVIi/73DB5Kb8uJJyuY5Eoo='); // deactivated.webp
   static late final String security_discovery_call_webp = decrypt('whayW8zVaYYaHjTs7T2TVW8s+H72ILRDKLFOuiJWbBA='); // discovery_call.webp
-  static late final String security_empty_list_png = decrypt('l2QCn+wld48UYwF9WPbEjg=='); // empty_list.png
   static late final String security_female_png = decrypt('0ebcXWJm6pkGW8Tm6nN7HA=='); // female.png
   static late final String security_func_gift_png = decrypt('ruX4XntYMD12cGIynLE70Q=='); // func_gift.png
   static late final String security_gem_png = decrypt('7OBp377+JjZx8MvJd/PQSQ=='); // gem.png
@@ -119,4 +118,18 @@ abstract final class Images {
   static late final String security_user_collected_png = decrypt('VZdYiMNLAcUXdWHk0DVjwefl8zq/q940lgBoZ3MxAzs='); // user_collected.png
   static late final String security_video_msg_png = decrypt('d3qMFmRnrWP1ZqxBKYD8bg=='); // video_msg.png
   static late final String security_ic_add_create_png = decrypt('Onk7mS5/MXaMFHQ69WLLZC8Tbq39ens50WOpKlTbG68='); // ic_add_create.png
+
+  static late final String mina_search = '6ac0755719313ea3adf7635a85e589ad.webp';
+  static late final String mina_filter = '8617d56b1d2f4f1a6682359744c8ad78.png';
+
+  static late final String mina_task = '0e46d8d6b7a0096b06c0603c9fca9aad.webp';
+  static late final String mina_notification = '5660bcd256ba0012c41d3d6f22c17472.webp';
+  static late final String mina_collection = 'ae336cd047a6b0d10ffdc05dece4f3c3.webp';
+  static late final String mina_feedback = '1d50fa5b3a01d0b513df8f4b8be40158.webp';
+  static late final String mina_empty_list = 'dc5d2219fb4416476764f288c47c6ed4.webp';
+  static late final String mina_refresh_trend = '59d03e68ca99a383d47cdfcf244a4c61.webp';
+
+  /// 需要换md5
+  static late final String unspeaker_icon = '27fddb8302bb2a02a5cc370b01c50004.webp';
+  static late final String deactivated_icon = '3675d3acea7f2db0bacd40cd7780d405.webp';
 }

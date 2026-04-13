@@ -128,7 +128,7 @@ class PostAsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ImageView(Images.security_empty_list_png, width: 172, height: 146),
+          ImageView(Images.mina_empty_list, width: 172, height: 146),
           const SizedBox(height: 16),
           Text(
             textAlign: TextAlign.center,

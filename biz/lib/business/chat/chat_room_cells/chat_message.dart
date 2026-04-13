@@ -1,4 +1,3 @@
-import 'package:biz/base/crypt/routes.dart';
 import 'dart:convert';
 
 import 'package:get/get.dart';
@@ -7,6 +6,7 @@ import 'package:biz/base/crypt/security.dart';
 import 'package:biz/business/chat/chat_room_cells/chat_audio_message.dart';
 import 'package:biz/business/chat/chat_room_cells/chat_tip_message.dart';
 import 'package:biz/business/chat/chat_session.dart';
+import 'package:biz/base/crypt/routes.dart';
 
 import '../../../core/account/account_service.dart';
 import './chat_text_cell.dart';
@@ -44,6 +44,7 @@ abstract class AudioInfoInterface {
 }
 
 enum ChatMessageType {
+  anchorCard(-5),
   system(-4),
   time(-3),
   generating(-2),
@@ -117,13 +118,16 @@ class ChatMessage implements AudioInfoInterface {
   int like = 0;
   List<int>? specifyRepliers, bannedRepliers; //群聊发送对象
   ChatSession? session; //发送的时候会设置
-  final int sessionType;//0普通私聊，1剧场，2群聊
+  final int sessionType; //0普通私聊，1剧场，2群聊
 
   bool get isGroup => sessionType == 2;
+
   bool get isTheater => sessionType == 1;
 
   RxBool showContinue = false.obs;
-  int chatStatus = 0;   ///发消息给剧本时，需要将chatStatus设置为2（AI），否则不回消息，其他场景暂时没用，后面状态切换之后需要用
+  int chatStatus = 0;
+
+  ///发消息给剧本时，需要将chatStatus设置为2（AI），否则不回消息，其他场景暂时没用，后面状态切换之后需要用
 
   ChatMessage({
     required this.id,
@@ -216,38 +220,30 @@ class ChatMessage implements AudioInfoInterface {
 
   //提供一个fromData方法，用初始化列表实现
   ChatMessage.fromLocalData(Map<String, Object?> map)
-      : id = (map[Security.security_id] as int?) ?? 0,
-        senderId = (map[Security.security_senderId] as int?) ?? 0,
-        receiverId = (map[Security.security_receiverId] as int?) ?? 0,
-        date = DateTime.fromMillisecondsSinceEpoch(
-            (map[Security.security_date] as int?) ?? 0),
-        ownerId = (map[Security.security_ownerId] as int?) ?? 0,
-        senderName = (map[Security.security_name] as String?) ?? '',
-        senderAvatar = (map[Security.security_avatar] as String?) ?? '',
-        type = ChatMessageType.fromValue(
-            (map[Security.security_type] as int?) ?? 0),
-        uuid = (map[Security.security_uuid] as String?) ?? '',
-        info = (map[Security.security_info] as String?) ?? '{}',
-        nativeId = map[Security.security_nativeId] as String? ?? '',
-        like = (map[Security.security_like] as int?) ?? 0,
-        sessionType = (map[Security.security_sessionType] as int?) ?? 0,
-        lockInfo = JsonDecoder().convert(
-            map[Security.security_lockInfo] as String? ?? '{}') {
+    : id = (map[Security.security_id] as int?) ?? 0,
+      senderId = (map[Security.security_senderId] as int?) ?? 0,
+      receiverId = (map[Security.security_receiverId] as int?) ?? 0,
+      date = DateTime.fromMillisecondsSinceEpoch((map[Security.security_date] as int?) ?? 0),
+      ownerId = (map[Security.security_ownerId] as int?) ?? 0,
+      senderName = (map[Security.security_name] as String?) ?? '',
+      senderAvatar = (map[Security.security_avatar] as String?) ?? '',
+      type = ChatMessageType.fromValue((map[Security.security_type] as int?) ?? 0),
+      uuid = (map[Security.security_uuid] as String?) ?? '',
+      info = (map[Security.security_info] as String?) ?? '{}',
+      nativeId = map[Security.security_nativeId] as String? ?? '',
+      like = (map[Security.security_like] as int?) ?? 0,
+      sessionType = (map[Security.security_sessionType] as int?) ?? 0,
+      lockInfo = JsonDecoder().convert(map[Security.security_lockInfo] as String? ?? '{}') {
     sessionId = (map[Security.security_sessionId] as String?) ?? '';
-    sendState = ChatMessageSendStatus
-        .fromDigit((map[Security.security_sendState] as int?) ?? 0)
-        .obs;
-    renewInfo = JsonDecoder().convert(
-        map[Security.security_renewInfo] as String? ?? '{}');
+    sendState = ChatMessageSendStatus.fromDigit((map[Security.security_sendState] as int?) ?? 0).obs;
+    renewInfo = JsonDecoder().convert(map[Security.security_renewInfo] as String? ?? '{}');
   }
 
   //工厂方法实现
   factory ChatMessage.fromDatabase(Map<String, Object?> map) {
     int messageType = (map[Security.security_type] as int?) ?? 0;
     //创建ChatMessageType
-    ChatMessageType type = ChatMessageType.values.firstWhere(
-      (element) => element.value == messageType,
-    );
+    ChatMessageType type = ChatMessageType.values.firstWhere((element) => element.value == messageType);
     switch (type) {
       case ChatMessageType.text:
       case ChatMessageType.desc:
@@ -264,20 +260,18 @@ class ChatMessage implements AudioInfoInterface {
         return ChatAudioMessage.fromDatabase(map);
       case ChatMessageType.tip:
         return ChatTipsMessage.fromDatabase(map);
-      case ChatMessageType.customStoryBrief:
-        return ChatTheaterBriefMessage.fromDatabase(map);
       default:
         return ChatMessage.none();
     }
   }
 
   Map<String, dynamic> toServer() {
-    if (session != null && session!.isGroup || session!.isTheater) {
+    if (session != null && (session!.isGroup || session!.isTheater)) {
       return {
         Constants.receiverId: session!.isTheater ? receiverId : 0,
         Security.security_toGroupId: session!.isTheater ? 0 : session!.groupId,
         Security.security_sessionType: session!.type,
-        Security.security_sessionId: session!.sessionId,
+        Security.security_sessionId: session!.id,
         Constants.senderId: senderId,
         Constants.infoType: type.value,
         Constants.nativeId: nativeId,
@@ -297,36 +291,33 @@ class ChatMessage implements AudioInfoInterface {
 
   //fromServerData，用初始化列表实现
   ChatMessage.fromServerData(Map map)
-      : id = (map[Security.security_id] as int?) ?? 0,
-        senderId = (map[Constants.senderId] as int?) ?? 0,
-        receiverId = (map[Constants.receiverId] as int?) ?? 0,
-        date = DateTime.fromMillisecondsSinceEpoch(
-          (map[Security.security_sendAt] ?? 0) * 1000,
-        ),
-        ownerId = AccountService.instance.account.userId,
-        senderName = (map[Security.security_fromNick] as String?) ?? '',
-        senderAvatar = (map[Security.security_fromAvatar] as String?) ?? '',
-        type = ChatMessageType.fromValue(
-            (map[Constants.infoType] as int?) ?? 0),
-        uuid = (map[Security.security_uuid] as String?) ?? '',
-        info = (map[Security.security_jsonBody] as String?) ?? '{}',
-        nativeId = map[Constants.nativeId] as String? ?? '',
-        like = (map[Security.security_like] as int?) ?? 0,
-        sessionType = (map[Security.security_sessionType] as int?) ?? 0,
-        lockInfo = map[Security.security_unlock] as Map? ?? {} {
+    : id = (map[Security.security_id] as int?) ?? 0,
+      senderId = (map[Constants.senderId] as int?) ?? 0,
+      receiverId = (map[Constants.receiverId] as int?) ?? 0,
+      date = DateTime.fromMillisecondsSinceEpoch((map[Security.security_sendAt] ?? 0) * 1000),
+      ownerId = AccountService.instance.account.userId,
+      senderName = (map[Security.security_fromNick] as String?) ?? '',
+      senderAvatar = (map[Security.security_fromAvatar] as String?) ?? '',
+      type = ChatMessageType.fromValue((map[Constants.infoType] as int?) ?? 0),
+      uuid = (map[Security.security_uuid] as String?) ?? '',
+      info = (map[Security.security_jsonBody] as String?) ?? '{}',
+      nativeId = map[Constants.nativeId] as String? ?? '',
+      like = (map[Security.security_like] as int?) ?? 0,
+      sessionType = (map[Security.security_sessionType] as int?) ?? 0,
+      lockInfo = map[Security.security_unlock] as Map? ?? {} {
     sendState = ChatMessageSendStatus.sent.obs;
     renewInfo = map[Security.security_reload] as Map? ?? {};
   }
 
   factory ChatMessage.fromServer(Map map) {
     //创建ChatMessageType
-    ChatMessageType type = ChatMessageType.fromValue(
-      map[Constants.infoType] ?? 0,
-    );
+    ChatMessageType type = ChatMessageType.fromValue(map[Constants.infoType] ?? 0);
     switch (type) {
       case ChatMessageType.text:
       case ChatMessageType.desc:
         return ChatTextMessage.fromServer(map);
+      case ChatMessageType.call:
+        return ChatCallMessage.fromServer(map);
       case ChatMessageType.image:
         return ChatImageMessage.fromServer(map);
       case ChatMessageType.video:
@@ -337,8 +328,6 @@ class ChatMessage implements AudioInfoInterface {
         return ChatAudioMessage.fromServer(map);
       case ChatMessageType.tip:
         return ChatTipsMessage.fromServer(map);
-      case ChatMessageType.call:
-        return ChatCallMessage.fromServer(map);
       default:
         return ChatMessage.none(); //不支持的消息类型，返回默认值
     }
@@ -368,8 +357,7 @@ class ChatMessage implements AudioInfoInterface {
   @override
   String get audioUrl => '';
 
-  bool get unlocked =>
-      lockInfo.isEmpty || lockInfo[Security.security_unlock] == 1;
+  bool get unlocked => lockInfo.isEmpty || lockInfo[Security.security_unlock] == 1;
 
   set unlocked(bool unlocked) {
     lockInfo[Security.security_unlock] = unlocked ? 1 : 0;

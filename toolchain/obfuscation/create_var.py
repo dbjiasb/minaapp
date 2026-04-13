@@ -67,8 +67,6 @@ def generate_security_constants(prefix='security'):
             cleaned = re.sub(r'^\d+', '', cleaned)
             if not cleaned:
                 continue
-            cleaned = cleaned[0].lower() + cleaned[1:]
-            
             if re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', cleaned) and cleaned not in seen:
                 seen.add(cleaned)
                 valid_vars.append((cleaned, encrypt_string(original_var), original_var))  # 存储原始值

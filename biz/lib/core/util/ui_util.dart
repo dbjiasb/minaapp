@@ -1,7 +1,9 @@
+import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../base/assets/image_path.dart';
 import '../../base/crypt/copywriting.dart';
+import '../../base/crypt/images.dart';
 import '../../shared/app_theme.dart';
 
 typedef SyncBuilder<T> = Widget Function(T data, BuildContext context);
@@ -12,7 +14,7 @@ class UiUtils {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // child: CachedImage(imageUrl: ImagePath.img_empty, width: 156, height: 156),
+          ImageView(Images.mina_empty_list, width: 150, height: 150),
           Text(
             tips ?? Copywriting.security_no_data,
             style: TextStyle(

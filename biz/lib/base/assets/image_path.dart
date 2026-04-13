@@ -31,4 +31,7 @@ abstract final class ImagePath {
   static const String ic_arrow_right_circle = '${ApiConfig.cdnApp}3d14650895e431ae6c31df66767d749d.webp'; // Original filename: ic_arrow_right_circle.webp
   static const String ic_edit = '${ApiConfig.cdnApp}491f7aea802ef50f9fb79cad9c090e29.webp'; // Original filename: ic_edit.webp
   static const String ic_copy = '${ApiConfig.cdnApp}29ad999436ed93a599b2fa297c29aa3c.webp'; // Original filename: ic_copy.webp
+
+  static const String mina_search = '${ApiConfig.cdnApp}6ac0755719313ea3adf7635a85e589ad.webp'; // Original filename: ic_edit.webp
+  static const String mina_filter = '${ApiConfig.cdnApp}8617d56b1d2f4f1a6682359744c8ad78.png'; // Original filename: ic_copy.webp
 }

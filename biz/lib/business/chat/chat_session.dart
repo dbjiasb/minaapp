@@ -16,6 +16,7 @@ class SessionType {
   static const int theater = 1;
   static const int group = 2;
 }
+
 enum AccType {
   real,
   ai,

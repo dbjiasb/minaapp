@@ -115,6 +115,7 @@ class ChatImageMessage extends ChatMessage {
   }
 
   String get imageUrl => decodedMap[Security.security_url] ?? '';
+  String get imageDesc => decodedMap[Security.security_desc] ?? '';
 
   bool get prepared => preparedValue == 1 || (decodedMap[Security.security_prepared] == null && imageUrl.isNotEmpty);
   int get preparedValue => decodedMap[Security.security_prepared] ?? 0;
@@ -464,7 +465,7 @@ class ChatImageCell extends ChatCell {
         children: [
           ImageView(Images.security_unlock_png, width: 16, height: 16),
           SizedBox(width: 4),
-          Text(Security.security_Unlock, style: TextStyle(color: Colors.white, fontWeight: AppFonts.medium, fontSize: 14)),
+          Text(Security.security_Unlock, style: TextStyle(color: Colors.black, fontWeight: AppFonts.medium, fontSize: 14)),
         ],
       ),
     );

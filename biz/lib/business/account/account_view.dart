@@ -48,8 +48,8 @@ class AccountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StyleTabBars tabBar = StyleTabBars(
-      selectedStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900),
-      unselectedStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 14, fontWeight: FontWeight.bold),
+      selectedStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+      unselectedStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 16, fontWeight: FontWeight.bold),
       titles: controller.tabNames,
       onTabSelected: (index) {
         controller.pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.linearToEaseOut);
@@ -86,22 +86,8 @@ class AccountView extends StatelessWidget {
                               SizedBox(height: 24),
                               premiumArea(),
                               buildCurrencyRow(),
-                              SizedBox(height: 4),
-                              Container(
-                                decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.circular(12)),
-                                child: Column(
-                                  children: [
-                                    _settingItem(Security.security_about, ImagePath.set_about, toAbout),
-                                    // _settingItem(Copywriting.security_terms_of_service, ImagePath.set_tos, checkTermsOfService),
-                                    // _settingItem(Copywriting.security_privacy_policy, ImagePath.set_privacy, checkPrivacyPolicy),
-                                    // _settingItem("Feedback", "", feedbackLog),
-                                    // _settingItem(Copywriting.security_account_Deletion, ImagePath.set_delete, deleteAccount),
-                                    _settingItem(Security.security_Setting, Images.security_ic_setting_png, toSetting),
-                                  ],
-                                ),
-                              ),
-                              // SizedBox(height: 12),
-                              // _logoutView(),
+                              SizedBox(height: 12),
+                              menuArea(),
                             ],
                           ),
                         ),
@@ -126,21 +112,9 @@ class AccountView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                     child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routers.editMe);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Color(0xFF272533)),
-                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                        child: Center(
-                          child: Row(
-                            children: [
-                              CachedImage(imageUrl: ImagePath.ic_edit, width: 16, height: 16, color: Colors.white),
-                              SizedBox(width: 2),
-                              Text(Copywriting.security_edit, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
-                            ],
-                          ),
-                        ),
+                      onTap: toSetting,
+                      child: Icon(
+                        Icons.settings, size: 28, color: Colors.white
                       ),
                     ),
                   ),
@@ -149,28 +123,6 @@ class AccountView extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _settingItem(String name, String icon, Function() click) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: click,
-      child: SizedBox(
-        height: 44,
-        child: Row(
-          children: [
-            SizedBox(width: 12),
-            // ImageView(icon, width: 20, height: 20),
-            // SizedBox(width: 8),
-            Text(name, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
-            Spacer(),
-            CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
-
-            SizedBox(width: 12),
-          ],
-        ),
       ),
     );
   }
@@ -281,6 +233,25 @@ class AccountView extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(width: 16,),
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(Routers.editMe);
+          },
+          child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Color(0xFF272533)),
+            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+            child: Center(
+              child: Row(
+                children: [
+                  CachedImage(imageUrl: ImagePath.ic_edit, width: 16, height: 16, color: Colors.white),
+                  SizedBox(width: 2),
+                  Text(Copywriting.security_edit, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+                ],
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
@@ -308,29 +279,29 @@ class AccountView extends StatelessWidget {
           child: Container(
             height: 72,
             decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.all(Radius.circular(12))),
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            alignment: Alignment.centerLeft,
+            child: Row(
               children: [
-                Row(
+                Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(Copywriting.security_my_Gems, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
-                    const Spacer(),
-                    CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ImageView(Images.security_gem_png, width: 24, height: 24),
+                        SizedBox(width: 4),
+                        Obx(() => Text(MyAccount.gems.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
+                      ],
+                    ),
                   ],
                 ),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ImageView(Images.security_gem_png, width: 24, height: 24),
-                    SizedBox(width: 4),
-                    Obx(() => Text(MyAccount.gems.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
-                  ],
-                ),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white60,)
+                // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
               ],
             ),
           ),
@@ -341,34 +312,42 @@ class AccountView extends StatelessWidget {
         flex: 1,
         child: GestureDetector(
           onTap: () async {
-            // await RH.toCoins();
+            await RH.toCoins();
           },
           child: Container(
             height: 72,
             decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.all(Radius.circular(12))),
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            alignment: Alignment.centerLeft,
+            child: Row(
               children: [
-                Row(
+                Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(Copywriting.security_my_Coins, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
-                    // const Spacer(),
-                    // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
+                    // Row(
+                    //   mainAxisSize: MainAxisSize.min,
+                    //   children: [
+                    //     Text(Copywriting.security_my_Coins, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                    //     // const Spacer(),
+                    //     // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
+                    //   ],
+                    // ),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ImageView(Images.security_coin_png, width: 24, height: 24),
+                        SizedBox(width: 4),
+                        Obx(() => Text(MyAccount.coins.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
+                      ],
+                    ),
                   ],
                 ),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ImageView(Images.security_coin_png, width: 24, height: 24),
-                    SizedBox(width: 4),
-                    Obx(() => Text(MyAccount.coins.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
-                  ],
-                ),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white60,)
+                // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
               ],
             ),
           ),
@@ -521,108 +500,108 @@ class AccountView extends StatelessWidget {
     );
   }
 
-  // Widget menuArea() {
-  //   return Container(
-  //     decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(16)),
-  //     padding: const EdgeInsets.all(16),
-  //     child: Column(
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //           children: [
-  //             //
-  //             InkWell(
-  //               onTap: () async {
-  //                 await RH.toTask();
-  //                 UserManager.instance.queryUserReminders();
-  //               },
-  //               child: Stack(
-  //                 children: [
-  //                   Column(
-  //                     children: [
-  //                       child: CachedImage(imageUrl: ImagePath.ic_mine_task, width: 28, height: 28),
-  //                       // Icon(Icons.task, color: Colors.white),
-  //                       SizedBox(height: 4),
-  //                       Text(Copywriting.security_daily_Task, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
-  //                     ],
-  //                   ),
-  //                   Positioned(
-  //                     right: 5,
-  //                     top: 3,
-  //                     child: Obx(() {
-  //                       return UserManager.instance.taskReminder.value
-  //                           ? Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle))
-  //                           : Container();
-  //                     }),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //             InkWell(
-  //               onTap: () {
-  //                 RH.toPage(
-  //                   Routers.webView,
-  //                   args: {Security.security_title: '', Security.security_url: AppManager.instance.notificationUrl, Security.security_hideHeader: 1},
-  //                 );
-  //               },
-  //               child: Stack(
-  //                 children: [
-  //                   Column(
-  //                     children: [
-  //                       child: CachedImage(imageUrl: ImagePath.ic_mine_notification, width: 28, height: 28),
-  //                       SizedBox(height: 4),
-  //                       Text(Security.security_notifications, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
-  //                     ],
-  //                   ),
-  //                   Positioned(
-  //                     right: 5,
-  //                     top: 3,
-  //                     child: Obx(() {
-  //                       return UserManager.instance.notificationReminder.value
-  //                           ? Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle))
-  //                           : Container();
-  //                     }),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //             InkWell(
-  //               onTap: () {
-  //                 Get.toNamed(Routers.collections, arguments: {});
-  //               },
-  //               child: Column(
-  //                 children: [
-  //                   child: CachedImage(imageUrl: ImagePath.ic_mine_collection, width: 28, height: 28),
-  //                   SizedBox(height: 4),
-  //                   Text(Security.security_collections, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
-  //                 ],
-  //               ),
-  //             ),
-  //             InkWell(
-  //               onTap: () {
-  //                 L.uploadIfNeed();
-  //                 Get.toNamed(Routers.webView, arguments: {Security.security_title: '', Security.security_url: Preferences.instance.dcLink});
-  //               },
-  //               child: Column(
-  //                 children: [
-  //                   // Icon(Icons.feedback, color: Colors.white),
-  //                   child: CachedImage(imageUrl: ImagePath.ic_mine_feedback, width: 28, height: 28),
-  //                   SizedBox(height: 4),
-  //                   Text(Security.security_feedback, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
-  //                 ],
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         // Row(
-  //         //   children: [
-  //         //
-  //         //   ],
-  //         // )
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget menuArea() {
+    return Container(
+      decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.all(Radius.circular(12))),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              //
+              InkWell(
+                onTap: () async {
+                  await RH.toTask();
+                  UserManager.instance.queryUserReminders();
+                },
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        ImageView(Images.mina_task, width: 28, height: 28),
+                        SizedBox(height: 4),
+                        Text(Copywriting.security_daily_Task, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                    Positioned(
+                      right: 5,
+                      top: 3,
+                      child: Obx(() {
+                        return UserManager.instance.taskReminder.value
+                            ? Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle))
+                            : Container();
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  RH.toPage(
+                    Routers.webView,
+                    args: {Security.security_title: '', Security.security_url: AppManager.instance.notificationUrl, Security.security_hideHeader: 1},
+                  );
+                },
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        // Icon(Icons.notifications, color: Colors.white),
+                        ImageView(Images.mina_notification, width: 28, height: 28),
+                        SizedBox(height: 4),
+                        Text(Security.security_notifications, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                    Positioned(
+                      right: 5,
+                      top: 3,
+                      child: Obx(() {
+                        return UserManager.instance.notificationReminder.value
+                            ? Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle))
+                            : Container();
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.toNamed(Routers.collections, arguments: {});
+                },
+                child: Column(
+                  children: [
+                    ImageView(Images.mina_collection, width: 28, height: 28),
+                    SizedBox(height: 4),
+                    Text(Security.security_collections, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  L.uploadIfNeed();
+                  Get.toNamed(Routers.webView, arguments: {Security.security_title: '', Security.security_url: Preferences.instance.dcLink});
+                },
+                child: Column(
+                  children: [
+                    // Icon(Icons.feedback, color: Colors.white),
+                    ImageView(Images.mina_feedback, width: 28, height: 28),
+                    SizedBox(height: 4),
+                    Text(Security.security_feedback, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          // Row(
+          //   children: [
+          //
+          //   ],
+          // )
+        ],
+      ),
+    );
+  }
 
   // Widget _buildCompanionItem(dynamic companion) {
   //   String uidStr = (companion[Security.security_uid] ?? 0).toString();
@@ -688,28 +667,30 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
       color: AppColors.base_background,
       height: 40,
       padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Stack(
+      child: Row(
         children: [
-          tabBar,
-          Positioned(
-            top: 0,
-            right: 0,
-            bottom: 0,
-            child: GestureDetector(
-              onTap: () {
-                if (Preferences.instance.isRv) {
-                  CreateOcRvDialog.show();
-                } else {
-                  CreateOcDialog.show();
-                }
-              },
-              behavior: HitTestBehavior.opaque,
+          Expanded(child: tabBar),
+          GestureDetector(
+            onTap: () {
+              if (Preferences.instance.isRv) {
+                CreateOcRvDialog.show();
+              } else {
+                CreateOcDialog.show();
+              }
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(32),
+                gradient: LinearGradient(colors: [Color(0xFFffee6b), Color(0xFFfff8bf)], begin: Alignment.centerLeft, end: Alignment.centerRight),
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ImageView(Images.security_chat_add_png, width: 16, height: 16, color: Color(0xFFA19C9A)),
-                  SizedBox(width: 4),
-                  Text(Security.security_create, style: TextStyle(color: Color(0xFFA19C9A), fontSize: 12, fontWeight: FontWeight.w500)),
+                  ImageView(Images.security_ic_add_create_png, width: 20, height: 20),
+                  SizedBox(width: 2),
+                  Text(Security.security_create, style: TextStyle(color: Color(0xFF07070a), fontSize: 14, fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
@@ -736,7 +717,7 @@ class AccountViewController extends GetxController with GetTickerProviderStateMi
   late TabController tabController;
   PageController pageController = PageController();
 
-  List<String> tabNames = [Security.security_character];
+  List<String> tabNames = ['Companions'].obs;
   RxList<Widget> tabPage = [KeepAliveWrapper(child: MyCompanionView(viewAll: 0))].obs;
 
   @override

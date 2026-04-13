@@ -1,4 +1,5 @@
 import 'package:biz/base/crypt/routes.dart';
+import 'package:biz/core/account/account_service.dart';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -154,7 +155,9 @@ class RouteHelper {
     if (url.isNotEmpty) {
       return await handleRoute(url);
     }
-    return await toPage(Routers.rechargeCurrency, args: {Security.security_rcgType: 0});
+    // return await toPage(Routers.rechargeCurrency, args: {Security.security_rcgType: 0});
+    await toTask();
+    AccountService.instance.refreshBalance();
   }
 
   static Future toWeb(String url, {String? title, int hideHeader = 0}) async {

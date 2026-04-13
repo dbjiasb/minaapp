@@ -1,7 +1,10 @@
+import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/shared/app_theme.dart';
+
+import '../../base/crypt/images.dart';
 
 enum ListStatus { idle, loading, success, empty, error }
 
@@ -17,10 +20,8 @@ class ListStatusView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // child: CachedImage(imageUrl: ImagePath.img_empty, width: 180, height: 180),
-          // Text(emptyDesc ?? Copywriting.security_no_data, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF9EA1A8))),
-          // Text(description ?? Copywriting.security_no_data, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF9EA1A8))),
-          // >>>>>>> feature/feature_1.0.0
+          ImageView(Images.mina_empty_list, width: 150, height: 150),
+          Text(emptyDesc ?? Copywriting.security_no_data, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF9EA1A8))),
         ],
       ),
     );
@@ -31,7 +32,7 @@ class ListStatusView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // child: CachedImage(imageUrl: ImagePath.img_empty, width: 156, height: 156),
+          ImageView(Images.mina_empty_list, width: 180, height: 180),
           Text(
             errorDesc ?? Copywriting.security_network_exception__please_try_again_later,
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF9EA1A8)),

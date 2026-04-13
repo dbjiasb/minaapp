@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/business/chat/chat_session.dart';
 import 'package:biz/business/chat/chat_session_handler.dart';
@@ -6,6 +7,9 @@ import 'package:biz/base/event_center/event_center.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PrivateChatHistoryListLogic extends GetxController {
+  int type = 0;
+  PrivateChatHistoryListLogic(this.type);
+
   final RxList<ChatSession> dataList = <ChatSession>[].obs;
   final RxBool isLoading = true.obs;
   final RefreshController refreshController = RefreshController(initialRefresh: false);

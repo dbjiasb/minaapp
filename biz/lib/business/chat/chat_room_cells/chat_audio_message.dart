@@ -315,7 +315,7 @@ class ChatAudioView extends StatelessWidget {
             fontWeight: AppFonts.medium,
           ),
         ),
-        CachedImage(imageUrl: ImagePath.play_icon, height: 20, width: 20),
+        CachedImage(imageUrl: ImagePath.play_icon, height: 20, width: 20, color: Colors.black),
       ],
     );
   }

@@ -46,7 +46,7 @@ class _MyGroupViewState extends State<MyGroupView> {
         context,
       ) {
         if ((data ?? []).isEmpty) {
-          return UiUtils.buildCommonEmptyView();
+          return UiUtils.buildCommonEmptyView(tips: 'No groups yet, go create one!');
         } else {
           return ListView.builder(
             itemCount: data!.length,
@@ -57,7 +57,7 @@ class _MyGroupViewState extends State<MyGroupView> {
             },
           );
         }
-      }),
+      }, emptyView: UiUtils.buildCommonEmptyView(tips: 'No groups yet, go create one!')),
     );
   }
 

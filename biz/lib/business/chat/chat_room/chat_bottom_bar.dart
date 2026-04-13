@@ -1,41 +1,44 @@
-import 'package:biz/base/crypt/images.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:biz/base/assets/image_view.dart';
-import 'package:biz/base/crypt/copywriting.dart';
-import 'package:biz/base/crypt/security.dart';
-import 'package:biz/base/preferences/preferences.dart';
-import 'package:biz/base/report/report_manager.dart';
-import 'package:biz/base/router/router_names.dart';
-import 'package:biz/business/chat/chat_manager.dart';
-import 'package:biz/business/chat/chat_room/chat_room_view.dart';
-import 'package:biz/business/chat/chat_room_cells/chat_audio_message.dart';
-import 'package:biz/business/chat/chat_room_cells/chat_image_message.dart';
-import 'package:biz/business/chat/chat_session.dart';
-import 'package:biz/core/util/audio_manager.dart';
-import 'package:biz/core/util/cached_image.dart';
-import 'package:biz/core/util/collections_util.dart';
-import 'package:biz/core/util/file_upload.dart';
-import 'package:biz/shared/app_theme.dart';
-import 'package:biz/shared/sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:biz/base/assets/image_path.dart';
+import 'package:biz/base/crypt/copywriting.dart';
+import 'package:biz/base/crypt/security.dart';
+import 'package:biz/base/preferences/preferences.dart';
+import 'package:biz/base/router/router_names.dart';
+import 'package:biz/business/chat/chat_manager.dart';
+import 'package:biz/business/chat/chat_room/chat_room_view.dart';
+import 'package:biz/business/chat/chat_room_cells/chat_audio_message.dart';
+import 'package:biz/business/chat/chat_room_cells/chat_image_message.dart';
+import 'package:biz/business/chat/chat_room_cells/chat_message.dart';
+import 'package:biz/business/chat/chat_session.dart';
+import 'package:biz/business/chat/generate_video/generate_video_panel.dart';
+import 'package:biz/core/util/audio_manager.dart';
+import 'package:biz/core/util/cached_image.dart';
+import 'package:biz/core/util/collections_util.dart';
+import 'package:biz/core/util/file_upload.dart';
+import 'package:biz/shared/app_theme.dart';
+import 'package:biz/shared/sheet.dart';
+import 'package:biz/base/crypt/routes.dart';
+
 import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../../../base/assets/image_view.dart';
+import '../../../base/crypt/images.dart';
 import '../../../shared/toast/toast.dart';
-import '../call/av_engine.dart';
 import '../chat_room_cells/chat_video_message.dart';
 import '../create_image/create_image_panel.dart';
 import '../gift/gift_panel.dart';
 import 'chat_muse_view.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 enum ChatRoomBottomBarState { simple, detailed, muse, gift }
 
 class ChatBottomBar extends StatelessWidget {
@@ -51,20 +54,21 @@ class ChatBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
+          () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (viewController.isGroup) _buildMembersBar(),
           if (viewController.isReal) buildGreetTips(),
+          if (viewController.isAi) buildAiTrick(),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFF252230).withValues(alpha: 0.5), Color(0xFF2F253B).withValues(alpha: 0.9)],
+                colors: [AppColors.mainDarkColor.withValues(alpha: 0.0), AppColors.mainDarkColor.withValues(alpha: 0.9)],
               ),
             ),
-            child: SafeArea(bottom: true, child: Column(children: [buildInputBar(), buildFunctionBar()])),
+            child: SafeArea(bottom: true, child: Column(children: [buildInputBar(), buildFunctionBar(), if (Platform.isAndroid) SizedBox(height: 10)])),
           ),
         ],
       ),
@@ -108,18 +112,18 @@ class ChatBottomBar extends StatelessWidget {
         final isAudioMode = _audioInputMode.value;
         return GestureDetector(
           onTap:
-              isAudioMode
-                  ? () {
-                    Toast.show(Copywriting.security_audio_input_is_too_short_to_send_);
-                    viewController.cleanAudioInput();
-                  }
-                  : null,
+          isAudioMode
+              ? () {
+            Toast.show(Copywriting.security_audio_input_is_too_short_to_send_);
+            viewController.cleanAudioInput();
+          }
+              : null,
           onLongPressStart:
-              isAudioMode
-                  ? (_) {
-                    beginAudioRecord();
-                  }
-                  : null,
+          isAudioMode
+              ? (_) {
+            beginAudioRecord();
+          }
+              : null,
           onLongPressEnd: (_) {
             endAudioRecord();
           },
@@ -127,132 +131,130 @@ class ChatBottomBar extends StatelessWidget {
           child: Container(
             height: 44,
             decoration: BoxDecoration(
-              color: _audioInputMode.value ? Colors.white.withValues(alpha: 0.7) : Color(0xFFB4ADAB).withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(26),
+              color: _audioInputMode.value ? Colors.white.withValues(alpha: 0.6) : Color(0xFF999999).withValues(alpha: 0.8),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               children: [
                 Obx(() {
                   return viewController.isKeyboardVisible.value
                       ? GestureDetector(
-                        onTap: () {
-                          viewController.textController.text += '**';
-                          viewController.textController.selection = TextSelection.fromPosition(
-                            TextPosition(offset: viewController.textController.text.length - 1),
-                          );
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 24,
-                          height: 24,
-                          margin: EdgeInsets.only(left: 12, right: 8),
-                          child: Text('**', style: TextStyle(fontSize: 20, color: Colors.white)),
-                        ),
-                      )
-                      : GestureDetector(
-                        onTap: () {
-                          _audioInputMode.value = !_audioInputMode.value;
-                          if (viewController.barState != ChatRoomBottomBarState.simple) {
-                            viewController.updateBarState(ChatRoomBottomBarState.simple);
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(left: 12, right: 8),
-                          child: Obx(() => ImageView(_audioInputMode.value ? Images.security_keyboard_png : Images.security_audio_mode_png, width: 24, height: 24)),
-                        ),
+                    onTap: () {
+                      viewController.textController.text += '**';
+                      viewController.textController.selection = TextSelection.fromPosition(
+                        TextPosition(offset: viewController.textController.text.length - 1),
                       );
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 24,
+                      height: 24,
+                      margin: EdgeInsets.only(left: 12, right: 8),
+                      child: Obx(() => ImageView(_audioInputMode.value ? Images.security_keyboard_png : Images.security_audio_mode_png, width: 24, height: 24)),
+                    ),
+                  )
+                      : GestureDetector(
+                    onTap: () {
+                      _audioInputMode.value = !_audioInputMode.value;
+                      if (viewController.barState != ChatRoomBottomBarState.simple) {
+                        viewController.updateBarState(ChatRoomBottomBarState.simple);
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 12, right: 8),
+                      child: Obx(() => ImageView(_audioInputMode.value ? Images.security_keyboard_png : Images.security_audio_mode_png, width: 24, height: 24)),
+                    ),
+                  );
                 }),
                 Expanded(
                   child: Obx(
-                    () =>
-                        _audioInputMode.value
-                            ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(Copywriting.security_hold_to_talk, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 14)),
-                              ],
-                            )
-                            : Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      viewController.onTextChanged(value);
-                                    },
-                                    onSubmitted: (value) {
-                                      viewController.sendText(value);
-                                    },
-                                    style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
-                                    controller: viewController.textController,
-                                    focusNode: viewController.focusNode,
-                                    decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                      focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                      fillColor: Colors.transparent,
-                                      filled: true,
-                                      hintText: viewController.messageHints,
-                                      hintStyle: TextStyle(color: Color(0x80FFFFFF), fontWeight: FontWeight.w600, fontSize: 11),
-                                      floatingLabelBehavior: viewController.isGroup ? FloatingLabelBehavior.always : FloatingLabelBehavior.auto,
-                                      prefix:
-                                          viewController.isGroup
-                                              ? Container(
-                                                constraints: BoxConstraints(maxWidth: 120),
-                                                margin: viewController.buildGroupAtText().isNotEmpty ? EdgeInsets.only(right: 4) : null,
-                                                child: Text(
-                                                  viewController.buildGroupAtText(),
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 11,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              )
-                                              : null,
-                                      contentPadding: EdgeInsets.zero,
-                                    ),
-                                    textInputAction: TextInputAction.send,
+                        () =>
+                    _audioInputMode.value
+                        ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(Copywriting.security_hold_to_talk, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 14)),
+                      ],
+                    )
+                        : Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            onChanged: (value) {
+                              viewController.onTextChanged(value);
+                            },
+                            onSubmitted: (value) {
+                              viewController.sendText(value);
+                            },
+                            style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+                            controller: viewController.textController,
+                            focusNode: viewController.focusNode,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                              focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                              fillColor: Colors.transparent,
+                              filled: true,
+                              hintText: viewController.messageHints,
+                              hintStyle: TextStyle(color: Color(0x99FFFFFF), fontWeight: FontWeight.w600, fontSize: 14),
+                              floatingLabelBehavior: viewController.isGroup ? FloatingLabelBehavior.always : FloatingLabelBehavior.auto,
+                              prefix:
+                              viewController.isGroup
+                                  ? Container(
+                                constraints: BoxConstraints(maxWidth: 120),
+                                margin: viewController.buildGroupAtText().isNotEmpty ? EdgeInsets.only(right: 4) : null,
+                                child: Text(
+                                  viewController.buildGroupAtText(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,
+                                    overflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                if (viewController.isAi)
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (viewController.barState != ChatRoomBottomBarState.muse) {
-                                        viewController.updateBarState(ChatRoomBottomBarState.muse);
-                                      } else {
-                                        viewController.updateBarState(ChatRoomBottomBarState.simple);
-                                      }
-                                    },
-                                    child: Container(
-                                      margin: EdgeInsets.only(right: 6),
-                                      child: Obx(
-                                        () => ImageView(
-                                          viewController.barState == ChatRoomBottomBarState.muse ? Images.security_tip_on_png : Images.security_tip_off_png,
-                                          width: 28,
-                                          height: 28,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                GestureDetector(
-                                  onTap: () {
-                                    if (viewController.barState != ChatRoomBottomBarState.detailed) {
-                                      viewController.updateBarState(ChatRoomBottomBarState.detailed);
-                                    } else {
-                                      viewController.updateBarState(ChatRoomBottomBarState.simple);
-                                    }
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 12),
-                                    child: ImageView(
-                                      viewController.barState == ChatRoomBottomBarState.detailed ? Images.security_chat_add_png : Images.security_chat_add_png,
-                                      width: 28,
-                                      height: 28,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              )
+                                  : null,
+                              contentPadding: EdgeInsets.zero,
                             ),
+                            textInputAction: TextInputAction.send,
+                          ),
+                        ),
+                        if (viewController.isAi)
+                          GestureDetector(
+                            onTap: () {
+                              if (viewController.barState != ChatRoomBottomBarState.muse) {
+                                viewController.updateBarState(ChatRoomBottomBarState.muse);
+                              } else {
+                                viewController.updateBarState(ChatRoomBottomBarState.simple);
+                              }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 6),
+                              child: Obx(
+                                    () => ImageView(
+                                      viewController.barState == ChatRoomBottomBarState.muse ? Images.security_tip_on_png : Images.security_tip_off_png,
+                                  width: 28,
+                                  height: 28,
+                                ),
+                              ),
+                            ),
+                          ),
+                        GestureDetector(
+                          onTap: () {
+                            if (viewController.barState != ChatRoomBottomBarState.detailed) {
+                              viewController.updateBarState(ChatRoomBottomBarState.detailed);
+                            } else {
+                              viewController.updateBarState(ChatRoomBottomBarState.simple);
+                            }
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 12),
+                            child: ImageView(
+                                viewController.barState == ChatRoomBottomBarState.detailed ? Images.security_chat_add_png : Images.security_chat_add_png,
+                                width: 28, height: 28),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -291,119 +293,83 @@ class ChatBottomBar extends StatelessWidget {
     }
   }
 
-  Widget buildSimpleBar() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        spacing: 8,
-        children: [
-          GestureDetector(
-            onTap: () {
-              viewController.askForImage();
-            },
-            child: Container(
-              height: 30,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Color(0xFF63616B).withValues(alpha: 0.8)),
-              child: Row(
-                spacing: 4,
-                children: [
-                  ImageView(Images.security_btn_pic_png, width: 16, height: 16, fit: BoxFit.cover),
-                  Text(Security.security_Ask, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
-                ],
-              ),
-            ),
-          ),
-          if (Preferences.instance.supportVeo(viewController.userId.toString()))
-            GestureDetector(
-              onTap: () {
-                viewController.askForVideo();
-              },
-              child: Stack(
-                children: [
-                  Container(
-                    height: 30,
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Color(0xFF63616B).withValues(alpha: 0.8)),
-                    child: Row(
-                      spacing: 4,
-                      children: [
-                        Image.asset(Images.security_btn_video_png, width: 16, height: 16, fit: BoxFit.cover),
-                        Text(Security.security_Ask, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    child: Transform.translate(
-                      offset: Offset(2, -6),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black.withValues(alpha: 0.4)),
-                        child: Obx(
-                          () => Row(
-                            children: [
-                              // if (!viewController.hasVideoConfig) SizedBox(height: 10, width: 10, child: CircularProgressIndicator(strokeWidth: 2)),
-                              if (viewController.hasVideoConfig)
-                                Row(
-                                  children: [
-                                    if (viewController.isGenerateVideoPremiumFree)
-                                      Row(
-                                        children: [
-                                          ImageView(Images.security_premium_png, width: 12, height: 12),
-                                          SizedBox(width: 1),
-                                          Text(Security.security_Free, style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                                        ],
-                                      ),
-                                    if (viewController.isGenerateVideoFree)
-                                      Text(Security.security_Free, style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          GestureDetector(
-            onTap: onCreateImageButtonClicked,
-            child: Container(
-              height: 30,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Color(0xFF63616B).withValues(alpha: 0.8)),
-              child: Row(
-                spacing: 4,
-                children: [
-                  ImageView(Images.security_btn_custom_png, width: 16, height: 16, fit: BoxFit.cover),
-                  Text(Security.security_Custom, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              viewController.toCall(0);
-            },
-            child: Container(
-              height: 30,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Color(0xFF63616B).withValues(alpha: 0.8)),
-              child: Row(
-                spacing: 4,
-                children: [
-                  ImageView(Images.security_btn_call_png, width: 16, height: 16, fit: BoxFit.cover),
-                  Text(Security.security_Call, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget buildSimpleBar() {
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(horizontal: 16),
+  //     child: Row(
+  //       spacing: 8,
+  //       children: [
+  //         GestureDetector(
+  //           onTap: () {
+  //             viewController.askForImage();
+  //           },
+  //           child: Container(
+  //             height: 30,
+  //             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  //             decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Color(0xFF63616B).withValues(alpha: 0.8)),
+  //             child: Row(
+  //               spacing: 4,
+  //               children: [
+  //                 Image.asset(ImagePath.btm_pic, width: 16, height: 16, fit: BoxFit.cover),
+  //                 Text(Security.security_Ask, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //         if (Preferences.instance.supportVeo(viewController.userId.toString()))
+  //           GestureDetector(
+  //             onTap: () {
+  //               viewController.askForVideo();
+  //             },
+  //             child: Container(
+  //               height: 30,
+  //               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  //               decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Color(0xFF63616B).withValues(alpha: 0.8)),
+  //               child: Row(
+  //                 spacing: 4,
+  //                 children: [
+  //                   Image.asset(ImagePath.btm_video, width: 16, height: 16, fit: BoxFit.cover),
+  //                   Text(Security.security_Ask, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         GestureDetector(
+  //           onTap: onCreateImageButtonClicked,
+  //           child: Container(
+  //             height: 30,
+  //             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  //             decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Color(0xFF63616B).withValues(alpha: 0.8)),
+  //             child: Row(
+  //               spacing: 4,
+  //               children: [
+  //                 Image.asset(ImagePath.btm_custom, width: 16, height: 16, fit: BoxFit.cover),
+  //                 Text(Security.security_Custom, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //         GestureDetector(
+  //           onTap: () {
+  //             viewController.toCall(0);
+  //           },
+  //           child: Container(
+  //             height: 30,
+  //             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  //             decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Color(0xFF63616B).withValues(alpha: 0.8)),
+  //             child: Row(
+  //               spacing: 4,
+  //               children: [
+  //                 Image.asset(ImagePath.btm_call, width: 16, height: 16, fit: BoxFit.cover),
+  //                 Text(Security.security_Call, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   void onCreateImageButtonClicked() {
     Get.lazyPut(() => CreateImagePanelController());
@@ -418,51 +384,50 @@ class ChatBottomBar extends StatelessWidget {
     viewController.askForImage();
   }
 
+  void askForVideo() {
+    viewController.askForVideo();
+  }
+
   Widget buildDetailedBar() {
     List<Map<String, dynamic>> items;
-    if (viewController.isGroup) {
-      items = [
-        {Security.security_title: Security.security_Photo, Security.security_icon: Images.security_btn_pic_png, Security.security_action: viewController.showImageSelector},
-        {Security.security_title: Security.security_History, Security.security_icon: Images.security_btn_history_png, Security.security_action: onChatHistoryButtonClicked},
-      ];
+    // if (viewController.isGroup) {
+    //   items = [
+    //     {
+    //       Security.security_title: Security.security_Photo,
+    //       Security.security_icon: ImagePath.func_img,
+    //       Security.security_action: viewController.showImageSelector,
+    //     },
+    //     {
+    //       Security.security_title: Security.security_History,
+    //       Security.security_icon: ImagePath.func_history,
+    //       Security.security_action: onChatHistoryButtonClicked,
+    //     },
+    //   ];
+    // } else {
+    items = [
+      {Security.security_title: Security.security_Photo, Security.security_icon: Images.security_btn_pic_png, Security.security_action: viewController.showImageSelector},
+      {Security.security_title: Security.security_History, Security.security_icon: Images.security_btn_history_png, Security.security_action: onChatHistoryButtonClicked},
+      {Security.security_title: Security.security_Gift, Security.security_icon: Images.security_btn_gift_png, Security.security_action: viewController.showGiftPanel},
+    ];
+
+    if (!viewController.isAi) {
+      items.insertAll(1, [
+        {Security.security_title: Security.security_Video, Security.security_icon: Images.security_btn_video_png, Security.security_action: viewController.onSendVideo},
+        {
+          Security.security_title: Copywriting.security_video_Call,
+          Security.security_icon: Images.security_btn_video_call_png,
+          Security.security_action: () => viewController.toCall(0),
+        },
+        {
+          Security.security_title: Copywriting.security_audio_Call,
+          Security.security_icon: Images.security_btn_call_png,
+          Security.security_action: () => viewController.toCall(1),
+        },
+      ]);
     } else {
-      if (viewController.isAi) {
-        items = [
-          {Security.security_title: Copywriting.security_ask_for_pic, Security.security_icon: Images.security_btn_pic_png, Security.security_action: viewController.askForImage},
-          {Security.security_title: Copywriting.security_ask_for_video, Security.security_icon: Images.security_btn_video_png, Security.security_action: viewController.askForVideo},
-          {
-            Security.security_title: Copywriting.security_audio_Call,
-            Security.security_icon: Images.security_btn_call_png,
-            Security.security_action: () => viewController.toCall(StreamType.audio.index),
-          },
-          {Security.security_title: Security.security_Gift, Security.security_icon: Images.security_btn_gift_png, Security.security_action: viewController.showGiftPanel},
-          {
-            Security.security_title: Security.security_Photo,
-            Security.security_icon: Images.security_btn_camera_png,
-            Security.security_action: viewController.showImageSelector,
-          },
-          {Security.security_title: Security.security_History, Security.security_icon: Images.security_btn_history_png, Security.security_action: onChatHistoryButtonClicked},
-          {Security.security_title: Security.security_Custom, Security.security_icon: Images.security_btn_custom_png, Security.security_action: onCreateImageButtonClicked},
-        ];
-      } else {
-        items = [
-          {Security.security_title: Security.security_Photo, Security.security_icon: Images.security_btn_pic_png, Security.security_action: viewController.showImageSelector},
-          {Security.security_title: Security.security_Video, Security.security_icon: Images.security_btn_video_png, Security.security_action: viewController.onSendVideo},
-          {
-            Security.security_title: Copywriting.security_video_Call,
-            Security.security_icon: Images.security_btn_video_call_png,
-            Security.security_action: () => viewController.toCall(StreamType.video.index),
-          },
-          {
-            Security.security_title: Copywriting.security_audio_Call,
-            Security.security_icon: Images.security_btn_call_png,
-            Security.security_action: () => viewController.toCall(StreamType.audio.index),
-          },
-          {Security.security_title: Security.security_Gift, Security.security_icon: Images.security_btn_gift_png, Security.security_action: viewController.showGiftPanel},
-          {Security.security_title: Security.security_History, Security.security_icon: Images.security_btn_history_png, Security.security_action: onChatHistoryButtonClicked},
-        ];
-      }
+
     }
+    // }
 
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16, top: 16),
@@ -481,10 +446,10 @@ class ChatBottomBar extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  width: 56,
-                  height: 56,
+                  width: 60,
+                  height: 60,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(color: Color(0x26FFFFFF), borderRadius: BorderRadius.all(Radius.circular(10))),
+                  decoration: BoxDecoration(color: Color(0x26FFFFFF), borderRadius: BorderRadius.all(Radius.circular(15))),
                   child: ImageView(item[Security.security_icon] ?? '', width: 32, height: 32),
                 ),
                 SizedBox(height: 4),
@@ -534,7 +499,7 @@ class ChatBottomBar extends StatelessWidget {
                         color: Colors.black.withAlpha((255.0 * 0.4).round()),
                         borderRadius: const BorderRadius.all(Radius.circular(16)),
                       ),
-                      child: Center(child: ImageView(Images.security_unspeaker_webp, width: 16, height: 16)),
+                      child: Center(child: ImageView(Images.unspeaker_icon, width: 16, height: 16)),
                     ),
                   ),
                 if (item[Security.security_state] == 2 || item[Security.security_state] == 3)
@@ -544,7 +509,7 @@ class ChatBottomBar extends StatelessWidget {
                         color: Colors.black.withAlpha((255.0 * 0.4).round()),
                         borderRadius: const BorderRadius.all(Radius.circular(16)),
                       ),
-                      child: Center(child: ImageView(Images.security_deactivated_webp, width: 16, height: 16)),
+                      child: Center(child: ImageView(Images.deactivated_icon, width: 16, height: 16)),
                     ),
                   ),
               ],
@@ -558,66 +523,124 @@ class ChatBottomBar extends StatelessWidget {
   Widget _buildMembersBar() {
     return viewController.membersNoOwner.isNotEmpty
         ? Container(
-          padding: const EdgeInsets.all(4),
-          margin: const EdgeInsets.only(left: 12, right: 12, bottom: 4),
-          decoration: const BoxDecoration(color: Color(0x66252230), borderRadius: BorderRadius.all(Radius.circular(20))),
-          height: 40,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return _buildMemberItem(viewController.membersNoOwner.safeGet(index, {}));
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(width: 8);
-            },
-            itemCount: viewController.membersNoOwner.length,
-          ),
-        )
+      padding: const EdgeInsets.all(4),
+      margin: const EdgeInsets.only(left: 12, right: 12, bottom: 4),
+      decoration: const BoxDecoration(color: Color(0x66252230), borderRadius: BorderRadius.all(Radius.circular(20))),
+      height: 40,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return _buildMemberItem(viewController.membersNoOwner.safeGet(index, {}));
+        },
+        separatorBuilder: (context, index) {
+          return const SizedBox(width: 8);
+        },
+        itemCount: viewController.membersNoOwner.length,
+      ),
+    )
         : Container();
+  }
+
+  Widget buildAiTrick() {
+    var items = [
+      {
+        Security.security_title: 'Ask',
+        Security.security_icon: Images.security_btn_pic_png,
+        Security.security_action: viewController.askForImage,
+      },
+      {
+        Security.security_title: 'Create Video',
+        Security.security_icon: Images.security_btn_video_png,
+        Security.security_action: viewController.askForVideo,
+      },
+      {
+        Security.security_title: 'Create',
+        Security.security_icon: Images.security_btn_pic_png,
+        Security.security_action: onCreateImageButtonClicked,
+      },
+      {
+        Security.security_title: 'Call',
+        Security.security_icon: Images.security_btn_call_png,
+        Security.security_action: () => viewController.toCall(1),
+      },
+    ];
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        spacing: 8,
+        children: items.map((item) {
+          return Container(
+            height: 30,
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(color: Color(0x99333333),
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+                border: Border.all(color: Color(0x66FFFFFF), width: 1)
+            ),
+            child: GestureDetector(
+              onTap: () {
+                (item[Security.security_action] as Function?)?.call();
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ImageView((item[Security.security_icon] as String?) ?? '', width: 16, height: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    (item[Security.security_title] as String?) ?? '',
+                    style: const TextStyle(color: Color(0xCCFFFFFF), fontWeight: FontWeight.w500, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    ).marginOnly(left: 16);
   }
 
   Widget buildGreetTips() {
     return Obx(() {
-      return !viewController.hasMessages && showGreetTips.value
+      return !Preferences.instance.isRv && !viewController.hasSentMessages && showGreetTips.value
           ? Container(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            margin: const EdgeInsets.only(bottom: 6, top: 6),
-            child: Row(
-              children: [
-                ...['😃 Hi~', '💝${Copywriting.security_nice_to_meet_you_}'].map(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        margin: const EdgeInsets.only(bottom: 6, top: 6),
+        child: Row(
+          children: [
+            ...['💗Hello~', '💝${Copywriting.security_nice_to_meet_you_}'].map(
                   (e) => GestureDetector(
-                    onTap: () {
-                      viewController.sendText(e);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), borderRadius: BorderRadius.circular(8)),
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.only(left: 6, right: 6),
-                      height: 24,
-                      // width: 32,
-                      child: Text(e, style: TextStyle(color: Colors.white, fontSize: 12)),
-                    ),
-                  ),
+                onTap: () {
+                  viewController.sendText(e);
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), borderRadius: BorderRadius.circular(8)),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(left: 6, right: 6),
+                  height: 24,
+                  // width: 32,
+                  child: Text(e, style: TextStyle(color: Colors.white, fontSize: 12)),
                 ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    showGreetTips.value = false;
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), borderRadius: BorderRadius.circular(8)),
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.only(left: 4, right: 4),
-                    height: 24,
-                    // width: 32,
-                    child: const Icon(Icons.close, color: Colors.white, size: 14, weight: 100),
-                  ),
-                ),
-              ],
+              ),
             ),
-          )
+            const Spacer(),
+            GestureDetector(
+              onTap: () {
+                showGreetTips.value = false;
+              },
+              child: Container(
+                decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), borderRadius: BorderRadius.circular(8)),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(left: 4, right: 4),
+                height: 24,
+                // width: 32,
+                child: const Icon(Icons.close, color: Colors.white, size: 14, weight: 100),
+              ),
+            ),
+          ],
+        ),
+      )
           : Container();
     });
   }
@@ -638,7 +661,20 @@ class ChatBottomBarController extends GetxController {
 
   int get userId => roomViewController.userId;
 
-  bool get hasMessages => roomViewController.messages.isNotEmpty;
+  bool get hasSentMessages {
+    List messages = roomViewController.messages;
+    if (messages.length > 10) return true;
+    try {
+      for (ChatMessage message in messages) {
+        if (message.isMine()) {
+          return true;
+        }
+      }
+    } catch (e) {
+      return false;
+    }
+    return false;
+  }
 
   List<dynamic> get membersNoOwner => roomViewController.crowdInfo.value.membersNoOwner;
 
@@ -647,20 +683,6 @@ class ChatBottomBarController extends GetxController {
   List<int> get specifyRepliers => rxMemberSelect.entries.where((entry) => entry.value == 1).map((e) => e.key).toList();
 
   List<int> get bannedRepliers => rxMemberSelect.entries.where((entry) => entry.value == 2).map((e) => e.key).toList();
-
-  bool get hasVideoConfig => roomViewController.hasVideoConfig;
-
-  int get videoConfigCost => roomViewController.videoConfigCost ?? 0;
-
-  int? get videoConfigCostType => roomViewController.videoConfigCostType;
-
-  bool get isGenerateVideoPremiumFree => roomViewController.askVideoConfig[Security.security_freeReason] == 3 && videoConfigCost == 0;
-
-  bool get isGenerateVideoFree => roomViewController.askVideoConfig[Security.security_freeReason] != 3 && videoConfigCost == 0;
-
-  bool get isGenerateVideoNotFree => videoConfigCost > 0;
-
-  String get generateVideoCostIcon => videoConfigCostType == 0 ? Images.security_coin_png : Images.security_gem_png;
 
   final _barState = ChatRoomBottomBarState.simple.obs;
 
@@ -687,7 +709,7 @@ class ChatBottomBarController extends GetxController {
     }
     for (int i = 0; i < atMemberIds.length; i++) {
       dynamic member = membersNoOwner.firstWhere(
-        (element) => element[Security.security_userbase]?[Security.security_uid] == atMemberIds[i],
+            (element) => element[Security.security_userbase]?[Security.security_uid] == atMemberIds[i],
         orElse: () {
           return null;
         },
@@ -805,17 +827,8 @@ class ChatBottomBarController extends GetxController {
     barState = ChatRoomBottomBarState.gift;
   }
 
-  askForVideo() async {
-    if (!roomViewController.hasVideoConfig) {
-      Toast.show(Copywriting.security_generate_config_loading);
-      return;
-    }
-
-    ReportManager.sendEvent(Security.security_video_generate_view_event, {
-      Security.security_entrance: Security.security_chat_bottom_bar_ask,
-      Security.security_userId: "${roomViewController.userId}",
-    });
-    roomViewController.showGenerateVideoPanel();
+  void askForVideo() {
+    GenerateVideoDialog.show();
   }
 
   void askForImage() {
@@ -904,15 +917,9 @@ class ChatBottomBarController extends GetxController {
         thumbnailUrl = await FilePushService.instance.upload(thumbnailBytes, FileType.im, ext: Security.security_jpg);
       }
 
-      if (thumbnailUrl == null || thumbnailUrl.isEmpty) {
-        Toast.error(Copywriting.security_upload_failed__please_try_again_later);
-        return;
-      }
-
-      Toast.dismiss();
       ChatVideoMessage message = ChatVideoMessage.fromVideo(
         url,
-        thumbnailUrl,
+        thumbnailUrl ?? '',
         videoBytes.length,
         roomViewController.userId,
         specifyRepliers: specifyRepliers,

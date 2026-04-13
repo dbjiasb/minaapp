@@ -1,9 +1,7 @@
-import 'package:biz/base/crypt/images.dart';
-import 'package:biz/business/chat/chat_room/chat_introduction_card.dart';
-import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:biz/business/chat/chat_room_cells/chat_image_message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/api_service/api_response.dart';
@@ -14,11 +12,8 @@ import 'package:biz/base/event_center/event_center.dart';
 import 'package:biz/base/router/router_names.dart';
 import 'package:biz/business/chat/ai_mode/service/ai_mode_service.dart';
 import 'package:biz/business/chat/call/call_manager.dart';
-import 'package:biz/business/chat/chat_room_cells/chat_image_message.dart';
 import 'package:biz/business/chat/chat_room_cells/chat_message.dart';
 import 'package:biz/business/chat/chat_room_cells/chat_tip_message.dart';
-import 'package:biz/business/chat/chat_room_cells/chat_video_message.dart';
-import 'package:biz/business/chat/generate_video/generate_video_config_cache.dart';
 import 'package:biz/business/chat/setting/chat_model_view.dart';
 import 'package:biz/business/chat/setting/chat_setting_helper.dart';
 import 'package:biz/business/chat/setting/message_option_view.dart';
@@ -27,14 +22,16 @@ import 'package:biz/core/account/account_service.dart';
 import 'package:biz/core/report/report_helper.dart';
 import 'package:biz/core/user_manager/user_manager.dart';
 import 'package:biz/core/util/string_ext.dart';
+import 'package:biz/shared/rv_helper.dart';
 
+import '../../../base/ads/ad_service.dart';
 import '../../../base/api_service/api_request.dart';
 import '../../../base/api_service/api_service.dart';
 import '../../../base/assets/image_view.dart';
 import '../../../base/crypt/apis.dart';
+import '../../../base/crypt/images.dart';
 import '../../../base/preferences/preferences.dart';
 import '../../../base/push_service/push_service.dart';
-import '../../../base/report/report_manager.dart';
 import '../../../base/router/route_helper.dart';
 import '../../../base/ui/overlay_popup.dart';
 import '../../../core/util/cached_image.dart';
@@ -43,6 +40,7 @@ import '../../../shared/alert.dart';
 import '../../../shared/app_theme.dart';
 import '../../../shared/toast/toast.dart';
 import '../chat_manager.dart';
+import '../chat_room_cells/chat_anchor_album_message.dart';
 import '../chat_room_cells/chat_audio_message.dart';
 import '../chat_room_cells/chat_call_cell.dart';
 import '../chat_room_cells/chat_cell.dart';
@@ -57,8 +55,8 @@ import '../generate_video/generate_video_panel.dart';
 import './chat_bottom_bar.dart';
 import 'level_up_pop_up.dart';
 import 'sidebar.dart';
-
-const String kLogTag = '[ChatRoom]';
+import 'package:cached_network_image/cached_network_image.dart';
+const String kLogTag = '[TalkRoom]';
 
 String chatRoomViewTag = Security.security_chat_room_view;
 
@@ -87,64 +85,58 @@ class ChatRoomView extends StatelessWidget {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: ListView.builder(
-                  controller: viewController.messageListScrollController,
-                  itemBuilder: (BuildContext context, int index) {
-                    // 最后一项显示介绍卡片（列表反向，最后一项显示在顶部）
-                    if (index == viewController.messages.length) {
-                      return ChatIntroductionCard(session: session);
-                    }
+        child:
+        viewController.messages.isEmpty
+            ? null
+            : ListView.builder(
+          itemBuilder: (BuildContext context, int index) {
+            OverlayPopupController overlayPopupController = OverlayPopupController();
 
-                    OverlayPopupController overlayPopupController = OverlayPopupController();
+            ChatMessage message = viewController.messages[index];
+            Widget cell = ChatCell.create(
+              message,
+              resend: viewController.resendMessage,
+              unlock: viewController.unlockMessage,
+              reload: viewController.reloadMessage,
+              download: viewController.downloadMessage,
+              onTap: viewController.onTapMessage,
+              onContinue: viewController.onAIContinue,
+              generateVideo: viewController.generateVideo,
+            );
 
-                    ChatMessage message = viewController.messages[index];
-                    Widget cell = ChatCell.create(
-                      message,
-                      resend: viewController.resendMessage,
-                      unlock: viewController.unlockMessage,
-                      reload: viewController.reloadMessage,
-                      download: viewController.downloadMessage,
-                      onTap: viewController.onTapMessage,
-                      onContinue: viewController.onAIContinue,
-                      generateVideo: viewController.generateVideoByMessage,
-                    );
+            if (message is ChatTipsMessage || message is ChatSystemMessage || message is ChatTimeMessage || message is ChatGeneratingMessage) {
+              return cell;
+            }
 
-                    if (message is ChatTipsMessage
-                        || message is ChatSystemMessage
-                        || message is ChatTimeMessage
-                        || message is ChatGeneratingMessage) {
-                      return cell;
-                    }
+            Widget paddingWidget = GestureDetector(
+              onTap: () {
+                overlayPopupController.hideMenu();
+              },
+              child: SizedBox(width: 70),
+            );
 
-                    Widget paddingWidget = GestureDetector(
-                      onTap: () {
-                        overlayPopupController.hideMenu();
-                      },
-                      child: SizedBox(width: 70),
-                    );
-
-                    return OverlayPopup(
-                      pressType: PressType.longPress,
-                      showArrow: false,
-                      position: index >= viewController.messages.length - 2 ? PreferredPosition.bottom : PreferredPosition.top,
-                      controller: overlayPopupController,
-                      child: cell,
-                      menuBuilder: () {
-                        return Row(
-                          mainAxisAlignment: message.isMine() ? MainAxisAlignment.end : MainAxisAlignment.start,
-                          children: [
-                            if (message.isMine()) paddingWidget,
-                            Flexible(child: MessageOptionView(viewController.messages[index], viewController, overlayPopupController.hideMenu)),
-                            if (!message.isMine()) paddingWidget,
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  itemCount: viewController.messages.length + 1,
-                  padding: EdgeInsets.zero,
-                  reverse: true,
-                ),
+            return OverlayPopup(
+              pressType: PressType.longPress,
+              showArrow: false,
+              position: index >= viewController.messages.length - 2 ? PreferredPosition.bottom : PreferredPosition.top,
+              controller: overlayPopupController,
+              child: cell,
+              menuBuilder: () {
+                return Row(
+                  mainAxisAlignment: message.isMine() ? MainAxisAlignment.end : MainAxisAlignment.start,
+                  children: [
+                    if (message.isMine()) paddingWidget,
+                    Flexible(child: MessageOptionView(viewController.messages[index], viewController, overlayPopupController.hideMenu)),
+                    if (!message.isMine()) paddingWidget,
+                  ],
+                );
+              },
+            );
+          },
+          itemCount: viewController.messages.length,
+          padding: EdgeInsets.only(bottom: 10),
+          reverse: true,
+        ),
       ),
     );
   }
@@ -153,51 +145,58 @@ class ChatRoomView extends StatelessWidget {
     return Drawer(
       backgroundColor: AppColors.base_background,
       child: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          children: [
-            if (viewController.isAiChat && !session.isGroup)
-              _drawerTemplate(
-                Copywriting.security_chat_Models,
-                onTap: () {
-                  Get.bottomSheet(ChatModeView());
-                },
-              ),
-            if (viewController.isAiChat && !session.isGroup)
-              _drawerTemplate(
-                Security.security_reset,
-                onTap: () {
-                  ChatSettingHelper.doReset(tUid: viewController.userId, sessionId: viewController.session.id, userName: viewController.session.name);
-                },
-              ),
-            _drawerTemplate(
-              Copywriting.security_clear_Chat_History,
-              onTap: () {
-                ChatSettingHelper.doClearHistory(userName: viewController.session.name, onConfirm: viewController.clearHistory);
-              },
-            ),
-            _drawerTemplate(
-              Security.security_Report,
-              onTap: () {
-                ReportHelper.showReportDialog(int.parse(viewController.session.id));
-              },
-            ),
-            Obx(() {
-              return _drawerOption(
-                Security.security_block,
-                onChange: (value) {
-                  showConfirmAlert(
-                    Security.security_block,
-                    Copywriting.security_are_you_sure_you_want_to_block_this_user_,
-                    onConfirm: () {
-                      UserManager.instance.blockUser(viewController.session.userId, value);
+        child: Align(
+          alignment: Alignment.topRight,
+          child: Container(
+            margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: Color(0xFF202026)),
+            child: ListView(
+              shrinkWrap: true, // 自适应高度
+              children: [
+                if (viewController.isAiChat && !session.isGroup)
+                  _drawerTemplate(
+                    Copywriting.security_chat_Models,
+                    onTap: () {
+                      Get.bottomSheet(ChatModeView());
                     },
+                  ),
+                if (viewController.isAiChat && !session.isGroup)
+                  _drawerTemplate(
+                    Security.security_reset,
+                    onTap: () {
+                      ChatSettingHelper.doReset(tUid: viewController.userId, sessionId: viewController.session.id, userName: viewController.session.name);
+                    },
+                  ),
+                _drawerTemplate(
+                  Copywriting.security_clear_Chat_History,
+                  onTap: () {
+                    ChatSettingHelper.doClearHistory(userName: viewController.session.name, onConfirm: viewController.clearHistory);
+                  },
+                ),
+                _drawerTemplate(
+                  Security.security_Report,
+                  onTap: () {
+                    ReportHelper.showReportDialog(int.parse(viewController.session.id));
+                  },
+                ),
+                Obx(() {
+                  return _drawerOption(
+                    Security.security_block,
+                    onChange: (value) {
+                      showConfirmAlert(
+                        Security.security_block,
+                        Copywriting.security_are_you_sure_you_want_to_block_this_user_,
+                        onConfirm: () {
+                          UserManager.instance.blockUser(viewController.session.userId, value);
+                        },
+                      );
+                    },
+                    value: UserManager.instance.isBlocked(viewController.session.userId),
                   );
-                },
-                value: UserManager.instance.isBlocked(viewController.session.userId),
-              );
-            }),
-          ],
+                }),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -239,15 +238,15 @@ class ChatRoomView extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 12, top: 30),
                 child: Center(
                   child: Obx(
-                    () =>
-                        isAudioCanceled.value
-                            ? Text(Copywriting.security_release_Cancel, style: TextStyle(color: Color(0xFFFF3E3E), fontSize: 13, fontWeight: AppFonts.medium))
-                            : Text(Copywriting.security_release_Send, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: AppFonts.medium)),
+                        () =>
+                    isAudioCanceled.value
+                        ? Text(Copywriting.security_release_Cancel, style: TextStyle(color: Color(0xFFF8397D), fontSize: 13, fontWeight: AppFonts.medium))
+                        : Text(Copywriting.security_release_Send, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: AppFonts.medium)),
                   ),
                 ),
               ),
               Container(
-                height: 148,
+                height: 132,
                 clipBehavior: Clip.hardEdge,
                 alignment: Alignment.topCenter,
                 decoration: BoxDecoration(
@@ -260,10 +259,7 @@ class ChatRoomView extends StatelessWidget {
                     Container(
                       height: 72,
                       padding: EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isAudioCanceled.value ? Color(0xFFF84652).withValues(alpha: 0.4) : Color(0xFF29D97F).withValues(alpha: 0.4),
-                      ),
+                      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Color(0xFFF8397D), width: 1)),
                       child: ImageView(isAudioCanceled.value ? Images.security_audio_cancel_png : Images.security_audio_on_webp),
                     ),
                     Spacer(),
@@ -284,8 +280,7 @@ class ChatRoomView extends StatelessWidget {
         onTap?.call();
       },
       child: Container(
-        decoration: BoxDecoration(color: Color(0xFF2A2132), borderRadius: BorderRadius.circular(8)),
-        margin: EdgeInsets.only(bottom: 8),
+        height: 44,
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Row(
           children: [
@@ -300,7 +295,7 @@ class ChatRoomView extends StatelessWidget {
 
   Widget _drawerOption(String title, {Function(bool value)? onChange, required bool value}) {
     return Container(
-      decoration: BoxDecoration(color: Color(0xFF2A2132), borderRadius: BorderRadius.circular(8)),
+      height: 44,
       margin: EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -309,7 +304,10 @@ class ChatRoomView extends StatelessWidget {
           Spacer(),
           Switch(
             value: value,
-            activeColor: AppColors.primary,
+            activeColor: Colors.white,
+            inactiveThumbColor: Colors.white,
+            activeTrackColor: AppColors.mainLightColor,
+            inactiveTrackColor: const Color(0x33D2C0FF),
             onChanged: (bool val) {
               onChange?.call(val);
             },
@@ -329,89 +327,58 @@ class ChatRoomView extends StatelessWidget {
 
   Widget _buildNavigationBar() {
     return Container(
-      height: 46,
+      height: 44,
       alignment: Alignment.center,
-      padding: const EdgeInsets.only(left: 12),
+      padding: const EdgeInsets.only(left: 16),
       child: Row(
         children: [
           GestureDetector(
             onTap: _onBackButtonClicked,
-            child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView(Images.security_back_png, width: 24, height: 24)),
+            child: Container(width: 32, height: 32, alignment: Alignment.center, child: CachedNetworkImage(imageUrl:ImagePath.ic_arrow_left_circle, width: 32, height: 32)),
           ),
-          SizedBox(width: 8),
-          Flexible(
-            child: GetBuilder<ChatRoomViewController>(
-              id: Security.security_kTagChatRoomHeader,
-              builder: (_) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          SizedBox(width: 10),
+          GetBuilder<ChatRoomViewController>(
+            id: Security.security_kTagChatRoomHeader,
+            builder: (_) {
+              return Container(
+                padding: EdgeInsets.only(left: 2, right: 12),
+                height: 40,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(color: Color(0xCC333333), borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    GestureDetector(
+                      onTap: () async {
+                        if (session.isGroup) {
+                          dynamic result = await viewController.toCrowInfoView();
+                          if (result is CrowdInfo) {
+                            viewController.crowdInfo.value = result;
+                            viewController.updateGroupInfoIfNeed();
+                          }
+                        } else {
+                          viewController.toPersonalPage();
+                        }
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 1),
+                          borderRadius: BorderRadius.circular(18),
+                          image: DecorationImage(image: CachedImageProvider(viewController.session.avatar), fit: BoxFit.cover),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GestureDetector(
-                          onTap: () async {
-                            if (session.isGroup) {
-                              dynamic result = await viewController.toCrowInfoView();
-                              if (result is CrowdInfo) {
-                                viewController.crowdInfo.value = result;
-                                viewController.updateGroupInfoIfNeed();
-                              }
-                            } else {
-                              viewController.toPersonalPage();
-                            }
-                          },
-                          child: Row(
-                            spacing: 4,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  viewController.session.name,
-                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
-                                  maxLines: 1,
-                                ),
-                              ),
-                              ImageView(Images.security_arrow_right_png, height: 16, width: 16),
-                              if (session.isPrivateAI)
-                                Container(
-                                  alignment: Alignment.center,
-                                  width: 32,
-                                  height: 12,
-                                  decoration: BoxDecoration(color: Color(0xff8761F1).withValues(alpha: 0.5), borderRadius: BorderRadius.circular(6)),
-                                  child: Obx(
-                                    () => Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              flex: session.nextLevelRatio.value,
-                                              child: Container(
-                                                height: 12,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
-                                                  gradient: LinearGradient(
-                                                    colors: [Color(0xFFCF66FF), Color(0xFFFF74C4)],
-                                                    begin: Alignment.centerLeft,
-                                                    end: Alignment.centerRight,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(flex: 100 - session.nextLevelRatio.value, child: SizedBox()),
-                                          ],
-                                        ),
-                                        Text(
-                                          'LV.${viewController.session.level}',
-                                          style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w800, height: 1),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
+                        Text(
+                          viewController.session.name,
+                          style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+                          maxLines: 1,
                         ),
                         if (session.isPGCAI)
                           Obx(() {
@@ -419,58 +386,48 @@ class ChatRoomView extends StatelessWidget {
                             return mod.isEmpty
                                 ? SizedBox()
                                 : GestureDetector(
-                                  onTap: () {
-                                    RH.toPage(
-                                      Routers.modeList,
-                                      params: {Security.security_uid: session.id, Security.security_defaultId: '${mod[Security.security_id]}'},
-                                    );
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(8)),
-                                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            mod[Security.security_name] ?? '',
-                                            style: TextStyle(color: Color(0xFFFFF37C), fontSize: 11, overflow: TextOverflow.ellipsis),
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                        SizedBox(width: 2),
-                                        ImageView(Images.security_mode_change_png, height: 12, width: 12),
-                                      ],
-                                    ),
-                                  ),
+                              onTap: () {
+                                RH.toPage(
+                                  Routers.modeList,
+                                  params: {Security.security_uid: session.id, Security.security_defaultId: '${mod[Security.security_id]}'},
                                 );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    mod[Security.security_name] ?? '',
+                                    style: TextStyle(color: Color(0xFF999999), fontSize: 11, overflow: TextOverflow.ellipsis, height: 1),
+                                    maxLines: 1,
+                                  ),
+                                  SizedBox(width: 2,),
+                                  ImageView(Images.security_mode_change_png, height: 12, width: 12),
+                                ],
+                              ),
+                            );
                           }),
                       ],
                     ),
-                    if (session.isGroup)
-                      Obx(() {
-                        return Text('Group member:${viewController.crowdInfo.value.members.length}', style: TextStyle(color: Color(0xFF45F7E7), fontSize: 11));
-                      }),
                   ],
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
-          // Spacer(),
+          Spacer(),
           GestureDetector(
             onTap: () {
               RH.toRecharge((session.isAiChat || session.isGroup) ? 0 : 1);
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-              decoration: BoxDecoration(color: Color(0xFF000000).withValues(alpha: 0.30), borderRadius: BorderRadius.circular(14)),
+              decoration: BoxDecoration(color: Color(0xCC333333), borderRadius: BorderRadius.circular(14)),
               child: Row(
-                spacing: 6,
+                spacing: 4,
                 children: [
                   ImageView(session.isAiChat || session.isGroup ? Images.security_coin_png : Images.security_gem_png, height: 16, width: 16),
                   Obx(
-                    () => Text(
+                        () => Text(
                       session.isAiChat || session.isGroup ? MyAccount.coins.toFixString : MyAccount.gems.toFixString,
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
@@ -506,27 +463,12 @@ class ChatRoomView extends StatelessWidget {
         child: Scaffold(
           key: _scaffoldKey,
           endDrawer: _buildChatDrawer(),
-          backgroundColor: Color(0xFF0A0B12),
+          backgroundColor: AppColors.base_background,
           resizeToAvoidBottomInset: true,
           body: Stack(
             fit: StackFit.expand,
             children: [
               _buildBackgroundView(),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                height: Get.statusBarHeight,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.black.withValues(alpha: 0.8), Colors.black.withValues(alpha: 0)],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                ),
-              ),
               SafeArea(
                 bottom: false,
                 child: Column(
@@ -538,7 +480,7 @@ class ChatRoomView extends StatelessWidget {
                 ),
               ),
               _buildAudioInputMask(),
-              ChatSidebar(),
+              RvHelper.packWidget(ChatSidebar(),),
             ],
           ),
         ),
@@ -548,8 +490,6 @@ class ChatRoomView extends StatelessWidget {
 }
 
 class ChatRoomViewController extends GetxController {
-  final ScrollController messageListScrollController = ScrollController();
-
   final isShowAudioInputAnim = false.obs;
 
   Map<String, dynamic> arguments = Get.arguments;
@@ -582,54 +522,12 @@ class ChatRoomViewController extends GetxController {
 
   bool get isAiChat => !isRealChat;
 
-  RxMap askVideoConfig = RxMap();
-
-  int? get videoConfigCost => askVideoConfig[Security.security_cost];
-
-  bool get hasVideoConfig => videoConfigCost != null;
-
-  int? get videoConfigCostType => askVideoConfig[Security.security_costType];
-
-  List<Map>? get videoConfigSettingTags => (askVideoConfig[Security.security_groups] as List<dynamic>).cast<Map>();
-
-  void initAskVideoConfigIfNeed() async {
-    askVideoConfig.value = GenerateVideoConfigCache.instance.get(userId) ?? {};
-    getAskVideoConfig();
-  }
-
-  void getAskVideoConfig() async {
-    Map params = {Security.security_tId: "${MyAccount.userId}", Security.security_targetUid: "$userId"};
-    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getGenerateVideoConfig, params: params));
-    askVideoConfig.value = rsp.data;
-    GenerateVideoConfigCache.instance.save(userId, rsp.data);
-  }
-
-  Future<ApiResponse> requestGenerateVideo(Map params) async {
-    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_generateVideoV2, params: params));
-    updateAskVideoConfigAfterGenerateVideo();
-    return rsp;
-  }
-
-  void updateAskVideoConfigAfterGenerateVideo() {
-    askVideoConfig.value = {};
-    getAskVideoConfig();
-  }
-
   ChatRoomViewController(Map<String, dynamic> arguments) : session = createSession(arguments);
-
-  final String kChatImageViewGenerateVideo = Security.security_kChatImageViewGenerateVideo;
-  final String kRequestGenerateVideoSuccess = Security.security_kRequestGenerateVideoSuccess;
 
   @override
   void onInit() async {
     super.onInit();
 
-    /// 修复异常sesstion type导致群聊不正常显示和发言问题
-    if (session.id.contains(Security.security_gROUP) && session.type == 0) {
-      session.type = 2;
-    }
-
-    initAskVideoConfigIfNeed();
     ChatVoicePlayer.instance.init();
     session.unreadNumber.value = 0;
     ChatManager.instance.currentSession = session;
@@ -651,12 +549,11 @@ class ChatRoomViewController extends GetxController {
     EventCenter.instance.addListener(kEventCenterDidReceivedNewMessages, handlePushMessages);
     EventCenter.instance.addListener(kEventCenterDidPreparedImageMessage, onImagePrepared);
     EventCenter.instance.addListener(Security.security_kDidCreateRole, onInfoChange);
-    EventCenter.instance.addListener(kChatImageViewGenerateVideo, onGenerateVideoEvent);
-    EventCenter.instance.addListener(kRequestGenerateVideoSuccess, onRequestGenerateVideoSuccess);
-
     updateInfoIfNeed();
 
     PushService.instance.addObserver(PushId.kLevelUpMessageId, handleLevelUpMessage);
+
+    VideoCreateManager.getVideoConfig(userId);
   }
 
   void handleLevelUpMessage(Event event) {
@@ -700,22 +597,6 @@ class ChatRoomViewController extends GetxController {
     ChatMessage message = event.data[Security.security_message];
     //替换messages中的消息
     replaceMessage(message);
-  }
-
-  messageListScrollToBottom(){
-    if (messageListScrollController.hasClients) {
-      messageListScrollController.jumpTo(0);
-    }
-  }
-
-  onRequestGenerateVideoSuccess(Event event) {
-    messageListScrollToBottom();
-  }
-
-  onGenerateVideoEvent(Event event) {
-    String imageUrl = event.data[Security.security_imageUrl] ?? "";
-    String desc = event.data[Security.security_desc] ?? "";
-    generateVideoByImageUrl(imageUrl, desc);
   }
 
   onInfoChange(Event event) {
@@ -896,8 +777,6 @@ class ChatRoomViewController extends GetxController {
     EventCenter.instance.removeListener(kEventCenterDidReceivedNewMessages, handlePushMessages);
     EventCenter.instance.removeListener(kEventCenterDidPreparedImageMessage, onImagePrepared);
     EventCenter.instance.removeListener(Security.security_kDidCreateRole, onInfoChange);
-    EventCenter.instance.removeListener(kChatImageViewGenerateVideo, onGenerateVideoEvent);
-    EventCenter.instance.removeListener(kRequestGenerateVideoSuccess, onRequestGenerateVideoSuccess);
     ChatManager.instance.currentSession = null;
     ChatVoicePlayer.instance.dealloc();
     PushService.instance.removeObserver(PushId.kLevelUpMessageId, handleLevelUpMessage);
@@ -985,7 +864,6 @@ class ChatRoomViewController extends GetxController {
 
       message.audioStatus.value = ChatTextAudioStatus.ready;
     } else if (message is ChatAudioMessage) {
-      if (message.audioUrl.isEmpty) return;
       ChatVoiceManager.instance.downloadSrc(message.audioUrl);
     }
   }
@@ -995,7 +873,6 @@ class ChatRoomViewController extends GetxController {
     Toast.loading();
     ApiResponse response = await ChatManager.instance.unlockMessage(message);
     if (response.isSuccess) {
-
       ChatMessage newMessage = ChatMessage.fromServer(response.data[Security.security_msg]);
       await downloadMessageResource(newMessage);
       await ChatManager.instance.messageHandler.insertMessage(newMessage);
@@ -1003,10 +880,9 @@ class ChatRoomViewController extends GetxController {
       // 更新权益信息
       MyAccount.setPremInfo(response.data[Security.security_ownPremiumInfo]);
       EventCenter.instance.sendEvent(kEventCenterRefreshCurrency, {});
-      AccountService.instance.refreshBalance();
-      // if (MyAccount.coins < 30) {
-      //   AdsManager.getBalanceAdAward();
-      // }
+      if (MyAccount.coins < 30) {
+        AdsManager.getBalanceAdAward();
+      }
 
       Toast.dismiss();
       replaceMessage(newMessage);
@@ -1016,7 +892,6 @@ class ChatRoomViewController extends GetxController {
       }
       Toast.error(response.description);
     }
-
     return Future.value(response.isSuccess);
   }
 
@@ -1037,8 +912,6 @@ class ChatRoomViewController extends GetxController {
     if (response.isSuccess) {
       Toast.dismiss();
       ChatMessage newMessage = ChatMessage.fromServer(response.data[Security.security_msg]);
-      // 更新权益信息
-      MyAccount.setPremInfo(response.data[Security.security_ownPremiumInfo]);
       await ChatManager.instance.messageHandler.insertMessage(newMessage);
       replaceMessage(newMessage);
     } else {
@@ -1072,53 +945,13 @@ class ChatRoomViewController extends GetxController {
     if (ret) insertGeneratingMessage();
   }
 
-  void showGenerateVideoPanel() async {
-    await GenerateVideoDialog.show(videoConfigCost, videoConfigCostType, videoConfigSettingTags);
-  }
-
-  void generateVideoByMessage(ChatMessage message) async {
-    if (message is ChatTextMessage) {
-      ReportManager.sendEvent(Security.security_video_generate_view_event, {Security.security_entrance: Security.security_textMessage, Security.security_userId: "$userId"});
-      await GenerateVideoDialog.show(videoConfigCost, videoConfigCostType, videoConfigSettingTags, prompt: message.text);
-    } else if (message is ChatImageMessage) {
-      ReportManager.sendEvent(Security.security_video_generate_view_event, {Security.security_entrance: Security.security_imageMessage, Security.security_userId: "$userId"});
-      if (message.prepared) {
-        await GenerateVideoDialog.show(
-          videoConfigCost,
-          videoConfigCostType,
-          videoConfigSettingTags,
-          imageUrl: message.imageUrl,
-          prompt: message.decodedMap[Security.security_desc],
-        );
-      } else {
-        await GenerateVideoDialog.show(
-          videoConfigCost,
-          videoConfigCostType,
-          videoConfigSettingTags,
-          msgId: message.id,
-          prompt: message.decodedMap[Security.security_desc],
-        );
-      }
-    } else if (message is ChatVideoMessage) {
-      //视频消息不需要显示面板，直接调接口生成
-      Toast.loading();
-      ApiResponse rsp = await requestGenerateVideo({
-        Security.security_tId: "${MyAccount.userId}",
-        Security.security_toUid: userId,
-        Security.security_msgId: message.id,
-      });
-      if (rsp.data[Security.security_statusInfo]?[Security.security_code] != 0) {
-        Toast.show(rsp.data[Security.security_statusInfo]?[Security.security_msg]);
-      }
-      Toast.dismiss();
-    }
-  }
-
-  void generateVideoByImageUrl(String imageUrl, String desc) async {
-    if (!hasVideoConfig || imageUrl.isEmpty) {
+  void generateVideo(ChatMessage message) {
+    try {
+      GenerateVideoDialog.show(prompt: (message as ChatImageMessage).imageDesc, imageUrl: message.imageUrl);
+    } catch (e) {
+      L.e('generateVideo error: $e');
       return;
     }
-    await GenerateVideoDialog.show(videoConfigCost, videoConfigCostType, videoConfigSettingTags, imageUrl: imageUrl, prompt: desc);
   }
 
   void updateGroupInfoIfNeed({CrowdInfo? resultInfo}) async {
@@ -1197,6 +1030,18 @@ class ChatRoomViewController extends GetxController {
     if (sessionChanged) {
       ChatManager.instance.updateChatSession(session);
     }
+    updateAnchorAlbumCard();
+  }
+
+  void updateAnchorAlbumCard() {
+    if (!session.isRealChat || session.isOffChatSession) {
+      return;
+    }
+    if (messages.isNotEmpty && messages.last is ChatAnchorAlbumMessage) {
+      messages.removeLast();
+    }
+    ChatAnchorAlbumMessage cardMessage = ChatAnchorAlbumMessage.fromAnchorInfo(userProfileInfo.data);
+    messages.add(cardMessage);
   }
 
   void toPersonalPage() {

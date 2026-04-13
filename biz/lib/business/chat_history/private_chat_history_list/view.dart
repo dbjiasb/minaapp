@@ -1,20 +1,25 @@
 import 'package:biz/base/router/route_helper.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../base/preferences/preferences.dart';
+import '../../chat/chat_session.dart';
 import 'logic.dart';
 import 'private_chat_session_cell.dart';
 
 class PrivateChatHistoryListView extends StatelessWidget {
-  const PrivateChatHistoryListView({super.key});
+  PrivateChatHistoryListView({super.key, int type = 0}) {
+    logic = Get.put(PrivateChatHistoryListLogic(type), tag: 'type_$type');
+  }
+
+  late PrivateChatHistoryListLogic logic;
 
   @override
   Widget build(BuildContext context) {
-    final logic = Get.put(PrivateChatHistoryListLogic());
-
     return Obx(
       () =>
           logic.isLoading.value && logic.dataList.isEmpty

@@ -1,16 +1,10 @@
+import 'package:biz/business/home_page_lists/role_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:biz/base/api_service/api_response.dart';
 import '../../base/crypt/security.dart';
-import 'role_manager.dart' as rm;
 
-enum RoleListType {
-  ai,
-  real,
-  ugc,
-  proOnly,
-}
 
 class RoleListLogic extends GetxController {
   final RoleListType type;
@@ -69,25 +63,12 @@ class RoleListLogic extends GetxController {
     }
   }
 
-  rm.RoleListType _mapToRoleManagerType() {
-    switch (type) {
-      case RoleListType.ai:
-        return rm.RoleListType.ai;
-      case RoleListType.real:
-        return rm.RoleListType.real;
-      case RoleListType.ugc:
-        return rm.RoleListType.ugc;
-      case RoleListType.proOnly:
-        return rm.RoleListType.pro_only;
-    }
-  }
-
   Future<void> getListData() async {
     try {
-      ApiResponse rsp = await rm.RoleManager.instance.getRoleList(
+      ApiResponse rsp = await RoleManager.instance.getRoleList(
         pageIndex: page,
         pageSize: pageSize,
-        type: _mapToRoleManagerType(),
+        type: type,
       );
 
       if (rsp.isSuccess) {

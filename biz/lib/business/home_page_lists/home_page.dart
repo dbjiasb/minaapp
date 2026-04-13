@@ -1,6 +1,8 @@
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/crypt/images.dart';
+import 'package:biz/base/event_center/event_center.dart';
+import 'package:biz/business/home_page_lists/role_manager.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -34,10 +36,7 @@ class HomePageView extends StatelessWidget {
           children: [
             Column(
               children: [
-                // Top bar
                 _buildTopBar(),
-
-                // Category tabs
                 Obx(
                   () => CategoryTabsWidget(
                     categories: controller.categories,
@@ -50,21 +49,12 @@ class HomePageView extends StatelessWidget {
 
                 // Content area with TabBarView
                 Expanded(
-                  child: TabBarView(
+                  child: Obx(() => TabBarView(
                     controller: controller.tabController,
-                    children: [
-                      // Story tab - linear list
-                      TheaterListView(scrollController: controller.scrollController),
-                      // Discovery tab - waterfall grid
-                      RoleListView(type: RoleListType.ai, scrollController: controller.scrollController),
-                      // Real tab - waterfall grid
-                      RoleListView(type: RoleListType.real, scrollController: controller.scrollController),
-                      // OC tab - waterfall grid
-                      RoleListView(type: RoleListType.ugc, scrollController: controller.scrollController),
-                      // Pro only tab - waterfall grid
-                      RoleListView(type: RoleListType.proOnly, scrollController: controller.scrollController),
-                    ],
-                  ),
+                    children: controller.categories.map((e) => e.type == RoleListType.story
+                        ? TheaterListView(scrollController: controller.scrollController)
+                        : RoleListView(type: e.type, scrollController: controller.scrollController)).toList(),
+                  )),
                 ),
               ],
             ),
@@ -94,17 +84,53 @@ class HomePageView extends StatelessWidget {
 
   Widget _buildTopBar() {
     return Container(
-      height: 44.w,
+      margin: EdgeInsets.only(top: 4.w, bottom: 4.w),
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(Security.security_recommend, style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun)),
-          InkWell(
+          Expanded(child: GestureDetector(
             onTap: () {
               Get.toNamed(Routers.search);
             },
-            child: Icon(Icons.search, color: Colors.white, size: 24.w),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.w),
+              decoration: BoxDecoration(
+                  color: Color(0xFF171C29),
+                  borderRadius: BorderRadius.circular(32.w),
+                  border: Border.all(color: Color(0xFF2A3144), width: 1)
+              ),
+              child: Row(
+                children: [
+                  ImageView(Images.mina_search, width: 14.w, height: 14.w),
+                  SizedBox(width: 6.w),
+                  Text('Search by ID, name, tag...', style: TextStyle(color: Color(0xFFAEB6C7), fontSize: 12.sp)),
+                ],
+              ),
+            ),
+          )),
+          SizedBox(width: 12.w,),
+          // Text(Security.security_recommend, style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun)),
+          InkWell(
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            onTap: () {
+              // Get.toNamed(Routers.search);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.w),
+              decoration: BoxDecoration(
+                  color: Color(0xFF171C29),
+                  borderRadius: BorderRadius.circular(32.w),
+                  border: Border.all(color: Color(0xFF2A3144), width: 1)
+              ),
+              child: Row(
+                children: [
+                  ImageView(Images.mina_filter, width: 14.w, height: 14.w),
+                  SizedBox(width: 6.w),
+                  Text('Filter', style: TextStyle(color: Color(0xFFF2F4F8), fontSize: 13.sp)),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -143,17 +169,57 @@ class HomePageView extends StatelessWidget {
   }
 }
 
+class Category {
+  String name;
+  RoleListType type;
+  Category(this.name, this.type);
+}
+
 class HomePageViewController extends GetxController with GetSingleTickerProviderStateMixin {
-  final List<String> categories = [Security.security_story, Security.security_discovery, Security.security_real, Security.security_oC, Copywriting.security_pro_only];
+  late RxList<Category> categories = RxList<Category>();
+  // final List<String> categories = [Security.security_story, Security.security_discovery, Security.security_real, Security.security_oC, Copywriting.security_pro_only];
   final RxInt selectedCategoryIndex = 0.obs;
   final RxBool showCreateButton = true.obs;
   final ScrollController scrollController = ScrollController();
   Timer? _scrollTimer;
   late TabController tabController;
 
+  late RxBool isRv = true.obs;
+
   @override
   void onInit() {
     super.onInit();
+    isRv = Preferences.instance.isRv.obs;
+    setupCategories();
+    EventCenter.instance.addListener(Preferences.kDicChangedAppConfig, (Event event) {
+      handleAppConfigChanged(event);
+    });
+  }
+
+  void handleAppConfigChanged(Event event) {
+    if (isRv.value == Preferences.instance.isRv) return;
+    isRv.value = Preferences.instance.isRv;
+    setupCategories();
+  }
+
+  void setupCategories() {
+    categories.value = isRv.value ? [
+      Category(Security.security_recommend, RoleListType.ai_and_script),
+      Category(Security.security_story, RoleListType.story),
+      // Category(Security.security_real, RoleListType.real),
+      // Category(Security.security_oC, RoleListType.ugc),
+      // Category(Copywriting.security_pro_only, RoleListType.pro_only),
+    ] : [
+      Category(Security.security_recommend, RoleListType.ai_and_script),
+      Category(Security.security_real, RoleListType.real),
+      Category(Security.security_oC, RoleListType.ugc),
+      Category(Security.security_featured, RoleListType.dating),
+      Category(Security.security_anime, RoleListType.anime),
+      Category(Security.security_realistic, RoleListType.realistic),
+      Category(Copywriting.security_pro_only, RoleListType.pro_only),
+      Category(Security.security_story, RoleListType.story),
+    ];
+
     tabController = TabController(length: categories.length, vsync: this);
     tabController.addListener(() {
       if (!tabController.indexIsChanging) {

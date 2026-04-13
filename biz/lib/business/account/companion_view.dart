@@ -231,7 +231,7 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
         if (!showRequesting && showCount == 0) {
           return Container(
             color: AppColors.base_background,
-            child: ListStatusView(status: ListStatus.empty, emptyDesc: Copywriting.security_no_chat_partner_has_been_initiated_yet),
+            child: ListStatusView(status: ListStatus.empty, emptyDesc: 'No companions yet, go create one!'),
           );
         }
 

@@ -6,7 +6,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../base/assets/image_view.dart';
+import '../../base/crypt/images.dart';
 import '../../base/router/router_names.dart';
 import '../../shared/app_theme.dart';
 import '../../shared/widget/keep_alive_wrapper.dart';
@@ -49,19 +52,19 @@ class DiscoveryView extends GetView<DiscoveryController> {
         clipBehavior: Clip.none,
         children: [
           Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.black.withValues(alpha: 0), Colors.black.withValues(alpha: 0.3), Colors.black.withValues(alpha: 0)],
-              ),
-            ),
+            // decoration: BoxDecoration(
+            //   gradient: LinearGradient(
+            //     begin: Alignment.topCenter,
+            //     end: Alignment.bottomCenter,
+            //     colors: [Colors.black.withValues(alpha: 0), Colors.black.withValues(alpha: 0.3), Colors.black.withValues(alpha: 0)],
+            //   ),
+            // ),
             child: Text(
               tab.name,
               style:
                   isSelected
-                      ? TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)
-                      : TextStyle(fontSize: 16, color: Colors.white.withValues(alpha: 0.7), fontWeight: FontWeight.bold),
+                      ? TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun)
+                      : TextStyle(color: Colors.white70, fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun),
             ),
           ),
           Positioned(
@@ -108,8 +111,8 @@ class DiscoveryView extends GetView<DiscoveryController> {
                           controller: controller.tabController,
                           tabAlignment: TabAlignment.start,
                           isScrollable: true,
-                          labelStyle: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
-                          unselectedLabelStyle: const TextStyle(color: Colors.white70, fontSize: 16),
+                          // labelStyle: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun),
+                          // unselectedLabelStyle: TextStyle(color: Colors.white70, fontSize: 20.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun),
                           onTap: (index) {
                             controller.currentIndex.value = index;
                           },
@@ -124,12 +127,20 @@ class DiscoveryView extends GetView<DiscoveryController> {
                         );
                       }),
                       const Spacer(),
-                      InkWell(
-                        onTap: () {
-                          Get.toNamed(Routers.search);
-                        },
-                        child: Icon(Icons.search, color: Colors.white, size: 24),
-                      ),
+                InkWell(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  onTap: () {
+                    Get.toNamed(Routers.search);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                        color: Color(0xFF171C29).withValues(alpha: 0.7),
+                        borderRadius: BorderRadius.circular(32),
+                        border: Border.all(color: Color(0xFF2A3144), width: 1)
+                    ),
+                    child: ImageView(Images.mina_search, width: 14, height: 14),
+                  )),
                     ],
                   ),
                 ).marginOnly(bottom: 8),

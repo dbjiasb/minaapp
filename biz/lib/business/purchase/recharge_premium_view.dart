@@ -24,7 +24,9 @@ class RechargePremiumView extends StatelessWidget {
     return GetBuilder<RechargePremiumViewController>(
       init: RechargePremiumViewController(),
       builder: (controller) {
-        return Scaffold(body: Stack(children: [
+        return Scaffold(
+            backgroundColor: Colors.black,
+            body: Stack(children: [
           ImageView(Images.security_premium_buy_bg_png, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
           _buildBackButton(controller),
           _buildContent(controller)

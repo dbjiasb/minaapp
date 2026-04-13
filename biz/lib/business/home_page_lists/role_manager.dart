@@ -19,7 +19,8 @@ enum RoleListType {
   pro_only(11),
   theater(1000),
   realistic(20001),
-  anime(20002);
+  anime(20002),
+  story(-9999);
 
   final int value;
 

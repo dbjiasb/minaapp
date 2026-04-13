@@ -1,21 +1,24 @@
-import 'package:biz/base/crypt/images.dart';
-import 'package:biz/base/assets/image_view.dart';
-import 'package:biz/base/crypt/routes.dart';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/router/router_names.dart';
+import 'package:biz/business/chat/generate_video/generate_video_panel.dart';
 import 'package:biz/core/account/account_service.dart';
 import 'package:biz/shared/alert.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../base/ads/ad_unlock_button.dart';
 import '../../../base/api_service/api_response.dart';
+import '../../../base/assets/image_view.dart';
+import '../../../base/crypt/images.dart';
 import '../../../base/report/report_manager.dart';
 import '../../../core/util/cached_image.dart';
 import '../chat_manager.dart';
@@ -111,21 +114,21 @@ class ChatVideoMessage extends ChatMessage {
   String get externalText => '[VIDEO]';
 
   ChatVideoMessage.fromVideo(String url, String thumbnailUrl, int length, int receiverId, {super.specifyRepliers, super.bannedRepliers, super.session})
-    : super(
-        id: DateTime.now().microsecondsSinceEpoch,
-        senderId: AccountService.instance.account.userId,
-        receiverId: receiverId,
-        date: DateTime.now(),
-        ownerId: AccountService.instance.account.userId,
-        senderName: AccountService.instance.account.name,
-        senderAvatar: AccountService.instance.account.avatar,
-        type: ChatMessageType.video,
-        uuid: '',
-        info: '',
-        sessionType: session?.type ?? 0,
-        lockInfo: {},
-        nativeId: (const Uuid().v4()).replaceAll('-', ''),
-      ) {
+      : super(
+    id: DateTime.now().microsecondsSinceEpoch,
+    senderId: AccountService.instance.account.userId,
+    receiverId: receiverId,
+    date: DateTime.now(),
+    ownerId: AccountService.instance.account.userId,
+    senderName: AccountService.instance.account.name,
+    senderAvatar: AccountService.instance.account.avatar,
+    type: ChatMessageType.video,
+    uuid: '',
+    info: '',
+    sessionType: session?.type ?? 0,
+    lockInfo: {},
+    nativeId: (const Uuid().v4()).replaceAll('-', ''),
+  ) {
     Map body = {Security.security_url: url, Security.security_coverUrl: thumbnailUrl, Security.security_length: length};
     info = jsonEncode(body);
     sendState = ChatMessageSendStatus.sending.obs;
@@ -143,21 +146,11 @@ class ChatVideoCell extends ChatCell {
 
   bool get isPremiumFreeReload => MyAccount.premiumFreeReloadVideoTimes > 0;
 
-  bool get hasVideoConfig => roomViewController.hasVideoConfig;
-
-  int get videoConfigCost => roomViewController.videoConfigCost ?? 0;
-
   bool get isReal => roomViewController.isRealChat;
 
-  int? get videoConfigCostType => roomViewController.videoConfigCostType;
+  bool get isGenerateVideoNotFree => VideoCreateManager.cost > 0;//videoConfigCost > 0;
 
-  bool get isGenerateVideoPremiumFree => roomViewController.askVideoConfig[Security.security_freeReason] == 3 && videoConfigCost == 0;
-
-  bool get isGenerateVideoFree => roomViewController.askVideoConfig[Security.security_freeReason] != 3 && videoConfigCost == 0;
-
-  bool get isGenerateVideoNotFree => videoConfigCost > 0;
-
-  String get generateVideoCostIcon => videoConfigCostType == 0 ? Images.security_coin_png : Images.security_gem_png;
+  String get generateVideoCostIcon => VideoCreateManager.costType == 1 ? Images.security_gem_png : Images.security_coin_png;
 
   String get refreshId => 'VEO_${videoMessage.uuid}';
 
@@ -167,7 +160,7 @@ class ChatVideoCell extends ChatCell {
 
   bool get preparedButNotUnlock => prepared && !videoMessage.unlocked;
 
-  bool get isLoading => (videoMessage.preparedValue == 0) && !isReal;
+  bool get isLoading => (videoMessage.preparedValue == 0) || (isInitialization && videoMessage.unlocked) && !isReal;
 
   bool get isInitialization => videoMessage.preparedValue == 2;
 
@@ -218,7 +211,10 @@ class ChatVideoCell extends ChatCell {
         if (!videoMessage.unlocked && !isMine) {
           return Stack(
             alignment: Alignment.center,
-            children: [ImageView(Images.security_chat_img_placeholder_png, fit: BoxFit.cover, width: 172, height: 256), renderUnlockMaskIfNeeded()],
+            children: [
+              ImageView(Images.security_chat_img_placeholder_png, fit: BoxFit.cover, width: 172, height: 256),
+              renderUnlockMaskIfNeeded()
+            ],
           );
         }
 
@@ -234,15 +230,15 @@ class ChatVideoCell extends ChatCell {
         fit: StackFit.expand,
         children: [
           SizedBox(
-            width: 172,
-            height: 256,
-            child: CachedImage(
-              imageUrl: coverUrl,
-              fit: BoxFit.cover,
-              placeholder: (BuildContext context, String url) {
-                return renderLoadingMask();
-              },
-            )
+              width: 172,
+              height: 256,
+              child: CachedImage(
+                imageUrl: coverUrl,
+                fit: BoxFit.cover,
+                placeholder: (BuildContext context, String url) {
+                  return renderLoadingMask();
+                },
+              )
           ),
           //生成一个播放按钮
           renderPlayButton(videoUrl),
@@ -268,51 +264,51 @@ class ChatVideoCell extends ChatCell {
                 width: 172,
                 height: 256,
                 child:
-                    length <= 1
-                        ? buildVideoView()
-                        : Stack(
-                          children: [
-                            PageView(
-                              onPageChanged: (index) {
-                                videoIndicator.value = index;
-                              },
-                              children:
-                                  videos.reversed
-                                      .map(
-                                        (e) => buildPageVideoViewItem(e[Security.security_coverUrl], e[Security.security_url], e[Security.security_prepared]),
-                                      )
-                                      .toList(),
-                            ),
-                            Positioned(
-                              bottom: 2,
-                              left: 0,
-                              right: 0,
-                              child: SizedBox(
-                                height: 20,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(length, (index) {
-                                    return Obx(
-                                      () => Container(
-                                        width: 6.0,
-                                        height: 6.0,
-                                        margin: EdgeInsets.symmetric(horizontal: 2.0),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color:
-                                              videoIndicator.value == index
-                                                  ? Colors
-                                                      .white // 当前页用蓝色
-                                                  : Colors.grey.withValues(alpha: 0.5), // 其他页用灰色
-                                        ),
-                                      ),
-                                    );
-                                  }),
+                length <= 1
+                    ? buildVideoView()
+                    : Stack(
+                  children: [
+                    PageView(
+                      onPageChanged: (index) {
+                        videoIndicator.value = index;
+                      },
+                      children:
+                      videos.reversed
+                          .map(
+                            (e) => buildPageVideoViewItem(e[Security.security_coverUrl], e[Security.security_url], e[Security.security_prepared]),
+                      )
+                          .toList(),
+                    ),
+                    Positioned(
+                      bottom: 2,
+                      left: 0,
+                      right: 0,
+                      child: SizedBox(
+                        height: 20,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(length, (index) {
+                            return Obx(
+                                  () => Container(
+                                width: 6.0,
+                                height: 6.0,
+                                margin: EdgeInsets.symmetric(horizontal: 2.0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color:
+                                  videoIndicator.value == index
+                                      ? Colors
+                                      .white // 当前页用蓝色
+                                      : Colors.grey.withValues(alpha: 0.5), // 其他页用灰色
                                 ),
                               ),
-                            ),
-                          ],
+                            );
+                          }),
                         ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -327,7 +323,7 @@ class ChatVideoCell extends ChatCell {
   }
 
   @override
-  Widget buildView() {
+  Widget build(BuildContext context) {
     return type == ChatCellType.chat ? (isMine ? buildChatCell() : Row(children: [buildChatCell(), buildContinueView()])) : buildVideoCell();
   }
 
@@ -383,9 +379,9 @@ class ChatVideoCell extends ChatCell {
     //使Container根据自身内容自适应宽度
     if (!videoMessage.canReload) return SizedBox.shrink();
     String text =
-        (videoMessage.reloadPrice == 0 || isPremiumFreeReload)
-            ? Security.security_Free
-            : '${videoMessage.reloadPrice} ${videoMessage.reloadCurrencyType == 1 ? 'Gems' : 'Coins'}';
+    (videoMessage.reloadPrice == 0 || isPremiumFreeReload)
+        ? Security.security_Free
+        : '${videoMessage.reloadPrice} ${videoMessage.reloadCurrencyType == 1 ? 'Gems' : 'Coins'}';
 
     return Row(
       children: [
@@ -463,24 +459,24 @@ class ChatVideoCell extends ChatCell {
 
               //视频生成
               if (!preparedButNotUnlock)
-                hasVideoConfig
+                VideoCreateManager.hasVideoConfig
                     ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (isGenerateVideoNotFree)
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ImageView(generateVideoCostIcon, width: 24, height: 24),
-                              SizedBox(width: 4),
-                              Text('$videoConfigCost', style: TextStyle(color: Colors.white, fontWeight: AppFonts.black, fontSize: 16)),
-                            ],
-                          ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (isGenerateVideoNotFree)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ImageView(generateVideoCostIcon, width: 24, height: 24),
+                          SizedBox(width: 4),
+                          Text('${VideoCreateManager.cost}', style: TextStyle(color: Colors.white, fontWeight: AppFonts.black, fontSize: 16)),
+                        ],
+                      ),
 
-                        if (isGenerateVideoFree || isGenerateVideoPremiumFree)
-                          Text(Security.security_Free, style: TextStyle(color: Colors.white, fontWeight: AppFonts.black, fontSize: 16)),
-                      ],
-                    )
+                    if (VideoCreateManager.isFree || VideoCreateManager.isPremiumFree)
+                      Text(Security.security_Free, style: TextStyle(color: Colors.white, fontWeight: AppFonts.black, fontSize: 16)),
+                  ],
+                )
                     : SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)),
             ],
           ),
@@ -539,15 +535,11 @@ class ChatVideoCell extends ChatCell {
       ],
     );
     Widget costUnlockBtn = Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: AppColors.primary),
+      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(type==ChatCellType.chat?12:6)), color: Color(0xFFFFF9C6)),
       alignment: Alignment.center,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          ImageView(Images.security_unlock_png, width: 16, height: 16),
-          SizedBox(width: 4),
-          Text(Security.security_Unlock, style: TextStyle(color: Colors.white, fontWeight: AppFonts.medium, fontSize: 14)),
-        ],
+        children: [Text(Security.security_Unlock, style: TextStyle(color: AppColors.mainDarkColor, fontWeight: AppFonts.semiBold, fontSize: 14))],
       ),
     );
 
@@ -555,21 +547,21 @@ class ChatVideoCell extends ChatCell {
       onTap: showUnlockDialogIfNeeded,
       child: Column(
         children: [
-          // if (videoMessage.currencyType == 0 && videoMessage.unlockPrice > 0 && !showFreeImage)
-          //   Container(
-          //     margin: EdgeInsets.only(bottom: 8),
-          //     height: type == ChatCellType.chat ? 40 : 28,
-          //     width: type == ChatCellType.chat ? 132 : 90,
-          //     child: MediaAdsButton(
-          //       videoMessage.uuid,
-          //       1,
-          //       grantAdCallback: (adAwardRsp) async {
-          //         videoMessage.unlocked = true;
-          //         Get.find<ChatRoomViewController>().update([refreshId]);
-          //         ChatManager.instance.messageHandler.insertMessage(videoMessage);
-          //       },
-          //     ),
-          //   ),
+          if (videoMessage.currencyType == 0 && videoMessage.unlockPrice > 0 && !showFreeImage)
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              height: type == ChatCellType.chat ? 40 : 28,
+              width: type == ChatCellType.chat ? 132 : 90,
+              child: MediaAdsButton(
+                videoMessage.uuid,
+                1,
+                grantAdCallback: (adAwardRsp) async {
+                  videoMessage.unlocked = true;
+                  Get.find<ChatRoomViewController>().update([refreshId]);
+                  ChatManager.instance.messageHandler.insertMessage(videoMessage);
+                },
+              ),
+            ),
           SizedBox(height: type == ChatCellType.chat ? 40 : 28, width: type == ChatCellType.chat ? 132 : 90, child: showFreeImage ? premiumBtn : costUnlockBtn),
         ],
       ),
@@ -587,9 +579,9 @@ class ChatVideoCell extends ChatCell {
             spacing: 7,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (isGenerateVideoPremiumFree) ImageView(Images.security_premium_png, width: 16, height: 16),
+              if (VideoCreateManager.isPremiumFree) ImageView(Images.security_premium_png, width: 16, height: 16),
               Text(
-                isGenerateVideoPremiumFree ? Copywriting.security_premium_Free : Security.security_Free,
+                VideoCreateManager.isPremiumFree ? Copywriting.security_premium_Free : Security.security_Free,
                 style: TextStyle(color: Color(0xFFFFE96F), fontSize: 12, fontWeight: AppFonts.medium),
               ),
             ],
@@ -598,27 +590,23 @@ class ChatVideoCell extends ChatCell {
       ],
     );
     Widget costUnlockBtn = Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: AppColors.primary),
+      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(type==ChatCellType.chat?12:6)), color: Color(0xFFFFF9C6)),
       alignment: Alignment.center,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          ImageView(Images.security_unlock_png, width: 16, height: 16),
-          SizedBox(width: 4),
-          Text(Security.security_Unlock, style: TextStyle(color: Colors.white, fontWeight: AppFonts.medium, fontSize: 14)),
-        ],
+        children: [Text(Security.security_Unlock, style: TextStyle(color: AppColors.mainDarkColor, fontWeight: AppFonts.semiBold, fontSize: 14))],
       ),
     );
 
-    return hasVideoConfig
+    return VideoCreateManager.hasVideoConfig
         ? GestureDetector(
-          onTap: showUnlockDialogIfNeeded,
-          child: SizedBox(
-            height: type == ChatCellType.chat ? 40 : 28,
-            width: type == ChatCellType.chat ? 132 : 90,
-            child: (!isGenerateVideoNotFree) ? freeBtn : costUnlockBtn,
-          ),
-        )
+      onTap: showUnlockDialogIfNeeded,
+      child: SizedBox(
+        height: type == ChatCellType.chat ? 40 : 28,
+        width: type == ChatCellType.chat ? 132 : 90,
+        child: (!isGenerateVideoNotFree) ? freeBtn : costUnlockBtn,
+      ),
+    )
         : SizedBox.shrink();
   }
 

@@ -1,8 +1,9 @@
+import 'package:biz/business/home_page_lists/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoryTabsWidget extends StatelessWidget {
-  final List<String> categories;
+  final List<Category> categories;
   final int selectedIndex;
   final Function(int) onTap;
 
@@ -16,7 +17,8 @@ class CategoryTabsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40.w,
+      // height: 40.w,
+      margin: EdgeInsets.only(top: 8.w),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -27,19 +29,20 @@ class CategoryTabsWidget extends StatelessWidget {
               onTap: () => onTap(index),
               child: Container(
                 margin: EdgeInsets.only(right: 8.w),
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.w),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.w),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? Color(0xFFeeeeee)
-                      : Color(0xFFeeeeee).withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(14.r),
+                      ? Color(0xFFEDEFF3)
+                      : Color(0xFF262B35),
+                  borderRadius: BorderRadius.circular(28.r),
                 ),
                 child: Text(
-                  categories[index],
+                  categories[index].name,
                   style: TextStyle(
                     color: isSelected ? Color(0xFF07070a) : Colors.white,
                     fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold ,
+                    height: 1.5
                   ),
                 ),
               ),

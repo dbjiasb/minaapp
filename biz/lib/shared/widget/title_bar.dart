@@ -44,7 +44,7 @@ class StyleTabBars extends StatelessWidget {
           );
         },
         separatorBuilder: (context, index) {
-          return const SizedBox(width: 24);
+          return const SizedBox(width: 16);
         },
         itemCount: titles.length,
       ),

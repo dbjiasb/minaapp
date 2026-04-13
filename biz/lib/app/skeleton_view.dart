@@ -30,8 +30,8 @@ class BottomBarItem {
 final String kCachedKeyGoToPremiumFlag = Security.security_kCachedKeyGoToPremiumFlag;
 
 // const int CREATE_OC_INDEX = 2;
-int get MESSAGE_INDEX => Preferences.instance.isRv ? 1 : 2;
-int get MINE_INDEX => Preferences.instance.isRv ? 2 : 3;
+int get MESSAGE_INDEX => 2;
+int get MINE_INDEX => 3;
 
 class SkeletonView extends StatelessWidget {
   SkeletonView({super.key});
@@ -146,6 +146,14 @@ class SkeletonViewController extends GetxController {
 
   List<BottomBarItem> items = <BottomBarItem>[
     BottomBarItem(
+      name: Security.security_Discovery,
+      pageBuilder: () {
+        return KeepAliveWrapper(child: DiscoveryView());
+      },
+      selectedBuilder: () => ImageView(Images.security_tab_moment_1_png, width: 28, height: 28),
+      normalBuilder: () => ImageView(Images.security_tab_moment_0_png, width: 28, height: 28),
+    ),
+    BottomBarItem(
       name: Security.security_list,
       pageBuilder: () {
         return KeepAliveWrapper(child: HomePageView()); //TheaterListView()
@@ -153,22 +161,6 @@ class SkeletonViewController extends GetxController {
       selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_1, width: 28, height: 28),
       normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_0, width: 28, height: 28),
     ),
-    // BottomBarItem(
-    //   name: Security.security_Discovery,
-    //   pageBuilder: () {
-    //     return KeepAliveWrapper(child: DiscoveryView());
-    //   },
-    //   selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_1, width: 28, height: 28),
-    //   normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_0, width: 28, height: 28),
-    // ),
-    // BottomBarItem(
-    //   name: Security.security_createoc,
-    //   pageBuilder: () {
-    //     return Container();
-    //   },
-    //   selectedBuilder: () => child: CachedImage(imageUrl: ImagePath.create_oc, width: 28, height: 28),
-    //   normalBuilder: () => child: CachedImage(imageUrl: ImagePath.create_oc, width: 28, height: 28),
-    // ),
     BottomBarItem(
       name: Security.security_chat,
       pageBuilder: () {
@@ -195,16 +187,6 @@ class SkeletonViewController extends GetxController {
     EventCenter.instance.addListener(kEventCenterDidClearSessionNumber, (event) => unreadCount.value = 0);
     updateUnreadCount();
     Get.put(ChatHistoryViewController());
-    if (!Preferences.instance.isRv) {
-      items.insert(1, BottomBarItem(
-        name: Security.security_Discovery,
-        pageBuilder: () {
-          return KeepAliveWrapper(child: DiscoveryView());
-        },
-        selectedBuilder: () => ImageView(Images.security_tab_moment_1_png, width: 28, height: 28),
-        normalBuilder: () => ImageView(Images.security_tab_moment_0_png, width: 28, height: 28),
-      ));
-    }
   }
 
   @override

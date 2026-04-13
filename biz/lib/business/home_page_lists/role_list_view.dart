@@ -1,6 +1,7 @@
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/router/route_helper.dart';
+import 'package:biz/business/home_page_lists/role_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -42,7 +43,7 @@ class RoleListView extends StatelessWidget {
                           ? _emptyView(controller)
                           : MasonryGridView.count(
                             physics: AlwaysScrollableScrollPhysics(),
-                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
+                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.w),
                             crossAxisCount: 2,
                             crossAxisSpacing: 11.w,
                             mainAxisSpacing: 12.w,
@@ -53,7 +54,6 @@ class RoleListView extends StatelessWidget {
                                   isRealType: type == RoleListType.real,
                                   onTap: () {
                                     final item = controller.dataList[index];
-                                    // 路由到私聊（type = 3）
                                     RouteHelper.toChat(
                                       id: item[Security.security_uid].toString() ?? '',
                                       name: item[Security.security_nickname] ?? '',

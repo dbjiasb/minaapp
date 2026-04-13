@@ -131,7 +131,7 @@ class _MomentItemViewState extends State<MomentItemView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ImageView(Images.security_empty_list_png, width: 172, height: 146),
+          ImageView(Images.mina_empty_list, width: 172, height: 146),
           const SizedBox(height: 16),
           if (widget.listType == 2 && (widget.baseInfo != null || widget.targetUid == 0))
           GestureDetector(
@@ -150,9 +150,9 @@ class _MomentItemViewState extends State<MomentItemView> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16),
+                  CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16, color: Colors.black),
                   const SizedBox(width: 4),
-                  Text(Copywriting.security_create_Moment, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                  Text(Copywriting.security_create_Moment, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),

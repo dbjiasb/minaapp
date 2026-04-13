@@ -1,7 +1,13 @@
 import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:biz/core/util/cached_image.dart';
+
+import '../../base/assets/image_view.dart';
+import '../../base/crypt/images.dart';
+import '../../shared/widget/app_widgets.dart';
+import 'list_item.dart';
 
 class RoleCardWidget extends StatelessWidget {
   final Map item;
@@ -22,6 +28,14 @@ class RoleCardWidget extends StatelessWidget {
     String avatarUrl = item[Security.security_avatarUrl] ?? "";
     String bio = item[Security.security_bio] ?? "";
 
+    int acType = item["accountType"];
+    String masterName = item[Security.security_robotInfo]?[Security.security_masterInfo]?[Security.security_nickName] ?? '';
+    if (masterName == 'Official') {
+      masterName = 'Mina';
+    }
+    String linkNum = RoleItem.shortStringForCount(item[Security.security_heatInfo]?[Security.security_connectors] ?? 0);
+    String heatNum = RoleItem.shortStringForCount(item[Security.security_heatInfo]?[Security.security_heatValue] ?? 0);
+
     // 如果是真人类型且 coverUrl 为空，使用 avatarUrl
     String imageUrl = coverUrl;
     if (isRealType && coverUrl.isEmpty && avatarUrl.isNotEmpty) {
@@ -40,6 +54,9 @@ class RoleCardWidget extends StatelessWidget {
           String tagName = tag[Security.security_name] ?? tag[Security.security_title] ?? tag.toString();
           tags.add(tagName);
         }
+      }
+      if (tags.length > 2) {
+        tags.removeAt(0);
       }
     } catch (e) {
       // If parsing fails, just use empty tags
@@ -72,7 +89,7 @@ class RoleCardWidget extends StatelessWidget {
               left: 0,
               right: 0,
               child: Container(
-                height: 120.w,
+                height: 140.w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(12.r),
@@ -81,9 +98,12 @@ class RoleCardWidget extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
+                    stops: [0.0, 0.7, 0.9, 1.0],
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.8),
+                      Colors.black.withValues(alpha: 0.6),
+                      Colors.black.withValues(alpha: 0.9),
+                      Colors.black.withValues(alpha: 1),
                     ],
                   ),
                 ),
@@ -92,25 +112,28 @@ class RoleCardWidget extends StatelessWidget {
 
             // Content
             Positioned(
-              bottom: 12.w,
+              bottom: 8.w,
               left: 12.w,
               right: 12.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Role name
-                  Text(
-                    name,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Flexible(child: Text(
+                        name,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                      AppWidgets.userTag(acType),
+                    ],
                   ),
-
                   SizedBox(height: 4.w),
 
                   // Brief description (only show if not empty)
@@ -118,11 +141,12 @@ class RoleCardWidget extends StatelessWidget {
                     Text(
                       bio,
                       style: TextStyle(
-                        color: Color(0xFFb8b7b4),
+                        color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 12.sp,
                         fontWeight: FontWeight.normal,
+                        height: 1.3
                       ),
-                      maxLines: 2,
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
 
@@ -134,7 +158,30 @@ class RoleCardWidget extends StatelessWidget {
                     Wrap(
                       spacing: 4.w,
                       runSpacing: 4.w,
-                      children: tags.take(2).map((tag) => _buildTag(tag)).toList(),
+                      children: tags.take(4).map((tag) => _buildTag(tag)).toList(),
+                    ),
+
+                  if (!isRealType) SizedBox(height: 8),
+                  if (!isRealType)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            masterName.isEmpty ? '' : '@$masterName',
+                            style: TextStyle(color: Color(0xFFBEBFC5), fontSize: 8, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            ImageView(Images.security_linknum_webp, width: 12, height: 12).marginOnly(right: 2),
+                            Text(linkNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
+                            SizedBox(width: 4),
+                            ImageView(Images.security_heart_count_webp, width: 12, height: 12).marginOnly(right: 2),
+                            Text(heatNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
+                          ],
+                        ),
+                      ],
                     ),
                 ],
               ),
@@ -147,15 +194,15 @@ class RoleCardWidget extends StatelessWidget {
 
   Widget _buildTag(String text) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.w),
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.w),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.1),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: Color(0xFFb8b7b4),
+          color: Colors.white.withValues(alpha: 0.9),
           fontSize: 10.sp,
           fontWeight: FontWeight.w500,
         ),
