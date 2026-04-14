@@ -132,7 +132,7 @@ class PostAsPage extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             textAlign: TextAlign.center,
-            Copywriting.security_you_need_to_have_your_own_role_to_post___nGo_create_a_character,
+            Copywriting.security_you_need_to_have_your_own_role_to_post___nGo_create_a_character.replaceAll('\\n', '\n'),
             // style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal),
             style: TextStyle(color: Color(0xFFABABAD), fontSize: 14, fontWeight: FontWeight.normal),
           ),
@@ -148,9 +148,9 @@ class PostAsPage extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16),
+                  CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16, color: Colors.black,),
                   const SizedBox(width: 4),
-                  Text(Copywriting.security_create_Character, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                  Text(Copywriting.security_create_Character, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),

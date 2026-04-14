@@ -176,7 +176,7 @@ class ExploreItemView extends StatelessWidget {
           ),
         ),
         child: Text(
-          Security.security_chat,
+          Security.security_Chat,
           style: TextStyle(
             color: Color(0xCC221600),
             fontSize: 18,
