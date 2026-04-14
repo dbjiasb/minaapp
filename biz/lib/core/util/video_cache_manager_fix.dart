@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/security.dart';
 import 'dart:async';
 
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
@@ -9,7 +10,7 @@ void configureVideoCacheManager() {
 }
 
 class SafeVideoCacheManager extends CacheManager {
-  static const String key = 'libCachedVideoPlayerPlusData';
+  static final String key = Security.security_libCachedVideoPlayerPlusData;
   static final SafeVideoCacheManager _instance = SafeVideoCacheManager._();
 
   factory SafeVideoCacheManager() => _instance;

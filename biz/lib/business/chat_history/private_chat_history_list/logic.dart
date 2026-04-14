@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/security.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -82,7 +83,7 @@ class PrivateChatHistoryListLogic extends GetxController {
     if (session.id == ChatSession.offChatSession.id) {
       return false;
     }
-    bool ret = await showConfirmAlert('Tip', 'Are you sure you want to delete your chat with ${session.name}? This action cannot be undone.', confirmText: 'Confirm', cancelText: 'Cancel', onConfirm: () async {
+    bool ret = await showConfirmAlert(Security.security_Tip, 'Are you sure you want to delete your chat with ${session.name}? This action cannot be undone.', confirmText: Security.security_confirm, cancelText: Security.security_cancel, onConfirm: () async {
     });
 
     if (!ret) return false;

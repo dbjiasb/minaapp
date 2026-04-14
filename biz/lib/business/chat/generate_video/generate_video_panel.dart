@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:math';
 
@@ -71,17 +72,17 @@ class VideoCreateManager {
   static int get costType => _asInt(askVideoConfig[Security.security_costType]);
 
   static bool get genAudioNeedCost =>
-      _asInt(_asMap(askVideoConfig['generateAudioConfig'])['needExtraCost']) >
+      _asInt(_asMap(askVideoConfig[Security.security_generateAudioConfig])[Security.security_needExtraCost]) >
       0;
 
   static bool get hasVideoConfig =>
       askVideoConfig[Security.security_cost] != null;
 
-  static bool get isPremiumFree => _asInt(_asMap(askVideoConfig['groupsV2'])[_kPremiumFreeReason]) > 0;
+  static bool get isPremiumFree => _asInt(_asMap(askVideoConfig[Security.security_groupsV2])[_kPremiumFreeReason]) > 0;
   static bool get isFree => cost == 0;
 
   static List<Map> get videoConfigSettingTags => _asMapList(
-    askVideoConfig['groupsV2'] ?? askVideoConfig[Security.security_groups],
+    askVideoConfig[Security.security_groupsV2] ?? askVideoConfig[Security.security_groups],
   );
 
   static void getVideoConfig(int sid) async {
@@ -120,12 +121,12 @@ class VideoCreateManager {
     }
 
     if (generateAudio) {
-      params['audioInfo'] = {'enabled': 1};
+      params[Security.security_audioInfo] = {Security.security_enabled: 1};
     }
 
     Toast.loading();
-    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest('generateVideoV2', params: {
-      'params': params,
+    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_generateVideoV2, params: {
+      Security.security_params: params,
     }));
     if (!rsp.isSuccess) {
       Toast.error(rsp.description);
@@ -204,7 +205,7 @@ class GenerateVideoDialog extends StatelessWidget {
                 Expanded(
                   child: Center(
                     child: Text(
-                      'Generate Video',
+                      Copywriting.security_generate_Video,
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -281,7 +282,7 @@ class GenerateVideoDialog extends StatelessWidget {
                 children: [
                   24.w.verticalSpace,
                   Text(
-                    'Settings',
+                    Security.security_settings,
                     style: TextStyle(
                       fontSize: 14.w,
                       color: Colors.white,
@@ -315,7 +316,7 @@ class GenerateVideoDialog extends StatelessWidget {
                   child: Text(
                     controller.reloadMessage != null
                         ? Security.security_reload
-                        : 'Generate',
+                        : Security.security_generate,
                     style: TextStyle(
                       fontSize: 16.w,
                       fontWeight: FontWeight.bold,
@@ -394,7 +395,7 @@ class GenerateVideoDialog extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      // if (_asInt(subItem['needExtraCost']) > 0)
+                      // if (_asInt(subItem[Security.security_needExtraCost]) > 0)
                       //   Image.asset(
                       //     controller.costType.value == 0
                       //         ? ImagePath.coin
@@ -496,7 +497,7 @@ class GenerateVideoDialog extends StatelessWidget {
                   }),
                   const Spacer(),
                   Text(
-                    'Detail',
+                    Security.security_Detail,
                     style: TextStyle(
                       color: Color(0xFFFFEF3B),
                       fontSize: 12,
@@ -540,7 +541,7 @@ class GenerateVideoDialog extends StatelessWidget {
   Widget extraCostItem(Map item) {
     final text = _asString(item[Security.security_type]);
     final cost = _asInt(item[Security.security_costValue]);
-    final freeReason = _asInt(item['freeReason']);
+    final freeReason = _asInt(item[Security.security_freeReason]);
 
     return Row(
       children: [
@@ -588,11 +589,11 @@ class GenerateVideoDialog extends StatelessWidget {
 class GenerateVideoController extends GetxController {
   final promptTextFileController = TextEditingController();
   final roomViewController = Get.find<ChatRoomViewController>();
-  String reportKey = 'video_generate_click';
+  String reportKey = Security.security_video_generate_click;
 
   int get userId => roomViewController.userId;
 
-  static String estimatedRefreshId = 'generateVideoEstimatedRefreshId';
+  static String estimatedRefreshId = Security.security_generateVideoEstimatedRefreshId;
 
   RxInt cost = 15.obs;
   RxInt costType = 0.obs;
@@ -635,24 +636,24 @@ class GenerateVideoController extends GetxController {
     calculateResult.value = 1;
     var prompt = promptTextFileController.text;
 
-    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest('calculateGenerateVideoCost', params: {
-      'params': {
+    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_calculateGenerateVideoCost, params: {
+      Security.security_params: {
         Security.security_url: imageUrl ?? '',
         Security.security_prompt: prompt,
          Security.security_toUid: userId,
         Security.security_tags: tags,
-        'audioInfo': {
-          'enabled': generateAudio.value ? 1 : 0,
+        Security.security_audioInfo: {
+          Security.security_enabled: generateAudio.value ? 1 : 0,
         },
       },
-      'reloadMsgId': reloadMessage?.id ?? 0,
+      Security.security_reloadMsgId: reloadMessage?.id ?? 0,
     }));
 
 
     if (rsp.isSuccess) {
       calculateResult.value = 0;
-      estimatedCost = rsp.data['costDetail']?['totalCostValue'] ?? 0;
-      costItems = rsp.data['costDetail']?['costItems'];
+      estimatedCost = rsp.data[Security.security_costDetail]?[Security.security_totalCostValue] ?? 0;
+      costItems = rsp.data[Security.security_costDetail]?[Security.security_costItems];
     } else {
       calculateResult.value = 2;
       // costItems = null;
@@ -667,7 +668,7 @@ class GenerateVideoController extends GetxController {
     final prompt = promptTextFileController.text;
 
     if (prompt.isEmpty) {
-      Toast.show('Please input description');
+      Toast.show(Copywriting.security_please_input_description);
       return;
     }
 
@@ -697,7 +698,7 @@ class GenerateVideoController extends GetxController {
       generateAudio: generateAudio.value,
     );
     EventCenter.instance.sendEvent(
-      'requestGenerateVideoSuccess',
+      Security.security_requestGenerateVideoSuccess,
       {},
     );
     Toast.dismiss();

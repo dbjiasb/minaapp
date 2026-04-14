@@ -932,4 +932,28 @@ abstract final class Security {
   static late final String security_slim = decrypt('aZDfizbm5SzGggTBMtbSmw=='); // slim
   static late final String security_yy = decrypt('yR1AdB2H+vr1cc+CWDakRg=='); // yy
   static late final String security_yyyy = decrypt('30iicW0VnoxswU+DB3cGFw=='); // yyyy
+  static late final String security_AI = decrypt('GGJHxL81SvK3wga5w6ALTw=='); // AI
+  static late final String security_companions = decrypt('0G32rlOnKdMKSQmujCITGw=='); // Companions
+  static late final String security_Detail = decrypt('NFzFc7VaCPEdk76/lCgL/Q=='); // Detail
+  static late final String security_Filter = decrypt('5VtvIJOVKjElkdjsVQmpng=='); // Filter
+  static late final String security_Group = decrypt('pmGB/2lTJTEylPLCXdS6zw=='); // Group
+  static late final String security_Mina = decrypt('M7CKswUyMPTxkepXMiD/aA=='); // Mina
+  static late final String security_Official = decrypt('QcfCN2WadFwPCjqoCNK2TQ=='); // Official
+  static late final String security_Settings = decrypt('meKKZEYY6wmy6pPdfi7vHg=='); // Settings
+  static late final String security_Story = decrypt('6L8U79pIZAWHWYhCVb1DxA=='); // Story
+  static late final String security_Tip = decrypt('vPIBZDK/nCXn8p/TuuBEuA=='); // Tip
+  static late final String security_Trending = decrypt('3ht2WqUE7MB3Fi1TK71NAA=='); // Trending
+  static late final String security_audioInfo = decrypt('hVDVvoxCyvEb8GhzPTQApw=='); // audioInfo
+  static late final String security_costDetail = decrypt('2lwns/oGux/tNfhtQSt1uw=='); // costDetail
+  static late final String security_costItems = decrypt('EKUPWu9hEXts+FR9mR1RdA=='); // costItems
+  static late final String security_enabled = decrypt('nydNVDlDjKoqJyUT2RljXQ=='); // enabled
+  static late final String security_generateAudioConfig = decrypt('aViiMOdAQ4h0vrHigU4EwUCiCSnxeFji4vv9r6mHq/8='); // generateAudioConfig
+  static late final String security_generateVideoEstimatedRefreshId = decrypt('xeG06QGY0mONEwkt5HYLzB/WTz98NH+qMvDSAGrVCKk='); // generateVideoEstimatedRefreshId
+  static late final String security_groupsV2 = decrypt('qbc0Z/fHoe1qJYKegLgDDA=='); // groupsV2
+  static late final String security_libCachedVideoPlayerPlusData = decrypt('uv+HHZoYryAc2294ibvl7pCFPh9R0QyAX4OjHd4kYPc='); // libCachedVideoPlayerPlusData
+  static late final String security_needExtraCost = decrypt('HLxDQ2grD6UqWEK8ly6KOQ=='); // needExtraCost
+  static late final String security_params = decrypt('SW7fKP/RYOqnyK0EmGPeJA=='); // params
+  static late final String security_reloadMsgId = decrypt('a/vpKjEkIewuyiTBTYzsRw=='); // reloadMsgId
+  static late final String security_requestGenerateVideoSuccess = decrypt('2Og2S9CIsZ6snCgxYMV7A15ahpz4oMijLuIq1kByyuE='); // requestGenerateVideoSuccess
+  static late final String security_totalCostValue = decrypt('/cH1HHAyyWzDNt7JKQnMeQ=='); // totalCostValue
 }

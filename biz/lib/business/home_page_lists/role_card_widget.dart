@@ -28,10 +28,10 @@ class RoleCardWidget extends StatelessWidget {
     String avatarUrl = item[Security.security_avatarUrl] ?? "";
     String bio = item[Security.security_bio] ?? "";
 
-    int acType = item["accountType"];
+    int acType = item[Security.security_accountType];
     String masterName = item[Security.security_robotInfo]?[Security.security_masterInfo]?[Security.security_nickName] ?? '';
-    if (masterName == 'Official') {
-      masterName = 'Mina';
+    if (masterName == Security.security_Official) {
+      masterName = Security.security_mina;
     }
     String linkNum = RoleItem.shortStringForCount(item[Security.security_heatInfo]?[Security.security_connectors] ?? 0);
     String heatNum = RoleItem.shortStringForCount(item[Security.security_heatInfo]?[Security.security_heatValue] ?? 0);

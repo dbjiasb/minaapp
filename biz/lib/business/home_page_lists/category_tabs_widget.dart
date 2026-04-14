@@ -23,6 +23,7 @@ class CategoryTabsWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: List.generate(categories.length, (index) {
             bool isSelected = index == selectedIndex;
             return GestureDetector(

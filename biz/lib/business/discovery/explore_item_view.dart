@@ -175,8 +175,8 @@ class ExploreItemView extends StatelessWidget {
             colors: [Color(0xFFFFF288), Color(0xFFF9C07D)],
           ),
         ),
-        child: const Text(
-          'Chat',
+        child: Text(
+          Security.security_chat,
           style: TextStyle(
             color: Color(0xCC221600),
             fontSize: 18,

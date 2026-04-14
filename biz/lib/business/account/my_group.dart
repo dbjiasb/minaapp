@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:biz/core/util/cached_image.dart';
@@ -46,7 +47,7 @@ class _MyGroupViewState extends State<MyGroupView> {
         context,
       ) {
         if ((data ?? []).isEmpty) {
-          return UiUtils.buildCommonEmptyView(tips: 'No groups yet, go create one!');
+          return UiUtils.buildCommonEmptyView(tips: Copywriting.security_No_groups_yet__go_create_one_);
         } else {
           return ListView.builder(
             itemCount: data!.length,
@@ -57,7 +58,7 @@ class _MyGroupViewState extends State<MyGroupView> {
             },
           );
         }
-      }, emptyView: UiUtils.buildCommonEmptyView(tips: 'No groups yet, go create one!')),
+      }, emptyView: UiUtils.buildCommonEmptyView(tips: Copywriting.security_No_groups_yet__go_create_one_)),
     );
   }
 

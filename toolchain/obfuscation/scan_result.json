@@ -1,19 +1,29 @@
 {
   "images": {
-    "count": 1,
-    "items": [
-      "ic_add_create.png"
-    ]
-  },
-  "copywriting": {
     "count": 0,
     "items": []
   },
+  "copywriting": {
+    "count": 9,
+    "items": [
+      "All Chat",
+      "Create Video",
+      "Generate Video",
+      "Mina Support",
+      "No groups yet, go create one!",
+      "Please input description",
+      "Search by ID, name, tag...",
+      "The app may not function as expected until you remove this plugin from pubspec.yaml",
+      "Video initialization failed"
+    ]
+  },
   "links": {
-    "count": 6,
+    "count": 8,
     "items": [
       "https://cdn.miratales.online",
       "https://cdn.miratales.online/mina/app/",
+      "https://discord.gg/qdRqGq5WDG?external=1",
+      "https://h5.miratales.online",
       "https://open.miratales.online",
       "https://test-api.miratales.online",
       "ws://test-ws.miratales.online",
@@ -25,15 +35,55 @@
     "items": []
   },
   "apis": {
-    "count": 0,
-    "items": []
+    "count": 3,
+    "items": [
+      "calculateGenerateVideoCost",
+      "generateVideoV2",
+      "getUserRecommendList"
+    ]
   },
   "security": {
-    "count": 0,
-    "items": []
+    "count": 35,
+    "items": [
+      "AI",
+      "Ask",
+      "Call",
+      "Cancel",
+      "Chat",
+      "Companions",
+      "Confirm",
+      "Create",
+      "Detail",
+      "Filter",
+      "Generate",
+      "Group",
+      "Mina",
+      "Official",
+      "Real",
+      "Settings",
+      "Story",
+      "Tip",
+      "Trending",
+      "accountType",
+      "audioInfo",
+      "costDetail",
+      "costItems",
+      "enabled",
+      "freeReason",
+      "generateAudioConfig",
+      "generateVideoEstimatedRefreshId",
+      "groupsV2",
+      "libCachedVideoPlayerPlusData",
+      "needExtraCost",
+      "params",
+      "reloadMsgId",
+      "requestGenerateVideoSuccess",
+      "totalCostValue",
+      "video_generate_click"
+    ]
   },
   "other": {
-    "count": 106,
+    "count": 115,
     "items": [
       " (3-20 characters)",
       " : ",
@@ -42,10 +92,18 @@
       "##",
       ").last}",
       "**",
+      ", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),\n                backgroundColor: AppColors.base_background,\n                leading: IconButton(onPressed: Get.back, icon: ImageView(Images.security_back_png, height: 24, width: 24)),\n              )\n              : null,\n      body: Obx(() {\n        int showCount = controller.myCompanions.length;\n\n        bool showRequesting = controller.requestingOwnerRole.value == true && showCount == 0;\n\n        if (!showRequesting && showCount == 0) {\n          return Container(\n            color: AppColors.base_background,\n            child: ListStatusView(status: ListStatus.empty, emptyDesc: ",
       "- Call Time:",
       "- Trial Card:",
       "......",
       ".SF Pro Text",
+      ".avi",
+      ".bin",
+      ".m4v",
+      ".mkv",
+      ".mov",
+      ".mp4",
+      ".webm",
       "/2",
       "/20",
       "/500",
@@ -82,7 +140,6 @@
       "[CallEngine] microphone permission denied",
       "[Call] camera permission denied",
       "[Call] microphone permission denied",
-      "[ChatRoom]",
       "[Chat][Call] startMatch call Permission is not support",
       "[IMAGE]",
       "[Payment] IAP Service Not Available",
@@ -95,6 +152,7 @@
       "[PushService] login success",
       "[PushService] logout success",
       "[PushService] received chat message",
+      "[TalkRoom]",
       "[VIDEO]",
       "[VeoCall] answer",
       "[VeoCall] call is end...",
@@ -112,6 +170,7 @@
       "]} Members",
       "]})",
       "and ",
+      "estimated Cost",
       "external=1",
       "ic_match_bnt.svga",
       "id=?",
@@ -140,7 +199,7 @@
       "||",
       "}Type",
       "连接关闭",
-      "😃 Hi~"
+      "💗Hello~"
     ]
   }
 }

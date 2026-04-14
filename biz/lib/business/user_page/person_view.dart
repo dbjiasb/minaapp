@@ -5,6 +5,7 @@ import 'package:biz/base/router/router_names.dart';
 // import 'package:biz/business/account/collections_view.dart';
 import 'package:biz/business/chat/chat_room/chat_room_view.dart';
 import 'package:biz/business/chat/person_manager.dart';
+import 'package:biz/business/user_page/photo_view.dart';
 import 'package:biz/core/account/account_service.dart';
 import 'package:biz/core/util/es_helper.dart';
 import 'package:biz/core/util/ui_util.dart';
@@ -16,13 +17,17 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../core/user_manager/user_manager.dart';
+import '../../base/api_service/api_request.dart';
 import '../../base/api_service/api_response.dart';
+import '../../base/api_service/api_service.dart';
 import '../../base/assets/image_view.dart';
+import '../../base/crypt/apis.dart';
 import '../../base/preferences/preferences.dart';
 import '../../base/router/route_helper.dart';
 import '../../core/util/cached_image.dart';
 import '../../shared/toast/toast.dart';
 import '../../shared/widget/app_widgets.dart';
+import '../../shared/widget/keep_alive_wrapper.dart';
 import '../create_center/character_service.dart';
 import '../home_page_lists/list_item.dart';
 import '../home_page_lists/role_manager.dart';
@@ -105,7 +110,7 @@ class PersonViewPage extends StatelessWidget {
                   onPageChanged: (i) {
                     tabSelectIndex.value = i;
                   },
-                  children: [_buildGallerySection(), if (controller.isReal) _buildOcSection(), _buildMomentListSection()],
+                  children: [_buildGalleryWithSubTabs(), if (controller.isReal) _buildOcSection(), _buildMomentListSection()],
                 ),
               ),
             ),
@@ -443,41 +448,87 @@ class PersonViewPage extends StatelessWidget {
   Widget _buildMomentListSection() =>
       MomentItemView(EMomentListType.MOMENT_LIST_USER, targetUid: controller.uid, canRefresh: false, baseInfo: controller.isMyOc ? controller.baseInfo : null);
 
-  Widget _buildGallerySection() {
-    return Obx(
-      () =>
-          controller.gallery.isNotEmpty
-              ? GridView.count(
-                padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-                physics: const NeverScrollableScrollPhysics(),
-                // 1. 禁用GridView自身滚动
-                shrinkWrap: true,
-                // 2. 适应内容高度
-                crossAxisCount: 2,
-                mainAxisSpacing: 7,
-                crossAxisSpacing: 8,
-                childAspectRatio: 168 / 256,
-                children:
-                    controller.gallery
-                        .map(
-                          (url) => GestureDetector(
-                            onTap: () {
-                              Get.toNamed(
-                                Routers.imageBrowser,
-                                arguments: {Security.security_imageUrl: url, Security.security_canDownload: controller.isReal ? 0 : 1},
-                              );
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: CachedImage(imageUrl: url, fit: BoxFit.cover, errorWidget: (context, url, error) => Container(color: AppColors.ocMain)),
-                            ),
-                          ),
-                        )
-                        .toList(),
-              )
-              : Container(height: Get.height * 0.5, child: UiUtils.buildCommonEmptyView()),
+  Widget _buildGalleryWithSubTabs() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Obx(() => Preferences.instance.isRv ? Container() : Container(
+          color: Colors.transparent,
+          height: 36,
+          margin: const EdgeInsets.only(top: 8),
+          padding: const EdgeInsets.only(left: 16, bottom: 12),
+          child: TabBar(
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            controller: controller.galleryTabController,
+            tabAlignment: TabAlignment.start,
+            isScrollable: true,
+            tabs: [
+              Tab(text: 'Life'),
+              Tab(text: 'Private'),
+            ],
+            indicator: BoxDecoration(color: AppColors.ocMain, borderRadius: BorderRadius.circular(18)),
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelColor: Colors.black,
+            unselectedLabelColor: Color(0xFF9D9EA5),
+            labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            dividerColor: Colors.transparent,
+          ),
+        )),
+        Expanded(
+          child: TabBarView(
+            controller: controller.galleryTabController,
+            children: [
+              KeepAliveWrapper(
+                  child: PhotoView(
+                      [{Security.security_type: 1, Security.security_url: controller.avatarUrl}, ...controller.photos],
+                      controller.accountType,
+                      isLocked: false
+                  )
+              ),
+              KeepAliveWrapper(child: PhotoView(controller.lockedPhotos, controller.accountType, isLocked: true, unLockRes: controller.unlockPhoto,)),
+            ],
+          ),
+        ),
+      ],
     );
   }
+
+  // Widget _buildGallerySection() {
+  //   return Obx(
+  //     () =>
+  //         controller.gallery.isNotEmpty
+  //             ? GridView.count(
+  //               padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+  //               physics: const NeverScrollableScrollPhysics(),
+  //               // 1. 禁用GridView自身滚动
+  //               shrinkWrap: true,
+  //               // 2. 适应内容高度
+  //               crossAxisCount: 2,
+  //               mainAxisSpacing: 7,
+  //               crossAxisSpacing: 8,
+  //               childAspectRatio: 168 / 256,
+  //               children:
+  //                   controller.gallery
+  //                       .map(
+  //                         (url) => GestureDetector(
+  //                           onTap: () {
+  //                             Get.toNamed(
+  //                               Routers.imageBrowser,
+  //                               arguments: {Security.security_imageUrl: url, Security.security_canDownload: controller.isReal ? 0 : 1},
+  //                             );
+  //                           },
+  //                           child: ClipRRect(
+  //                             borderRadius: BorderRadius.circular(8),
+  //                             child: CachedImage(imageUrl: url, fit: BoxFit.cover, errorWidget: (context, url, error) => Container(color: AppColors.ocMain)),
+  //                           ),
+  //                         ),
+  //                       )
+  //                       .toList(),
+  //             )
+  //             : Container(height: Get.height * 0.5, child: UiUtils.buildCommonEmptyView()),
+  //   );
+  // }
 
   Widget _buildFollowButton() {
     return Obx(
@@ -580,15 +631,19 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class PersonViewController extends GetxController {
+class PersonViewController extends GetxController with GetTickerProviderStateMixin {
   PersonViewController(Map<String, dynamic> personInfo) {
     personalInfo.value = personInfo;
   }
+
+  late TabController galleryTabController;
 
   final personalInfo = <String, dynamic>{}.obs;
 
   UserManager get userManager => UserManager.instance;
 
+  List get photos => personalInfo[Security.security_resInfoList] ?? [];
+  List get lockedPhotos => personalInfo['lockedPaidResInfoList'] ?? [];
   List get gallery => personalInfo[Security.security_gallery] ?? [];
 
   Map get userInfo => personalInfo[Security.security_userInfo] ?? {};
@@ -687,6 +742,7 @@ class PersonViewController extends GetxController {
       Toast.show(Copywriting.security_no_user_information__getting_back___);
       Get.back();
     }
+    galleryTabController = TabController(length: 2, vsync: this);
     getPersonInfo(uid);
     fetchMyCompanions();
   }
@@ -757,4 +813,23 @@ class PersonViewController extends GetxController {
       Toast.show(response.description);
     }
   }
+
+  Future<bool> unlockPhoto(int galleryResId, int costValue, int costType) async {
+    Toast.loading();
+
+    ApiRequest request = ApiRequest('unlockResource', params: {'galleryResId': galleryResId});
+    ApiResponse rsp = await ApiService.instance.sendRequest(request);
+    if (!rsp.isSuccess) {
+      Toast.error(rsp.description);
+      if (rsp.bsnsCode == 2000) {
+        costType == 0 ? RH.toCoins() : RH.toGems();
+      }
+      AccountService.instance.refreshBalance();
+      return false;
+    }
+
+    Toast.show('Unlocked successfully');
+    return true;
+  }
+
 }

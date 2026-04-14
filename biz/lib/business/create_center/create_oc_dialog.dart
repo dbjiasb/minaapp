@@ -1,13 +1,14 @@
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/business/create_center/character_service.dart';
 import 'package:biz/business/crowd/crowd_manager.dart';
 import 'package:biz/core/account/account_service.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 import '../../base/api_service/api_response.dart';
 import '../../base/app_info/app_manager.dart';
 import '../../base/assets/image_view.dart';
@@ -31,9 +32,13 @@ class CreateOcDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 528,
-      decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      child: Stack(children: [_buildHeaderSection(), Positioned(bottom: 0, left: 0, right: 0, child: _buildFooterSection())]),
+      height: 440.w,
+      // color: Colors.red,
+      // decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      child: Stack(children: [
+        _buildHeaderSection(),
+        Positioned(top: 131.w, left: 0, right: 0, bottom: 0, child: _buildFooterSection())
+      ]),
     );
   }
 
@@ -47,9 +52,9 @@ class CreateOcDialog extends StatelessWidget {
   Widget _buildHeaderSection() {
     return Stack(
       children: [
-        ImageView(Images.security_oc_dialog_bg_png, width: double.infinity),
+        ImageView(Images.security_oc_dialog_bg_png, width: double.infinity, height: 163.w, fit: BoxFit.cover),
         Positioned(
-          top: 0,
+          top: 36.w,
           left: 0,
           right: 0,
           child: Row(
@@ -78,12 +83,12 @@ class CreateOcDialog extends StatelessWidget {
           height: 70,
           padding: EdgeInsets.symmetric(horizontal: 16),
           alignment: Alignment.center,
-          decoration: BoxDecoration(color: Color(0xFFFFF0E9), borderRadius: BorderRadius.circular(16)),
+          decoration: BoxDecoration(color: Color(0xFFF9F6FF), borderRadius: BorderRadius.circular(16)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ImageView(Images.security_oc_moment_door_webp, width: 36, height: 36),
+              ImageView(Images.security_oc_create_door_webp, width: 36, height: 36),
               SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -133,10 +138,11 @@ class CreateOcDialog extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 3),
-                    Text(Copywriting.security_design_your_own_unique_character_and_bring_it_to_life_, style: TextStyle(color: Color(0xFFABABAD), fontSize: 10)),
+                    Text(Copywriting.security_design_your_own_unique_character_and_bring_it_to_life_, style: TextStyle(color: Color(0xFFB8B7B4), fontSize: 10)),
                   ],
                 ),
               ),
+              Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFFB8B7B4)).marginOnly(left: 8)
             ],
           ),
         ),
@@ -161,10 +167,10 @@ class CreateOcDialog extends StatelessWidget {
           width: double.infinity,
           alignment: Alignment.center,
           height: 74,
-          decoration: BoxDecoration(color: Color(0xFFFFF2D8), borderRadius: BorderRadius.circular(16)),
+          decoration: BoxDecoration(color: Color(0xFFF9F6FF), borderRadius: BorderRadius.circular(16)),
           child: Row(
             children: [
-              ImageView(Images.security_oc_create_door_webp, width: 36, height: 36),
+              ImageView(Images.security_oc_group_door_webp, width: 36, height: 36),
               SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -177,11 +183,7 @@ class CreateOcDialog extends StatelessWidget {
                         (CrowedManager.instance.onlyForPremium == 1 && !MyAccount.isSubscribed)
                             ? Container(
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                  colors: [Color(0xFFF1BD8D), Color(0xFFF43F7C)],
-                                ),
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(100),
                               ),
                               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
@@ -189,7 +191,7 @@ class CreateOcDialog extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   ImageView(Images.security_premium_png, width: 18, height: 18).marginOnly(right: 4),
-                                  Text(Copywriting.security_premium_Only, style: TextStyle(color: Colors.white, fontSize: 8)),
+                                  Text(Copywriting.security_premium_Only, style: TextStyle(color: Color(0xFFFF59D9), fontSize: 9, fontWeight: FontWeight.bold)),
                                 ],
                               ),
                             )
@@ -235,10 +237,11 @@ class CreateOcDialog extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 3),
-                    Text(Copywriting.security_connect_with_everyone_in_one_place, style: TextStyle(color: Color(0xFFABABAD), fontSize: 10)),
+                    Text(Copywriting.security_connect_with_everyone_in_one_place, style: TextStyle(color: Color(0xFFB8B7B4), fontSize: 10)),
                   ],
                 ),
               ),
+              Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFFB8B7B4)).marginOnly(left: 8)
             ],
           ),
         ),
@@ -259,11 +262,11 @@ class CreateOcDialog extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         width: double.infinity,
         height: 74,
-        decoration: BoxDecoration(color: Color(0xFFF8E9FF), borderRadius: BorderRadius.circular(16)),
+        decoration: BoxDecoration(color: Color(0xFFF9F6FF), borderRadius: BorderRadius.circular(16)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ImageView(Images.security_oc_group_door_webp, width: 36, height: 36),
+            ImageView(Images.security_oc_moment_door_webp, width: 36, height: 36),
             SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -279,7 +282,7 @@ class CreateOcDialog extends StatelessWidget {
                 ],
               ),
             ),
-            ImageView(Images.security_arrow_right_png, width: 16, height: 16),
+            Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFFB8B7B4)).marginOnly(left: 8)
           ],
         ),
       ),
@@ -287,69 +290,78 @@ class CreateOcDialog extends StatelessWidget {
   }
 
   Widget _buildFooterSection() {
-    return SafeArea(
-      bottom: true,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            _buildCreateOcView(),
-            _buildChatGpView(),
-            _buildMomentView(),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: Obx(
-                    () => GestureDetector(
-                      onTap: () {
-                        _logic.consent.value = !_logic.consent.value;
-                      },
-                      child: ImageView(_logic.consent.value == true ? Images.security_ic_check_png : Images.security_ic_uncheck_png),
-                    ),
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFF9F0FF),
+              Color(0xFFEBD8FE),
+            ],
+          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16))
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: Column(
+        children: [
+          _buildCreateOcView(),
+          _buildChatGpView(),
+          _buildMomentView(),
+          Spacer(),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 16,
+                height: 16,
+                child: Obx(
+                      () => GestureDetector(
+                    onTap: () {
+                      _logic.consent.value = !_logic.consent.value;
+                    },
+                    child: ImageView(_logic.consent.value == true ? Images.security_ic_check_png : Images.security_ic_uncheck_png),
                   ),
                 ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: RichText(
-                    textAlign: TextAlign.start,
-                    maxLines: 2,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: Copywriting.security_prior_to_the_creation_process__please_review_our,
-                          style: TextStyle(color: const Color(0xFFABABAD), fontSize: 11, fontWeight: AppFonts.medium),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: RichText(
+                  textAlign: TextAlign.start,
+                  maxLines: 2,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: Copywriting.security_prior_to_the_creation_process__please_review_our,
+                        style: TextStyle(color: const Color(0xFFABABAD), fontSize: 11, fontWeight: AppFonts.medium),
+                      ),
+                      TextSpan(
+                        text: Copywriting.security_copyright_Agreement,
+                        style: TextStyle(
+                          color: Color(0xFFB86AFF),
+                          fontWeight: AppFonts.medium,
+                          fontSize: 11,
+                          fontFamily: Copywriting.security_sF_Pro,
+                          decoration: TextDecoration.underline,
                         ),
-                        TextSpan(
-                          text: Copywriting.security_copyright_Agreement,
-                          style: TextStyle(
-                            color: Color(0xFFB86AFF),
-                            fontWeight: AppFonts.medium,
-                            fontSize: 11,
-                            fontFamily: Copywriting.security_sF_Pro,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer:
-                              TapGestureRecognizer()
-                                ..onTap = () {
-                                  _showCopyrightAgreement();
-                                },
-                        ),
-                        TextSpan(
-                          text: Copywriting.security_and_indicate_your_consent_,
-                          style: TextStyle(color: const Color(0xFFABABAD), fontSize: 11, fontWeight: AppFonts.medium),
-                        ),
-                      ],
-                      style: const TextStyle(fontSize: 14, color: Colors.white),
-                    ),
+                        recognizer:
+                        TapGestureRecognizer()
+                          ..onTap = () {
+                            _showCopyrightAgreement();
+                          },
+                      ),
+                      TextSpan(
+                        text: Copywriting.security_and_indicate_your_consent_,
+                        style: TextStyle(color: const Color(0xFFB8B7B4), fontSize: 11, fontWeight: AppFonts.medium),
+                      ),
+                    ],
+                    style: const TextStyle(fontSize: 14, color: Colors.white),
                   ),
                 ),
-              ],
-            ).marginSymmetric(vertical: 8),
-          ],
-        ),
+              ),
+            ],
+          ).marginSymmetric(vertical: 8),
+        ],
       ),
     );
   }

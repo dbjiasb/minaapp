@@ -24,7 +24,6 @@ import '../../shared/alert.dart';
 import '../../shared/interactions.dart';
 import '../../shared/toast/toast.dart';
 import '../../shared/widget/keep_alive_wrapper.dart';
-import '../../shared/widget/title_bar.dart';
 import '../chat/setting/message_setting.dart';
 import '../create_center/create_oc_dialog.dart';
 import '../create_center/create_oc_rv_dialog.dart';
@@ -47,21 +46,51 @@ class AccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StyleTabBars tabBar = StyleTabBars(
-      selectedStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-      unselectedStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 16, fontWeight: FontWeight.bold),
-      titles: controller.tabNames,
-      onTabSelected: (index) {
-        controller.pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.linearToEaseOut);
-      },
-    );
+    Widget obxTabBar = Obx(() {
+      return TabBar(
+        controller: controller.tabController,
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
+        tabAlignment: TabAlignment.start,
+        isScrollable: true,
+        indicatorSize: TabBarIndicatorSize.label,
+        indicatorColor: Colors.white,
+        dividerColor: Colors.transparent,
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.white.withValues(alpha: 0.4),
+        labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+        labelPadding: const EdgeInsets.only(right: 16),
+        tabs: controller.tabNames.map((title) => Tab(text: title)).toList(),
+        onTap: (index) {
+          controller.pageController.animateToPage(
+            index,
+            duration: Duration(milliseconds: 300),
+            curve: Curves.linearToEaseOut,
+          );
+        },
+      );
+    });
     return Scaffold(
       backgroundColor: AppColors.base_background,
-      appBar: AppBar(systemOverlayStyle: SystemUiOverlayStyle.light, backgroundColor: AppColors.base_background, elevation: 0, toolbarHeight: 0),
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: AppColors.base_background,
+        elevation: 0,
+        toolbarHeight: 0,
+      ),
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
-          Positioned(bottom: 0, height: 400, left: 0, right: 0, child: Container(color: AppColors.base_background)),
+          Positioned(
+            bottom: 0,
+            height: 400,
+            left: 0,
+            right: 0,
+            child: Container(color: AppColors.base_background),
+          ),
           Positioned(
             left: 0,
             right: 0,
@@ -74,11 +103,19 @@ class AccountView extends StatelessWidget {
                   await controller.refreshData();
                 },
                 child: NestedScrollView(
-                  headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                  headerSliverBuilder: (
+                    BuildContext context,
+                    bool innerBoxIsScrolled,
+                  ) {
                     return [
                       SliverToBoxAdapter(
                         child: Container(
-                          padding: EdgeInsets.only(left: 16, right: 16, top: 32, bottom: 8),
+                          padding: EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            top: 32,
+                            bottom: 8,
+                          ),
                           child: Column(
                             // spacing: 16,
                             children: [
@@ -92,10 +129,14 @@ class AccountView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SliverPersistentHeader(pinned: true, floating: true, delegate: _TabBarDelegate(tabBar)),
+                      SliverPersistentHeader(
+                        pinned: true,
+                        floating: true,
+                        delegate: _TabBarDelegate(obxTabBar),
+                      ),
                     ];
                   },
-                  body: _buildFeatureView(tabBar),
+                  body: _buildFeatureView(),
                 ),
               ),
             ),
@@ -114,7 +155,9 @@ class AccountView extends StatelessWidget {
                     child: GestureDetector(
                       onTap: toSetting,
                       child: Icon(
-                        Icons.settings, size: 28, color: Colors.white
+                        Icons.settings,
+                        size: 28,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -136,8 +179,18 @@ class AccountView extends StatelessWidget {
         height: 44,
         width: double.infinity,
         alignment: Alignment.center,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color(0xFF261F1F)),
-        child: Text(Copywriting.security_log_out, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFFF8397D))),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Color(0xFF261F1F),
+        ),
+        child: Text(
+          Copywriting.security_log_out,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            color: Color(0xFFF8397D),
+          ),
+        ),
       ),
     );
   }
@@ -145,14 +198,20 @@ class AccountView extends StatelessWidget {
   void checkTermsOfService() {
     Get.toNamed(
       Routers.webView,
-      arguments: {Security.security_title: Copywriting.security_terms_of_service, Security.security_url: AppManager.instance.termsHtml},
+      arguments: {
+        Security.security_title: Copywriting.security_terms_of_service,
+        Security.security_url: AppManager.instance.termsHtml,
+      },
     );
   }
 
   void checkPrivacyPolicy() {
     Get.toNamed(
       Routers.webView,
-      arguments: {Security.security_title: Copywriting.security_privacy_policy, Security.security_url: AppManager.instance.privacyHtml},
+      arguments: {
+        Security.security_title: Copywriting.security_privacy_policy,
+        Security.security_url: AppManager.instance.privacyHtml,
+      },
     );
   }
 
@@ -215,7 +274,11 @@ class AccountView extends StatelessWidget {
             Obx(
               () => Text(
                 nickname.isNotEmpty ? nickname : Security.security_user,
-                style: TextStyle(color: Color(0xFFFFE407), fontSize: 18, fontWeight: FontWeight.w900),
+                style: TextStyle(
+                  color: Color(0xFFFFE407),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
             ),
             SizedBox(height: 4),
@@ -226,32 +289,58 @@ class AccountView extends StatelessWidget {
               child: Row(
                 spacing: 2,
                 children: [
-                  Text('ID:$ID', style: TextStyle(color: Color(0xFF7F848F), fontSize: 10, fontWeight: FontWeight.w500)),
-                  CachedImage(imageUrl: ImagePath.ic_copy, height: 14, width: 14),
+                  Text(
+                    'ID:$ID',
+                    style: TextStyle(
+                      color: Color(0xFF7F848F),
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  CachedImage(
+                    imageUrl: ImagePath.ic_copy,
+                    height: 14,
+                    width: 14,
+                  ),
                 ],
               ),
             ),
           ],
         ),
-        SizedBox(width: 16,),
+        SizedBox(width: 16),
         GestureDetector(
           onTap: () {
             Get.toNamed(Routers.editMe);
           },
           child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Color(0xFF272533)),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Color(0xFF272533),
+            ),
             padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
             child: Center(
               child: Row(
                 children: [
-                  CachedImage(imageUrl: ImagePath.ic_edit, width: 16, height: 16, color: Colors.white),
+                  CachedImage(
+                    imageUrl: ImagePath.ic_edit,
+                    width: 16,
+                    height: 16,
+                    color: Colors.white,
+                  ),
                   SizedBox(width: 2),
-                  Text(Copywriting.security_edit, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+                  Text(
+                    Copywriting.security_edit,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -278,7 +367,10 @@ class AccountView extends StatelessWidget {
           },
           child: Container(
             height: 72,
-            decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.all(Radius.circular(12))),
+            decoration: BoxDecoration(
+              color: Color(0xFF202026),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
             padding: EdgeInsets.symmetric(horizontal: 16),
             alignment: Alignment.centerLeft,
             child: Row(
@@ -287,20 +379,40 @@ class AccountView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(Copywriting.security_my_Gems, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                    Text(
+                      Copywriting.security_my_Gems,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
                     SizedBox(height: 8),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ImageView(Images.security_gem_png, width: 24, height: 24),
+                        ImageView(
+                          Images.security_gem_png,
+                          width: 24,
+                          height: 24,
+                        ),
                         SizedBox(width: 4),
-                        Obx(() => Text(MyAccount.gems.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
+                        Obx(
+                          () => Text(
+                            MyAccount.gems.toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
                 Spacer(),
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white60,)
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white60),
                 // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
               ],
             ),
@@ -316,7 +428,10 @@ class AccountView extends StatelessWidget {
           },
           child: Container(
             height: 72,
-            decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.all(Radius.circular(12))),
+            decoration: BoxDecoration(
+              color: Color(0xFF202026),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
             padding: EdgeInsets.symmetric(horizontal: 16),
             alignment: Alignment.centerLeft,
             child: Row(
@@ -325,7 +440,14 @@ class AccountView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(Copywriting.security_my_Coins, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                    Text(
+                      Copywriting.security_my_Coins,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
                     // Row(
                     //   mainAxisSize: MainAxisSize.min,
                     //   children: [
@@ -338,15 +460,28 @@ class AccountView extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ImageView(Images.security_coin_png, width: 24, height: 24),
+                        ImageView(
+                          Images.security_coin_png,
+                          width: 24,
+                          height: 24,
+                        ),
                         SizedBox(width: 4),
-                        Obx(() => Text(MyAccount.coins.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
+                        Obx(
+                          () => Text(
+                            MyAccount.coins.toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
                 Spacer(),
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white60,)
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white60),
                 // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
               ],
             ),
@@ -421,43 +556,78 @@ class AccountView extends StatelessWidget {
         height: 48,
         padding: EdgeInsets.only(left: 16, right: 16),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
-          image: DecorationImage(image: ImageView.getImageProvider(Images.security_premium_bg_png), fit: BoxFit.cover),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+          image: DecorationImage(
+            image: ImageView.getImageProvider(Images.security_premium_bg_png),
+            fit: BoxFit.cover,
+          ),
         ),
         child: Row(
           children: [
-            ImageView(Images.security_premium_png, height: 24, width: 24).marginOnly(right: 8),
+            ImageView(
+              Images.security_premium_png,
+              height: 24,
+              width: 24,
+            ).marginOnly(right: 8),
             Text(
               Security.security_vIP,
-              style: TextStyle(color: Color(0xFF07070A), fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: Color(0xFF07070A),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             Spacer(),
             Obx(
-              () => MyAccount.isSubscribed
-                  ? Row(
-                      children: [
-                        Text(
-                          '${Copywriting.security_expires_on} ${CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? ''}',
-                          style: const TextStyle(color: Color(0xFF07070A), fontSize: 14, fontWeight: FontWeight.w600),
-                        ).marginOnly(right: 8),
-                        ImageView(Images.security_arrow_right_png, height: 16, width: 16, color: Colors.black.withValues(alpha: 0.5)),
-                      ],
-                    )
-                  : Container(
-                      height: 24,
-                      width: 84,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF171411), Color(0xFF84786C), Color(0xFF07070A)],
-                          stops: [0.049, 0.361, 0.879],
+              () =>
+                  MyAccount.isSubscribed
+                      ? Row(
+                        children: [
+                          Text(
+                            '${Copywriting.security_expires_on} ${CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? ''}',
+                            style: const TextStyle(
+                              color: Color(0xFF07070A),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ).marginOnly(right: 8),
+                          ImageView(
+                            Images.security_arrow_right_png,
+                            height: 16,
+                            width: 16,
+                            color: Colors.black.withValues(alpha: 0.5),
+                          ),
+                        ],
+                      )
+                      : Container(
+                        height: 24,
+                        width: 84,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFF171411),
+                              Color(0xFF84786C),
+                              Color(0xFF07070A),
+                            ],
+                            stops: [0.049, 0.361, 0.879],
+                          ),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        borderRadius: BorderRadius.circular(12),
+                        alignment: Alignment.center,
+                        child: Text(
+                          Security.security_Subscribe,
+                          style: TextStyle(
+                            color: Color(0xFFFFEFDA),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                      alignment: Alignment.center,
-                      child: Text(Security.security_Subscribe, style: TextStyle(color: Color(0xFFFFEFDA), fontSize: 14, fontWeight: FontWeight.w600)),
-                    ),
             ),
           ],
         ),
@@ -486,14 +656,16 @@ class AccountView extends StatelessWidget {
   //   );
   // }
 
-  Widget _buildFeatureView(StyleTabBars tabBar) {
+  Widget _buildFeatureView() {
     return Container(
       padding: EdgeInsets.only(top: 4),
       color: AppColors.base_background,
       child: PageView(
         controller: controller.pageController,
         onPageChanged: (index) {
-          tabBar.switchToTab(index);
+          if (controller.tabController.index != index) {
+            controller.tabController.animateTo(index);
+          }
         },
         children: controller.tabPage,
       ),
@@ -502,7 +674,10 @@ class AccountView extends StatelessWidget {
 
   Widget menuArea() {
     return Container(
-      decoration: BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.all(Radius.circular(12))),
+      decoration: BoxDecoration(
+        color: Color(0xFF202026),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
@@ -521,7 +696,14 @@ class AccountView extends StatelessWidget {
                       children: [
                         ImageView(Images.mina_task, width: 28, height: 28),
                         SizedBox(height: 4),
-                        Text(Copywriting.security_daily_Task, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                        Text(
+                          Copywriting.security_daily_Task,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ],
                     ),
                     Positioned(
@@ -529,7 +711,14 @@ class AccountView extends StatelessWidget {
                       top: 3,
                       child: Obx(() {
                         return UserManager.instance.taskReminder.value
-                            ? Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle))
+                            ? Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            )
                             : Container();
                       }),
                     ),
@@ -540,7 +729,12 @@ class AccountView extends StatelessWidget {
                 onTap: () {
                   RH.toPage(
                     Routers.webView,
-                    args: {Security.security_title: '', Security.security_url: AppManager.instance.notificationUrl, Security.security_hideHeader: 1},
+                    args: {
+                      Security.security_title: '',
+                      Security.security_url:
+                          AppManager.instance.notificationUrl,
+                      Security.security_hideHeader: 1,
+                    },
                   );
                 },
                 child: Stack(
@@ -548,9 +742,20 @@ class AccountView extends StatelessWidget {
                     Column(
                       children: [
                         // Icon(Icons.notifications, color: Colors.white),
-                        ImageView(Images.mina_notification, width: 28, height: 28),
+                        ImageView(
+                          Images.mina_notification,
+                          width: 28,
+                          height: 28,
+                        ),
                         SizedBox(height: 4),
-                        Text(Security.security_notifications, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                        Text(
+                          Security.security_notifications,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ],
                     ),
                     Positioned(
@@ -558,7 +763,14 @@ class AccountView extends StatelessWidget {
                       top: 3,
                       child: Obx(() {
                         return UserManager.instance.notificationReminder.value
-                            ? Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle))
+                            ? Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            )
                             : Container();
                       }),
                     ),
@@ -573,21 +785,41 @@ class AccountView extends StatelessWidget {
                   children: [
                     ImageView(Images.mina_collection, width: 28, height: 28),
                     SizedBox(height: 4),
-                    Text(Security.security_collections, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                    Text(
+                      Security.security_collections,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 ),
               ),
               InkWell(
                 onTap: () {
                   L.uploadIfNeed();
-                  Get.toNamed(Routers.webView, arguments: {Security.security_title: '', Security.security_url: Preferences.instance.dcLink});
+                  Get.toNamed(
+                    Routers.webView,
+                    arguments: {
+                      Security.security_title: '',
+                      Security.security_url: Preferences.instance.dcLink,
+                    },
+                  );
                 },
                 child: Column(
                   children: [
                     // Icon(Icons.feedback, color: Colors.white),
                     ImageView(Images.mina_feedback, width: 28, height: 28),
                     SizedBox(height: 4),
-                    Text(Security.security_feedback, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                    Text(
+                      Security.security_feedback,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -657,12 +889,16 @@ class AccountView extends StatelessWidget {
 
 // Tab栏的委托类
 class _TabBarDelegate extends SliverPersistentHeaderDelegate {
-  final StyleTabBars tabBar;
+  final Widget tabBar;
 
   _TabBarDelegate(this.tabBar);
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Container(
       color: AppColors.base_background,
       height: 40,
@@ -683,14 +919,29 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
               padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(32),
-                gradient: LinearGradient(colors: [Color(0xFFffee6b), Color(0xFFfff8bf)], begin: Alignment.centerLeft, end: Alignment.centerRight),
+                gradient: LinearGradient(
+                  colors: [Color(0xFFffee6b), Color(0xFFfff8bf)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ImageView(Images.security_ic_add_create_png, width: 20, height: 20),
+                  ImageView(
+                    Images.security_ic_add_create_png,
+                    width: 20,
+                    height: 20,
+                  ),
                   SizedBox(width: 2),
-                  Text(Security.security_create, style: TextStyle(color: Color(0xFF07070a), fontSize: 14, fontWeight: FontWeight.w600)),
+                  Text(
+                    Security.security_create,
+                    style: TextStyle(
+                      color: Color(0xFF07070a),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -712,30 +963,48 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class AccountViewController extends GetxController with GetTickerProviderStateMixin {
+class AccountViewController extends GetxController
+    with GetTickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
   late TabController tabController;
   PageController pageController = PageController();
 
-  List<String> tabNames = ['Companions'].obs;
-  RxList<Widget> tabPage = [KeepAliveWrapper(child: MyCompanionView(viewAll: 0))].obs;
+  RxList<String> tabNames = RxList<String>();
+  RxList<Widget> tabPage =
+      [KeepAliveWrapper(child: MyCompanionView(viewAll: 0))].obs;
 
   @override
   void onInit() {
     super.onInit();
-    if (!Preferences.instance.isRv) {
-      tabNames.add(Copywriting.security_group_Chat);
-      tabNames.add(Security.security_moment);
-      tabPage.add(KeepAliveWrapper(child: MyGroupView()));
-      tabPage.add(KeepAliveWrapper(child: MomentItemView(EMomentListType.MOMENT_LIST_USER, targetUid: 0, canRefresh: false)));
-    }
-    tabController = TabController(vsync: this, length: tabNames.length);
-
     EventCenter.instance.addListener(kEventCenterUserDidLogin, (_) {
       refreshData();
     });
 
+    EventCenter.instance.addListener(Preferences.kDicChangedAppConfig, (_) {
+      setupTabs();
+    });
+
+    setupTabs();
     refreshData();
+  }
+
+  setupTabs() {
+    tabNames.value = [Security.security_companions];
+    if (!Preferences.instance.isRv) {
+      tabNames.add(Copywriting.security_group_Chat);
+      tabNames.add(Security.security_moment);
+      tabPage.add(KeepAliveWrapper(child: MyGroupView()));
+      tabPage.add(
+        KeepAliveWrapper(
+          child: MomentItemView(
+            EMomentListType.MOMENT_LIST_USER,
+            targetUid: 0,
+            canRefresh: false,
+          ),
+        ),
+      );
+    }
+    tabController = TabController(vsync: this, length: tabNames.length);
   }
 
   Future refreshData() async {
@@ -753,12 +1022,17 @@ class AccountViewController extends GetxController with GetTickerProviderStateMi
   }
 
   Future refreshDataIfNeed() async {
-    int lastRefreshTime = Preferences.instance.getInt(Security.security_kPrefLastRefreshTime);
+    int lastRefreshTime = Preferences.instance.getInt(
+      Security.security_kPrefLastRefreshTime,
+    );
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     if (currentTime - lastRefreshTime < 30 * 1000) {
       return;
     }
     refreshData();
-    Preferences.instance.setInt(Security.security_kPrefLastRefreshTime, currentTime);
+    Preferences.instance.setInt(
+      Security.security_kPrefLastRefreshTime,
+      currentTime,
+    );
   }
 }

@@ -274,7 +274,7 @@ class ChatRoomView extends StatelessWidget {
   }
 
   Widget _drawerTemplate(String title, {Function()? onTap, Widget? tail}) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         Get.back();
         onTap?.call();

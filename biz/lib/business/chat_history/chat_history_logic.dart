@@ -1,3 +1,6 @@
+import 'package:biz/base/crypt/copywriting.dart';
+import 'package:biz/base/crypt/apis.dart';
+import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,11 +46,11 @@ class ChatHistoryViewController extends GetxController with GetTickerProviderSta
 
   setupTabs() {
       tabs = [
-        SessionListTab("All chat", SessionListType.all),
-        SessionListTab("AI", SessionListType.ai),
-        SessionListTab("Real", SessionListType.real),
-        SessionListTab("Group", SessionListType.group),
-        SessionListTab("Story", SessionListType.theater),
+        SessionListTab(Copywriting.security_all_Chat, SessionListType.all),
+        SessionListTab(Security.security_aI, SessionListType.ai),
+        SessionListTab(Security.security_real, SessionListType.real),
+        SessionListTab(Security.security_Group, SessionListType.group),
+        SessionListTab(Security.security_story, SessionListType.theater),
       ];
 
       tabController = TabController(length: tabs.length, vsync: this);
@@ -70,7 +73,7 @@ class ChatHistoryViewController extends GetxController with GetTickerProviderSta
   void queryRecommendList(bool isReload) async {
     if (!showRecommend.value) return;
     refreshingRecommend.value = true;
-    ApiResponse response = await ApiService.instance.sendRequest(ApiRequest('getUserRecommendList', params: {
+    ApiResponse response = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getUserRecommendList, params: {
       Security.security_version: 2
     }));
     refreshingRecommend.value = false;

@@ -545,22 +545,22 @@ class ChatBottomBar extends StatelessWidget {
   Widget buildAiTrick() {
     var items = [
       {
-        Security.security_title: 'Ask',
+        Security.security_title: Security.security_Ask,
         Security.security_icon: Images.security_btn_pic_png,
         Security.security_action: viewController.askForImage,
       },
       {
-        Security.security_title: 'Create Video',
+        Security.security_title: Copywriting.security_Create_Video,
         Security.security_icon: Images.security_btn_video_png,
         Security.security_action: viewController.askForVideo,
       },
       {
-        Security.security_title: 'Create',
+        Security.security_title: Security.security_create,
         Security.security_icon: Images.security_btn_pic_png,
         Security.security_action: onCreateImageButtonClicked,
       },
       {
-        Security.security_title: 'Call',
+        Security.security_title: Security.security_call,
         Security.security_icon: Images.security_btn_call_png,
         Security.security_action: () => viewController.toCall(1),
       },

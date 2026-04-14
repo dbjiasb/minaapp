@@ -104,7 +104,7 @@ class HomePageView extends StatelessWidget {
                 children: [
                   ImageView(Images.mina_search, width: 14.w, height: 14.w),
                   SizedBox(width: 6.w),
-                  Text('Search by ID, name, tag...', style: TextStyle(color: Color(0xFFAEB6C7), fontSize: 12.sp)),
+                  Text(Copywriting.security_Search_by_ID__name__tag___, style: TextStyle(color: Color(0xFFAEB6C7), fontSize: 12.sp)),
                 ],
               ),
             ),
@@ -127,7 +127,7 @@ class HomePageView extends StatelessWidget {
                 children: [
                   ImageView(Images.mina_filter, width: 14.w, height: 14.w),
                   SizedBox(width: 6.w),
-                  Text('Filter', style: TextStyle(color: Color(0xFFF2F4F8), fontSize: 13.sp)),
+                  Text(Security.security_Filter, style: TextStyle(color: Color(0xFFF2F4F8), fontSize: 13.sp)),
                 ],
               ),
             ),

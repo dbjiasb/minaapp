@@ -402,4 +402,13 @@ abstract final class Copywriting {
   static late final String security_start_Create = decrypt('D9nLW5WIJeVcVVlIx+Nvkg=='); // Start Create
   static late final String security_unsupported_message_type = decrypt('eIqQnKKw4h0V3K/eUsUXElx9v5iaRHcKZlOMRR0B86Y='); // Unsupported message type
   static late final String security_voice_button_tapped = decrypt('J3oPqKeghGbJeVEzCs/pQvbpEZnN+27fmRSMp+HcM4Q='); // Voice button tapped
+  static late final String security_All_Chat = decrypt('pni3Mjuo4qSqbFpIFNd4bQ=='); // All Chat
+  static late final String security_Create_Video = decrypt('d7qXD04OQiNgBILH4t7/sw=='); // Create Video
+  static late final String security_Generate_Video = decrypt('7MdYoekAFPVyoyl+8dqWyg=='); // Generate Video
+  static late final String security_Mina_Support = decrypt('fgXa5yFXUfSca9d1x4aTKA=='); // Mina Support
+  static late final String security_No_groups_yet__go_create_one_ = decrypt('DvSjb+xMrug7ezTOm7/cD/ETmB0r//rPaafyMAiHD/4='); // No groups yet, go create one!
+  static late final String security_Please_input_description = decrypt('bBvpGohWrkV4+grdfpCG4ZZa0sapV5V8Wr49ieC7ffY='); // Please input description
+  static late final String security_Search_by_ID__name__tag___ = decrypt('z/Hpk4Fk90++YudyXP7SDlWsrOdauwhWjYEZ3n3DZ7U='); // Search by ID, name, tag...
+  static late final String security_The_app_may_not_function_as_expected_until_you_remove_this_plugin_from_pubspec_yaml = decrypt('Pw07bWZPg06J4v1++ZQjfDKzi2mRUwNbwx1osM+p8rSrx41VS0V4QR7jzGFw3Ot0SPEoe9S/ZLsx5cNUFRKQd2bUKo6P7lWftalgjc4zpL5PdJVcRmDvzRPhZZfcRib/'); // The app may not function as expected until you remove this plugin from pubspec.yaml
+  static late final String security_Video_initialization_failed = decrypt('HUvJfk3nSIUCF2I2Ntd/3kGOShNzNB1r/bbJ17F6D5I='); // Video initialization failed
 }

@@ -43,7 +43,7 @@ def clean_string(s: str) -> str:
     cleaned = re.sub(r'^\d+', '', cleaned)
     if not cleaned:
         return ''
-    return cleaned[0].lower() + cleaned[1:]
+    return cleaned
 
 def replace_security_strings(enable_backup=False):
     script_dir = Path(__file__).parent

@@ -36,5 +36,5 @@ class AppManager {
   String get taskUrl => '${ApiConfig.h5}/rech/?type=0';
   String get createOcHtml => '${ApiConfig.cdn}/mina/createoc.html';
 
-  String get notificationUrl => 'https://${ApiConfig.cdn}/h5/notification/index.html#/';
+  String get notificationUrl => '${ApiConfig.h5}/notification/';
 }

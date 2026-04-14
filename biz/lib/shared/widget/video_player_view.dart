@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/images.dart';
 // 用Getx库实现一个视频播放器，播放器接受 videoUrl 作为参数，并播放视频
 import 'dart:io';
@@ -56,7 +57,7 @@ class VideoPlayerView extends StatelessWidget {
           }
 
           if (viewController.hasError.value || !viewController.isPlayerReady) {
-            return const Text('Video initialization failed', style: TextStyle(color: Colors.white70));
+            return Text(Copywriting.security_Video_initialization_failed, style: const TextStyle(color: Colors.white70));
           }
 
           final ratio = viewController._player.controller.value.aspectRatio;

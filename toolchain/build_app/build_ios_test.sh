@@ -7,15 +7,15 @@ build_dir=$(pwd)
 
   # 检查当前目录路径是否包含 'roll'
 if [[ "$build_dir" == *"roll"* ]]; then
-    alias flutter='/Users/roll/Roll/Library/flutter3.29/bin/flutter'
-    echo "Use flutter from /Users/roll/Roll/Library/flutter3.29/bin/flutter"
+    alias flutter='/Users/roll/Roll/Library/flutter3.35/bin/flutter'
+    echo "Use flutter from /Users/roll/Roll/Library/flutter3.35/bin/flutter"
 else
     echo "Use flutter from system."
 fi
 
 flutter --version
 
-IPA_NAME="Soulink"
+IPA_NAME="Mina"
 APP_NAME="Runner"
 CONFIGURATION="Release"
 upload_script=$build_dir'/pgyer_upload.sh'

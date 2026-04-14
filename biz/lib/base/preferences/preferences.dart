@@ -253,7 +253,7 @@ class Preferences {
   }
 
   bool supportVeo(String sid) {
-    if (isRv) return false;//审核模式不支持视频
+    // if (isRv) return false;//审核模式不支持视频
     // int uid = int.tryParse(sid) ?? 0;
     // if (uid > 9999 && uid < 10040) {
     //   return true;

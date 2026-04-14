@@ -1,3 +1,16 @@
+export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
+
+curl ipinfo.io
+
+if curl -s ipinfo.io | grep -iq "china"; then
+    echo "\n IP in China, stop building"
+    exit 1
+else
+    echo "\nIP Not China，Will continue"
+fi
+
+echo "\n\nCheck your IP, will continue building after 10s \n\n"
+sleep 10
 
 # 项目目录（默认为当前目录）
 PROJECT_DIR="$(pwd)"

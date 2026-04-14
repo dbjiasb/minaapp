@@ -86,9 +86,9 @@ class MomentListViewPage extends GetView<MomentListViewLogic> {
         decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(100)),
         child: Row(
           children: [
-            CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16),
+            CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16, color: Colors.black),
             const SizedBox(width: 4),
-            Text(Security.security_post, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+            Text(Security.security_post, style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
           ],
         ),
       ),

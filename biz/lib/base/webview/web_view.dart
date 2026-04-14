@@ -16,6 +16,7 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import '../../core/util/cached_image.dart';
 import '../../core/util/log_util.dart';
 import '../../shared/app_theme.dart';
+import '../ads/ad_utils.dart';
 import '../assets/image_path.dart';
 import '../router/router_names.dart';
 
@@ -204,6 +205,13 @@ class _WebViewState extends State<WebView> {
         retData = statusBarHeight;
       } else if (api.startsWith(Security.security_jsWatchAd)) {
         try {
+          AdsUtils adUtils = AdsUtils(
+            jsonDecode(data),
+            grantAdCallback: (grant) {
+              _outputDataToJsBridge({Security.security_api: Security.security_onWatchAdSuccess, Security.security_data: data});
+            },
+          );
+          adUtils.showAd();
         } catch (e) {
           // debugPrint('Error parsing ad data: $e');
         }
@@ -212,7 +220,7 @@ class _WebViewState extends State<WebView> {
         RouteHelper.toGems();
         return;
       } else if (api.startsWith(Security.security_jsRech)) {
-
+        RouteHelper.toGems();
       } else if (api.startsWith(Security.security_jsGoPersonal)) {
         Map user = jsonDecode(data);
         RouteHelper.toPage(
@@ -232,7 +240,10 @@ class _WebViewState extends State<WebView> {
         );
       } else if (api.startsWith(Security.security_jsClearNotificationRedDot)) {
         UserManager.instance.notificationReminder.value = false;
-      } else {
+      } else if (api.startsWith('jsGoNativePage')) {
+        RH.handleRoute(data);
+      }
+      else {
         return;
       }
 
