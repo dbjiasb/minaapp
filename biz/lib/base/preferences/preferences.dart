@@ -98,6 +98,7 @@ import '../app_info/app_manager.dart';
 import '../crypt/apis.dart';
 import '../crypt/copywriting.dart';
 import '../event_center/event_center.dart';
+import '../push_service/push_service.dart';
 
 class Preferences {
   // 单例模式
@@ -227,6 +228,8 @@ class Preferences {
     });
 
     startRefreshTimer();
+
+    PushService.instance.addObserver(PushId.kAppAditChanged, (e) => refreshConfig());
   }
 
   startRefreshTimer() {
@@ -301,6 +304,11 @@ class Preferences {
   String get coinUrl {
     String url = appConfig[Security.security_coin_url] ?? '';
     return url;
+  }
+
+  bool get showCoins {
+    String str = appConfig['show_coins'] ?? '1';
+    return str == '1';
   }
 
   String get premiumUrl {

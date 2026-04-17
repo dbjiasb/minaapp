@@ -42,17 +42,19 @@ class ChatMessageHandler {
   }
 
   Future<int> insertMessage(ChatMessage message) async {
+    Map<String, Object?> values = message.toDatabase();
     return await database.insert(
       ChatMessage.tableName,
-      message.toDatabase(),
+      values,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   Future<int> updateLocalMessage(ChatMessage message) async {
+    Map<String, Object?> values = message.toDatabase();
     return await database.update(
       ChatMessage.tableName,
-      message.toDatabase(),
+      values,
       where: Other.security_nativeId___,
       whereArgs: [message.nativeId],
     );
@@ -64,6 +66,7 @@ class ChatMessageHandler {
     int? limit,
     int? offset,
   }) async {
+
     String where =
         "${Security.security_ownerId}  = $userId AND ${Security.security_sessionId}  = ?";
     if (types != null && types.isNotEmpty) {

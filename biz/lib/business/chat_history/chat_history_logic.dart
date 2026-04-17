@@ -1,6 +1,9 @@
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/security.dart';
+import 'package:biz/base/event_center/event_center.dart';
+import 'package:biz/base/preferences/preferences.dart';
+import 'package:biz/business/chat/chat_session.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,13 +25,12 @@ class SessionListType {
 class SessionListTab {
   String name;
   int type;
+
   SessionListTab(this.name, this.type);
 }
 
-
 class ChatHistoryViewController extends GetxController with GetTickerProviderStateMixin {
-
-  late List<SessionListTab> tabs;
+  RxList<SessionListTab> tabs = RxList<SessionListTab>();
   late TabController tabController;
 
   final RxInt currentTabIndex = 0.obs;
@@ -42,23 +44,34 @@ class ChatHistoryViewController extends GetxController with GetTickerProviderSta
     super.onInit();
     queryRecommendList(false);
     setupTabs();
+
+    EventCenter.instance.addListener(Preferences.kDicChangedAppConfig, (_) {
+      setupTabs();
+    });
   }
 
   setupTabs() {
-      tabs = [
-        SessionListTab(Copywriting.security_all_Chat, SessionListType.all),
-        SessionListTab(Security.security_aI, SessionListType.ai),
-        SessionListTab(Security.security_real, SessionListType.real),
-        SessionListTab(Security.security_Group, SessionListType.group),
-        SessionListTab(Security.security_story, SessionListType.theater),
-      ];
+    bool rv = Preferences.instance.isRv;
+    List<SessionListTab> ss = [
+      if (rv) SessionListTab('Chats', SessionListType.all),
+      if (!rv) SessionListTab(Copywriting.security_all_Chat, SessionListType.all),
+      if (!rv) SessionListTab(Security.security_aI, SessionListType.ai),
+      if (!rv) SessionListTab(Security.security_real, SessionListType.real),
+      if (!rv) SessionListTab(Security.security_Group, SessionListType.group),
+      SessionListTab(Security.security_story, SessionListType.theater),
+    ];
 
-      tabController = TabController(length: tabs.length, vsync: this);
-      tabController.addListener(() {
-        if (!tabController.indexIsChanging) {
-          onTabChanged(tabController.index);
-        }
-      });
+    if (tabs.length == ss.length) {
+      return;
+    }
+
+    tabController = TabController(length: ss.length, vsync: this);
+    tabController.addListener(() {
+      if (!tabController.indexIsChanging) {
+        onTabChanged(tabController.index);
+      }
+    });
+    tabs.value = ss;
   }
 
   @override
@@ -73,9 +86,7 @@ class ChatHistoryViewController extends GetxController with GetTickerProviderSta
   void queryRecommendList(bool isReload) async {
     if (!showRecommend.value) return;
     refreshingRecommend.value = true;
-    ApiResponse response = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getUserRecommendList, params: {
-      Security.security_version: 2
-    }));
+    ApiResponse response = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getUserRecommendList, params: {Security.security_version: 2}));
     refreshingRecommend.value = false;
     if (!response.isSuccess) {
       if (isReload) {
@@ -85,5 +96,4 @@ class ChatHistoryViewController extends GetxController with GetTickerProviderSta
     }
     recommendList.assignAll(response!.data[Security.security_list] ?? []);
   }
-
 }

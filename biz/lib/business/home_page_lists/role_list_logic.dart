@@ -40,6 +40,12 @@ class RoleListLogic extends GetxController {
   void initData() {
     isLoading.value = true;
     getListData();
+
+    if (type == RoleListType.ai_and_script) {
+      RoleManager.instance.onFilterChange = () {
+        refreshController.requestRefresh();
+      };
+    }
   }
 
   void onRefresh() async {

@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -36,6 +37,17 @@ class RoleManager {
 
   static RoleManager get instance => _instance;
 
+  RxMap filterConfig = {}.obs;
+  bool get hasFilter => (filterConfig[Security.security_gender] ?? 0) != 0  || (filterConfig[Security.security_tagIdList] ?? []).isNotEmpty;
+  Function? onFilterChange;
+
+  void applyFilter(int genger, List tagIdList) {
+    filterConfig[Security.security_gender] = genger;
+    filterConfig[Security.security_tagIdList] = tagIdList.cast<int>();
+    filterConfig.refresh();
+    onFilterChange?.call();
+  }
+
   init() {
     Map tagConfig = Preferences.instance.getMap(Security.security_kCacheFilterTagKey);
     if (tagConfig.isNotEmpty && (tagConfig[Security.security_filterList] ?? []).isNotEmpty) {
@@ -52,7 +64,6 @@ class RoleManager {
     int targetUid = 0,
     RoleListType type = RoleListType.ai,
     int pageSize = 20,
-    Map filter = const {},
   }) async {
     Map<String, dynamic> params = {};
     params[Security.security_version] = version;
@@ -60,7 +71,9 @@ class RoleManager {
     params[Security.security_length] = pageSize;
     params[Security.security_type] = type.value;
     params[Security.security_userId] = targetUid;
-    params[Security.security_filterCondition] = filter;
+    if (type == RoleListType.ai_and_script) {
+      params[Security.security_filterCondition] = filterConfig;
+    }
 
     ApiRequest request = ApiRequest(Apis.security_fetchUsers, params: params);
     return await ApiService.instance.sendRequest(request);

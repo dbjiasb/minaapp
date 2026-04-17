@@ -53,6 +53,9 @@ class PushId {
 
   static const int kSecPackCreationResourceChangedNotice = 100011;
 
+  static const int kAppAditChanged = 600001;
+
+
 }
 
 class PushKey {

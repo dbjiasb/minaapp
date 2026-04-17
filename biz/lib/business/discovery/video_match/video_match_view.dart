@@ -92,13 +92,12 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
                             children: [
                               Text(Copywriting.security_start_Match, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
                               Obx(() {
-                                return //CallManager.instance.freeMatchCard > 0 ||
-                                CallManager.instance.isFreeCall
-                                    ? Container()
-                                    : Text(
-                                      'Get 30s Trial for ${MatchService.to.userMatchTrialOriginalCostInfo?[Security.security_costValue] ?? 8} ${MatchService.to.userMatchTrialOriginalCostInfo?[Security.security_costType] == 0 ? "Coins" : "Gems"}.',
-                                      style: const TextStyle(color: Color(0x99FFFFFF), fontSize: 12),
-                                    );
+                                return CallManager.instance.isFreeCall
+                                    ? Text(
+                                      'Get ${CallManager.instance.freeCallMinutes} minutes Free Call Trial',
+                                      style: const TextStyle(color: Color(0x99FFFFFF), fontSize: 11),
+                                    )
+                                    : Container();
                               }),
                             ],
                           ),
@@ -107,10 +106,7 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
                     ),
                   ],
                 ).marginOnly(top: 20),
-                if (Preferences.instance.callGiftUrl.isNotEmpty ||
-                    // CallManager.instance.freeMatchCard > 0 ||
-                    CallManager.instance.isFreeCall)
-                  _buildVideoBalanceView(),
+                // if (Preferences.instance.callGiftUrl.isNotEmpty || CallManager.instance.isFreeCall) _buildVideoBalanceView(),
                 const SizedBox(height: 80),
               ],
             ),
@@ -202,20 +198,6 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(Copywriting.security_currently_owns_, style: TextStyle(color: Color(0xFFDCC3FF), fontSize: 13)),
-          // Image.asset(
-          //   'assets/images/ic_property_free_call.webp',
-          //   package: Security.security_app_common,
-          //   width: 24,
-          //   height: 24,
-          //   fit: BoxFit.cover,
-          // ),
-          // Obx(() {
-          //   return Text(
-          //     " x${UserInfoService.to.freeMatchCard}  ",
-          //     style: const TextStyle(color: Color(0xFFDCC3FF), fontSize: 13),
-          //   );
-          // }),
-          Image.asset('', width: 24, height: 24, fit: BoxFit.cover),
           Obx(() {
             return Text(" x${CallManager.instance.freeCallMinutes}  ", style: const TextStyle(color: Color(0xFFDCC3FF), fontSize: 13));
           }),

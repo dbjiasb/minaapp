@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../base/crypt/security.dart';

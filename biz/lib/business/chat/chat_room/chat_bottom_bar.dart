@@ -560,7 +560,7 @@ class ChatBottomBar extends StatelessWidget {
         Security.security_action: onCreateImageButtonClicked,
       },
       {
-        Security.security_title: Security.security_call,
+        Security.security_title: Security.security_Call,
         Security.security_icon: Images.security_btn_call_png,
         Security.security_action: () => viewController.toCall(1),
       },

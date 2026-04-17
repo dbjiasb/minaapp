@@ -271,7 +271,7 @@ class ChatMessage implements AudioInfoInterface {
         Constants.receiverId: session!.isTheater ? receiverId : 0,
         Security.security_toGroupId: session!.isTheater ? 0 : session!.groupId,
         Security.security_sessionType: session!.type,
-        Security.security_sessionId: session!.id,
+        Security.security_sessionId: session!.sessionId,
         Constants.senderId: senderId,
         Constants.infoType: type.value,
         Constants.nativeId: nativeId,

@@ -16,6 +16,7 @@ import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/push_service/push_service.dart';
 import 'package:biz/business/chat/chat_manager.dart';
 import 'package:biz/core/account/account_service.dart';
+import 'base/ads/ad_service.dart';
 import 'base/file_manager/zip_image_manager.dart';
 import 'business/chat/call/call_manager.dart';
 import 'business/crowd/crowd_manager.dart';
@@ -64,6 +65,7 @@ void startApp(List<String> args) async {
   CrowedManager.instance.init();
   CallManager.instance.init();
   ChatManager.instance.init();
+  AdsManager.init();
   Get.put<MatchService>(MatchService());
   Get.put(MomentService());
   runApp(const RootView());

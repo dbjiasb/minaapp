@@ -138,7 +138,8 @@ class AdsUtils {
       AdsManager.getBalanceAdAward();
       grantAdCallback?.call(value);
       EasyLoading.dismiss();
-      showRewardDialog(adConfig[Security.security_awardValue] ?? "");
+      EasyLoading.showToast(adConfig[Security.security_awardValue] ?? 'Got coins reward');
+      // showRewardDialog(adConfig[Security.security_awardValue] ?? "");
     }).onError((error, stackTrace) {
       EasyLoading.showToast(Copywriting.security_failed_to_grant_coin__Please_try_again_later_);
       EasyLoading.dismiss();

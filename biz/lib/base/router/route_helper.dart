@@ -155,18 +155,18 @@ class RouteHelper {
     if (url.isNotEmpty) {
       return await handleRoute(url);
     }
-    // return await toPage(Routers.rechargeCurrency, args: {Security.security_rcgType: 0});
-    await toTask();
-    AccountService.instance.refreshBalance();
+
+    if (Preferences.instance.showCoins) {
+      await toPage(Routers.rechargeCurrency, args: {Security.security_rcgType: 0});
+    } else {
+      await toTask();
+      AccountService.instance.refreshBalance();
+    }
   }
 
   static Future toWeb(String url, {String? title, int hideHeader = 0}) async {
     return await toPage(Routers.webView, args: {Security.security_title: title ?? '', Security.security_url: url, Security.security_hideHeader: hideHeader});
   }
-
-  // static Future toTask() async {
-  //   return await toWeb(AppManager.instance.taskUrl, title: '', hideHeader: 1);
-  // }
 
   static Future toPersonalView({required int uid, required int accountType, String name = '', String avatar = ''}) async {
     return await RouteHelper.toPage(

@@ -3,7 +3,7 @@ export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_pr
 curl ipinfo.io
 
 if curl -s ipinfo.io | grep -iq "china"; then
-    echo "\n IP in China, stop building"
+    echo "\nIP in China, stop building"
     exit 1
 else
     echo "\nIP Not China，Will continue"

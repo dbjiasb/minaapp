@@ -17,7 +17,7 @@ class CategoryTabsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 40.w,
+      alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(top: 8.w),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,

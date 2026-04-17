@@ -300,7 +300,7 @@ class ChatManager {
         }
 
         //插入消息
-        await messageHandler.insertMessage(message);
+        int ret = await messageHandler.insertMessage(message);
         if (didPostOutMessages.contains(message.id) == false) {
           didPostOutMessages.add(message.id);
           messages.add(message);

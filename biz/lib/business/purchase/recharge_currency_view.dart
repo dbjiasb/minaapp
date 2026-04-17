@@ -28,7 +28,7 @@ class RechargeCurrencyView extends StatelessWidget {
       backgroundColor: const Color(0xFF07070A),
         extendBody: true,
       appBar: AppBar(
-        leading: InkWell(onTap: Get.back, child: Container(padding: EdgeInsets.all(16), child: ImageView(Images.security_back_png, fit: BoxFit.fill))),
+        leading: InkWell(overlayColor: WidgetStateProperty.all(Colors.transparent), onTap: Get.back, child: Container(alignment: Alignment.center, padding: EdgeInsets.only(left: 16), child: ImageView(Images.security_back_png, fit: BoxFit.cover, height: 24, width: 24))),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         title: Text(

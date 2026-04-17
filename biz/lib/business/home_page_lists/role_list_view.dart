@@ -14,13 +14,14 @@ import 'role_list_logic.dart';
 
 class RoleListView extends StatelessWidget {
   final RoleListType type;
+  final refreshIndex;
   final ScrollController? scrollController;
 
-  RoleListView({super.key, required this.type, this.scrollController});
+  RoleListView({super.key, required this.type, this.refreshIndex, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(RoleListLogic(type: type, externalScrollController: scrollController), tag: type.toString());
+    final controller = Get.put(RoleListLogic(type: type, externalScrollController: scrollController), tag: '${type}_$refreshIndex');
 
     return Obx(
       () =>

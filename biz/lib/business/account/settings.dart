@@ -1,6 +1,7 @@
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/other.dart';
+import 'package:biz/base/preferences/preferences.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -30,7 +31,7 @@ class SettingItem {
 
 class AccountSettings extends StatelessWidget {
   List<SettingItem> get items => <SettingItem>[
-    SettingItem(title: Copywriting.security_message_Settings, onTap: messageSettings),
+    if (!Preferences.instance.isRv) SettingItem(title: Copywriting.security_message_Settings, onTap: messageSettings),
     // SettingItem(title: Security.security_about, onTap: toAbout),
     SettingItem(title: Copywriting.security_terms_of_service, onTap: checkTermsOfService),
     SettingItem(title: Copywriting.security_privacy_policy, onTap: checkPrivacyPolicy),

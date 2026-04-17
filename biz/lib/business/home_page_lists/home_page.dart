@@ -3,6 +3,7 @@ import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/event_center/event_center.dart';
 import 'package:biz/business/home_page_lists/role_manager.dart';
+import 'package:biz/shared/app_theme.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -13,20 +14,22 @@ import 'package:get/get.dart';
 import '../../base/assets/image_view.dart';
 import '../../base/preferences/preferences.dart';
 import '../../base/router/router_names.dart';
+import '../../core/util/log_util.dart';
 import '../create_center/create_oc_dialog.dart';
 import '../create_center/create_oc_rv_dialog.dart';
 import '../theater/theater_list/view.dart';
 import 'category_tabs_widget.dart';
+import 'filter_view.dart';
 import 'role_list_logic.dart';
 import 'role_list_view.dart';
 
 class HomePageView extends StatelessWidget {
   HomePageView({super.key});
 
+  HomePageViewController controller = Get.put(HomePageViewController(), tag: Security.security_home_page_controller);
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomePageViewController(), tag: Security.security_home_page_controller);
-
     return Scaffold(
       backgroundColor: Color(0xFF07070a),
       appBar: AppBar(backgroundColor: Color(0xFF07070a), systemOverlayStyle: SystemUiOverlayStyle.light, elevation: 0, toolbarHeight: 0),
@@ -34,32 +37,28 @@ class HomePageView extends StatelessWidget {
         bottom: false,
         child: Stack(
           children: [
-            Column(
-              children: [
-                _buildTopBar(),
-                Obx(
-                  () => CategoryTabsWidget(
+            Obx(() {
+              return Column(
+                children: [
+                  _buildTopBar(),
+                  CategoryTabsWidget(
                     categories: controller.categories,
                     selectedIndex: controller.selectedCategoryIndex.value,
                     onTap: (index) => controller.onCategoryChanged(index),
                   ),
-                ),
+                  SizedBox(height: 8.w),
+                  Expanded(
+                    child: TabBarView(
+                      controller: controller.tabController,
+                      children: controller.categories.map((e) => e.type == RoleListType.story
+                          ? TheaterListView(scrollController: controller.scrollController)
+                          : RoleListView(type: e.type, scrollController: controller.scrollController, refreshIndex: controller.refreshIndex)).toList(),
+                    ),
+                  ),
+                ],
+              );
+            }),
 
-                SizedBox(height: 8.w),
-
-                // Content area with TabBarView
-                Expanded(
-                  child: Obx(() => TabBarView(
-                    controller: controller.tabController,
-                    children: controller.categories.map((e) => e.type == RoleListType.story
-                        ? TheaterListView(scrollController: controller.scrollController)
-                        : RoleListView(type: e.type, scrollController: controller.scrollController)).toList(),
-                  )),
-                ),
-              ],
-            ),
-
-            // Floating Create button
             Positioned(
               bottom: 16.w,
               left: 0,
@@ -114,22 +113,35 @@ class HomePageView extends StatelessWidget {
           InkWell(
             overlayColor: WidgetStateProperty.all(Colors.transparent),
             onTap: () {
-              // Get.toNamed(Routers.search);
+              if (RoleManager.instance.filterList.isEmpty) return;
+              RoleFilterWidget.showFilter(controller.selectedCategory.type.value, filterCondition: RoleManager.instance.filterConfig, onApply: (int gender, List tagIds) {
+                RoleManager.instance.applyFilter(gender, tagIds);
+              },);
             },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.w),
-              decoration: BoxDecoration(
-                  color: Color(0xFF171C29),
-                  borderRadius: BorderRadius.circular(32.w),
-                  border: Border.all(color: Color(0xFF2A3144), width: 1)
-              ),
-              child: Row(
-                children: [
-                  ImageView(Images.mina_filter, width: 14.w, height: 14.w),
-                  SizedBox(width: 6.w),
-                  Text(Security.security_Filter, style: TextStyle(color: Color(0xFFF2F4F8), fontSize: 13.sp)),
-                ],
-              ),
+            child: Stack(
+              alignment: Alignment.centerRight,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.w),
+                  decoration: BoxDecoration(
+                      color: Color(0xFF171C29),
+                      borderRadius: BorderRadius.circular(32.w),
+                      border: Border.all(color: Color(0xFF2A3144), width: 1)
+                  ),
+                  child: Obx(() {
+                    return Row(
+                      children: [
+                        ImageView(Images.mina_filter, width: 14.w, height: 14.w),
+                        SizedBox(width: 4.w),
+                        Text(Security.security_Filter, style: TextStyle(color: Color(0xFFF2F4F8), fontSize: 13.sp)),
+                        if (RoleManager.instance.hasFilter) SizedBox(width: 4.w),
+                        if (RoleManager.instance.hasFilter) Container(width: 8, height: 8, decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),)
+                      ],
+                    );
+                  }),
+                ),
+                // Positioned(right: 6, child: )
+              ],
             ),
           ),
         ],
@@ -175,58 +187,69 @@ class Category {
   Category(this.name, this.type);
 }
 
-class HomePageViewController extends GetxController with GetSingleTickerProviderStateMixin {
+class HomePageViewController extends GetxController with GetTickerProviderStateMixin {
   late RxList<Category> categories = RxList<Category>();
-  // final List<String> categories = [Security.security_story, Security.security_discovery, Security.security_real, Security.security_oC, Copywriting.security_pro_only];
   final RxInt selectedCategoryIndex = 0.obs;
+  Category get selectedCategory => categories[selectedCategoryIndex.value];
+
   final RxBool showCreateButton = true.obs;
   final ScrollController scrollController = ScrollController();
   Timer? _scrollTimer;
   late TabController tabController;
 
-  late RxBool isRv = true.obs;
+  RxInt refreshIndex = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
-    isRv = Preferences.instance.isRv.obs;
+    // isRv = Preferences.instance.isRv.obs;
     setupCategories();
     EventCenter.instance.addListener(Preferences.kDicChangedAppConfig, (Event event) {
       handleAppConfigChanged(event);
     });
+    _setupScrollListener();
   }
 
   void handleAppConfigChanged(Event event) {
-    if (isRv.value == Preferences.instance.isRv) return;
-    isRv.value = Preferences.instance.isRv;
+    // if (isRv.value == Preferences.instance.isRv && !isRv.value) return;
+    // isRv.value = Preferences.instance.isRv;
     setupCategories();
   }
 
   void setupCategories() {
-    categories.value = isRv.value ? [
-      Category(Security.security_recommend, RoleListType.ai_and_script),
-      Category(Security.security_story, RoleListType.story),
-      // Category(Security.security_real, RoleListType.real),
-      // Category(Security.security_oC, RoleListType.ugc),
-      // Category(Copywriting.security_pro_only, RoleListType.pro_only),
-    ] : [
-      Category(Security.security_recommend, RoleListType.ai_and_script),
-      Category(Security.security_real, RoleListType.real),
-      Category(Security.security_oC, RoleListType.ugc),
-      Category(Security.security_featured, RoleListType.dating),
-      Category(Security.security_anime, RoleListType.anime),
-      Category(Security.security_realistic, RoleListType.realistic),
-      Category(Copywriting.security_pro_only, RoleListType.pro_only),
-      Category(Security.security_story, RoleListType.story),
-    ];
+    try {
+      List<Category> tabs = Preferences.instance.isRv ? [
+        Category(Security.security_recommend, RoleListType.ai_and_script),
+        Category(Security.security_story, RoleListType.story),
+        // Category(Security.security_real, RoleListType.real),
+        // Category(Security.security_oC, RoleListType.ugc),
+        // Category(Copywriting.security_pro_only, RoleListType.pro_only),
+      ] : [
+        Category(Security.security_recommend, RoleListType.ai_and_script),
+        Category(Security.security_real, RoleListType.real),
+        Category(Security.security_oC, RoleListType.ugc),
+        Category(Security.security_featured, RoleListType.dating),
+        Category(Security.security_anime, RoleListType.anime),
+        Category(Security.security_realistic, RoleListType.realistic),
+        Category(Copywriting.security_pro_only, RoleListType.pro_only),
+        Category(Security.security_story, RoleListType.story),
+      ];
 
-    tabController = TabController(length: categories.length, vsync: this);
-    tabController.addListener(() {
-      if (!tabController.indexIsChanging) {
-        selectedCategoryIndex.value = tabController.index;
+      if (categories.length == tabs.length) {
+        return;
       }
-    });
-    _setupScrollListener();
+      refreshIndex++;
+
+      tabController = TabController(length: tabs.length, vsync: this);
+      tabController.addListener(() {
+        if (!tabController.indexIsChanging) {
+          selectedCategoryIndex.value = tabController.index;
+        }
+      });
+      categories.value = tabs;
+    } catch (e) {
+      L.e('setupCategories error: $e');
+    }
   }
 
   @override

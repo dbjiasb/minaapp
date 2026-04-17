@@ -181,7 +181,7 @@ class DiscoveryController extends GetxController with GetTickerProviderStateMixi
         DisTab(DisTabType.match, Security.security_match),
       ];
     } else {
-      newTabs = [DisTab(DisTabType.character, Security.security_Discovery), DisTab(DisTabType.moment, Security.security_moment)];
+      newTabs = [DisTab(DisTabType.character, Security.security_Discovery)];
     }
     tabController = TabController(vsync: this, length: newTabs.length, initialIndex: currentIndex.value);
     tabController.addListener(() {

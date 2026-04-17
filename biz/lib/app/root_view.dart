@@ -11,6 +11,7 @@ import 'package:biz/core/account/login_channel.dart';
 import 'package:biz/shared/widget/image_viewer.dart';
 import 'package:biz/shared/widget/video_player_view.dart';
 
+import '../business/account/collections_view.dart';
 import '../business/account/edit_my_info_view.dart';
 import '../business/account/settings.dart';
 import '../business/chat/ai_mode/my_mode/binding.dart';
@@ -106,6 +107,7 @@ class RootView extends StatelessWidget {
             GetPage(name: Routers.createCrowed, page: () => CreateCrowedPage(), binding: CreateCrowedBinding()),
             GetPage(name: Routers.crowedInfo, page: () => CrowedInfoView(), binding: CrowedInfoBinding()),
             GetPage(name: Routers.search, page: () => SearchView(), binding: SearchBinding()),
+            GetPage(name: Routers.collections, page: () => CollectionsView()),
           ],
           routingCallback: (route) {
             Toast.dismiss();

@@ -41,7 +41,6 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
 
   @override
   Widget build(BuildContext context) {
-    final tabBar = _buildTabBar();
     return Scaffold(
       backgroundColor: AppColors.base_background,
       appBar: AppBar(
@@ -81,26 +80,29 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _ChatHistoryTabBarDelegate(
-                  tabBar: tabBar,
+                  tabBar: Obx(() {
+                    return _buildTabBar();
+                  }),
                   leftPadding: 12.w,
                   bottomSpacing: 8.w,
                 ),
               ),
             ];
           },
-          body: TabBarView(
-            controller: logic.tabController,
-            children:
-                logic.tabs.map((e) {
-                  if (e.type == SessionListType.theater) {
-                    return KeepAliveWrapper(child: TheaterHistoryListView());
-                  } else {
-                    return KeepAliveWrapper(
-                      child: PrivateChatHistoryListView(type: e.type),
-                    );
-                  }
-                }).toList(),
-          ),
+          body: Obx(() {
+            return TabBarView(
+              controller: logic.tabController,
+              children: logic.tabs.map((e) {
+                if (e.type == SessionListType.theater) {
+                  return KeepAliveWrapper(child: TheaterHistoryListView());
+                } else {
+                  return KeepAliveWrapper(
+                    child: PrivateChatHistoryListView(type: e.type),
+                  );
+                }
+              }).toList(),
+            );
+          })
         ),
       ),
     );
@@ -169,7 +171,6 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                         ),
                       ),
                       SizedBox(width: 6.w),
-                      // refreshingRecommend
                       Obx(
                         () =>
                             logic.refreshingRecommend.value
@@ -335,7 +336,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
 }
 
 class _ChatHistoryTabBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabBar tabBar;
+  final Widget tabBar;
   final double leftPadding;
   final double bottomSpacing;
 
@@ -360,10 +361,10 @@ class _ChatHistoryTabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => tabBar.preferredSize.height + bottomSpacing;
+  double get maxExtent => 44.w;
 
   @override
-  double get minExtent => tabBar.preferredSize.height + bottomSpacing;
+  double get minExtent => 44.w;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

@@ -8,6 +8,8 @@ import 'package:biz/base/crypt/security.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/shared/sheet.dart';
 
+import '../../base/assets/image_view.dart';
+import '../../base/crypt/images.dart';
 import '../../core/account/account_service.dart';
 import '../../core/util/cached_image.dart';
 import '../../core/util/file_upload.dart';
@@ -25,7 +27,7 @@ class EditMyInfoPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.base_background,
       appBar: AppBar(
-        leading: InkWell(onTap: Get.back, child: Container(padding: EdgeInsets.all(16), child: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, width: 20, height: 20))),
+        leading: InkWell(overlayColor: WidgetStateProperty.all(Colors.transparent), onTap: Get.back, child: Container(alignment: Alignment.center, padding: EdgeInsets.only(left: 16), child: ImageView(Images.security_back_png, fit: BoxFit.cover, height: 24, width: 24))),
         centerTitle: true,
         backgroundColor: AppColors.base_background,
         title: Text(Copywriting.security_edit_information, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),

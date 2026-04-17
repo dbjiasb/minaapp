@@ -7,6 +7,8 @@ import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/core/util/cached_image.dart';
 
 import '../../../base/assets/image_path.dart';
+import '../../../base/assets/image_view.dart';
+import '../../../base/crypt/images.dart';
 import '../../../base/crypt/security.dart';
 import '../../../base/router/route_helper.dart';
 import '../../../shared/app_theme.dart';
@@ -63,7 +65,7 @@ class TheaterHistoryListView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // child: CachedImage(imageUrl: ImagePath.img_empty, width: 172, height: 146),
+          ImageView(Images.mina_empty_list, width: 172.w, height: 146.h),
           Text(Copywriting.security_no_data, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal)),
         ],
       ),
