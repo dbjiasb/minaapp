@@ -10,6 +10,7 @@ import 'package:biz/business/chat/chat_voice_manager.dart';
 import 'package:biz/core/account/account_service.dart';
 import 'package:biz/shared/alert.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 import '../../../base/router/route_helper.dart';
 import '../../../core/util/cached_image.dart';
@@ -209,16 +210,16 @@ class ChatTextCell extends ChatCell {
 
   Widget buildText() {
     String text = textMessage.text;
-    // if (textMessage.isOfficial) {
-    //   return Linkify(
-    //     onOpen: (link) async {
-    //       if (link.url.startsWith(Security.security_http)) RH.handleRoute(link.url);
-    //     },
-    //     text: text,
-    //     style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
-    //     linkStyle: const TextStyle(color: Colors.blue, fontSize: 14, height: 1.5, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
-    //   );
-    // }
+    if (textMessage.isOfficial) {
+      return Linkify(
+        onOpen: (link) async {
+          if (link.url.startsWith(Security.security_http)) RH.handleRoute(link.url);
+        },
+        text: text,
+        style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+        linkStyle: const TextStyle(color: Colors.blue, fontSize: 14, height: 1.5, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
+      );
+    }
 
     Map sortSplitter = textMessage.sortSplitter();
     Widget textWidget() => Text(

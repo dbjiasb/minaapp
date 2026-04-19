@@ -417,7 +417,7 @@ class AccountService {
         premiumConfig.value = rspData[Security.security_config] ?? [];
       }
     } catch (e) {
-      L.e("[Payment] fetchPremiumCards error, $e");
+      L.e("[IAP] fetchPremiumCards error, $e");
     }
   }
 

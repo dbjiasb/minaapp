@@ -57,7 +57,7 @@ extension IapMap on Map {
   set iapPurchaseId(String id) => this[Security.security_purchaseId] = id;
   String get iapPurchaseId => this[Security.security_purchaseId] ?? iapId;
 
-  bool get iapVip => this[Security.security_rechargeItemType] == 1 || iapId.contains(Security.security_weekly) || iapId.contains(Security.security_monthly);
+  bool get iapVip => this[Security.security_rechargeItemType] == 1 || iapId.contains(Security.security_weekly) || iapId.contains(Security.security_monthly) || iapId.contains(Security.security_yearly);
   bool get iapV1 => iapItemId == kIapV1ItemId;
 
   set iapFirstPurchase(bool isFirst) => this[Security.security_iapFirstPurchase] = isFirst;
@@ -165,7 +165,7 @@ class PurchaseManager {
     _initialized = true;
     _isAvailable = await iap.isAvailable();
     if (!_isAvailable) {
-      L.e("[Payment] ⚠️  IAP Service not available");
+      L.e("[IAP] ⚠️  IAP Service not available");
     }
     EventCenter.instance.addListener(Security.security_kEventCenterUserDidLogin, onUserDidLogin);
     EventCenter.instance.addListener(Security.security_kEventCenterUserDidLogout, onUserDidLogout);
@@ -197,7 +197,7 @@ class PurchaseManager {
     await Future.delayed(const Duration(seconds: 5));
 
     var exceptionOrders = Preferences.instance.getMap(kCachedExceptionOrderKey);
-    L.i('[Payment] fixedOrders: $exceptionOrders');
+    L.i('[IAP] fixedOrders: $exceptionOrders');
     if (exceptionOrders.isNotEmpty) {
       for (var key in exceptionOrders.keys) {
         var pair = exceptionOrders[key];
@@ -210,23 +210,23 @@ class PurchaseManager {
 
   Future<List<ProductDetails>> getIapProducts(Set<String> ids) async {
     // final Set<String> ids = productConfig.keys.toSet();
-    L.i("[Payment] query products, ids: $ids");
+    L.i("[IAP] query products, ids: $ids");
     try {
       final ProductDetailsResponse response = await iap.queryProductDetails(ids);
       if (response.notFoundIDs.isNotEmpty) {
-        L.e("[Payment] query products not found ids: ${response.notFoundIDs}");
+        L.e("[IAP] query products not found ids: ${response.notFoundIDs}");
       }
       _products = response.productDetails;
       productMap = Map.fromEntries(_products.map((e) => MapEntry(e.id, e)));
-      L.i("[Payment] query products count:  ${_products.length}");
+      L.i("[IAP] query products count:  ${_products.length}");
     } catch (e) {
-      L.e("[Payment] query products error: $e");
+      L.e("[IAP] query products error: $e");
     }
     return _products;
   }
 
   Future<void> onPurchaseEventCallback(PurchaseDetails purchase) async {
-    debugPrint("[Payment]  purchase callback: ${purchase.productID} pid ${purchase.purchaseID} status: ${purchase.status} error: ${purchase.error}");
+    debugPrint("[IAP]  purchase callback: ${purchase.productID} pid ${purchase.purchaseID} status: ${purchase.status} error: ${purchase.error}");
 
     switch (purchase.status) {
       case PurchaseStatus.purchased:
@@ -235,7 +235,7 @@ class PurchaseManager {
           Preferences.instance.setMap(
               iapCachedKey, {Security.security_pid: purchase.productID, Security.security_receipt: purchase.verificationData.serverVerificationData});
         }
-        L.i("[Payment] ✅ 购买成功: ${purchase.productID}, status: ${purchase.status} pid ${purchase.purchaseID} 开始验证Receipt");
+        L.i("[IAP] ✅ 购买成功: ${purchase.productID}, status: ${purchase.status} pid ${purchase.purchaseID} 开始验证Receipt");
 
         /// 存在正在购买的商品，走订单验证逻辑
         if (purchasingItem?.iapId == purchase.productID) {
@@ -254,21 +254,21 @@ class PurchaseManager {
         }
         purchasingItem = null;
         completion?.call(false, "Purchase Fail: ${purchase.error}");
-        L.e("[Payment] ❌ Purchase Fail: ${purchase.error}");
+        L.e("[IAP] ❌ Purchase Fail: ${purchase.error}");
         break;
       case PurchaseStatus.pending:
-        L.i("[Payment]⌛ Pending: ${purchase.productID}");
+        L.i("[IAP]⌛ Pending: ${purchase.productID}");
         break;
       case PurchaseStatus.canceled:
         Toast.dismiss();
-        L.i("[Payment] ⌛ canceled: ${purchase.productID}");
+        L.i("[IAP] ⌛ canceled: ${purchase.productID}");
         purchasingItem = null;
         break;
     }
 
     if (purchase.pendingCompletePurchase && Platform.isIOS) {
       InAppPurchase.instance.completePurchase(purchase);
-      L.i("[Payment] ✅ completePurchase 已调用: ${purchase.productID}");
+      L.i("[IAP] ✅ completePurchase 已调用: ${purchase.productID}");
     }
   }
 
@@ -289,22 +289,16 @@ class PurchaseManager {
       return;
     }
 
-    if (!_isAvailable) {
-      L.e("[Payment] IAP Service Not Available");
-      Toast.show(Copywriting.security_iAP_Service_Not_Available);
-      return;
-    }
-
-    L.e("[Payment] buy product, item $item, iap config: $productMap");
+    L.e("[IAP] buy product, item $item, iap config: $productMap");
 
     if (purchasingItem != null) {
-      L.e("[Payment] buy product, another purchase is in processing");
+      L.e("[IAP] buy product, another purchase is in processing");
       Toast.loading(status: Copywriting.security_purchasing___);
       return;
     }
 
     if (item.iapId.isEmpty || item.iapItemId == 0) {
-      L.e("[Payment] buy product, item error");
+      L.e("[IAP] buy product, item error");
       Toast.show(Copywriting.security_item_info_error);
       return;
     }
@@ -323,7 +317,7 @@ class PurchaseManager {
     String verifyUrl = order[Security.security_developerPayload] ?? '';
     if (verifyUrl.isNotEmpty && verifyUrl.startsWith(Security.security_http)) {
       purchasingItem = null;
-      L.i('[Purchase] detect risk order, will verify');
+      L.i('[IAP] detect risk order, will verify');
       await RouteHelper.toWeb(verifyUrl, title: '');
       if (item.iapVip) {
         AccountService.instance.getPremInfo();
@@ -333,12 +327,19 @@ class PurchaseManager {
       return;
     }
 
+
+    if (!_isAvailable) {
+      L.e("[IAP] IAP Not Available");
+      Toast.show(Copywriting.security_iAP_Service_Not_Available);
+      return;
+    }
+
     ProductDetails? product = productMap[item.iapId];
     if (product == null) {
-      L.e("[Payment] buy error, ${item.iapId} not found, will load again.");
+      L.e("[IAP] error, ${item.iapId} not found, will load again.");
       product = (await getIapProducts({item.iapId})).firstOrNull;
       if (product == null) {
-        L.e("[Payment] buy error, ${item.iapId} not found");
+        L.e("[IAP] error, ${item.iapId} not found");
         Toast.show('Product not found for ${item.iapId}, please try again later');
         return;
       }
@@ -358,7 +359,7 @@ class PurchaseManager {
         iap.buyConsumable(purchaseParam: purchaseParam);
       }
     } catch (e) {
-      L.e("[Payment] buy error for ${item.iapId}, $e");
+      L.e("[IAP] buy error for ${item.iapId}, $e");
       Toast.show('Purchase failed, ${e.toString()}');
       purchasingItem = null;
       // Toast.dismiss();
@@ -396,7 +397,7 @@ class PurchaseManager {
     if (rsp.isSuccess == true && rsp.data.isNotEmpty) {
       allRechargeItems = rsp.data[Security.security_rechargeItems] ?? [];
     } else {
-      L.e("[Payment] fetchRechargeItem error, ${rsp.bsnsCode}, ${rsp.description}");
+      L.e("[IAP] fetchRechargeItem error, ${rsp.bsnsCode}, ${rsp.description}");
       if (allRechargeItems.isEmpty) {
         Toast.show(rsp.description);
       }
@@ -411,7 +412,7 @@ class PurchaseManager {
     if (rsp.isSuccess == true) {
       return rsp.data[Security.security_order];
     } else {
-      L.i("[Payment] createRechargeOrder failed, ${rsp.bsnsCode}, ${rsp.description}");
+      L.i("[IAP] createRechargeOrder failed, ${rsp.bsnsCode}, ${rsp.description}");
       Toast.show(rsp.description);
       return null;
     }
@@ -441,7 +442,7 @@ class PurchaseManager {
       Toast.dismiss();
       showConfirmAlert(Copywriting.security_payment_successful, '${item.iapName} purchased successfully');
     } else {
-      L.e('[Payment] rechargeCallback failed, $code, ${rsp.description}');
+      L.e('[IAP] rechargeCallback failed, $code, ${rsp.description}');
       if (!isRetry) {
         /// 重试一次
         rechargeCallback(item, isRetry: true);
@@ -500,7 +501,7 @@ class PurchaseManager {
         return response.data;
       }
     } catch (e) {
-      L.e("[Payment] fetchPremiumCards error, $e");
+      L.e("[IAP] fetchPremiumCards error, $e");
     }
     return null;
   }

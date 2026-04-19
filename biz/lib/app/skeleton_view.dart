@@ -9,6 +9,7 @@ import 'package:biz/business/account/account_view.dart';
 import 'package:biz/core/user_manager/user_manager.dart';
 import 'package:biz/shared/widget/keep_alive_wrapper.dart';
 
+import '../base/fcm_service/fcm_service.dart';
 import '../base/preferences/preferences.dart';
 import '../business/chat/chat_session_handler.dart';
 import '../business/discovery/discovery_view.dart';
@@ -213,8 +214,7 @@ class SkeletonViewController extends GetxController {
     pageController.jumpToPage(index);
     selectedIndex.value = index;
     if (index == MESSAGE_INDEX) {
-      // FcmService.instance.requestPermission();
-      // 刷新聊天历史视图（如果需要）
+      FcmService.instance.requestPermission();
     } else if (index == MINE_INDEX) {
       try {
         Get.find<AccountViewController>().refreshDataIfNeed();
