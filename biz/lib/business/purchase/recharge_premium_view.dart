@@ -164,6 +164,7 @@ class RechargePremiumView extends StatelessWidget {
       String type = (e[Security.security_premiumItemType] ?? 0).toString();
       int totalTimes = e[Security.security_times] ?? 0;
       String name = e[Security.security_name] ?? '';
+
       Map usedInfo = MyAccount.premUsedInfo[type] ?? {};
       int leftTime = usedInfo[Security.security_leftTimes] ?? -1;
       return Padding(
@@ -276,7 +277,11 @@ class RechargePremiumView extends StatelessWidget {
     final isSelected = controller.selectedPlan == plan;
 
     Map rcgItem = plan[Security.security_rechargeItem] ?? {};
-    final prodName = rcgItem.iapName;
+    String prodName = rcgItem.iapName;
+    if (prodName.split(' ').length > 1) {
+      prodName = prodName.split(' ')[0];
+    }
+
     final cdType = rcgItem[Security.security_premiumPeriodType] ?? 1;
     final dailyPay = calculateDailyPay(cdType, rcgItem.iapPrice);
     final dscnt = rcgItem[EncHelper.rcg_dsct];

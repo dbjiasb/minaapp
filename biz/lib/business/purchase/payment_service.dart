@@ -57,7 +57,7 @@ extension IapMap on Map {
   set iapPurchaseId(String id) => this[Security.security_purchaseId] = id;
   String get iapPurchaseId => this[Security.security_purchaseId] ?? iapId;
 
-  bool get iapVip => this[Security.security_rechargeItemType] == 1 || iapId.contains(Security.security_weekly) || iapId.contains(Security.security_monthly) || iapId.contains(Security.security_yearly);
+  bool get iapVip => this[Security.security_rechargeItemType] == 1 || iapId.contains('week') || iapId.contains('month') || iapId.contains('year');
   bool get iapV1 => iapItemId == kIapV1ItemId;
 
   set iapFirstPurchase(bool isFirst) => this[Security.security_iapFirstPurchase] = isFirst;
@@ -231,10 +231,10 @@ class PurchaseManager {
     switch (purchase.status) {
       case PurchaseStatus.purchased:
       case PurchaseStatus.restored:
-        if (!purchase.productID.contains(Security.security_weekly) && !purchase.productID.contains(Security.security_monthly) && !purchase.productID.contains(Security.security_yearly)) {
-          Preferences.instance.setMap(
-              iapCachedKey, {Security.security_pid: purchase.productID, Security.security_receipt: purchase.verificationData.serverVerificationData});
-        }
+        // if (!purchase.productID.contains(Security.security_weekly) && !purchase.productID.contains(Security.security_monthly) && !purchase.productID.contains(Security.security_yearly)) {
+        //   Preferences.instance.setMap(
+        //       iapCachedKey, {Security.security_pid: purchase.productID, Security.security_receipt: purchase.verificationData.serverVerificationData});
+        // }
         L.i("[IAP] ✅ 购买成功: ${purchase.productID}, status: ${purchase.status} pid ${purchase.purchaseID} 开始验证Receipt");
 
         /// 存在正在购买的商品，走订单验证逻辑
@@ -431,7 +431,7 @@ class PurchaseManager {
       completion?.call(true, null);
       cachedReceipts.remove(purchasingItem?.iapPurchaseId ?? '');
       Preferences.instance.setMap(iapCachedKey, cachedReceipts);
-      if (item.iapId.contains(Security.security_weekly) || item.iapId.contains(Security.security_monthly) || item.iapId.contains(Security.security_yearly)) {
+      if (item.iapVip) {
         AccountService.instance.getPremInfo();
       } else {
         AccountService.instance.refreshBalance();
