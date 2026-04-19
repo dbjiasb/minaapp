@@ -82,6 +82,8 @@ dependencies:
   bubble_pop_up: ^2.1.0
   video_thumbnail: ^0.5.6
   flutter_linkify: 6.0.0
+  flutter_svga:
+    path: lib/flutter_svga
 
   #混淆使用
   package_info_plus:
@@ -93,9 +95,7 @@ dependencies:
   mobile_scanner: #^7.2.0
 #  zego_uikit_prebuilt_call: #^4.22.3
   bordered_text: ^2.0.0
-
-  flutter_svga:
-    path: lib/flutter_svga
+  freshchat_sdk: ^0.10.31
 
 dev_dependencies:
   flutter_test:
