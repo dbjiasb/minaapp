@@ -16,6 +16,7 @@ import 'package:biz/shared/alert.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../base/ads/ad_unlock_button.dart';
 import '../../../base/assets/image_view.dart';
 import '../../../core/util/cached_image.dart';
 import '../chat_manager.dart';
@@ -474,21 +475,21 @@ class ChatImageCell extends ChatCell {
       onTap: showUnlockDialogIfNeeded,
       child: Column(
         children: [
-          // if (imageMessage.currencyType == 0 && imageMessage.unlockPrice > 0 && !showFreeImage)
-          //   Container(
-          //     margin: EdgeInsets.only(bottom: 8),
-          //     height: type == ChatCellType.chat ? 40 : 28,
-          //     width: type == ChatCellType.chat ? 132 : 90,
-          //     child: MediaAdsButton(
-          //       imageMessage.uuid,
-          //       0,
-          //       grantAdCallback: (adAwardRsp) async {
-          //         imageMessage.unlocked = true;
-          //         Get.find<ChatRoomViewController>().update([refreshId]);
-          //         ChatManager.instance.messageHandler.insertMessage(imageMessage);
-          //       },
-          //     ),
-          //   ),
+          if (imageMessage.currencyType == 0 && imageMessage.unlockPrice > 0 && !showFreeImage)
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              height: type == ChatCellType.chat ? 40 : 28,
+              width: type == ChatCellType.chat ? 132 : 90,
+              child: MediaAdsButton(
+                imageMessage.uuid,
+                0,
+                grantAdCallback: (adAwardRsp) async {
+                  imageMessage.unlocked = true;
+                  Get.find<ChatRoomViewController>().update([refreshId]);
+                  ChatManager.instance.messageHandler.insertMessage(imageMessage);
+                },
+              ),
+            ),
           SizedBox(height: type == ChatCellType.chat ? 40 : 28, width: type == ChatCellType.chat ? 132 : 90, child: showFreeImage ? premiumBtn : costUnlockBtn),
         ],
       ),

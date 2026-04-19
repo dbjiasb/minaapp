@@ -12,7 +12,7 @@ abstract final class Routers {
   static String setting = Routes.security__setting;
   static String loginChannel = Routes.security__loginChannel;
   static String rechargeCurrency = Routes.security__recharge_currency;
-  static String rechargePremium = '/myPremium';
+  static String rechargePremium = Routes.security__myPremium;
   static String editMe = Routes.security__edit_me;
   static String person = Routes.security__chat_person;
   static String imageBrowser = Routes.security__imageBrowser;

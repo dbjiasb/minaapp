@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/copywriting.dart';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
@@ -92,7 +93,7 @@ class _PhotoViewState extends State<PhotoView> {
                 ? _buildLockedImage(element, double.infinity, 256.w)
                 : ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: VideoFileView(url: element[Security.security_url] ?? '', thumbnailUrl: element['thumbnailUrl'] ?? '',),
+              child: VideoFileView(url: element[Security.security_url] ?? '', thumbnailUrl: element[Security.security_thumbnailUrl] ?? '',),
             ),
           ),
         )
@@ -155,7 +156,7 @@ class _PhotoViewState extends State<PhotoView> {
             ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
               child: resInfo[Security.security_type] == 2
-                  ? VideoFileView(url: resInfo[Security.security_url] ?? '', thumbnailUrl: resInfo['thumbnailUrl'] ?? '',)
+                  ? VideoFileView(url: resInfo[Security.security_url] ?? '', thumbnailUrl: resInfo[Security.security_thumbnailUrl] ?? '',)
                   : CachedImage(imageUrl: resInfo[Security.security_url] ?? '', width: width, height: height, fit: BoxFit.cover),
             ),
             Center(
@@ -209,7 +210,7 @@ class _PhotoViewState extends State<PhotoView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Unlock this photo',
+                Copywriting.security_Unlock_this_photo,
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.base_background),
               ),
               const SizedBox(height: 16),
@@ -237,7 +238,7 @@ class _PhotoViewState extends State<PhotoView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Your balance',
+                    Copywriting.security_Your_balance,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.base_background),
                   ),
                   Row(

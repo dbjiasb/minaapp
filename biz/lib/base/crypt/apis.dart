@@ -107,4 +107,5 @@ abstract final class Apis {
   static late final String security_getSceneSessionList = decrypt('OfGbVS3xjnQqyqr18dxk749fW8VGAgnRMsHVSfbP9v0='); // getSceneSessionList
   static late final String security_calculateGenerateVideoCost = decrypt('W0guTWjz1GeYzoHYk9VES3bGx8EdFTAJ8/+mZgVddlg='); // calculateGenerateVideoCost
   static late final String security_getUserRecommendList = decrypt('0XdnK9lyVeyRdVJucljOsMMHztfMWSIRp/SdDI22lKQ='); // getUserRecommendList
+  static late final String security_unlockResource = decrypt('dlL5shlMJFG6XThdLv2WKw=='); // unlockResource
 }

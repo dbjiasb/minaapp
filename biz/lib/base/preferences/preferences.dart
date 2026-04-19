@@ -307,7 +307,7 @@ class Preferences {
   }
 
   bool get showCoins {
-    String str = appConfig['show_coins'] ?? '1';
+    String str = appConfig[Security.security_show_coins] ?? '1';
     return str == '1';
   }
 

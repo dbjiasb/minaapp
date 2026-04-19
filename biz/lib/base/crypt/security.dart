@@ -956,4 +956,12 @@ abstract final class Security {
   static late final String security_reloadMsgId = decrypt('a/vpKjEkIewuyiTBTYzsRw=='); // reloadMsgId
   static late final String security_requestGenerateVideoSuccess = decrypt('2Og2S9CIsZ6snCgxYMV7A15ahpz4oMijLuIq1kByyuE='); // requestGenerateVideoSuccess
   static late final String security_totalCostValue = decrypt('/cH1HHAyyWzDNt7JKQnMeQ=='); // totalCostValue
+  static late final String security_Chats = decrypt('CmPRVKW70gz78LJzngDBfQ=='); // Chats
+  static late final String security_Life = decrypt('VsZdtWpPddsDiL1G/XTbsQ=='); // Life
+  static late final String security_Private = decrypt('1VScBj72VaGObg0ThsHp9A=='); // Private
+  static late final String security_galleryResId = decrypt('ZvgSXU3GzcK8mJMsAIGw5Q=='); // galleryResId
+  static late final String security_jsGoNativePage = decrypt('GfxyrGrQNd/Pt6egfXc65w=='); // jsGoNativePage
+  static late final String security_lockedPaidResInfoList = decrypt('R2icdXkcP+K1Gkxfq0yOpKXkKy6F1Mw8sbB/Ve04p14='); // lockedPaidResInfoList
+  static late final String security_show_coins = decrypt('LwSybCHp/r3Cjxe0PpsPYg=='); // show_coins
+  static late final String security_thumbnailUrl = decrypt('uGsp/xMzG39tqj/SKpFvrg=='); // thumbnailUrl
 }

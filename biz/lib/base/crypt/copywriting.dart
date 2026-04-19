@@ -411,4 +411,8 @@ abstract final class Copywriting {
   static late final String security_Search_by_ID__name__tag___ = decrypt('z/Hpk4Fk90++YudyXP7SDlWsrOdauwhWjYEZ3n3DZ7U='); // Search by ID, name, tag...
   static late final String security_The_app_may_not_function_as_expected_until_you_remove_this_plugin_from_pubspec_yaml = decrypt('Pw07bWZPg06J4v1++ZQjfDKzi2mRUwNbwx1osM+p8rSrx41VS0V4QR7jzGFw3Ot0SPEoe9S/ZLsx5cNUFRKQd2bUKo6P7lWftalgjc4zpL5PdJVcRmDvzRPhZZfcRib/'); // The app may not function as expected until you remove this plugin from pubspec.yaml
   static late final String security_Video_initialization_failed = decrypt('HUvJfk3nSIUCF2I2Ntd/3kGOShNzNB1r/bbJ17F6D5I='); // Video initialization failed
+  static late final String security_Got_coins_reward = decrypt('8GfjNGGKazb7xTx+CkN8DcFGgsmfJv4kR1CDaEZhrgY='); // Got coins reward
+  static late final String security_Unlock_this_photo = decrypt('U9BkopO03+YIU5JIp86VGNjR+yJ2krP5yhnaHTh5POA='); // Unlock this photo
+  static late final String security_Unlocked_successfully = decrypt('/7x/Ss7jT4uJxuu5il3l2iqUoBdtLAQBSqBy5HjbD8w='); // Unlocked successfully
+  static late final String security_Your_balance = decrypt('l9TMVFZ/x60rp8mlWC8ciQ=='); // Your balance
 }

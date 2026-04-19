@@ -53,7 +53,7 @@ class ChatHistoryViewController extends GetxController with GetTickerProviderSta
   setupTabs() {
     bool rv = Preferences.instance.isRv;
     List<SessionListTab> ss = [
-      if (rv) SessionListTab('Chats', SessionListType.all),
+      if (rv) SessionListTab(Security.security_Chats, SessionListType.all),
       if (!rv) SessionListTab(Copywriting.security_all_Chat, SessionListType.all),
       if (!rv) SessionListTab(Security.security_aI, SessionListType.ai),
       if (!rv) SessionListTab(Security.security_real, SessionListType.real),

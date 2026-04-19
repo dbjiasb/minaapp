@@ -41,4 +41,5 @@ abstract final class Routes {
   static late final String security__moment_create_post_image = decrypt('/dloA2rLjANqdSjH3p2XutxNfMvgpwPVPeKs+Esj5VY='); // /moment/create_post_image
   static late final String security__moment_detail_moment = decrypt('s6qNvVi8RdAb7ONTwhuMt35XFidsyD+BvI2NQBL/2Ao='); // /moment/detail_moment
   static late final String security__chatTheater = decrypt('pVnHyFxOgqZ/QZILvS+aQA=='); // /chatTheater
+  static late final String security__myPremium = decrypt('sHLW+7Zvag80DtOdZrXR3w=='); // /myPremium
 }

@@ -46,56 +46,45 @@ class _MediaAdsButtonState extends State<MediaAdsButton> {
               child: Container(
                 width: widget.width,
                 height: widget.height,
-                margin: widget.margin,
-                child: Stack(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    // color: Color(0xFF1FE08A),
+                    gradient: const LinearGradient(
+                        begin: Alignment.bottomRight,
+                        end: Alignment.topLeft,
+                        colors: [
+                          Color(0xFF1FE08A),
+                          Color(0xFF0FBF7A),
+                        ])
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center, 
                   children: [
-                    Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          gradient: const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Color(0xFF7CBC3C),
-                                Color(0xFF61982A),
-                              ])),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.video_call,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          Text(
-                            Copywriting.security_aD_Free,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold),
-                          ).marginOnly(left: 4)
-                        ],
-                      ),
+                    const Icon(
+                      Icons.video_library,
+                      color: Colors.white,
+                      size: 16,
                     ),
-                    Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: const BoxDecoration(
-                              color: Color(0xFF5D9B1E),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8))),
-                          child: Text(
-                            '${AdsManager.getResLockUseCount(widget.sourceType)}/${AdsManager.getResLockTotalCount(widget.sourceType)}',
-                            style: const TextStyle(
-                                fontSize: 10, color: Colors.white),
-                          ),
-                        ))
+                    Text(
+                      Copywriting.security_aD_Free,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold),
+                    ).marginOnly(left: 4, right: 4),
+                    Container(
+                      // alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                      decoration: BoxDecoration(
+                          color: Colors.black26,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Text(
+                        '${AdsManager.getResLockUseCount(widget.sourceType)}/${AdsManager.getResLockTotalCount(widget.sourceType)}',
+                        style: const TextStyle(fontSize: 10, color: Colors.white),
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -240,7 +240,7 @@ class _WebViewState extends State<WebView> {
         );
       } else if (api.startsWith(Security.security_jsClearNotificationRedDot)) {
         UserManager.instance.notificationReminder.value = false;
-      } else if (api.startsWith('jsGoNativePage')) {
+      } else if (api.startsWith(Security.security_jsGoNativePage)) {
         RH.handleRoute(data);
       }
       else {

@@ -547,21 +547,21 @@ class ChatVideoCell extends ChatCell {
       onTap: showUnlockDialogIfNeeded,
       child: Column(
         children: [
-          if (videoMessage.currencyType == 0 && videoMessage.unlockPrice > 0 && !showFreeImage)
-            Container(
-              margin: EdgeInsets.only(bottom: 8),
-              height: type == ChatCellType.chat ? 40 : 28,
-              width: type == ChatCellType.chat ? 132 : 90,
-              child: MediaAdsButton(
-                videoMessage.uuid,
-                1,
-                grantAdCallback: (adAwardRsp) async {
-                  videoMessage.unlocked = true;
-                  Get.find<ChatRoomViewController>().update([refreshId]);
-                  ChatManager.instance.messageHandler.insertMessage(videoMessage);
-                },
-              ),
-            ),
+          // if (videoMessage.currencyType == 0 && videoMessage.unlockPrice > 0 && !showFreeImage)
+          //   Container(
+          //     margin: EdgeInsets.only(bottom: 8),
+          //     height: type == ChatCellType.chat ? 40 : 28,
+          //     width: type == ChatCellType.chat ? 132 : 90,
+          //     child: MediaAdsButton(
+          //       videoMessage.uuid,
+          //       1,
+          //       grantAdCallback: (adAwardRsp) async {
+          //         videoMessage.unlocked = true;
+          //         Get.find<ChatRoomViewController>().update([refreshId]);
+          //         ChatManager.instance.messageHandler.insertMessage(videoMessage);
+          //       },
+          //     ),
+          //   ),
           SizedBox(height: type == ChatCellType.chat ? 40 : 28, width: type == ChatCellType.chat ? 132 : 90, child: showFreeImage ? premiumBtn : costUnlockBtn),
         ],
       ),

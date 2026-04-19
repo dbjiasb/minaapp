@@ -1,3 +1,4 @@
+import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -463,8 +464,8 @@ class PersonViewPage extends StatelessWidget {
             tabAlignment: TabAlignment.start,
             isScrollable: true,
             tabs: [
-              Tab(text: 'Life'),
-              Tab(text: 'Private'),
+              Tab(text: Security.security_Life),
+              Tab(text: Security.security_Private),
             ],
             indicator: BoxDecoration(color: AppColors.ocMain, borderRadius: BorderRadius.circular(18)),
             indicatorSize: TabBarIndicatorSize.tab,
@@ -643,7 +644,7 @@ class PersonViewController extends GetxController with GetTickerProviderStateMix
   UserManager get userManager => UserManager.instance;
 
   List get photos => personalInfo[Security.security_resInfoList] ?? [];
-  List get lockedPhotos => personalInfo['lockedPaidResInfoList'] ?? [];
+  List get lockedPhotos => personalInfo[Security.security_lockedPaidResInfoList] ?? [];
   List get gallery => personalInfo[Security.security_gallery] ?? [];
 
   Map get userInfo => personalInfo[Security.security_userInfo] ?? {};
@@ -817,7 +818,7 @@ class PersonViewController extends GetxController with GetTickerProviderStateMix
   Future<bool> unlockPhoto(int galleryResId, int costValue, int costType) async {
     Toast.loading();
 
-    ApiRequest request = ApiRequest('unlockResource', params: {'galleryResId': galleryResId});
+    ApiRequest request = ApiRequest(Apis.security_unlockResource, params: {Security.security_galleryResId: galleryResId});
     ApiResponse rsp = await ApiService.instance.sendRequest(request);
     if (!rsp.isSuccess) {
       Toast.error(rsp.description);
@@ -828,7 +829,7 @@ class PersonViewController extends GetxController with GetTickerProviderStateMix
       return false;
     }
 
-    Toast.show('Unlocked successfully');
+    Toast.show(Copywriting.security_Unlocked_successfully);
     return true;
   }
 

@@ -4,17 +4,12 @@
     "items": []
   },
   "copywriting": {
-    "count": 9,
+    "count": 4,
     "items": [
-      "All Chat",
-      "Create Video",
-      "Generate Video",
-      "Mina Support",
-      "No groups yet, go create one!",
-      "Please input description",
-      "Search by ID, name, tag...",
-      "The app may not function as expected until you remove this plugin from pubspec.yaml",
-      "Video initialization failed"
+      "Got coins reward",
+      "Unlock this photo",
+      "Unlocked successfully",
+      "Your balance"
     ]
   },
   "links": {
@@ -31,65 +26,40 @@
     ]
   },
   "routes": {
-    "count": 0,
-    "items": []
+    "count": 1,
+    "items": [
+      "/myPremium"
+    ]
   },
   "apis": {
-    "count": 3,
+    "count": 1,
     "items": [
-      "calculateGenerateVideoCost",
-      "generateVideoV2",
-      "getUserRecommendList"
+      "unlockResource"
     ]
   },
   "security": {
-    "count": 35,
+    "count": 8,
     "items": [
-      "AI",
-      "Ask",
-      "Call",
-      "Cancel",
-      "Chat",
-      "Companions",
-      "Confirm",
-      "Create",
-      "Detail",
-      "Filter",
-      "Generate",
-      "Group",
-      "Mina",
-      "Official",
-      "Real",
-      "Settings",
-      "Story",
-      "Tip",
-      "Trending",
-      "accountType",
-      "audioInfo",
-      "costDetail",
-      "costItems",
-      "enabled",
-      "freeReason",
-      "generateAudioConfig",
-      "generateVideoEstimatedRefreshId",
-      "groupsV2",
-      "libCachedVideoPlayerPlusData",
-      "needExtraCost",
-      "params",
-      "reloadMsgId",
-      "requestGenerateVideoSuccess",
-      "totalCostValue",
-      "video_generate_click"
+      "Chats",
+      "Life",
+      "Private",
+      "galleryResId",
+      "jsGoNativePage",
+      "lockedPaidResInfoList",
+      "show_coins",
+      "thumbnailUrl"
     ]
   },
   "other": {
-    "count": 115,
+    "count": 118,
     "items": [
       " (3-20 characters)",
       " : ",
       " : Security.security_audio} call",
       " Free",
+      " Unlock",
       "##",
+      ").format(DateTime.now())}.log",
       ").last}",
       "**",
       ", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),\n                backgroundColor: AppColors.base_background,\n                leading: IconButton(onPressed: Get.back, icon: ImageView(Images.security_back_png, height: 24, width: 24)),\n              )\n              : null,\n      body: Obx(() {\n        int showCount = controller.myCompanions.length;\n\n        bool showRequesting = controller.requestingOwnerRole.value == true && showCount == 0;\n\n        if (!showRequesting && showCount == 0) {\n          return Container(\n            color: AppColors.base_background,\n            child: ListStatusView(status: ListStatus.empty, emptyDesc: ",
@@ -164,6 +134,7 @@
       "[VeoCall] onSwitchCamera",
       "[VeoCall] rt conntion Timeout, end call",
       "[VeoCall] this call is handling , ignore WATING msg",
+      "\\\\n",
       "\\d+",
       "\\n",
       "]?[Security.security_targetUid]}",
