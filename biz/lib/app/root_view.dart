@@ -1,3 +1,4 @@
+import 'package:biz/base/report/report_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -110,6 +111,10 @@ class RootView extends StatelessWidget {
             GetPage(name: Routers.collections, page: () => CollectionsView()),
           ],
           routingCallback: (route) {
+            String? name = route?.current;
+            if (name != null) {
+              ReportManager.reportPage(name);
+            }
             Toast.dismiss();
           },
         );

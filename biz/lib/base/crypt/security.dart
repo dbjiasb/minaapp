@@ -964,4 +964,5 @@ abstract final class Security {
   static late final String security_lockedPaidResInfoList = decrypt('R2icdXkcP+K1Gkxfq0yOpKXkKy6F1Mw8sbB/Ve04p14='); // lockedPaidResInfoList
   static late final String security_show_coins = decrypt('LwSybCHp/r3Cjxe0PpsPYg=='); // show_coins
   static late final String security_thumbnailUrl = decrypt('uGsp/xMzG39tqj/SKpFvrg=='); // thumbnailUrl
+  static late final String security_page_view = decrypt('rTfwV+QZwU5d01KMtxexuA=='); // page_view
 }

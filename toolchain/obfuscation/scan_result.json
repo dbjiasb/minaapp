@@ -4,13 +4,8 @@
     "items": []
   },
   "copywriting": {
-    "count": 4,
-    "items": [
-      "Got coins reward",
-      "Unlock this photo",
-      "Unlocked successfully",
-      "Your balance"
-    ]
+    "count": 0,
+    "items": []
   },
   "links": {
     "count": 8,
@@ -26,28 +21,17 @@
     ]
   },
   "routes": {
-    "count": 1,
-    "items": [
-      "/myPremium"
-    ]
+    "count": 0,
+    "items": []
   },
   "apis": {
-    "count": 1,
-    "items": [
-      "unlockResource"
-    ]
+    "count": 0,
+    "items": []
   },
   "security": {
-    "count": 8,
+    "count": 1,
     "items": [
-      "Chats",
-      "Life",
-      "Private",
-      "galleryResId",
-      "jsGoNativePage",
-      "lockedPaidResInfoList",
-      "show_coins",
-      "thumbnailUrl"
+      "page_view"
     ]
   },
   "other": {

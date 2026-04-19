@@ -86,4 +86,8 @@ class ReportManager {
       L.i('sendData failed');
     }
   }
+
+  static reportPage(String page) {
+      sendEvent(Security.security_page_view, {Security.security_route: page});
+  }
 }
