@@ -323,7 +323,7 @@ class RechargePremiumView extends StatelessWidget {
                     Text(
                       rcgItem.iapPriceStr,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: isSelected ? const Color(0xFFFFF37C) : const Color(0xFF999999),
                       ),

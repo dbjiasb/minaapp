@@ -90,6 +90,10 @@ PODS:
   - FMDB/SQLCipher (2.7.12):
     - FMDB/Core
     - SQLCipher (~> 4.6)
+  - freshchat_sdk (0.10.31):
+    - Flutter
+    - FreshchatSDK (= 6.4.7)
+  - FreshchatSDK (6.4.7)
   - Google-Mobile-Ads-SDK (12.2.0):
     - GoogleUserMessagingPlatform (>= 1.1)
   - google_mobile_ads (6.0.0):
@@ -246,6 +250,7 @@ DEPENDENCIES:
   - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - freshchat_sdk (from `.symlinks/plugins/freshchat_sdk/ios`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
@@ -285,6 +290,7 @@ SPEC REPOS:
     - FirebaseInstallations
     - FirebaseMessaging
     - FMDB
+    - FreshchatSDK
     - Google-Mobile-Ads-SDK
     - GoogleDataTransport
     - GoogleSignIn
@@ -327,6 +333,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  freshchat_sdk:
+    :path: ".symlinks/plugins/freshchat_sdk/ios"
   google_mobile_ads:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
   google_sign_in_ios:
@@ -396,6 +404,8 @@ SPEC CHECKSUMS:
   flutter_native_splash: df59bb2e1421aa0282cb2e95618af4dcb0c56c29
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
+  freshchat_sdk: 4163b821db421184ad0487cfbd990398037e9dcd
+  FreshchatSDK: 23ccc87e8828397d69146c2dbe38089f9fc5ca65
   Google-Mobile-Ads-SDK: 1dfb0c3cb46c7e2b00b0f4de74a1e06d9ea25d67
   google_mobile_ads: cab27248050510554aa646195eacc393ce7406ad
   google_sign_in_ios: 7411fab6948df90490dc4620ecbcabdc3ca04017
@@ -407,7 +417,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_cropper: e0bb0042e4404ff2ef134e5cf0492cbd892156cd
   image_picker_ios: 4f2f91b01abdb52842a8e277617df877e40f905b
-  in_app_purchase_storekit: 2342c0a5da86593124d08dd13d920f39a52b273a
+  in_app_purchase_storekit: a1ce04056e23eecc666b086040239da7619cd783
   just_audio: a42c63806f16995daf5b219ae1d679deb76e6a79
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d

@@ -1,14 +1,4 @@
-export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
-
 curl ipinfo.io
-
-if curl -s ipinfo.io | grep -iq "china"; then
-    echo "\nIP in China, stop building"
-    exit 1
-else
-    echo "\nIP Not China，Will continue"
-fi
-
 echo "\n\nCheck your IP, will continue building after 10s \n\n"
 sleep 10
 
@@ -52,9 +42,9 @@ version_and_build=$(python3 -c "import yaml; print(yaml.safe_load(open('$yaml_pa
 version=$(echo $version_and_build | cut -d "+" -f1)
 echo 'version: '$version
 
-flutter --version
-flutter clean
-flutter packages get
+#flutter --version
+#flutter clean
+#flutter packages get
 
 cd ios
 
