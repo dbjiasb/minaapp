@@ -1,18 +1,14 @@
 import 'package:biz/base/crypt/images.dart';
-import 'package:biz/base/crypt/routes.dart';
-import 'package:biz/base/crypt/other.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:biz/base/api_service/api_service_export.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/constants.dart';
 import 'package:biz/core/account/account_service.dart';
 import 'package:biz/shared/formatters/date_formatter.dart';
@@ -20,13 +16,13 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../base/assets/image_view.dart';
 import '../../../base/event_center/event_center.dart';
+import '../../../base/privacy/ai_consent_service.dart';
 import '../../../core/util/cached_image.dart';
 import '../../../core/util/log_util.dart';
 import '../../../shared/toast/toast.dart';
 import '../chat_session.dart';
 import './call_manager.dart';
 import 'av_engine.dart';
-import 'call_info.dart';
 
 enum AICallState { connecting, userSpeaking, aiThinking, aiSpeaking }
 
@@ -56,10 +52,14 @@ class AICallView extends StatelessWidget {
   String get statusText {
     if (viewController.muted.value) return Copywriting.security_you_have_muted;
     AICallState status = viewController.callState.value;
-    if (status == AICallState.connecting) return Copywriting.security_connecting___;
-    if (status == AICallState.aiThinking) return Copywriting.security_i_am_thinking___;
-    if (status == AICallState.aiSpeaking) return Copywriting.security_interrupt_AI;
-    if (status == AICallState.userSpeaking) return Copywriting.security_i_am_listening___;
+    if (status == AICallState.connecting)
+      return Copywriting.security_connecting___;
+    if (status == AICallState.aiThinking)
+      return Copywriting.security_i_am_thinking___;
+    if (status == AICallState.aiSpeaking)
+      return Copywriting.security_interrupt_AI;
+    if (status == AICallState.userSpeaking)
+      return Copywriting.security_i_am_listening___;
     return Security.security_nothing;
   }
 
@@ -69,20 +69,38 @@ class AICallView extends StatelessWidget {
         return Column(
           children: [
             SizedBox(height: 184),
-            Text(Copywriting.security_connecting___, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white)),
+            Text(
+              Copywriting.security_connecting___,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
           ],
         );
       case AICallState.aiThinking:
         return Column(
           children: [
             SizedBox(height: 184),
-            Text(Copywriting.security_i_am_thinking___, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white)),
+            Text(
+              Copywriting.security_i_am_thinking___,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
           ],
         );
       case AICallState.aiSpeaking:
         return Column(
           children: [
-            ImageView(Images.security_triangle_arrow_png, width: 24, height: 12),
+            ImageView(
+              Images.security_triangle_arrow_png,
+              width: 24,
+              height: 12,
+            ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 43),
               child: Container(
@@ -90,19 +108,47 @@ class AICallView extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   //左上角和右上角圆角12
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                  gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0x40000000), Color(0x00000000)]),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0x40000000), Color(0x00000000)],
+                  ),
                 ),
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(8),
-                  child: Text(viewController.speechContent.value, style: TextStyle(color: Color(0xB3FFFFFF), fontSize: 13, fontWeight: FontWeight.normal)),
+                  child: Text(
+                    viewController.speechContent.value,
+                    style: TextStyle(
+                      color: Color(0xB3FFFFFF),
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 40),
-            GestureDetector(onTap: viewController.interruptAI, child: ImageView(Images.security_interrupt_task_png, width: 32, height: 32)),
+            GestureDetector(
+              onTap: viewController.interruptAI,
+              child: ImageView(
+                Images.security_interrupt_task_png,
+                width: 32,
+                height: 32,
+              ),
+            ),
             SizedBox(height: 4),
-            Text(Copywriting.security_interrupt_AI, style: TextStyle(fontSize: 14, color: Color(0xFFABABAD), fontWeight: FontWeight.w500)),
+            Text(
+              Copywriting.security_interrupt_AI,
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xFFABABAD),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         );
       case AICallState.userSpeaking:
@@ -110,7 +156,14 @@ class AICallView extends StatelessWidget {
           children: [
             SizedBox(height: 144),
             SizedBox(height: 16),
-            Text(Copywriting.security_i_am_listening___, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white)),
+            Text(
+              Copywriting.security_i_am_listening___,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
           ],
         );
     }
@@ -118,7 +171,10 @@ class AICallView extends StatelessWidget {
 
   Widget _buildBackgroundView() {
     if (viewController.session.backgroundUrl.value.isNotEmpty) {
-      return CachedImage(imageUrl: viewController.session.backgroundUrl.value, fit: BoxFit.cover);
+      return CachedImage(
+        imageUrl: viewController.session.backgroundUrl.value,
+        fit: BoxFit.cover,
+      );
     } else {
       return SizedBox.shrink();
     }
@@ -130,11 +186,24 @@ class AICallView extends StatelessWidget {
       child: Obx(
         () => RichText(
           text: TextSpan(
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: hidden ? Colors.transparent : Colors.white),
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: hidden ? Colors.transparent : Colors.white,
+            ),
             children: [
-              TextSpan(text: '${viewController.callInfo.value?.costEveryMinute ?? 15} '),
+              TextSpan(
+                text:
+                    '${viewController.callInfo.value?.costEveryMinute ?? 15} ',
+              ),
               WidgetSpan(
-                child: ImageView(viewController.callInfo.value?.currencyType == 1 ? Images.security_gem_png : Images.security_coin_png, height: 16, width: 16),
+                child: ImageView(
+                  viewController.callInfo.value?.currencyType == 1
+                      ? Images.security_gem_png
+                      : Images.security_coin_png,
+                  height: 16,
+                  width: 16,
+                ),
                 alignment: PlaceholderAlignment.middle, // 图片对齐方式
               ),
               TextSpan(text: Copywriting.security_per_minute),
@@ -171,7 +240,14 @@ class AICallView extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      Text(Copywriting.security_consuming_props_during_call, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                      Text(
+                        Copywriting.security_consuming_props_during_call,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                       buildCostWidget(false),
                       SizedBox(height: 66),
 
@@ -180,11 +256,21 @@ class AICallView extends StatelessWidget {
                         height: 100,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          image: DecorationImage(image: NetworkImage(viewController.session.avatar), fit: BoxFit.cover),
+                          image: DecorationImage(
+                            image: NetworkImage(viewController.session.avatar),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       SizedBox(height: 16),
-                      Text(viewController.session.name, style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+                      Text(
+                        viewController.session.name,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                   Obx(() => callStateView()),
@@ -193,11 +279,24 @@ class AICallView extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          Text(Copywriting.security_call_Duration, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
+                          Text(
+                            Copywriting.security_call_Duration,
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                           Obx(
                             () => Text(
-                              DateFormatter.formatSeconds(viewController.duration.value),
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.white),
+                              DateFormatter.formatSeconds(
+                                viewController.duration.value,
+                              ),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],
@@ -205,7 +304,14 @@ class AICallView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          GestureDetector(onTap: viewController.onCallCancel, child: ImageView(Images.security_hang_up_png, width: 64, height: 64)),
+                          GestureDetector(
+                            onTap: viewController.onCallCancel,
+                            child: ImageView(
+                              Images.security_hang_up_png,
+                              width: 64,
+                              height: 64,
+                            ),
+                          ),
                           SizedBox(width: 60),
                           GestureDetector(
                             onTap: () {
@@ -214,12 +320,24 @@ class AICallView extends StatelessWidget {
                             child: Obx(
                               () =>
                                   !viewController.muted.value
-                                      ? ImageView(Images.security_open_mic_png, width: 64, height: 64)
+                                      ? ImageView(
+                                        Images.security_open_mic_png,
+                                        width: 64,
+                                        height: 64,
+                                      )
                                       : Container(
                                         height: 64,
                                         width: 64,
-                                        decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xff000000).withValues(alpha: 0.2)),
-                                        child: Icon(Icons.mic_off_rounded, size: 32),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(
+                                            0xff000000,
+                                          ).withValues(alpha: 0.2),
+                                        ),
+                                        child: Icon(
+                                          Icons.mic_off_rounded,
+                                          size: 32,
+                                        ),
                                       ),
                             ),
                           ),
@@ -238,7 +356,9 @@ class AICallView extends StatelessWidget {
 }
 
 class AICallViewController extends GetxController {
-  final ChatSession session = ChatSession.fromRouter(Get.arguments[Security.security_session]);
+  final ChatSession session = ChatSession.fromRouter(
+    Get.arguments[Security.security_session],
+  );
   Rx<CallInfo?> callInfo = Rx<CallInfo?>(null);
   bool isEnd = false;
   bool isEngineCreated = false;
@@ -260,8 +380,15 @@ class AICallViewController extends GetxController {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+    final agreed = await AIConsentService.ensureConsent(
+      feature: AIConsentFeature.aiCall,
+    );
+    if (!agreed) {
+      close();
+      return;
+    }
     dial();
   }
 
@@ -281,7 +408,9 @@ class AICallViewController extends GetxController {
   }
 
   void dial() async {
-    ApiResponse response = await CallManager.instance.dial(userId: int.parse(session.id));
+    ApiResponse response = await CallManager.instance.dial(
+      userId: int.parse(session.id),
+    );
 
     int callId = response.data[Constants.dialId] ?? 0;
     String appId = response.data[Security.security_appId] ?? '';
@@ -327,7 +456,10 @@ class AICallViewController extends GetxController {
   Future<void> createEngine() async {
     if (isEngineCreated) return;
     //初始化
-    await AVEngine.instance.init(appId: callInfo.value!.appId, token: callInfo.value!.token);
+    await AVEngine.instance.init(
+      appId: callInfo.value!.appId,
+      token: callInfo.value!.token,
+    );
     AVEngine.instance.onReceiveCustomEvent = (data) {
       onReceiveCustomEvent(data);
     };
@@ -361,7 +493,8 @@ class AICallViewController extends GetxController {
         {
           String sender = event[Security.security_sender];
           String text = event[Constants.carrier]?[Security.security_text] ?? '';
-          bool isEnd = event[Constants.carrier]?[Security.security_end] ?? false;
+          bool isEnd =
+              event[Constants.carrier]?[Security.security_end] ?? false;
           // String round = event[Constants.carrier]?['roundid'] ?? '';
           // int? startMs = event[Constants.carrier]?['start_time_ms'] ?? -1;
           // String target = '';
@@ -417,7 +550,11 @@ class AICallViewController extends GetxController {
 
     addJoinRoomListener();
     String userId = callInfo.value?.rtcSelfUid ?? '';
-    await AVEngine.instance.joinRoom(callInfo.value?.roomId ?? '', userId, StreamType.audio);
+    await AVEngine.instance.joinRoom(
+      callInfo.value?.roomId ?? '',
+      userId,
+      StreamType.audio,
+    );
     onSpeakerAction(true);
     startPreview();
   }
@@ -454,7 +591,9 @@ class AICallViewController extends GetxController {
   }
 
   void interruptAI() async {
-    AVEngine.instance.interruptAI(int.parse(callInfo.value?.rtcTargetUid ?? '0'));
+    AVEngine.instance.interruptAI(
+      int.parse(callInfo.value?.rtcTargetUid ?? '0'),
+    );
   }
 
   void enableMic(bool enable) {

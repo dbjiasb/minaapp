@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/event_center/event_center.dart';
+import 'package:biz/base/privacy/ai_consent_service.dart';
 import 'package:biz/base/router/route_helper.dart';
 import 'package:biz/business/chat/chat_manager.dart';
 import 'package:biz/business/chat/chat_session.dart';
@@ -40,9 +41,7 @@ class ChatPrivateRoomView extends StatelessWidget {
             // 背景图片
             _buildBackground(controller),
             // 深色遮罩
-            Container(
-              color: Colors.black.withOpacity(0.2),
-            ),
+            Container(color: Colors.black.withOpacity(0.2)),
             // 主要内容
             SafeArea(
               child: Column(
@@ -62,9 +61,7 @@ class ChatPrivateRoomView extends StatelessWidget {
               left: 0,
               right: 0,
               bottom: 0,
-              child: ChatPrivateBottomBar(
-                onSendText: controller.sendText,
-              ),
+              child: ChatPrivateBottomBar(onSendText: controller.sendText),
             ),
           ],
         ),
@@ -77,12 +74,14 @@ class ChatPrivateRoomView extends StatelessWidget {
     if (bgUrl.isEmpty) {
       return Container(color: const Color(0xFF07070A));
     }
-    return Obx(() => CachedImage(
-      imageUrl: controller.session.backgroundUrl.value,
-      width: double.infinity,
-      height: double.infinity,
-      fit: BoxFit.cover,
-    ));
+    return Obx(
+      () => CachedImage(
+        imageUrl: controller.session.backgroundUrl.value,
+        width: double.infinity,
+        height: double.infinity,
+        fit: BoxFit.cover,
+      ),
+    );
   }
 
   Widget _buildTopBar(ChatPrivateRoomViewController controller) {
@@ -97,11 +96,7 @@ class ChatPrivateRoomView extends StatelessWidget {
               ChatManager.instance.updateChatSession(controller.session);
               RouteHelper.back();
             },
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 20.w,
-            ),
+            child: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20.w),
           ),
           SizedBox(width: 12.w),
           // 头像
@@ -163,11 +158,7 @@ class ChatPrivateRoomView extends StatelessWidget {
             onTap: () {
               // TODO: 显示更多菜单
             },
-            child: Icon(
-              Icons.more_vert,
-              color: Colors.white,
-              size: 24.w,
-            ),
+            child: Icon(Icons.more_vert, color: Colors.white, size: 24.w),
           ),
         ],
       ),
@@ -183,11 +174,9 @@ class ChatPrivateRoomView extends StatelessWidget {
         borderRadius: BorderRadius.circular(22.w),
       ),
       child: Text(
-        Copywriting.security_notice__AI_responses_are_fictional_and_for_entertainment_only,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 11.sp,
-        ),
+        Copywriting
+            .security_notice__AI_responses_are_fictional_and_for_entertainment_only,
+        style: TextStyle(color: Colors.white, fontSize: 11.sp),
         textAlign: TextAlign.center,
       ),
     );
@@ -218,7 +207,10 @@ class ChatPrivateRoomView extends StatelessWidget {
     });
   }
 
-  Widget _buildMessageCell(ChatMessage message, ChatPrivateRoomViewController controller) {
+  Widget _buildMessageCell(
+    ChatMessage message,
+    ChatPrivateRoomViewController controller,
+  ) {
     if (message is ChatTextMessage) {
       return Column(
         children: [
@@ -233,11 +225,14 @@ class ChatPrivateRoomView extends StatelessWidget {
           ),
           // 如果是AI消息且显示继续按钮
           if (!message.isMine())
-            Obx(() => message.showContinue.value
-                ? ChatContinueButton(
-                    onTap: () => controller.onContinue(message),
-                  )
-                : const SizedBox.shrink()),
+            Obx(
+              () =>
+                  message.showContinue.value
+                      ? ChatContinueButton(
+                        onTap: () => controller.onContinue(message),
+                      )
+                      : const SizedBox.shrink(),
+            ),
         ],
       );
     }
@@ -266,6 +261,9 @@ class ChatPrivateRoomViewController extends GetxController {
   void onInit() {
     super.onInit();
     session = _createSession(arguments);
+    if (session.isAiChat) {
+      AIConsentService.promptForEntryIfNeeded(feature: AIConsentFeature.chat);
+    }
     _loadMessages();
     _listenToMessages();
   }
@@ -273,7 +271,10 @@ class ChatPrivateRoomViewController extends GetxController {
   @override
   void onClose() {
     if (_messageListener != null) {
-      EventCenter.instance.removeListener(kEventCenterDidReceivedNewMessages, _messageListener!);
+      EventCenter.instance.removeListener(
+        kEventCenterDidReceivedNewMessages,
+        _messageListener!,
+      );
     }
     ChatManager.instance.updateChatSession(session);
     super.onClose();
@@ -296,7 +297,8 @@ class ChatPrivateRoomViewController extends GetxController {
 
   Future<void> _loadMessages() async {
     try {
-      final loadedMessages = await ChatManager.instance.messageHandler.queryMessages(session.sessionId);
+      final loadedMessages = await ChatManager.instance.messageHandler
+          .queryMessages(session.sessionId);
       messages.assignAll(loadedMessages.reversed);
 
       // 设置最后一条AI消息显示继续按钮
@@ -323,7 +325,10 @@ class ChatPrivateRoomViewController extends GetxController {
         }
       }
     };
-    EventCenter.instance.addListener(kEventCenterDidReceivedNewMessages, _messageListener!);
+    EventCenter.instance.addListener(
+      kEventCenterDidReceivedNewMessages,
+      _messageListener!,
+    );
   }
 
   void onContinue(ChatMessage message) {
@@ -333,6 +338,10 @@ class ChatPrivateRoomViewController extends GetxController {
 
   Future<void> sendText(String text) async {
     if (text.trim().isEmpty) return;
+    final agreed = await AIConsentService.ensureConsent(
+      feature: AIConsentFeature.chat,
+    );
+    if (!agreed) return;
 
     try {
       // 创建文本消息
@@ -343,7 +352,9 @@ class ChatPrivateRoomViewController extends GetxController {
       );
 
       // 先插入到数据库
-      int result = await ChatManager.instance.messageHandler.insertMessage(message);
+      int result = await ChatManager.instance.messageHandler.insertMessage(
+        message,
+      );
       if (result <= 0) return;
 
       // 更新消息列表

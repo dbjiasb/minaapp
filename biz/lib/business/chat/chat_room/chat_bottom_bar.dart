@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
+import 'package:biz/base/privacy/ai_consent_service.dart';
 import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/router/router_names.dart';
 import 'package:biz/business/chat/chat_manager.dart';
@@ -39,12 +40,19 @@ import '../create_image/create_image_panel.dart';
 import '../gift/gift_panel.dart';
 import 'chat_muse_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 enum ChatRoomBottomBarState { simple, detailed, muse, gift }
 
 class ChatBottomBar extends StatelessWidget {
-  ChatBottomBar({super.key, this.showAudioInputMask, this.cancelAudio, this.sendText});
+  ChatBottomBar({
+    super.key,
+    this.showAudioInputMask,
+    this.cancelAudio,
+    this.sendText,
+  });
 
-  final Function(bool)? showAudioInputMask; // control audio input mask visibility
+  final Function(bool)?
+  showAudioInputMask; // control audio input mask visibility
   final Function(bool)? cancelAudio; // control audio input cancel state
   final Function? sendText;
   RxBool showGreetTips = true.obs;
@@ -54,7 +62,7 @@ class ChatBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () => Column(
+      () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (viewController.isGroup) _buildMembersBar(),
@@ -65,10 +73,22 @@ class ChatBottomBar extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [AppColors.mainDarkColor.withValues(alpha: 0.0), AppColors.mainDarkColor.withValues(alpha: 0.9)],
+                colors: [
+                  AppColors.mainDarkColor.withValues(alpha: 0.0),
+                  AppColors.mainDarkColor.withValues(alpha: 0.9),
+                ],
               ),
             ),
-            child: SafeArea(bottom: true, child: Column(children: [buildInputBar(), buildFunctionBar(), if (Platform.isAndroid) SizedBox(height: 10)])),
+            child: SafeArea(
+              bottom: true,
+              child: Column(
+                children: [
+                  buildInputBar(),
+                  buildFunctionBar(),
+                  if (Platform.isAndroid) SizedBox(height: 10),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -112,18 +132,20 @@ class ChatBottomBar extends StatelessWidget {
         final isAudioMode = _audioInputMode.value;
         return GestureDetector(
           onTap:
-          isAudioMode
-              ? () {
-            Toast.show(Copywriting.security_audio_input_is_too_short_to_send_);
-            viewController.cleanAudioInput();
-          }
-              : null,
+              isAudioMode
+                  ? () {
+                    Toast.show(
+                      Copywriting.security_audio_input_is_too_short_to_send_,
+                    );
+                    viewController.cleanAudioInput();
+                  }
+                  : null,
           onLongPressStart:
-          isAudioMode
-              ? (_) {
-            beginAudioRecord();
-          }
-              : null,
+              isAudioMode
+                  ? (_) {
+                    beginAudioRecord();
+                  }
+                  : null,
           onLongPressEnd: (_) {
             endAudioRecord();
           },
@@ -131,7 +153,10 @@ class ChatBottomBar extends StatelessWidget {
           child: Container(
             height: 44,
             decoration: BoxDecoration(
-              color: _audioInputMode.value ? Colors.white.withValues(alpha: 0.6) : Color(0xFF999999).withValues(alpha: 0.8),
+              color:
+                  _audioInputMode.value
+                      ? Colors.white.withValues(alpha: 0.6)
+                      : Color(0xFF999999).withValues(alpha: 0.8),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -139,122 +164,197 @@ class ChatBottomBar extends StatelessWidget {
                 Obx(() {
                   return viewController.isKeyboardVisible.value
                       ? GestureDetector(
-                    onTap: () {
-                      viewController.textController.text += '**';
-                      viewController.textController.selection = TextSelection.fromPosition(
-                        TextPosition(offset: viewController.textController.text.length - 1),
-                      );
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 24,
-                      height: 24,
-                      margin: EdgeInsets.only(left: 12, right: 8),
-                      child: Obx(() => ImageView(_audioInputMode.value ? Images.security_keyboard_png : Images.security_audio_mode_png, width: 24, height: 24)),
-                    ),
-                  )
+                        onTap: () {
+                          viewController.textController.text += '**';
+                          viewController
+                              .textController
+                              .selection = TextSelection.fromPosition(
+                            TextPosition(
+                              offset:
+                                  viewController.textController.text.length - 1,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 24,
+                          height: 24,
+                          margin: EdgeInsets.only(left: 12, right: 8),
+                          child: Obx(
+                            () => ImageView(
+                              _audioInputMode.value
+                                  ? Images.security_keyboard_png
+                                  : Images.security_audio_mode_png,
+                              width: 24,
+                              height: 24,
+                            ),
+                          ),
+                        ),
+                      )
                       : GestureDetector(
-                    onTap: () {
-                      _audioInputMode.value = !_audioInputMode.value;
-                      if (viewController.barState != ChatRoomBottomBarState.simple) {
-                        viewController.updateBarState(ChatRoomBottomBarState.simple);
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(left: 12, right: 8),
-                      child: Obx(() => ImageView(_audioInputMode.value ? Images.security_keyboard_png : Images.security_audio_mode_png, width: 24, height: 24)),
-                    ),
-                  );
+                        onTap: () {
+                          _audioInputMode.value = !_audioInputMode.value;
+                          if (viewController.barState !=
+                              ChatRoomBottomBarState.simple) {
+                            viewController.updateBarState(
+                              ChatRoomBottomBarState.simple,
+                            );
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: 12, right: 8),
+                          child: Obx(
+                            () => ImageView(
+                              _audioInputMode.value
+                                  ? Images.security_keyboard_png
+                                  : Images.security_audio_mode_png,
+                              width: 24,
+                              height: 24,
+                            ),
+                          ),
+                        ),
+                      );
                 }),
                 Expanded(
                   child: Obx(
-                        () =>
-                    _audioInputMode.value
-                        ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(Copywriting.security_hold_to_talk, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 14)),
-                      ],
-                    )
-                        : Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            onChanged: (value) {
-                              viewController.onTextChanged(value);
-                            },
-                            onSubmitted: (value) {
-                              viewController.sendText(value);
-                            },
-                            style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
-                            controller: viewController.textController,
-                            focusNode: viewController.focusNode,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                              focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                              fillColor: Colors.transparent,
-                              filled: true,
-                              hintText: viewController.messageHints,
-                              hintStyle: TextStyle(color: Color(0x99FFFFFF), fontWeight: FontWeight.w600, fontSize: 14),
-                              floatingLabelBehavior: viewController.isGroup ? FloatingLabelBehavior.always : FloatingLabelBehavior.auto,
-                              prefix:
-                              viewController.isGroup
-                                  ? Container(
-                                constraints: BoxConstraints(maxWidth: 120),
-                                margin: viewController.buildGroupAtText().isNotEmpty ? EdgeInsets.only(right: 4) : null,
-                                child: Text(
-                                  viewController.buildGroupAtText(),
+                    () =>
+                        _audioInputMode.value
+                            ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  Copywriting.security_hold_to_talk,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 11,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
                                   ),
                                 ),
-                              )
-                                  : null,
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                            textInputAction: TextInputAction.send,
-                          ),
-                        ),
-                        if (viewController.isAi)
-                          GestureDetector(
-                            onTap: () {
-                              if (viewController.barState != ChatRoomBottomBarState.muse) {
-                                viewController.updateBarState(ChatRoomBottomBarState.muse);
-                              } else {
-                                viewController.updateBarState(ChatRoomBottomBarState.simple);
-                              }
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 6),
-                              child: Obx(
-                                    () => ImageView(
-                                      viewController.barState == ChatRoomBottomBarState.muse ? Images.security_tip_on_png : Images.security_tip_off_png,
-                                  width: 28,
-                                  height: 28,
+                              ],
+                            )
+                            : Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    onChanged: (value) {
+                                      viewController.onTextChanged(value);
+                                    },
+                                    onSubmitted: (value) {
+                                      viewController.sendText(value);
+                                    },
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    controller: viewController.textController,
+                                    focusNode: viewController.focusNode,
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      fillColor: Colors.transparent,
+                                      filled: true,
+                                      hintText: viewController.messageHints,
+                                      hintStyle: TextStyle(
+                                        color: Color(0x99FFFFFF),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                      floatingLabelBehavior:
+                                          viewController.isGroup
+                                              ? FloatingLabelBehavior.always
+                                              : FloatingLabelBehavior.auto,
+                                      prefix:
+                                          viewController.isGroup
+                                              ? Container(
+                                                constraints: BoxConstraints(
+                                                  maxWidth: 120,
+                                                ),
+                                                margin:
+                                                    viewController
+                                                            .buildGroupAtText()
+                                                            .isNotEmpty
+                                                        ? EdgeInsets.only(
+                                                          right: 4,
+                                                        )
+                                                        : null,
+                                                child: Text(
+                                                  viewController
+                                                      .buildGroupAtText(),
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 11,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              )
+                                              : null,
+                                      contentPadding: EdgeInsets.zero,
+                                    ),
+                                    textInputAction: TextInputAction.send,
+                                  ),
                                 ),
-                              ),
+                                if (viewController.isAi)
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (viewController.barState !=
+                                          ChatRoomBottomBarState.muse) {
+                                        viewController.updateBarState(
+                                          ChatRoomBottomBarState.muse,
+                                        );
+                                      } else {
+                                        viewController.updateBarState(
+                                          ChatRoomBottomBarState.simple,
+                                        );
+                                      }
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 6),
+                                      child: Obx(
+                                        () => ImageView(
+                                          viewController.barState ==
+                                                  ChatRoomBottomBarState.muse
+                                              ? Images.security_tip_on_png
+                                              : Images.security_tip_off_png,
+                                          width: 28,
+                                          height: 28,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (viewController.barState !=
+                                        ChatRoomBottomBarState.detailed) {
+                                      viewController.updateBarState(
+                                        ChatRoomBottomBarState.detailed,
+                                      );
+                                    } else {
+                                      viewController.updateBarState(
+                                        ChatRoomBottomBarState.simple,
+                                      );
+                                    }
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 12),
+                                    child: ImageView(
+                                      viewController.barState ==
+                                              ChatRoomBottomBarState.detailed
+                                          ? Images.security_chat_add_png
+                                          : Images.security_chat_add_png,
+                                      width: 28,
+                                      height: 28,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        GestureDetector(
-                          onTap: () {
-                            if (viewController.barState != ChatRoomBottomBarState.detailed) {
-                              viewController.updateBarState(ChatRoomBottomBarState.detailed);
-                            } else {
-                              viewController.updateBarState(ChatRoomBottomBarState.simple);
-                            }
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(right: 12),
-                            child: ImageView(
-                                viewController.barState == ChatRoomBottomBarState.detailed ? Images.security_chat_add_png : Images.security_chat_add_png,
-                                width: 28, height: 28),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ],
@@ -373,7 +473,11 @@ class ChatBottomBar extends StatelessWidget {
 
   void onCreateImageButtonClicked() {
     Get.lazyPut(() => CreateImagePanelController());
-    Get.bottomSheet(CreateImagePanel(), persistent: false, useRootNavigator: true);
+    Get.bottomSheet(
+      CreateImagePanel(),
+      persistent: false,
+      useRootNavigator: true,
+    );
   }
 
   void onChatHistoryButtonClicked() {
@@ -405,14 +509,30 @@ class ChatBottomBar extends StatelessWidget {
     //   ];
     // } else {
     items = [
-      {Security.security_title: Security.security_Photo, Security.security_icon: Images.security_btn_pic_png, Security.security_action: viewController.showImageSelector},
-      {Security.security_title: Security.security_History, Security.security_icon: Images.security_btn_history_png, Security.security_action: onChatHistoryButtonClicked},
-      {Security.security_title: Security.security_Gift, Security.security_icon: Images.security_btn_gift_png, Security.security_action: viewController.showGiftPanel},
+      {
+        Security.security_title: Security.security_Photo,
+        Security.security_icon: Images.security_btn_pic_png,
+        Security.security_action: viewController.showImageSelector,
+      },
+      {
+        Security.security_title: Security.security_History,
+        Security.security_icon: Images.security_btn_history_png,
+        Security.security_action: onChatHistoryButtonClicked,
+      },
+      {
+        Security.security_title: Security.security_Gift,
+        Security.security_icon: Images.security_btn_gift_png,
+        Security.security_action: viewController.showGiftPanel,
+      },
     ];
 
     if (!viewController.isAi) {
       items.insertAll(1, [
-        {Security.security_title: Security.security_Video, Security.security_icon: Images.security_btn_video_png, Security.security_action: viewController.onSendVideo},
+        {
+          Security.security_title: Security.security_Video,
+          Security.security_icon: Images.security_btn_video_png,
+          Security.security_action: viewController.onSendVideo,
+        },
         {
           Security.security_title: Copywriting.security_video_Call,
           Security.security_icon: Images.security_btn_video_call_png,
@@ -424,9 +544,7 @@ class ChatBottomBar extends StatelessWidget {
           Security.security_action: () => viewController.toCall(1),
         },
       ]);
-    } else {
-
-    }
+    } else {}
     // }
 
     return Container(
@@ -449,14 +567,28 @@ class ChatBottomBar extends StatelessWidget {
                   width: 60,
                   height: 60,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(color: Color(0x26FFFFFF), borderRadius: BorderRadius.all(Radius.circular(15))),
-                  child: ImageView(item[Security.security_icon] ?? '', width: 32, height: 32),
+                  decoration: BoxDecoration(
+                    color: Color(0x26FFFFFF),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  child: ImageView(
+                    item[Security.security_icon] ?? '',
+                    width: 32,
+                    height: 32,
+                  ),
                 ),
                 SizedBox(height: 4),
                 Container(
                   alignment: Alignment.center,
                   height: 16,
-                  child: Text(item[Security.security_title] ?? '', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 11)),
+                  child: Text(
+                    item[Security.security_title] ?? '',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 11,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 12),
               ],
@@ -470,7 +602,8 @@ class ChatBottomBar extends StatelessWidget {
   Widget _buildMemberItem(dynamic item) {
     return Obx(() {
       return Tooltip(
-        message: item[Security.security_userbase]?[Security.security_nickName] ?? '',
+        message:
+            item[Security.security_userbase]?[Security.security_nickName] ?? '',
         verticalOffset: -60,
         child: InkWell(
           onTap: () {
@@ -480,36 +613,63 @@ class ChatBottomBar extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(16)),
               border: Border.all(
-                color: viewController.rxMemberSelect[item[Security.security_userbase]?[Security.security_uid]] == 1 ? AppColors.primary : Colors.transparent,
+                color:
+                    viewController.rxMemberSelect[item[Security
+                                .security_userbase]?[Security.security_uid]] ==
+                            1
+                        ? AppColors.primary
+                        : Colors.transparent,
                 width: 1,
               ),
             ),
             child: Stack(
               children: [
                 CachedImage.clipImage(
-                  imageUrl: item[Security.security_userbase]?[Security.security_avatarUrl] ?? '',
+                  imageUrl:
+                      item[Security.security_userbase]?[Security
+                          .security_avatarUrl] ??
+                      '',
                   width: 32,
                   height: 32,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                if (viewController.rxMemberSelect[item[Security.security_userbase]?[Security.security_uid]] == 2)
+                if (viewController.rxMemberSelect[item[Security
+                        .security_userbase]?[Security.security_uid]] ==
+                    2)
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.black.withAlpha((255.0 * 0.4).round()),
-                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(16),
+                        ),
                       ),
-                      child: Center(child: ImageView(Images.unspeaker_icon, width: 16, height: 16)),
+                      child: Center(
+                        child: ImageView(
+                          Images.unspeaker_icon,
+                          width: 16,
+                          height: 16,
+                        ),
+                      ),
                     ),
                   ),
-                if (item[Security.security_state] == 2 || item[Security.security_state] == 3)
+                if (item[Security.security_state] == 2 ||
+                    item[Security.security_state] == 3)
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.black.withAlpha((255.0 * 0.4).round()),
-                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(16),
+                        ),
                       ),
-                      child: Center(child: ImageView(Images.deactivated_icon, width: 16, height: 16)),
+                      child: Center(
+                        child: ImageView(
+                          Images.deactivated_icon,
+                          width: 16,
+                          height: 16,
+                        ),
+                      ),
                     ),
                   ),
               ],
@@ -523,22 +683,27 @@ class ChatBottomBar extends StatelessWidget {
   Widget _buildMembersBar() {
     return viewController.membersNoOwner.isNotEmpty
         ? Container(
-      padding: const EdgeInsets.all(4),
-      margin: const EdgeInsets.only(left: 12, right: 12, bottom: 4),
-      decoration: const BoxDecoration(color: Color(0x66252230), borderRadius: BorderRadius.all(Radius.circular(20))),
-      height: 40,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return _buildMemberItem(viewController.membersNoOwner.safeGet(index, {}));
-        },
-        separatorBuilder: (context, index) {
-          return const SizedBox(width: 8);
-        },
-        itemCount: viewController.membersNoOwner.length,
-      ),
-    )
+          padding: const EdgeInsets.all(4),
+          margin: const EdgeInsets.only(left: 12, right: 12, bottom: 4),
+          decoration: const BoxDecoration(
+            color: Color(0x66252230),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          height: 40,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return _buildMemberItem(
+                viewController.membersNoOwner.safeGet(index, {}),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(width: 8);
+            },
+            itemCount: viewController.membersNoOwner.length,
+          ),
+        )
         : Container();
   }
 
@@ -570,77 +735,106 @@ class ChatBottomBar extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         spacing: 8,
-        children: items.map((item) {
-          return Container(
-            height: 30,
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(color: Color(0x99333333),
-                borderRadius: BorderRadius.all(Radius.circular(6)),
-                border: Border.all(color: Color(0x66FFFFFF), width: 1)
-            ),
-            child: GestureDetector(
-              onTap: () {
-                (item[Security.security_action] as Function?)?.call();
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ImageView((item[Security.security_icon] as String?) ?? '', width: 16, height: 16),
-                  const SizedBox(width: 4),
-                  Text(
-                    (item[Security.security_title] as String?) ?? '',
-                    style: const TextStyle(color: Color(0xCCFFFFFF), fontWeight: FontWeight.w500, fontSize: 12),
+        children:
+            items.map((item) {
+              return Container(
+                height: 30,
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  color: Color(0x99333333),
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  border: Border.all(color: Color(0x66FFFFFF), width: 1),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    (item[Security.security_action] as Function?)?.call();
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ImageView(
+                        (item[Security.security_icon] as String?) ?? '',
+                        width: 16,
+                        height: 16,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        (item[Security.security_title] as String?) ?? '',
+                        style: const TextStyle(
+                          color: Color(0xCCFFFFFF),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
+                ),
+              );
+            }).toList(),
       ),
     ).marginOnly(left: 16);
   }
 
   Widget buildGreetTips() {
     return Obx(() {
-      return !Preferences.instance.isRv && !viewController.hasSentMessages && showGreetTips.value
+      return !Preferences.instance.isRv &&
+              !viewController.hasSentMessages &&
+              showGreetTips.value
           ? Container(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        margin: const EdgeInsets.only(bottom: 6, top: 6),
-        child: Row(
-          children: [
-            ...['💗Hello~', '💝${Copywriting.security_nice_to_meet_you_}'].map(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            margin: const EdgeInsets.only(bottom: 6, top: 6),
+            child: Row(
+              children: [
+                ...[
+                  '💗Hello~',
+                  '💝${Copywriting.security_nice_to_meet_you_}',
+                ].map(
                   (e) => GestureDetector(
-                onTap: () {
-                  viewController.sendText(e);
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), borderRadius: BorderRadius.circular(8)),
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(left: 6, right: 6),
-                  height: 24,
-                  // width: 32,
-                  child: Text(e, style: TextStyle(color: Colors.white, fontSize: 12)),
+                    onTap: () {
+                      viewController.sendText(e);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(left: 6, right: 6),
+                      height: 24,
+                      // width: 32,
+                      child: Text(
+                        e,
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    showGreetTips.value = false;
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(left: 4, right: 4),
+                    height: 24,
+                    // width: 32,
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 14,
+                      weight: 100,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const Spacer(),
-            GestureDetector(
-              onTap: () {
-                showGreetTips.value = false;
-              },
-              child: Container(
-                decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), borderRadius: BorderRadius.circular(8)),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(left: 4, right: 4),
-                height: 24,
-                // width: 32,
-                child: const Icon(Icons.close, color: Colors.white, size: 14, weight: 100),
-              ),
-            ),
-          ],
-        ),
-      )
+          )
           : Container();
     });
   }
@@ -676,13 +870,22 @@ class ChatBottomBarController extends GetxController {
     return false;
   }
 
-  List<dynamic> get membersNoOwner => roomViewController.crowdInfo.value.membersNoOwner;
+  List<dynamic> get membersNoOwner =>
+      roomViewController.crowdInfo.value.membersNoOwner;
 
   RxMap<int, int> rxMemberSelect = RxMap(); // 保持成员的状态，1是选中，2是禁言
 
-  List<int> get specifyRepliers => rxMemberSelect.entries.where((entry) => entry.value == 1).map((e) => e.key).toList();
+  List<int> get specifyRepliers =>
+      rxMemberSelect.entries
+          .where((entry) => entry.value == 1)
+          .map((e) => e.key)
+          .toList();
 
-  List<int> get bannedRepliers => rxMemberSelect.entries.where((entry) => entry.value == 2).map((e) => e.key).toList();
+  List<int> get bannedRepliers =>
+      rxMemberSelect.entries
+          .where((entry) => entry.value == 2)
+          .map((e) => e.key)
+          .toList();
 
   final _barState = ChatRoomBottomBarState.simple.obs;
 
@@ -709,13 +912,16 @@ class ChatBottomBarController extends GetxController {
     }
     for (int i = 0; i < atMemberIds.length; i++) {
       dynamic member = membersNoOwner.firstWhere(
-            (element) => element[Security.security_userbase]?[Security.security_uid] == atMemberIds[i],
+        (element) =>
+            element[Security.security_userbase]?[Security.security_uid] ==
+            atMemberIds[i],
         orElse: () {
           return null;
         },
       );
       if (member != null) {
-        atMemberText += "@${member[Security.security_userbase]?[Security.security_nickName]} ";
+        atMemberText +=
+            "@${member[Security.security_userbase]?[Security.security_nickName]} ";
       }
     }
     return atMemberText;
@@ -730,21 +936,36 @@ class ChatBottomBarController extends GetxController {
       Toast.show(Copywriting.security_this_member_is_deactivated_);
       return;
     }
-    if (rxMemberSelect.containsKey(item[Security.security_userbase]?[Security.security_uid])) {
-      if (rxMemberSelect[item[Security.security_userbase]?[Security.security_uid]] == 1) {
-        rxMemberSelect[item[Security.security_userbase]?[Security.security_uid]] = 2;
+    if (rxMemberSelect.containsKey(
+      item[Security.security_userbase]?[Security.security_uid],
+    )) {
+      if (rxMemberSelect[item[Security.security_userbase]?[Security
+              .security_uid]] ==
+          1) {
+        rxMemberSelect[item[Security.security_userbase]?[Security
+                .security_uid]] =
+            2;
         if (!hasTipBanMember) {
           hasTipBanMember = true;
-          insertMessageTips(Copywriting.security_the_muted_member_will_not_reply_your_message);
+          insertMessageTips(
+            Copywriting.security_the_muted_member_will_not_reply_your_message,
+          );
         }
       } else {
-        rxMemberSelect.remove(item[Security.security_userbase]?[Security.security_uid]);
+        rxMemberSelect.remove(
+          item[Security.security_userbase]?[Security.security_uid],
+        );
       }
     } else {
-      rxMemberSelect[item[Security.security_userbase]?[Security.security_uid] ?? 0] = 1;
+      rxMemberSelect[item[Security.security_userbase]?[Security.security_uid] ??
+              0] =
+          1;
       if (!hasTipSelectMember) {
         hasTipSelectMember = true;
-        insertMessageTips(Copywriting.security_auto___enabled__The_mentioned_member_s__will_reply_your_message_);
+        insertMessageTips(
+          Copywriting
+              .security_auto___enabled__The_mentioned_member_s__will_reply_your_message_,
+        );
       }
     }
   }
@@ -752,7 +973,9 @@ class ChatBottomBarController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    textController = TextEditingController(text: roomViewController.session.draft.value);
+    textController = TextEditingController(
+      text: roomViewController.session.draft.value,
+    );
     focusNode.addListener(() {
       isKeyboardVisible.value = focusNode.hasFocus;
     });
@@ -790,7 +1013,11 @@ class ChatBottomBarController extends GetxController {
     if (isGroup) {
       text = buildGroupAtText() + text;
     }
-    roomViewController.sendText(text, specifyRepliers: specifyRepliers, bannedRepliers: bannedRepliers);
+    roomViewController.sendText(
+      text,
+      specifyRepliers: specifyRepliers,
+      bannedRepliers: bannedRepliers,
+    );
   }
 
   void sendAudio((String, int) recordInfo) async {
@@ -817,7 +1044,8 @@ class ChatBottomBarController extends GetxController {
   }
 
   void updateBarState(ChatRoomBottomBarState state) {
-    if (barState == ChatRoomBottomBarState.muse && state != ChatRoomBottomBarState.muse) {
+    if (barState == ChatRoomBottomBarState.muse &&
+        state != ChatRoomBottomBarState.muse) {
       Get.delete<ChatMuseViewController>();
     }
     barState = state;
@@ -884,6 +1112,12 @@ class ChatBottomBarController extends GetxController {
   }
 
   void pickVideo(ImageSource source) async {
+    final agreed = await AIConsentService.ensureConsent(
+      feature: AIConsentFeature.videoUpload,
+    );
+    if (!agreed) {
+      return;
+    }
     XFile? file;
     Uint8List? videoBytes;
     try {
@@ -899,7 +1133,11 @@ class ChatBottomBarController extends GetxController {
 
     Toast.loading();
     try {
-      String? url = await FilePushService.instance.upload(videoBytes, FileType.im, ext: Security.security_mp4);
+      String? url = await FilePushService.instance.upload(
+        videoBytes,
+        FileType.im,
+        ext: Security.security_mp4,
+      );
       if (url == null || url.isEmpty) {
         Toast.error(Copywriting.security_upload_failed__please_try_again_later);
         return;
@@ -909,12 +1147,17 @@ class ChatBottomBarController extends GetxController {
       Uint8List? thumbnailBytes = await VideoThumbnail.thumbnailData(
         video: path,
         imageFormat: ImageFormat.JPEG,
-        maxWidth: 300, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+        maxWidth:
+            300, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
         quality: 25,
       );
       String? thumbnailUrl;
       if (thumbnailBytes != null) {
-        thumbnailUrl = await FilePushService.instance.upload(thumbnailBytes, FileType.im, ext: Security.security_jpg);
+        thumbnailUrl = await FilePushService.instance.upload(
+          thumbnailBytes,
+          FileType.im,
+          ext: Security.security_jpg,
+        );
       }
 
       ChatVideoMessage message = ChatVideoMessage.fromVideo(
@@ -936,6 +1179,12 @@ class ChatBottomBarController extends GetxController {
   }
 
   void pickImage(ImageSource source) async {
+    final agreed = await AIConsentService.ensureConsent(
+      feature: AIConsentFeature.imageUpload,
+    );
+    if (!agreed) {
+      return;
+    }
     XFile? file;
     try {
       file = await ImagePicker().pickImage(source: source);
@@ -944,11 +1193,17 @@ class ChatBottomBarController extends GetxController {
     }
     if (file == null) return;
 
-    Uint8List? compressed = await FlutterImageCompress.compressWithFile(file.path);
+    Uint8List? compressed = await FlutterImageCompress.compressWithFile(
+      file.path,
+    );
     if (compressed == null) return;
 
     Toast.loading();
-    String? url = await FilePushService.instance.upload(compressed, FileType.im, ext: Security.security_jpg);
+    String? url = await FilePushService.instance.upload(
+      compressed,
+      FileType.im,
+      ext: Security.security_jpg,
+    );
     Toast.dismiss();
     if (url == null || url.isEmpty) {
       Toast.error(Copywriting.security_upload_failed__please_try_again_later);
@@ -956,7 +1211,12 @@ class ChatBottomBarController extends GetxController {
     }
 
     DefaultCacheManager().putFileStream(url, Stream.value(compressed));
-    var thumbnail = await FlutterImageCompress.compressWithFile(file.path, minWidth: 30, minHeight: 30, quality: 1);
+    var thumbnail = await FlutterImageCompress.compressWithFile(
+      file.path,
+      minWidth: 30,
+      minHeight: 30,
+      quality: 1,
+    );
 
     String? thumbnailBase64;
     if (thumbnail != null) {

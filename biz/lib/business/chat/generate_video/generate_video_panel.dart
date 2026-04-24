@@ -1,5 +1,4 @@
 import 'package:biz/base/crypt/apis.dart';
-import 'package:biz/base/crypt/routes.dart';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -10,6 +9,7 @@ import 'package:biz/base/api_service/api_response.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/event_center/event_center.dart';
+import 'package:biz/base/privacy/ai_consent_service.dart';
 import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/report/report_manager.dart';
 import 'package:biz/base/router/router_names.dart';
@@ -19,7 +19,6 @@ import 'package:biz/shared/toast/toast.dart';
 import '../../../base/api_service/api_request.dart';
 import '../../../base/api_service/api_service.dart';
 import '../../../base/assets/image_view.dart';
-import '../../../base/crypt/apis.dart';
 import '../../../base/crypt/images.dart';
 import '../../../base/router/route_helper.dart';
 import '../../../shared/app_theme.dart';
@@ -72,22 +71,35 @@ class VideoCreateManager {
   static int get costType => _asInt(askVideoConfig[Security.security_costType]);
 
   static bool get genAudioNeedCost =>
-      _asInt(_asMap(askVideoConfig[Security.security_generateAudioConfig])[Security.security_needExtraCost]) >
+      _asInt(
+        _asMap(askVideoConfig[Security.security_generateAudioConfig])[Security
+            .security_needExtraCost],
+      ) >
       0;
 
   static bool get hasVideoConfig =>
       askVideoConfig[Security.security_cost] != null;
 
-  static bool get isPremiumFree => _asInt(_asMap(askVideoConfig[Security.security_groupsV2])[_kPremiumFreeReason]) > 0;
+  static bool get isPremiumFree =>
+      _asInt(
+        _asMap(askVideoConfig[Security.security_groupsV2])[_kPremiumFreeReason],
+      ) >
+      0;
   static bool get isFree => cost == 0;
 
   static List<Map> get videoConfigSettingTags => _asMapList(
-    askVideoConfig[Security.security_groupsV2] ?? askVideoConfig[Security.security_groups],
+    askVideoConfig[Security.security_groupsV2] ??
+        askVideoConfig[Security.security_groups],
   );
 
   static void getVideoConfig(int sid) async {
-    Map params = {Security.security_tId: "${MyAccount.userId}", Security.security_targetUid: "$sid"};
-    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getGenerateVideoConfig, params: params));
+    Map params = {
+      Security.security_tId: "${MyAccount.userId}",
+      Security.security_targetUid: "$sid",
+    };
+    ApiResponse rsp = await ApiService.instance.sendRequest(
+      ApiRequest(Apis.security_getGenerateVideoConfig, params: params),
+    );
     if (!rsp.isSuccess) {
       return;
     }
@@ -125,9 +137,12 @@ class VideoCreateManager {
     }
 
     Toast.loading();
-    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_generateVideoV2, params: {
-      Security.security_params: params,
-    }));
+    ApiResponse rsp = await ApiService.instance.sendRequest(
+      ApiRequest(
+        Apis.security_generateVideoV2,
+        params: {Security.security_params: params},
+      ),
+    );
     if (!rsp.isSuccess) {
       Toast.error(rsp.description);
       if (rsp.bsnsCode == 2000) {
@@ -151,10 +166,17 @@ class GenerateVideoDialog extends StatelessWidget {
     ChatVideoMessage? reloadMessage,
     int? msgId,
   }) async {
+    final agreed = await AIConsentService.ensureConsent(
+      feature: AIConsentFeature.videoGeneration,
+    );
+    if (!agreed) {
+      return;
+    }
 
     int cost = VideoCreateManager.cost;
     int costType = VideoCreateManager.costType;
-    List<Map>? settingTags = VideoCreateManager.videoConfigSettingTags.map((e) => e).toList();
+    List<Map>? settingTags =
+        VideoCreateManager.videoConfigSettingTags.map((e) => e).toList();
     bool genAudioNeedCost = VideoCreateManager.genAudioNeedCost;
 
     Get.put(
@@ -263,7 +285,11 @@ class GenerateVideoDialog extends StatelessWidget {
               onTap: controller.aiWriterPrompt,
               child: Row(
                 children: [
-                  ImageView(Images.security_tip_off_png, width: 16.w, height: 16.w),
+                  ImageView(
+                    Images.security_tip_off_png,
+                    width: 16.w,
+                    height: 16.w,
+                  ),
                   4.w.horizontalSpace,
                   Text(
                     Copywriting.security_aI_Writer,
@@ -435,19 +461,21 @@ class GenerateVideoDialog extends StatelessWidget {
         const Spacer(),
         Obx(
           () => SizedBox(
-            width: 48.w, height: 24.w,
+            width: 48.w,
+            height: 24.w,
             child: CupertinoSwitch(
-            thumbColor: Colors.white,
-            inactiveTrackColor: const Color(
-              0xFFD2C0FF,
-            ).withValues(alpha: 0.16),
-            activeTrackColor: const Color(0xFF8761F1),
-            value: controller.generateAudio.value,
-            onChanged: (select) {
-              controller.generateAudio.value = select;
-              controller.calcCost();
-            },
-          ),),
+              thumbColor: Colors.white,
+              inactiveTrackColor: const Color(
+                0xFFD2C0FF,
+              ).withValues(alpha: 0.16),
+              activeTrackColor: const Color(0xFF8761F1),
+              value: controller.generateAudio.value,
+              onChanged: (select) {
+                controller.generateAudio.value = select;
+                controller.calcCost();
+              },
+            ),
+          ),
         ),
       ],
     );
@@ -593,7 +621,8 @@ class GenerateVideoController extends GetxController {
 
   int get userId => roomViewController.userId;
 
-  static String estimatedRefreshId = Security.security_generateVideoEstimatedRefreshId;
+  static String estimatedRefreshId =
+      Security.security_generateVideoEstimatedRefreshId;
 
   RxInt cost = 15.obs;
   RxInt costType = 0.obs;
@@ -636,24 +665,32 @@ class GenerateVideoController extends GetxController {
     calculateResult.value = 1;
     var prompt = promptTextFileController.text;
 
-    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_calculateGenerateVideoCost, params: {
-      Security.security_params: {
-        Security.security_url: imageUrl ?? '',
-        Security.security_prompt: prompt,
-         Security.security_toUid: userId,
-        Security.security_tags: tags,
-        Security.security_audioInfo: {
-          Security.security_enabled: generateAudio.value ? 1 : 0,
+    ApiResponse rsp = await ApiService.instance.sendRequest(
+      ApiRequest(
+        Apis.security_calculateGenerateVideoCost,
+        params: {
+          Security.security_params: {
+            Security.security_url: imageUrl ?? '',
+            Security.security_prompt: prompt,
+            Security.security_toUid: userId,
+            Security.security_tags: tags,
+            Security.security_audioInfo: {
+              Security.security_enabled: generateAudio.value ? 1 : 0,
+            },
+          },
+          Security.security_reloadMsgId: reloadMessage?.id ?? 0,
         },
-      },
-      Security.security_reloadMsgId: reloadMessage?.id ?? 0,
-    }));
-
+      ),
+    );
 
     if (rsp.isSuccess) {
       calculateResult.value = 0;
-      estimatedCost = rsp.data[Security.security_costDetail]?[Security.security_totalCostValue] ?? 0;
-      costItems = rsp.data[Security.security_costDetail]?[Security.security_costItems];
+      estimatedCost =
+          rsp.data[Security.security_costDetail]?[Security
+              .security_totalCostValue] ??
+          0;
+      costItems =
+          rsp.data[Security.security_costDetail]?[Security.security_costItems];
     } else {
       calculateResult.value = 2;
       // costItems = null;
@@ -664,6 +701,13 @@ class GenerateVideoController extends GetxController {
   }
 
   Future<void> generateVideo() async {
+    final agreed = await AIConsentService.ensureConsent(
+      feature: AIConsentFeature.videoGeneration,
+    );
+    if (!agreed) {
+      return;
+    }
+
     final tags = selectedTags.values.map((e) => Map.of(e)).toList();
     final prompt = promptTextFileController.text;
 

@@ -20,6 +20,7 @@ import 'package:biz/core/util/string_ext.dart';
 import '../../../base/api_service/api_request.dart';
 import '../../../base/api_service/api_service.dart';
 import '../../../base/crypt/apis.dart';
+import '../../../base/privacy/ai_consent_service.dart';
 import '../../../base/push_service/push_service.dart';
 import '../../../base/router/route_helper.dart';
 import '../../../core/report/report_helper.dart';
@@ -41,22 +42,28 @@ import '../chat_voice_player.dart';
 import 'package:biz/business/chat/chat_room/chat_theater_bottom_bar.dart';
 import 'package:biz/core/util/collections_util.dart';
 
-
 class ChatTheaterRoomView extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  ChatTheaterRoomViewController viewController = Get.put(ChatTheaterRoomViewController(Get.arguments));
-  ChatTheaterBottomBarController bottomBarController = Get.put(ChatTheaterBottomBarController());
+  ChatTheaterRoomViewController viewController = Get.put(
+    ChatTheaterRoomViewController(Get.arguments),
+  );
+  ChatTheaterBottomBarController bottomBarController = Get.put(
+    ChatTheaterBottomBarController(),
+  );
 
   List get messages => viewController.messages;
 
   int get currentMessageInex => viewController.storyMessageIndex.value;
 
-  ChatMessage get lastMessage => messages.safeGet(currentMessageInex, ChatMessage);
+  ChatMessage get lastMessage =>
+      messages.safeGet(currentMessageInex, ChatMessage);
 
-  bool get lastMessageIsGenerating => lastMessage.type == ChatMessageType.generating;
+  bool get lastMessageIsGenerating =>
+      lastMessage.type == ChatMessageType.generating;
 
-  ChatMessage get lastSecondMessage => messages.safeGet(currentMessageInex + 1, ChatMessage);
+  ChatMessage get lastSecondMessage =>
+      messages.safeGet(currentMessageInex + 1, ChatMessage);
 
   ChatSession get session => viewController.session;
 
@@ -66,7 +73,11 @@ class ChatTheaterRoomView extends StatelessWidget {
     RH.back();
   }
 
-  Widget createTheaterMessage(message) => ChatCell.createTheaterMessage(message, resendMessage: viewController.resendMessage, unlock: viewController.unlockMessage);
+  Widget createTheaterMessage(message) => ChatCell.createTheaterMessage(
+    message,
+    resendMessage: viewController.resendMessage,
+    unlock: viewController.unlockMessage,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -85,30 +96,43 @@ class ChatTheaterRoomView extends StatelessWidget {
           children: [
             _buildBackgroundView(),
             Obx(
-                  () =>
-              bottomBarController.isHideView.value
-                  ? SizedBox.shrink()
-                  : Stack(
-                children: [
-                  Container(color: Colors.black.withAlpha((255 * 0.3).toInt())),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: Get.statusBarHeight,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.black.withValues(alpha: 0.8), Colors.black.withValues(alpha: 0)],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
+              () =>
+                  bottomBarController.isHideView.value
+                      ? SizedBox.shrink()
+                      : Stack(
+                        children: [
+                          Container(
+                            color: Colors.black.withAlpha((255 * 0.3).toInt()),
+                          ),
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: Get.statusBarHeight,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.black.withValues(alpha: 0.8),
+                                    Colors.black.withValues(alpha: 0),
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SafeArea(
+                            bottom: false,
+                            child: Column(
+                              children: [
+                                _buildNavigationBar(),
+                                _buildChatRoomView(),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                  SafeArea(bottom: false, child: Column(children: [_buildNavigationBar(), _buildChatRoomView()])),
-                ],
-              ),
             ),
             Positioned(
               top: 0,
@@ -116,24 +140,28 @@ class ChatTheaterRoomView extends StatelessWidget {
               bottom: 0,
               left: 0,
               child: Obx(
-                    () =>
-                bottomBarController.isKeyboardVisible.value
-                    ? GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    bottomBarController.focusNode.unfocus();
-                  },
-                )
-                    : SizedBox.shrink(),
+                () =>
+                    bottomBarController.isKeyboardVisible.value
+                        ? GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            bottomBarController.focusNode.unfocus();
+                          },
+                        )
+                        : SizedBox.shrink(),
               ),
             ),
-            Positioned(left: 0, right: 0, bottom: 0, child: ChatTheaterBottomBar(sendText: viewController.sendText)),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: ChatTheaterBottomBar(sendText: viewController.sendText),
+            ),
           ],
         ),
       ),
     );
   }
-
 
   Widget _buildNavigationBar() {
     return Container(
@@ -144,7 +172,16 @@ class ChatTheaterRoomView extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: _onBackButtonClicked,
-            child: Container(width: 32, height: 32, alignment: Alignment.center, child: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, width: 32, height: 32)),
+            child: Container(
+              width: 32,
+              height: 32,
+              alignment: Alignment.center,
+              child: CachedImage(
+                imageUrl: ImagePath.ic_arrow_left_circle,
+                width: 32,
+                height: 32,
+              ),
+            ),
           ),
           SizedBox(width: 10),
           GetBuilder<ChatTheaterRoomViewController>(
@@ -154,7 +191,10 @@ class ChatTheaterRoomView extends StatelessWidget {
                 padding: EdgeInsets.only(left: 2, right: 12),
                 height: 40,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(color: Color(0xCC333333), borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(
+                  color: Color(0xCC333333),
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -176,7 +216,12 @@ class ChatTheaterRoomView extends StatelessWidget {
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.white, width: 1),
                           borderRadius: BorderRadius.circular(18),
-                          image: DecorationImage(image: CachedImageProvider(viewController.session.avatar), fit: BoxFit.cover),
+                          image: DecorationImage(
+                            image: CachedImageProvider(
+                              viewController.session.avatar,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
@@ -187,12 +232,23 @@ class ChatTheaterRoomView extends StatelessWidget {
                       children: [
                         Text(
                           viewController.session.name,
-                          style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           maxLines: 1,
                         ),
-                        Text(Security.security_theater, style: TextStyle(color: Color(0xFFFFE407), fontSize: 12)),
+                        Text(
+                          Security.security_theater,
+                          style: TextStyle(
+                            color: Color(0xFFFFE407),
+                            fontSize: 12,
+                          ),
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               );
@@ -201,7 +257,9 @@ class ChatTheaterRoomView extends StatelessWidget {
           Spacer(),
           IconButton(
             onPressed: () {
-              ReportHelper.showReportDialog(viewController.session.id.safeParse());
+              ReportHelper.showReportDialog(
+                viewController.session.id.safeParse(),
+              );
             },
             icon: Icon(Icons.more_horiz, color: Colors.white, size: 20),
           ),
@@ -220,8 +278,18 @@ class ChatTheaterRoomView extends StatelessWidget {
             return const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Colors.white, Colors.transparent, Colors.transparent, Colors.white],
-              stops: [0.0, 0.1, 1.0 - 0.1, 1.0], // 10% purple, 80% transparent, 10% purple
+              colors: [
+                Colors.white,
+                Colors.transparent,
+                Colors.transparent,
+                Colors.white,
+              ],
+              stops: [
+                0.0,
+                0.1,
+                1.0 - 0.1,
+                1.0,
+              ], // 10% purple, 80% transparent, 10% purple
             ).createShader(rect);
           },
           blendMode: BlendMode.dstOut,
@@ -259,7 +327,11 @@ class ChatTheaterRoomView extends StatelessWidget {
               messages.isNotEmpty
                   ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [if (lastMessageIsGenerating) createTheaterMessage(lastSecondMessage), createTheaterMessage(lastMessage)],
+                    children: [
+                      if (lastMessageIsGenerating)
+                        createTheaterMessage(lastSecondMessage),
+                      createTheaterMessage(lastMessage),
+                    ],
                   )
                   : SizedBox.shrink(),
         ),
@@ -268,18 +340,28 @@ class ChatTheaterRoomView extends StatelessWidget {
   }
 
   Widget _buildChatRoomView() {
-    return Obx(() => bottomBarController.isReview.value ? _buildReviewView() : _buildStoryView());
+    return Obx(
+      () =>
+          bottomBarController.isReview.value
+              ? _buildReviewView()
+              : _buildStoryView(),
+    );
   }
 
   Widget _buildBackgroundView() {
     return Obx(() {
       String url = viewController.session.backgroundUrl.value;
       debugPrint('viewController.session.backgroundUrl.value: $url');
-      return url.isNotEmpty ? CachedImage(imageUrl: url, fit: BoxFit.cover, errorWidget: (context, url, error) => SizedBox.shrink()) : SizedBox.shrink();
+      return url.isNotEmpty
+          ? CachedImage(
+            imageUrl: url,
+            fit: BoxFit.cover,
+            errorWidget: (context, url, error) => SizedBox.shrink(),
+          )
+          : SizedBox.shrink();
     });
   }
 }
-
 
 class ChatTheaterRoomViewController extends GetxController {
   final ScrollController messageListScrollController = ScrollController();
@@ -318,34 +400,50 @@ class ChatTheaterRoomViewController extends GetxController {
 
   bool get isAiChat => !isRealChat && !isTheater;
 
-  ChatTheaterRoomViewController(Map<String, dynamic> arguments) : session = createSession(arguments);
+  ChatTheaterRoomViewController(Map<String, dynamic> arguments)
+    : session = createSession(arguments);
 
-  final String kChatImageViewGenerateVideo = Security.security_kChatImageViewGenerateVideo;
-  final String kRequestGenerateVideoSuccess = Security.security_kRequestGenerateVideoSuccess;
+  final String kChatImageViewGenerateVideo =
+      Security.security_kChatImageViewGenerateVideo;
+  final String kRequestGenerateVideoSuccess =
+      Security.security_kRequestGenerateVideoSuccess;
 
   @override
   void onInit() async {
     super.onInit();
+    AIConsentService.promptForEntryIfNeeded(feature: AIConsentFeature.chat);
     ChatVoicePlayer.instance.init();
     session.unreadNumber.value = 0;
     ChatManager.instance.currentSession = session;
     //刷新session
     await refreshSession();
-    debugPrint('[ChatRoom] sid:${session.id}, sessionId:${session.sessionId}, greeted: ${session.greeted}');
+    debugPrint(
+      '[ChatRoom] sid:${session.id}, sessionId:${session.sessionId}, greeted: ${session.greeted}',
+    );
 
     if (!session.greeted) {
       ChatManager.instance.sayHelloIfNeeded(session);
     }
 
     //查聊天记录
-    List<ChatMessage> results = await ChatManager.instance.messageHandler.queryMessages(session.sessionId);
+    List<ChatMessage> results = await ChatManager.instance.messageHandler
+        .queryMessages(session.sessionId);
     messages.addAll(results);
     insertAiTipsMessageIfNeeded();
     showContinueButtonIfNeed();
 
-    EventCenter.instance.addListener(kEventCenterDidQueriedNewMessages, handlePullMessages);
-    EventCenter.instance.addListener(kEventCenterDidReceivedNewMessages, handlePushMessages);
-    EventCenter.instance.addListener(kEventCenterDidPreparedImageMessage, onImagePrepared);
+    EventCenter.instance.addListener(
+      kEventCenterDidQueriedNewMessages,
+      handlePullMessages,
+    );
+    EventCenter.instance.addListener(
+      kEventCenterDidReceivedNewMessages,
+      handlePushMessages,
+    );
+    EventCenter.instance.addListener(
+      kEventCenterDidPreparedImageMessage,
+      onImagePrepared,
+    );
 
     updateInfoIfNeed();
 
@@ -397,7 +495,9 @@ class ChatTheaterRoomViewController extends GetxController {
   }
 
   void insertMessageTips(String tips) {
-    ChatTipsMessage message = ChatTipsMessage.fromServer({Security.security_content: tips});
+    ChatTipsMessage message = ChatTipsMessage.fromServer({
+      Security.security_content: tips,
+    });
     messages.add(message);
   }
 
@@ -414,7 +514,8 @@ class ChatTheaterRoomViewController extends GetxController {
     // 倒序遍历
     for (int i = messages.length - 1; i >= 0; i--) {
       ChatMessage message = messages[i];
-      if (lastTime == null || message.date.difference(lastTime) >= fiveMinutes) {
+      if (lastTime == null ||
+          message.date.difference(lastTime) >= fiveMinutes) {
         // 插入 ChatTimeMessage
         ChatTimeMessage timeMessage = ChatTimeMessage(message.date);
         messages.insert(i + 1, timeMessage);
@@ -443,7 +544,8 @@ class ChatTheaterRoomViewController extends GetxController {
   }
 
   Future<void> refreshSession() async {
-    ChatSession? localSection = await ChatManager.instance.sessionHandler.querySession(session.id);
+    ChatSession? localSection = await ChatManager.instance.sessionHandler
+        .querySession(session.id);
     if (localSection != null) {
       session.lastMessageTime = localSection.lastMessageTime;
       session.lastMessageText = localSection.lastMessageText;
@@ -477,7 +579,8 @@ class ChatTheaterRoomViewController extends GetxController {
     if (storyMessageIndex.value == 0) {
       storyMessageIndex.value = newest.length - 1;
     }
-    ChatTheaterBottomBarController bottomBarController = Get.find<ChatTheaterBottomBarController>();
+    ChatTheaterBottomBarController bottomBarController =
+        Get.find<ChatTheaterBottomBarController>();
     bottomBarController.requestTemplateText();
   }
 
@@ -544,7 +647,9 @@ class ChatTheaterRoomViewController extends GetxController {
     if (_generatingTimer != null) {
       return;
     }
-    _generatingTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+    _generatingTimer = Timer.periodic(const Duration(milliseconds: 1000), (
+      timer,
+    ) {
       onTimeout(timer);
     });
   }
@@ -568,10 +673,22 @@ class ChatTheaterRoomViewController extends GetxController {
 
   @override
   void onClose() {
-    EventCenter.instance.removeListener(kEventCenterDidQueriedNewMessages, handlePullMessages);
-    EventCenter.instance.removeListener(kEventCenterDidReceivedNewMessages, handlePushMessages);
-    EventCenter.instance.removeListener(kEventCenterDidPreparedImageMessage, onImagePrepared);
-    EventCenter.instance.removeListener(kRequestGenerateVideoSuccess, onRequestGenerateVideoSuccess);
+    EventCenter.instance.removeListener(
+      kEventCenterDidQueriedNewMessages,
+      handlePullMessages,
+    );
+    EventCenter.instance.removeListener(
+      kEventCenterDidReceivedNewMessages,
+      handlePushMessages,
+    );
+    EventCenter.instance.removeListener(
+      kEventCenterDidPreparedImageMessage,
+      onImagePrepared,
+    );
+    EventCenter.instance.removeListener(
+      kRequestGenerateVideoSuccess,
+      onRequestGenerateVideoSuccess,
+    );
     ChatManager.instance.currentSession = null;
     ChatVoicePlayer.instance.dealloc();
     super.onClose();
@@ -588,19 +705,37 @@ class ChatTheaterRoomViewController extends GetxController {
     // barController.unfocus();
   }
 
-  void sendText(String text, {List<int>? specifyRepliers, List<int>? bannedRepliers}) async {
+  void sendText(
+    String text, {
+    List<int>? specifyRepliers,
+    List<int>? bannedRepliers,
+  }) async {
     if (text.isEmpty) {
       return;
     }
+    final agreed = await AIConsentService.ensureConsent(
+      feature: AIConsentFeature.chat,
+    );
+    if (!agreed) {
+      return;
+    }
 
-    ChatMessage message = ChatTextMessage.fromText(text, userId, specifyRepliers: specifyRepliers, bannedRepliers: bannedRepliers, session: session);
+    ChatMessage message = ChatTextMessage.fromText(
+      text,
+      userId,
+      specifyRepliers: specifyRepliers,
+      bannedRepliers: bannedRepliers,
+      session: session,
+    );
     if (session.isScriptChat || session.isTheater) message.chatStatus = 2;
     sendMessage(message);
   }
 
   void sendMessage(ChatMessage message) async {
     //先插入到数据库
-    int result = await ChatManager.instance.messageHandler.insertMessage(message);
+    int result = await ChatManager.instance.messageHandler.insertMessage(
+      message,
+    );
     if (result <= 0) return;
     //更新列表
     if (messages.contains(message)) {
@@ -616,10 +751,14 @@ class ChatTheaterRoomViewController extends GetxController {
     ChatManager.instance.updateChatSession(session);
 
     //再发送
-    SendMessageResponse response = await ChatManager.instance.sendMessage(message);
+    SendMessageResponse response = await ChatManager.instance.sendMessage(
+      message,
+    );
     if (response.isSuccess) {
       //用服务器返回的message替换掉自己发出去的message
-      int index = messages.indexWhere((element) => element.nativeId == message.nativeId);
+      int index = messages.indexWhere(
+        (element) => element.nativeId == message.nativeId,
+      );
       if (index >= 0) {
         messages[index] = response.message;
         if (isAiChat || isTheater) {
@@ -649,7 +788,9 @@ class ChatTheaterRoomViewController extends GetxController {
 
       message.audioStatus.value = ChatTextAudioStatus.loading;
 
-      TTSResult result = await ChatVoiceManager.instance.textToVoice(textMessage);
+      TTSResult result = await ChatVoiceManager.instance.textToVoice(
+        textMessage,
+      );
       if (result.success) {
         Map extra = result.toJson();
         Map newInfo = {...textMessage.decodedInfo, ...extra};
@@ -667,7 +808,9 @@ class ChatTheaterRoomViewController extends GetxController {
     Toast.loading();
     ApiResponse response = await ChatManager.instance.unlockMessage(message);
     if (response.isSuccess) {
-      ChatMessage newMessage = ChatMessage.fromServer(response.data[Security.security_msg]);
+      ChatMessage newMessage = ChatMessage.fromServer(
+        response.data[Security.security_msg],
+      );
       await downloadMessageResource(newMessage);
       await ChatManager.instance.messageHandler.insertMessage(newMessage);
 
@@ -678,8 +821,11 @@ class ChatTheaterRoomViewController extends GetxController {
       Toast.dismiss();
       replaceMessage(newMessage);
     } else {
-      if (response.bsnsCode == ApiError.notEnoughBalance.v || response.bsnsCode == ApiError.notEnoughGems.v) {
-        message.currencyType == 1 ? RouteHelper.toGems() : RouteHelper.toPremium();
+      if (response.bsnsCode == ApiError.notEnoughBalance.v ||
+          response.bsnsCode == ApiError.notEnoughGems.v) {
+        message.currencyType == 1
+            ? RouteHelper.toGems()
+            : RouteHelper.toPremium();
       }
       Toast.error(response.description);
     }
@@ -703,7 +849,9 @@ class ChatTheaterRoomViewController extends GetxController {
     ApiResponse response = await ChatManager.instance.reloadMessage(message);
     if (response.isSuccess) {
       Toast.dismiss();
-      ChatMessage newMessage = ChatMessage.fromServer(response.data[Security.security_msg]);
+      ChatMessage newMessage = ChatMessage.fromServer(
+        response.data[Security.security_msg],
+      );
       // 更新权益信息
       MyAccount.setPremInfo(response.data[Security.security_ownPremiumInfo]);
       await ChatManager.instance.messageHandler.insertMessage(newMessage);
@@ -730,7 +878,10 @@ class ChatTheaterRoomViewController extends GetxController {
   }
 
   void toPersonalPage() {
-    RouteHelper.toPage(Routers.person, args: {Security.security_personInfo: userProfileInfo.data});
+    RouteHelper.toPage(
+      Routers.person,
+      args: {Security.security_personInfo: userProfileInfo.data},
+    );
   }
 
   void clearHistory() {
@@ -743,7 +894,6 @@ class ChatTheaterRoomViewController extends GetxController {
 
   void showContinueButtonIfNeed({ChatMessage? lastestMsg}) {
     if (!session.isAiChat) return;
-
 
     ChatMessage? newestMsg = lastestMsg ?? messages.firstOrNull();
     showContinueMsg?.showContinue.value = false;
@@ -761,9 +911,16 @@ class ChatTheaterRoomViewController extends GetxController {
 
     if (lastMessage is ChatTheaterBriefMessage) return;
 
-    Map params = {Security.security_sessionId: session.sessionId, Security.security_userId: MyAccount.userId};
-    ApiResponse rsp = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getSceneMergedInfo, params: params));
-    String brief = rsp.data[Security.security_info]?[Security.security_storyBackground] ?? "";
+    Map params = {
+      Security.security_sessionId: session.sessionId,
+      Security.security_userId: MyAccount.userId,
+    };
+    ApiResponse rsp = await ApiService.instance.sendRequest(
+      ApiRequest(Apis.security_getSceneMergedInfo, params: params),
+    );
+    String brief =
+        rsp.data[Security.security_info]?[Security.security_storyBackground] ??
+        "";
 
     if (brief.isEmpty) return;
 

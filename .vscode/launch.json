@@ -1,0 +1,14 @@
+{
+    "version": "1.1.0",
+    "configurations": [
+        {
+            "name": "mina debug",
+            "type": "dart",
+            "request": "launch",
+            "cwd": "debug",
+            "program": "lib/main.dart",
+            "deviceId": "613D12D1-9A05-49A4-8E56-983F921D06E8",
+            "flutterMode": "debug"
+        }
+    ]
+}
