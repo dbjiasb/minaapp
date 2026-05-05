@@ -40,5 +40,55 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+
+    target.build_configurations.each do |config|
+      # You can remove unused permissions here
+      # for more information: https://github.com/Baseflow/flutter-permission-handler/blob/main/permission_handler_apple/ios/Classes/PermissionHandlerEnums.h
+      # e.g. when you don't need camera permission, just add 'PERMISSION_CAMERA=0'
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        ## dart: PermissionGroup.camera
+        'PERMISSION_CAMERA=1',
+        ## dart: PermissionGroup.microphone
+        'PERMISSION_MICROPHONE=1',
+      ]
+
+    end
+  end
+
+  tocrop_fix_file = File.join(__dir__, 'Pods', 'TOCropViewController', 'Objective-C', 'TOCropViewController', 'TOCropViewController.m')
+  if File.exist?(tocrop_fix_file)
+    tocrop_source = File.read(tocrop_fix_file)
+    tocrop_problematic_block = <<~'BLOCK'
+          // fix: On iOS 26, overlay with iPadOS windowingControl area.
+          if (@available(iOS 26.0, *)) {
+            if (!verticalLayout) {
+              UIViewLayoutRegion *layoutRegion = [UIViewLayoutRegion safeAreaLayoutRegionWithCornerAdaptation: UIViewLayoutRegionAdaptivityAxisVertical];
+              UIEdgeInsets edgeInsets = [self.view edgeInsetsForLayoutRegion:layoutRegion];
+              insets.top = edgeInsets.top;
+              insets.left = edgeInsets.left;
+              insets.bottom = edgeInsets.bottom;
+            }
+          }
+    BLOCK
+    tocrop_fixed_block = <<~'BLOCK'
+          // fix: On iOS 26, overlay with iPadOS windowingControl area.
+          if (!verticalLayout) {
+        #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 260000
+              if (@available(iOS 26.0, *)) {
+                  UIViewLayoutRegion *layoutRegion = [UIViewLayoutRegion safeAreaLayoutRegionWithCornerAdaptation:UIViewLayoutRegionAdaptivityAxisVertical];
+                  UIEdgeInsets edgeInsets = [self.view edgeInsetsForLayoutRegion:layoutRegion];
+                  insets.top = edgeInsets.top;
+                  insets.left = edgeInsets.left;
+                  insets.bottom = edgeInsets.bottom;
+              }
+        #endif
+          }
+    BLOCK
+
+    unless tocrop_source.include?('__IPHONE_OS_VERSION_MAX_ALLOWED >= 260000')
+      updated_tocrop_source = tocrop_source.sub(tocrop_problematic_block, tocrop_fixed_block)
+      File.write(tocrop_fix_file, updated_tocrop_source) if updated_tocrop_source != tocrop_source
+    end
   end
 end

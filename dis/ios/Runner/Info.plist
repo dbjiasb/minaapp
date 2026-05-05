@@ -32,6 +32,10 @@
     <string>App needs to access your camera to allow you to take a photo for your profile image.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>App needs to access your photo album to allow you to pick a photo for your profile image.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>App needs access to your microphone to send a voice message or make voice calls with characters.</string>
+    <key>NSUserTrackingUsageDescription</key>
+    <string>App would like to access your advertising identifier to provide more relevant and personalized content.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
