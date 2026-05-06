@@ -183,12 +183,12 @@ class PushService {
   }
 
   void handleKickOff(Map event) {
-    L.i('[BizPush] kick off');
+    L.i('[BizPush] on kick');
     EventCenter.instance.sendEvent(kEventCenterKickOff, null);
   }
 
   void handleHeartbeat(Map event) {
-    L.i('[BizPush] heartbeat');
+    L.i('[BizPush] hbeat');
   }
 
   void handleLogout(Map event) {

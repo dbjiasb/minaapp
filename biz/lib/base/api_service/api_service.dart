@@ -112,7 +112,7 @@ class ApiService {
       };
 
       if (isDebug) {
-        L.i('[BizRequest] ${request.method} start send $body');
+        L.i('[BizRequest] ${request.method} will send $body');
       } else {
         if (requestIndex % 10 == 0) {
           L.i('[BizRequest] ${request.method} will send $body');
