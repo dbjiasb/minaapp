@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import AppTrackingTransparency
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -17,6 +18,7 @@ import UIKit
       if #available(iOS 14, *) {
         ATTrackingManager.requestTrackingAuthorization { status in
             print("ATT: status is \(status.rawValue)")
+        }
       }
     }
   }

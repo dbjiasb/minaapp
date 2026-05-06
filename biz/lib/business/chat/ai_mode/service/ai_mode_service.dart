@@ -241,10 +241,8 @@ class AIModeService{
     ApiResponse response = await ApiService.instance.sendRequest(req);
 
     var rsp = response.data;
-    if (response.isSuccess && (rsp[ES.pl]?[Security.security_id] ?? '').isNotEmpty) {
-      cacheCurMode(rsp[ES.pl]!);
-    } else {
-      Toast.show( response.description);
+    if (response.isSuccess && (rsp[Security.security_personality]?[Security.security_id] ?? '').isNotEmpty) {
+      cacheCurMode(rsp[Security.security_personality]!);
     }
     return rsp;
   }

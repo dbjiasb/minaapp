@@ -50,15 +50,15 @@ cd ios
 
 
 #pod update
-pod install || exit 1
-echo "--->更新依赖库结束"
+#pod install || exit 1
+#echo "--->更新依赖库结束"
 
 pwd
 
 cd ../
 
 echo "--->开始编译"
-flutter build ipa -v --release --obfuscate --split-debug-info=symbols/${version} --export-options-plist=${PLIST_PATH}
+#flutter build ipa -v --release --obfuscate --split-debug-info=symbols/${version} --export-options-plist=${PLIST_PATH}
 echo "--->编译完毕"
 
 BUILD_IOS_PATH=${PROJECT_DIR}/build/ios

@@ -298,27 +298,6 @@ class PersonViewPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 4,
           children: [
-            // Row(
-            //   children: [
-            //     CircleAvatar(
-            //       radius: 36,
-            //       backgroundColor: Colors.transparent,
-            //       child: Container(
-            //         decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1, color: Colors.white.withValues(alpha: 0.8))),
-            //         child: ClipOval(
-            //           child: CachedImage(
-            //             imageUrl: controller.avatarUrl,
-            //             fit: BoxFit.cover,
-            //             errorWidget: (context, url, error) => Container(color: Colors.grey, height: 72, width: 72),
-            //             width: 72,
-            //             height: 72,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // SizedBox(height: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
