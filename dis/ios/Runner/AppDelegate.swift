@@ -10,4 +10,14 @@ import UIKit
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+
+  override func applicationDidBecomeActive(_ application: UIApplication) {
+    super.applicationDidBecomeActive(application)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+      if #available(iOS 14, *) {
+        ATTrackingManager.requestTrackingAuthorization { status in
+            print("ATT: status is \(status.rawValue)")
+      }
+    }
+  }
 }
