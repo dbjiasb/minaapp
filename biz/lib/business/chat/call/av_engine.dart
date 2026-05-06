@@ -57,7 +57,7 @@ class AVEngine {
 
   /// 第一步 初始化引擎
   Future<void> init({required String appId, required String token}) async {
-    L.i('[CallEngine] AVEngine init, id: $appId, token: $token');
+    L.i('[MediaCall] init engin, id: $appId, token: $token');
     cloud = await TRTCCloud.sharedInstance();
     this.appId = int.parse(appId);
     this.token = token;
@@ -66,13 +66,13 @@ class AVEngine {
   }
 
   void enableCamera(bool enable) {
-    L.i('[CallEngine] enableCamera: $enable');
+    L.i('[MediaCall] cam enable: $enable');
     cloud?.muteLocalVideo(!enable);
   }
 
   /// 本地音频设置
   void enableMic(bool enable) {
-    L.i('[CallEngine] enableMic: $enable');
+    L.i('[MediaCall] mic enable: $enable');
     if (enable) {
       cloud?.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
     } else {
@@ -86,7 +86,7 @@ class AVEngine {
   }
 
   void handleCloudEvent(type, params) async {
-    L.i('[CallEngine] handleCloudEvent: $type, $params');
+    L.i('[MediaCall] handle trtc message: $type, $params');
     switch (type) {
       case TRTCCloudListener.onEnterRoom:
         int result = params;
@@ -161,7 +161,7 @@ class AVEngine {
   }
 
   Future addRemoteViewStreamID(String streamID) async {
-    L.i('[CallEngine] addRemoteViewStreamID: $streamID');
+    L.i('[MediaCall] addView, stream id: $streamID');
     VideoView? view;
     if (_isVideoCall) {
       view = await getVideoView(false, streamID, (viewID) {
@@ -173,26 +173,26 @@ class AVEngine {
   }
 
   void deleteRemoteViewStreamID(String streamID) async {
-    L.i('[CallEngine] deleteRemoteViewStreamID: $streamID');
+    L.i('[MediaCall] deleteView, stream id: $streamID');
     stopPlayingStream(streamID);
 
     onRemoveStream?.call(streamID);
   }
 
   void clearEventCallback() {
-    L.i('[CallEngine] clearEventCallback');
+    L.i('[MediaCall] clearEventCallback');
     cloud?.unRegisterListener(handleCloudEvent);
   }
 
   Future<void> destroy() async {
-    L.i('[CallEngine] destroy');
+    L.i('[MediaCall] destroy');
     clearEventCallback();
     await TRTCCloud.destroySharedInstance();
   }
 
   /// 第三步 加入房间
   Future<void> joinRoom(String roomId, String userId, StreamType streamType) async {
-    L.i("[CallEngine] joinRoom, roomId: $roomId, userId: $userId, type: $streamType");
+    L.i("[MediaCall] joinRoom, roomId: $roomId, userId: $userId, type: $streamType");
     _userId = userId;
     _streamType = streamType; // 分语音和视频
 
@@ -218,17 +218,17 @@ class AVEngine {
   }
 
   void enableSpeaker(bool isEnable) {
-    L.i("[CallEngine] enableSpeaker: $isEnable");
+    L.i("[MediaCall] enableSpeaker: $isEnable");
     int type = isEnable ? TRTCCloudDef.TRTC_AUDIO_ROUTE_SPEAKER : TRTCCloudDef.TRTC_AUDIO_ROUTE_EARPIECE;
     cloud?.getDeviceManager().setAudioRoute(type);
   }
 
   Future<VideoView?> startPreview(String streamID) async {
-    L.i("[CallEngine] startPreview: $streamID");
+    L.i("[MediaCall] startPreview: $streamID");
     await Permission.microphone.request();
     PermissionStatus audioStatus = await Permission.microphone.status;
     if (!audioStatus.isGranted) {
-      L.i("[CallEngine] microphone permission denied");
+      L.i("[MediaCall] microphone permission denied");
       //用英语提示用户去申请麦克风权限
       onPermissionDenied?.call();
       Toast.show(Copywriting.security_please_grant_microphone_permission);
@@ -239,7 +239,7 @@ class AVEngine {
       await [Permission.camera].request();
       PermissionStatus cameraStatus = await Permission.camera.status;
       if (!cameraStatus.isGranted) {
-        L.i("[CallEngine] camera permission denied");
+        L.i("[MediaCall] camera permission denied");
         onPermissionDenied?.call();
         Toast.show(Copywriting.security_please_grant_camera_permission);
         return null;
@@ -278,12 +278,12 @@ class AVEngine {
   }
 
   void switchCameraDirection(bool front) {
-    debugPrint("[CallEngine] switchCamera, front: $front");
+    debugPrint("[MediaCall] switchCamera, front: $front");
     cloud?.getDeviceManager().switchCamera(front);
   }
 
   Future<void> exitRoom() async {
-    debugPrint("[CallEngine] exitRoom");
+    debugPrint("[MediaCall] exitRoom");
     await cloud?.stopLocalAudio();
     await cloud?.stopLocalPreview();
 
@@ -295,7 +295,7 @@ class AVEngine {
   static int breakNum = 0;
 
   void interruptAI(int receiverId) {
-    debugPrint("[CallEngine] interruptAI, $receiverId");
+    debugPrint("[MediaCall] interruptAI, $receiverId");
     Map data = {
       Security.security_type: 20001,
       Security.security_sender: _userId,

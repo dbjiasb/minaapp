@@ -40,16 +40,16 @@ class DeviceUtil {
     try {
       Preferences.instance.setString(didStorageKey, _deviceId);
       storage.write(key: keyChainKey, value: _deviceId);
-      L.i('[ApiService] [deviceId] write deviceId success: $_deviceId');
+      L.i('[BizRequest] [deviceId] write deviceId success: $_deviceId');
     } catch (e) {
-      L.e('[ApiService] [deviceId] write deviceId error: $e');
+      L.e('[BizRequest] [deviceId] write deviceId error: $e');
     }
   }
 
   static String get deviceId {
     if (_deviceId.isEmpty) {
       /// 正常不会走到这里，initDeviceId已经初始化过了，但是为了安全考虑，再次初始化
-      L.e('[ApiService] [deviceId] deviceId is empty, gen a new one');
+      L.e('[BizRequest] [deviceId] deviceId is empty, gen a new one');
       _deviceId = (const Uuid().v4()).replaceAll('-', '');
       Preferences.instance.setString(didStorageKey, _deviceId);
       storage.write(key: keyChainKey, value: _deviceId);

@@ -112,12 +112,12 @@ class ApiService {
       };
 
       if (isDebug) {
-        L.i('[apiService] ${request.method} start sendRequest $body');
+        L.i('[BizRequest] ${request.method} start send $body');
       } else {
         if (requestIndex % 10 == 0) {
-          L.i('[apiService] ${request.method} start sendRequest $body');
+          L.i('[BizRequest] ${request.method} will send $body');
         } else {
-          L.d('[apiService] ${request.method} start sendRequest ${request.params}');
+          L.d('[BizRequest] ${request.method} will send ${request.params}');
         }
       }
 
@@ -144,13 +144,13 @@ class ApiService {
       int responseTime = DateTime.now().millisecondsSinceEpoch;
       ApiResponse apiResponse = ApiResponse.withResponse(response.data);
       if (isDebug) {
-        L.i('[apiService] ${request.method} end, time: ${responseTime - requestTime}ms, response: ${apiResponse.toString()}');
+        L.i('[BizRequest] ${request.method} finish, time: ${responseTime - requestTime}ms, response: ${apiResponse.toString()}');
       } else {
-        L.i('[apiService] ${request.method} end, time: ${responseTime - requestTime}ms, netCode: ${apiResponse.statusCode}, biz code: ${apiResponse.bsnsCode}, description: ${apiResponse.description}');
+        L.i('[BizRequest] ${request.method} finish, time: ${responseTime - requestTime}ms, netCode: ${apiResponse.statusCode}, biz code: ${apiResponse.bsnsCode}, description: ${apiResponse.description}');
       }
       return apiResponse;
     } catch (e) {
-      L.i('[apiService] ${request.method} end error ${e.toString()}');
+      L.i('[BizRequest] ${request.method} finish failed ${e.toString()}');
       return ApiResponse.withError({Security.security_code: -1, Security.security_description: Copywriting.security_network_error__please_try_again_later});
     }
   }

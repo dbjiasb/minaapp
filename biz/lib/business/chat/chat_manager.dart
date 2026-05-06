@@ -174,7 +174,7 @@ class ChatManager {
       }
 
       if (shouldIgnoreMessage(message)) {
-        L.i('[ChatManager] [shouldIgnoreMessage][from_push] ${message.id.toString()} type:${message.type.value}');
+        L.i('[Chat][Ignore][push] ${message.id.toString()} type:${message.type.value}');
         continue;
       }
       //插入消息
@@ -184,12 +184,12 @@ class ChatManager {
         didPostOutMessages.add(message.id);
         messages.add(message);
       } else {
-        L.i('[ChatManager][PullTag][onReceivedNewMessages] didPostOutMessages contains ${message.id.toString()}');
+        L.i('[Chat][Pull][receivedMessages] didPostOutMessages contains ${message.id.toString()}');
       }
     }
 
     if (newestMessage != null) {
-      L.i('[ChatManager][PullTag][onReceivedNewMessages] ${newestMessage.id.toString()}');
+      L.i('[Chat][Pull][receivedMessages] ${newestMessage.id.toString()}');
       storePullTag(newestMessage.id.toString());
     }
 
@@ -260,7 +260,7 @@ class ChatManager {
     lastPullTime = DateTime.now();
 
     isQueryingMessages = true;
-    debugPrint('[${DateTime.now()}] [ChatManager][PullTag][sync] getHistoryMessages: $lastPullTag ');
+    debugPrint('[${DateTime.now()}] [Chat][Pull][sync] getHistoryMessages: $lastPullTag ');
     ApiRequest request = ApiRequest(Apis.security_syncChatHistory, params: {Security.security_position: lastPullTag});
     ApiResponse response = await ApiService.instance.sendRequest(request);
     if (response.isSuccess) {
@@ -285,7 +285,7 @@ class ChatManager {
 
     //取出消息
     for (var rawSession in rawSessions) {
-      L.i('[ChatManager][PullTag][onPullMessageRsp][Session] ${rawSession[Security.security_id]}-${rawSession[Security.security_sessionId]}');
+      L.i('[Chat][Pull][onPullMessageRsp][Session] ${rawSession[Security.security_id]}-${rawSession[Security.security_sessionId]}');
       List rawMessages = rawSession[Constants.rawItems] ?? [];
       if (rawMessages.isEmpty) continue;
 
@@ -295,7 +295,7 @@ class ChatManager {
       for (var rawMessage in rawMessages) {
         ChatMessage message = ChatMessage.fromServer(rawMessage);
         if (shouldIgnoreMessage(message)) {
-          L.i('[ChatManager][shouldIgnoreMessage][from_pull] ${message.id.toString()} type:${message.type.value}');
+          L.i('[Chat][shouldIgnoreMessage][from_pull] ${message.id.toString()} type:${message.type.value}');
           continue;
         }
 
@@ -306,7 +306,7 @@ class ChatManager {
           messages.add(message);
           if (!message.isMine()) unreadNumber++;
         } else {
-          L.i('[ChatManager][PullTag][onReceivedNewMessages] didPostOutMessages contains ${message.id.toString()}');
+          L.i('[Chat][Pull][receivedMessages] didPostOutMessages contains ${message.id.toString()}');
         }
       }
 
@@ -361,7 +361,7 @@ class ChatManager {
 
   void storePullTag(String pullTag) {
     if (pullTag == lastPullTag) return;
-    L.i('[ChatManager] storePullTag: $pullTag');
+    L.i('[Chat] storePullTag: $pullTag');
     if (pullTag.isEmpty) return;
 
     int newKey = int.tryParse(pullTag) ?? 0;
@@ -371,7 +371,7 @@ class ChatManager {
 
     lastPullTag = pullTag;
     Preferences.instance.setString(messagePullTag, pullTag);
-    L.i('[${DateTime.now()}] [ChatManager] [PullTag] storePullTag: $newKey [$oldKey]');
+    L.i('[${DateTime.now()}] [Chat] [Pull] storePullTag: $newKey [$oldKey]');
   }
 
   //定时器
@@ -444,7 +444,7 @@ class ChatManager {
 
   Future updateChatSession(ChatSession session) async {
     if (kDebugMode && session.lastMessageText.isEmpty) {
-      L.i('[ChatManager] [updateChatSession] ${StackTrace.current.toString()}');
+      L.i('[Chat] [updateChatSession] ${StackTrace.current.toString()}');
     }
     int ret = await sessionHandler.upsertSession(session);
     EventCenter.instance.sendEvent(kEventCenterDidUpdateSession, {Security.security_kUpdatedSession: session});

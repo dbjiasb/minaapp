@@ -54,18 +54,18 @@ class AppLog {
   }
 
   void imp_d(String msg) {
-    if (kDebugMode) debugPrint('[AppLog] $msg');
+    if (kDebugMode) debugPrint('[MinaLog] $msg');
     // _logger.d(msg);
   }
 
   void imp_i(String msg) {
-    if (kDebugMode) debugPrint('[AppLog] $msg');
-    _logger.i('[VCI] $msg');
+    if (kDebugMode) debugPrint('[MinaLog] $msg');
+    _logger.i('[MinaLog] $msg');
   }
 
   void imp_e(String msg) {
-    if (kDebugMode) debugPrint('[AppLog] $msg');
-    _logger.e('[VCE] $msg');
+    if (kDebugMode) debugPrint('[MinaLog] $msg');
+    _logger.e('[MinaLog] $msg');
   }
 
   static void d(String msg) => AppLog().imp_d(msg);
@@ -77,7 +77,7 @@ class AppLog {
     try {
       await deleteLogBefore5Days();
     } catch (e) {
-      L.e('delete log error: $e');
+      L.e('[MinaLog] failed error: $e');
     }
     String? zipPath = await getCompressLogPath();
     final file = File(zipPath ?? '');
@@ -119,7 +119,7 @@ class AppLog {
     }).toList();
     for (File file in filesToDelete) {
       await file.delete();
-      L.i('Delete log file：${file.path}');
+      L.i('[MinaLog] Delete file：${file.path}');
     }
   }
 }

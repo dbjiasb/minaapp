@@ -44,10 +44,10 @@ class ReportManager {
         handleAdjustAttribution(attribution);
       }
       ..eventSuccessCallback = (AdjustEventSuccess eventSuccess) {
-        L.i('eventSuccess: $eventSuccess');
+        L.i('[Adjust] Success: $eventSuccess');
       }
       ..eventFailureCallback = (AdjustEventFailure eventFailure) {
-        L.i('eventFailure: $eventFailure');
+        L.i('[Adjust] Failure: $eventFailure');
       };
   }
 
@@ -80,11 +80,7 @@ class ReportManager {
     ApiRequest request = ApiRequest(Apis.security_sendData, params: {Security.security_name: eventName, Security.security_param: event});
 
     ApiResponse response = await ApiService.instance.sendRequest(request);
-    if (response.isSuccess) {
-      L.i('sendData success');
-    } else {
-      L.i('sendData failed');
-    }
+    L.i('[Report] did sendData, eventName: $eventName, event: $event, response: ${response.data}');
   }
 
   static reportPage(String page) {

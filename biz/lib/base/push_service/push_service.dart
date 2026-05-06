@@ -139,7 +139,7 @@ class PushService {
     if (state != PushServiceState.disconnected) return;
 
     if (!loggedIn) {
-      L.i(' [PushService] secretKey is $_secretKey');
+      L.i('[BizPush] secretKey is $_secretKey');
       return;
     }
     final uri = Uri.parse(ApiConfig.wsUrl);
@@ -178,25 +178,25 @@ class PushService {
   }
 
   void handleLoginResult(Map event) {
-    L.i('[PushService] login success');
+    L.i('[BizPush] login');
     startTimer();
   }
 
   void handleKickOff(Map event) {
-    L.i('[PushService] kick off');
+    L.i('[BizPush] kick off');
     EventCenter.instance.sendEvent(kEventCenterKickOff, null);
   }
 
   void handleHeartbeat(Map event) {
-    L.i('[PushService] heartbeat');
+    L.i('[BizPush] heartbeat');
   }
 
   void handleLogout(Map event) {
-    L.i('[PushService] logout success');
+    L.i('[BizPush] logout');
   }
 
   void handleBusinessEvent(Map event) {
-    L.i('[PushService] received chat message');
+    L.i('[BizPush] received message');
     try {
       String bodyStr = event[PushKey.noticeContent];
       Map body = const JsonDecoder().convert(bodyStr);
@@ -204,7 +204,7 @@ class PushService {
 
       onReceivedPush(body[PushKey.noticeId], map);
     } catch (e) {
-      L.i('[PushService] decode error ${e.toString()}');
+      L.i('[BizPush] decode failed ${e.toString()}');
     }
   }
 
@@ -219,7 +219,7 @@ class PushService {
     if (event[uriKey] == null) return;
 
     var eventId = (event[uriKey] ?? 0.0).toInt();
-    L.i('[PushService] received event, eventId: $eventId');
+    L.i('[BizPush] received msg, id: $eventId');
     handlers[eventId]?.call(event);
   }
 
@@ -233,13 +233,13 @@ class PushService {
   }
 
   void sendData(Map data, int type) async {
-    // debugPrint('[PushService] sendData, data type: $type, data: $data');
+    // debugPrint('[BizPush] sendData, data type: $type, data: $data');
 
     try {
       Uint8List bytes = utf8.encode(encryptData(data, type));
       _channel?.sink.add(bytes);
     } catch (e) {
-      L.i('[PushService], sendData error ${e.toString()}');
+      L.i('[BizPush], sendData error ${e.toString()}');
     }
   }
 
@@ -323,7 +323,7 @@ class PushService {
       String str = utf8.decode(bytes);
       result = decryptData(str);
     } catch (e) {
-      L.i('[PushService] decryptBytes error ${e.toString()}');
+      L.i('[BizPush] decryptBytes error ${e.toString()}');
     }
     return result;
   }
@@ -343,7 +343,7 @@ class PushService {
   }
 
   void onReceivedPush(int uri, Map data) {
-    L.i('[PushService] onReceivedPush, uri: $uri, data: $data');
+    L.i('[BizPush] onReceivedPush, uri: $uri, data: $data');
     EventCenter.instance.sendEvent(uri.toString(), data);
   }
 }
