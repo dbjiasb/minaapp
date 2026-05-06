@@ -67,5 +67,5 @@ IPA_PATH=${BUILD_IOS_PATH}/ipa/release.ipa
 
 echo "ipa: ${IPA_PATH}"
 echo "--->上传至appstore️"
-xcrun altool --upload-app -f "${IPA_PATH}" -u "15112181155@139.com" -p "ytca-lrgr-afyv-gfkc" --type ios || exit
+xcrun altool --upload-app -f "${IPA_PATH}" -u "15112181155@139.com" -p "ytca-lrgr-afyv-gfkc" --type ios --verbose || exit
 echo "--->上传完毕"
