@@ -12,12 +12,14 @@ import 'package:biz/core/util/cached_image.dart';
 import '../../../base/assets/image_path.dart';
 import '../../../base/crypt/security.dart';
 import '../../../base/router/router_names.dart';
+import 'chat_anchor_album_message.dart';
 import 'chat_generating_message.dart';
 import 'chat_gift_cell.dart';
 // import 'chat_image_message.dart';
 import 'chat_image_message.dart';
 import 'chat_system_message.dart';
 import 'chat_text_cell.dart';
+import 'chat_time_message.dart';
 import 'chat_video_message.dart';
 // import 'chat_video_message.dart';
 
@@ -77,6 +79,11 @@ class ChatCell extends StatelessWidget {
         return ChatSystemCell(message as ChatSystemMessage, onTap: onTap);
       case ChatMessageType.tip:
         return ChatTipsCell(message as ChatTipsMessage, onTap: onTap);
+      case ChatMessageType.anchorCard:
+        return ChatAnchorCardCell(message as ChatAnchorAlbumMessage);
+      case ChatMessageType.time:
+        return ChatTimeCell(message: message as ChatTimeMessage);
+
       default:
         return ChatUnsupportedCell(message);
     }

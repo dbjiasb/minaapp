@@ -121,7 +121,7 @@ class ChatModeView extends StatelessWidget {
         child: Text(
           Security.security_switch,
           style: const TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
