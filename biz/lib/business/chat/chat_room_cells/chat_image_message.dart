@@ -118,6 +118,7 @@ class ChatImageMessage extends ChatMessage {
   String get imageUrl => decodedMap[Security.security_url] ?? '';
   String get imageDesc => decodedMap[Security.security_desc] ?? '';
 
+  bool get isLoading => preparedValue == 0;
   bool get prepared => preparedValue == 1 || (decodedMap[Security.security_prepared] == null && imageUrl.isNotEmpty);
   int get preparedValue => decodedMap[Security.security_prepared] ?? 0;
 
@@ -150,7 +151,7 @@ class ChatImageCell extends ChatCell {
   ChatImageMessage get imageMessage => message as ChatImageMessage;
 
   Widget buildImagePageView(String url, int prepared) {
-    bool isLoading = prepared != 1;
+    bool isLoading = prepared == 0;
 
     Widget child = GetBuilder<ChatRoomViewController>(
       builder: (_) {
@@ -184,7 +185,7 @@ class ChatImageCell extends ChatCell {
     Widget child = GetBuilder<ChatRoomViewController>(
       id: refreshId,
       builder: (_) {
-        if (!imageMessage.prepared) {
+        if (imageMessage.isLoading) {
           return renderLoadingMask();
         } else if (imageMessage.unlocked) {
           return GestureDetector(
