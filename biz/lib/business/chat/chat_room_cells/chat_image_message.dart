@@ -57,7 +57,7 @@ class ChatImageMessage extends ChatMessage {
 
 
   Future<void> updateInfoIfNeed() async {
-    if (prepared) return;
+    if (isPrepared) return;
 
     final String key = 'kMsgLastUpdateTime_$uuid';
     final int lastUpdateTime = Preferences.instance.getInt(key);
@@ -76,7 +76,7 @@ class ChatImageMessage extends ChatMessage {
     Map msg = response.data[Security.security_msg] ?? {};
     if (msg.isEmpty) return;
     ChatImageMessage message = ChatImageMessage.fromServer(msg);
-    if (message.prepared) {
+    if (message.isPrepared) {
       ChatManager.instance.onImagePrepared(msg);
     }
   }
@@ -118,15 +118,19 @@ class ChatImageMessage extends ChatMessage {
   String get imageUrl => decodedMap[Security.security_url] ?? '';
   String get imageDesc => decodedMap[Security.security_desc] ?? '';
 
-  bool get isLoading => preparedValue == 0;
-  bool get prepared => preparedValue == 1 || (decodedMap[Security.security_prepared] == null && imageUrl.isNotEmpty);
-  int get preparedValue => decodedMap[Security.security_prepared] ?? 0;
+  bool get isLoading => prepared == 0;
+  bool get isPrepared => prepared == 1 || (decodedMap[Security.security_prepared] == null && imageUrl.isNotEmpty);
+  int get prepared => decodedMap[Security.security_prepared] ?? 0;
+  set prepared(int value) {
+    decodedMap[Security.security_prepared] = value;
+    info = jsonEncode(decodedMap);
+  }
 
   String get thumbnailBase64 {
     return decodedMap[Security.security_base64] ?? '';
   }
 
-  bool get canReload => unlocked && renewInfo[Security.security_reload] == 1 && prepared;
+  bool get canReload => unlocked && renewInfo[Security.security_reload] == 1 && isPrepared;
 
   int get reloadPrice => renewInfo[Security.security_cost] ?? 0;
 
@@ -161,7 +165,7 @@ class ChatImageCell extends ChatCell {
           return GestureDetector(
             onTap: () {
               Map arguments = {Security.security_imageUrl: url, Security.security_canDownload: imageMessage.currencyType == 0 ? 1 : 0};
-              arguments[Security.security_canGenerateVideo] = supportGenerateVideo;
+              arguments[Security.security_canGenerateVideo] = false; ///supportGenerateVideo;
               arguments[Security.security_imageDes] = imageMessage.decodedMap[Security.security_desc];
               Get.toNamed(Routers.imageBrowser, arguments: arguments);
             },
@@ -191,7 +195,7 @@ class ChatImageCell extends ChatCell {
           return GestureDetector(
             onTap: () {
               Map arguments = {Security.security_imageUrl: imageMessage.imageUrl, Security.security_canDownload: imageMessage.currencyType == 0 ? 1 : 0};
-              arguments[Security.security_canGenerateVideo] = supportGenerateVideo;
+              arguments[Security.security_canGenerateVideo] = false;
               arguments[Security.security_imageDes] = imageMessage.decodedMap[Security.security_desc];
               Get.toNamed(Routers.imageBrowser, arguments: arguments);
             },
@@ -268,7 +272,7 @@ class ChatImageCell extends ChatCell {
               ),
             ],
           ),
-          SizedBox(width: 172, child: Align(alignment: Alignment.centerRight, child: IntrinsicWidth(child: renderReloadViewIfNeeded()))),
+          renderReloadViewIfNeeded(),
         ],
       ),
     );
@@ -290,6 +294,7 @@ class ChatImageCell extends ChatCell {
         imageMessage.reloadPrice == 0 ? Security.security_Free : '${imageMessage.reloadPrice} ${imageMessage.reloadCurrencyType == 1 ? 'Gems' : 'Coins'}';
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         if (supportGenerateVideo)
           GestureDetector(
@@ -297,7 +302,7 @@ class ChatImageCell extends ChatCell {
               super.generateVideo?.call(imageMessage);
             },
             child: Container(
-              height: 20,
+              height: 22,
               margin: EdgeInsets.only(top: 8),
               padding: EdgeInsets.symmetric(horizontal: 8),
               alignment: Alignment.centerLeft,
@@ -305,16 +310,16 @@ class ChatImageCell extends ChatCell {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [ImageView(Images.security_btn_video_png, width: 12, height: 12)],
+                children: [ImageView(Images.security_btn_video_png, width: 16, height: 16)],
               ),
             ),
-          ).marginOnly(right: 2),
+          ).marginOnly(right: 4),
         GestureDetector(
           onTap: () {
             super.reload?.call(imageMessage);
           },
           child: Container(
-            height: 20,
+            height: 22,
             margin: EdgeInsets.only(top: 8),
             padding: EdgeInsets.symmetric(horizontal: 8),
             alignment: Alignment.centerLeft,

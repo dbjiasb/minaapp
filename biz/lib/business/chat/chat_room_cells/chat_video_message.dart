@@ -53,7 +53,7 @@ class ChatVideoMessage extends ChatMessage {
     int compareTime = lastUpdateTime > 0 ? lastUpdateTime : createdDate.millisecondsSinceEpoch;
     DateTime compareDate = DateTime.fromMillisecondsSinceEpoch(compareTime);
 
-    if (!prepared && DateTime.now().difference(compareDate).inMinutes >= 2) {
+    if (!isPrepared && DateTime.now().difference(compareDate).inMinutes >= 2) {
       Preferences.instance.setInt('kMsgLastUpdateTime_$uuid', DateTime.now().millisecondsSinceEpoch);
 
       ApiResponse response = await ChatManager.instance.queryMsgWithUuid(uuid);
@@ -61,7 +61,7 @@ class ChatVideoMessage extends ChatMessage {
       Map msg = response.data[Security.security_msg] ?? {};
       if (msg.isEmpty) return;
       ChatVideoMessage message = ChatVideoMessage.fromServer(msg);
-      if (message.prepared) ChatManager.instance.onImagePrepared(msg);
+      if (message.isPrepared) ChatManager.instance.onImagePrepared(msg);
     }
   }
 
@@ -87,9 +87,13 @@ class ChatVideoMessage extends ChatMessage {
 
   String get videoUrl => decodedMap[Security.security_url] ?? '';
 
-  bool get prepared => preparedValue == 1;
+  bool get isPrepared => prepared == 1;
 
-  int get preparedValue => decodedMap[Security.security_prepared] ?? 1;
+  int get prepared => decodedMap[Security.security_prepared] ?? 1;
+  set prepared(int value) {
+    decodedMap[Security.security_prepared] = value;
+    info = jsonEncode(decodedMap);
+  }
 
   String get thumbnailBase64 {
     return decodedMap[Security.security_coverbase64] ?? '';
@@ -105,7 +109,7 @@ class ChatVideoMessage extends ChatMessage {
 
   int get currencyType => lockInfo[Security.security_costType] ?? 0;
 
-  bool get canReload => unlocked && renewInfo[Security.security_reload] == 1 && prepared;
+  bool get canReload => unlocked && renewInfo[Security.security_reload] == 1 && isPrepared;
 
   int get reloadPrice => renewInfo[Security.security_cost] ?? 0;
 
@@ -156,13 +160,13 @@ class ChatVideoCell extends ChatCell {
 
   bool get isInChat => type == ChatCellType.chat;
 
-  bool get prepared => videoMessage.prepared || isReal;
+  bool get prepared => videoMessage.isPrepared || isReal;
 
   bool get preparedButNotUnlock => prepared && !videoMessage.unlocked;
 
-  bool get isLoading => (videoMessage.preparedValue == 0) || (isInitialization && videoMessage.unlocked) && !isReal;
+  bool get isLoading => (videoMessage.prepared == 0) || (isInitialization && videoMessage.unlocked) && !isReal;
 
-  bool get isInitialization => videoMessage.preparedValue == 2;
+  bool get isInitialization => videoMessage.prepared == 2;
 
   Widget renderPlayButton(String videoUrl) {
     return GestureDetector(

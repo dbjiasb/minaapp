@@ -75,11 +75,12 @@ class CreateImageManager {
     }
   }
 
-  Future<ApiResponse> createImage(int userId, List? options, String? imagePrompts) async {
+  Future<ApiResponse> createImage(int userId, {List? options, String? imagePrompts, int? msgId}) async {
     ApiRequest request = ApiRequest(Apis.security_generateImage, params: {
-      Security.security_tags: options,
+      Security.security_tags: options ?? [],
       Security.security_targetUid: userId,
       Security.security_imagePrompts: imagePrompts ?? '',
+      'msgId': msgId,
     });
     ApiResponse response = await ApiService.instance.sendRequest(request);
     return response;

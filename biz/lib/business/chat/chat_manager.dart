@@ -1,4 +1,5 @@
 import 'package:biz/base/crypt/routes.dart';
+import 'package:biz/base/report/report_manager.dart';
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -29,6 +30,29 @@ String kEventCenterDidEnterChatRoom = Security.security_kEventCenterDidEnterChat
 String kEventCenterWillExitChatRoom = Security.security_kEventCenterWillExitChatRoom;
 
 String kEventCenterDidUpdateSession = Security.security_kEventCenterDidUpdateSession;
+
+class ResGenReporter {
+  static Map<int, DateTime> genInfo = {};
+
+  /// type 0: image 1: video
+  static void reportGen(int mid, int type) {
+    genInfo[mid] = DateTime.now();
+    ReportManager.sendEvent('gen_res', {
+      Security.security_mid: mid.toString(),
+      Security.security_type: type == 0 ? Security.security_image : 'video',
+    });
+  }
+
+  static void reportComplete(int mid, int prepare) {
+    DateTime startDate = genInfo[mid] ?? DateTime.now();
+    ReportManager.sendEvent('gen_res_done', {
+      Security.security_mid: mid.toString(),
+      Security.security_time: DateTime.now().difference(startDate).inSeconds.toString(),
+      'prepare': prepare.toString(),
+    });
+  }
+}
+
 
 class SendMessageResponse {
   ApiResponse response;

@@ -513,8 +513,8 @@ class CreateImagePanelController extends GetxController
     Toast.loading(status: Copywriting.security_generating_in_progress);
     ApiResponse response = await CreateImageManager.instance.createImage(
       Get.find<ChatRoomViewController>().userId,
-      options,
-      imgPrompt,
+       options: options,
+      imagePrompts: imgPrompt,
     );
     if (response.isSuccess) {
       Toast.dismiss();

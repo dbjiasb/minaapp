@@ -49,9 +49,11 @@ import '../chat_room_cells/chat_generating_message.dart';
 import '../chat_room_cells/chat_system_message.dart';
 import '../chat_room_cells/chat_text_cell.dart';
 import '../chat_room_cells/chat_time_message.dart';
+import '../chat_room_cells/chat_video_message.dart';
 import '../chat_session.dart';
 import '../chat_voice_manager.dart';
 import '../chat_voice_player.dart';
+import '../create_image/create_image_manager.dart';
 import '../generate_video/generate_video_panel.dart';
 import './chat_bottom_bar.dart';
 import 'level_up_pop_up.dart';
@@ -1090,8 +1092,49 @@ class ChatRoomViewController extends GetxController {
     }
   }
 
+  Future unlockVideoMessageWithInit(ChatVideoMessage message) async {
+    Toast.loading();
+    ApiResponse rsp = await VideoCreateManager.requestGenerateVideo(msgId: message.id, sid: session.userId);
+    if (rsp.isSuccess) {
+      ResGenReporter.reportGen(message.id, 1);
+      message.prepared = 0;
+      ChatManager.instance.messageHandler.insertMessage(message);
+      // update([message.refreshId]);
+      replaceMessage(message);
+      Toast.dismiss();
+      AccountService.instance.refreshBalance();
+    } else {
+      Toast.show(rsp.description);
+    }
+  }
+
+  Future unlockImageMessageWithInit(ChatImageMessage message) async {
+    Toast.loading();
+    ApiResponse rsp = await CreateImageManager.instance.createImage(session.userId, msgId: message.id);
+    if (rsp.isSuccess) {
+      ResGenReporter.reportGen(message.id, 0);
+      message.prepared = 0;
+      ChatManager.instance.messageHandler.insertMessage(message);
+      // update([message.refreshId]);
+      replaceMessage(message);
+      Toast.dismiss();
+      AccountService.instance.refreshBalance();
+    } else {
+      Toast.show(rsp.description);
+    }
+  }
+
   Future<bool> unlockMessage(ChatMessage message) async {
-    debugPrint('unlockMessage: $message');
+    L.i('unlockMessage: $message');
+
+    if (message is ChatVideoMessage) {
+      await unlockVideoMessageWithInit(message);
+      return Future.value(true);
+    } else if (message is ChatImageMessage) {
+      await unlockImageMessageWithInit(message);
+      return Future.value(true);
+    }
+
     Toast.loading();
     ApiResponse response = await ChatManager.instance.unlockMessage(message);
     if (response.isSuccess) {
