@@ -264,7 +264,7 @@ class CreateAccountViewController extends GetxController {
 
     if (verifyCode.isEmpty) {
       if (kDebugMode) {
-        verifyCode = '385620';
+        verifyCode = '752083';
       }
       return;
     }
