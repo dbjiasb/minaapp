@@ -2,6 +2,7 @@ import 'package:biz/base/crypt/routes.dart';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 // import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
@@ -22,6 +23,8 @@ class ImageViewer extends StatelessWidget {
   final int canDownload = Get.arguments[Security.security_canDownload] ?? 0;
   final bool canGenerateVideo = Get.arguments[Security.security_canGenerateVideo] ?? false;
   final String imageDes = Get.arguments[Security.security_imageDes] ?? "";
+
+  RxBool expandDes = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +87,56 @@ class ImageViewer extends StatelessWidget {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  color: Color(0xFF12151C),
-                  child: Text(imageDes, style: TextStyle(color: Colors.white), maxLines: 2, overflow: TextOverflow.ellipsis),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            expandDes.value = !expandDes.value;
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.white12,
+                              borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Obx(() => Text(
+                              expandDes.value ? 'Collapse' : 'Expand',
+                              style: TextStyle(color: Colors.white, fontSize: 14
+                              ),
+                            )),
+                          )).marginOnly(right: 8),
+                        GestureDetector(
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text: imageDes));
+                            Toast.show('Copied to clipboard');
+                          },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                  color: Colors.white12,
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: Text(
+                                'Copy',
+                                style: TextStyle(color: Colors.white, fontSize: 14
+                                ),
+                              ),
+                            ))
+                      ],
+                    ).marginOnly(left: 12, bottom: 6),
+                    Container(
+                      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 32),
+                      color: Color(0xFF12151C),
+                      child: Obx(() => Text(
+                        imageDes,
+                        style: TextStyle(color: Colors.white),
+                        maxLines: expandDes.value ? 50 : 3,
+                        overflow: TextOverflow.ellipsis,
+                      ))
+                    )
+                  ],
                 ),
               )
               : SizedBox.shrink(),
