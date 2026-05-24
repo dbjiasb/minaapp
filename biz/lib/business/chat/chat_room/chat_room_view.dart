@@ -1127,10 +1127,10 @@ class ChatRoomViewController extends GetxController {
   Future<bool> unlockMessage(ChatMessage message) async {
     L.i('unlockMessage: $message');
 
-    if (message is ChatVideoMessage) {
+    if (message is ChatVideoMessage && message.isInit) {
       await unlockVideoMessageWithInit(message);
       return Future.value(true);
-    } else if (message is ChatImageMessage) {
+    } else if (message is ChatImageMessage && message.isInit) {
       await unlockImageMessageWithInit(message);
       return Future.value(true);
     }
