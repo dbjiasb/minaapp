@@ -218,13 +218,7 @@ class HomePageViewController extends GetxController with GetTickerProviderStateM
 
   void setupCategories() {
     try {
-      List<Category> tabs = Preferences.instance.isRv ? [
-        Category(Security.security_recommend, RoleListType.ai_and_script),
-        Category(Security.security_story, RoleListType.story),
-        // Category(Security.security_real, RoleListType.real),
-        // Category(Security.security_oC, RoleListType.ugc),
-        // Category(Copywriting.security_pro_only, RoleListType.pro_only),
-      ] : [
+      List<Category> tabs = [
         Category(Security.security_recommend, RoleListType.ai_and_script),
         Category(Security.security_real, RoleListType.real),
         Category(Security.security_oC, RoleListType.ugc),

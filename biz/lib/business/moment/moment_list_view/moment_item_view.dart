@@ -2,6 +2,7 @@ import 'package:biz/base/crypt/images.dart';
 import 'dart:async';
 
 import 'package:biz/base/assets/image_view.dart';
+import 'package:biz/base/preferences/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -507,6 +508,9 @@ class _MomentItemViewState extends State<MomentItemView> {
     Map? rsp = await getListData(fromId);
     var rawData = rsp?[Security.security_param] ?? [];
     List<Map> listData = (rawData as List).cast<Map>();
+    if (Preferences.instance.isRv || Preferences.instance.isPreUIA) {
+      listData.shuffle();
+    }
     momentInfoList.addAll(listData);
     momentInfoList.refresh();
     hasMore.value = rsp?[Security.security_hasMore] == 1;
@@ -516,6 +520,9 @@ class _MomentItemViewState extends State<MomentItemView> {
 
   void refreshData(List<Map> momentList) {
     momentInfoList.clear();
+    if (Preferences.instance.isRv || Preferences.instance.isPreUIA) {
+      momentList.shuffle();
+    }
     momentInfoList.addAll(momentList);
   }
 

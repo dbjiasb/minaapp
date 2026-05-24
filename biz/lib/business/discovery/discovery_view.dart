@@ -156,7 +156,7 @@ class DiscoveryView extends GetView<DiscoveryController> {
 class DiscoveryController extends GetxController with GetTickerProviderStateMixin {
   RxList tabs = [].obs;
   late TabController tabController;
-  bool isRv = Preferences.instance.isRv;
+  bool isRv = Preferences.instance.isPreUIA;
   RxInt currentIndex = 0.obs;
 
   @override
@@ -164,13 +164,13 @@ class DiscoveryController extends GetxController with GetTickerProviderStateMixi
     super.onInit();
 
     setupTabs(isInit: true);
-    EventCenter.instance.addListener(Preferences.kDicChangedAppConfig, (event) {
+    EventCenter.instance.addListener(Preferences.kPreUIAChanged, (event) {
       setupTabs();
     });
   }
 
   setupTabs({bool isInit = false}) {
-    bool rv = Preferences.instance.isRv;
+    bool rv = Preferences.instance.isPreUIA;
     if (isRv == rv && !isInit) return;
     isRv = rv;
     List newTabs = [];
@@ -181,7 +181,10 @@ class DiscoveryController extends GetxController with GetTickerProviderStateMixi
         DisTab(DisTabType.match, Security.security_match),
       ];
     } else {
-      newTabs = [DisTab(DisTabType.character, Security.security_Discovery)];
+      newTabs = [
+        DisTab(DisTabType.character, Security.security_Discovery),
+        DisTab(DisTabType.moment, Security.security_moment),
+      ];
     }
     tabController = TabController(vsync: this, length: newTabs.length, initialIndex: currentIndex.value);
     tabController.addListener(() {

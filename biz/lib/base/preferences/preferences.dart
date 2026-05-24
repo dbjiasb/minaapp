@@ -90,6 +90,7 @@ import 'package:biz/base/crypt/security.dart';
 import 'package:biz/shared/alert.dart';
 
 import '../../core/account/account_service.dart';
+import '../../core/util/device_util.dart';
 import '../../core/util/log_util.dart';
 import '../api_service/api_request.dart';
 import '../api_service/api_response.dart';
@@ -124,12 +125,29 @@ class Preferences {
     checkLaunch();
   }
 
+  RxBool preUIA = false.obs;
+  bool get isPreUIA => preUIA.value;
+  Timer? checkLaunchTimer;
+
   checkLaunch() async {
-    int lastLaunchTs = getInt(Security.security_kLastLaunchTime);
-    if (lastLaunchTs == 0) {
+    int firstTime = getInt('kMinaFirstLaunch');
+    int notTime = DateTime.now().millisecondsSinceEpoch;
+    if (firstTime == 0) {
       isFirstLaunch = true;
+      setInt('kMinaFirstLaunch', notTime);
     }
-    _getStorage.write(Security.security_kLastLaunchTime, DateTime.now().millisecondsSinceEpoch);
+
+    preUIA.value = (await DeviceUtil.isPad) || notTime - firstTime < 60 * 10 * 1000;
+    if (!isPreUIA) return;
+
+    checkLaunchTimer = Timer.periodic(const Duration(seconds: 15), (Timer timer) async {
+      int firstTime = getInt('kMinaFirstLaunch');
+      preUIA.value = (await DeviceUtil.isPad) || DateTime.now().millisecondsSinceEpoch - firstTime < 60 * 10 * 1000;
+      if (!isPreUIA) {
+        checkLaunchTimer?.cancel();
+        EventCenter.instance.sendEvent(kPreUIAChanged, {});
+      }
+    });
   }
 
   Future<bool> setString(key, value) {
@@ -201,6 +219,7 @@ class Preferences {
 
   static String kCachedKeyAppConfig = Security.security_kCachedKeyAppConfig;
   static String kDicChangedAppConfig = Security.security_kDicChangedAppConfig;
+  static String kPreUIAChanged = 'kPreUIAChanged';
   static String kRPConfig = Security.security_kRPConfig;
 
   RxMap appConfig = RxMap({});

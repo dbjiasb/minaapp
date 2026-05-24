@@ -16,6 +16,7 @@ class RoleListLogic extends GetxController {
   final RefreshController refreshController = RefreshController(initialRefresh: false);
   final RxBool isLoading = true.obs;
   final RxList dataList = RxList<Map>();
+  final RxList banners = [].obs;
   bool isLoadingMore = false;
   bool _hasMore = true;
   int page = 0;
@@ -69,6 +70,8 @@ class RoleListLogic extends GetxController {
     }
   }
 
+  Set<int> listedIds = {};
+
   Future<void> getListData() async {
     try {
       ApiResponse rsp = await RoleManager.instance.getRoleList(
@@ -80,12 +83,22 @@ class RoleListLogic extends GetxController {
       if (rsp.isSuccess) {
         List rawData = rsp.data[Security.security_param] ?? [];
         List<Map> data = rawData.cast<Map>();
+        List banner = rsp.data[Security.security_banners] ?? [];
 
         if (page == 0) {
           dataList.clear();
+          listedIds.clear();
+          banners.value = banner;
         }
 
-        dataList.addAll(data);
+        for (int i = 0; i < data.length; i++) {
+          Map info = data[i];
+          int uid = info[Security.security_uid] ?? 0;
+          if (listedIds.contains(uid)) continue;
+          listedIds.add(uid);
+          dataList.add(info);
+        }
+
         _hasMore = rsp.data[Security.security_hasMore] == true;
       }
     } catch (e) {

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
@@ -55,5 +56,29 @@ class DeviceUtil {
       storage.write(key: keyChainKey, value: _deviceId);
     }
     return _deviceId;
+  }
+
+  static String _model = '';
+  static String _deviceTypeName = '';
+
+  static DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
+
+  static Future<String> get model async {
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo info = await _deviceInfo.androidInfo;
+      _model = info.model;
+      _deviceTypeName = info.model;
+    } else if (Platform.isIOS) {
+      IosDeviceInfo info = await _deviceInfo.iosInfo;
+      _model = info.utsname.machine;
+      _deviceTypeName = info.model;
+    }
+
+    return _model;
+  }
+
+  static Future<bool> get isPad async {
+    await model;
+    return _deviceTypeName.contains('iPad');
   }
 }
