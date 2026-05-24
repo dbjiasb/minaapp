@@ -310,12 +310,12 @@ class ChatAudioView extends StatelessWidget {
         Text(
           '$length"',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 14,
             fontWeight: AppFonts.medium,
           ),
         ),
-        CachedImage(imageUrl: ImagePath.play_icon, height: 20, width: 20, color: Colors.black),
+        CachedImage(imageUrl: ImagePath.play_icon, height: 20, width: 20, color: Colors.white),
       ],
     );
   }
