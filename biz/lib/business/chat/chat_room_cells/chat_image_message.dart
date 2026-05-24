@@ -120,6 +120,8 @@ class ChatImageMessage extends ChatMessage {
 
   bool get isLoading => prepared == 0;
   bool get isPrepared => prepared == 1 || (decodedMap[Security.security_prepared] == null && imageUrl.isNotEmpty);
+  bool get isInit => prepared == 2;
+
   int get prepared => decodedMap[Security.security_prepared] ?? 0;
   set prepared(int value) {
     decodedMap[Security.security_prepared] = value;

@@ -88,6 +88,7 @@ class ChatVideoMessage extends ChatMessage {
   String get videoUrl => decodedMap[Security.security_url] ?? '';
 
   bool get isPrepared => prepared == 1;
+  bool get isInit => prepared == 2;
 
   int get prepared => decodedMap[Security.security_prepared] ?? 1;
   set prepared(int value) {
