@@ -59,13 +59,13 @@ class _PhotoViewState extends State<PhotoView> {
       if (index == 0) {
         img = GestureDetector(
           onTap: () {
-            if (element[Security.security_unlocked] == 0) {
+            if (element[Security.security_unlocked] == 0 && widget.isLocked) {
               _showUnlockDialog(element);
             } else {
               toViewer(element[Security.security_url] ?? '');
             }
           },
-          child: element[Security.security_unlocked] == 0
+          child: element[Security.security_unlocked] == 0 && widget.isLocked
               ? _buildLockedImage(element, 168.w, 168.w)
               : CachedImage.clipImage(
             imageUrl: element[Security.security_url] ?? '',
@@ -80,7 +80,7 @@ class _PhotoViewState extends State<PhotoView> {
         img = element[Security.security_type] == 2
             ? GestureDetector(
           onTap: () {
-            if ((element[Security.security_unlocked] ?? 0) != 0) {
+            if ((element[Security.security_unlocked] ?? 0) != 0 || !widget.isLocked) {
               Get.toNamed(Routers.videoPlayer, arguments: {Security.security_videoUrl: element[Security.security_url] ?? ''});
             } else {
               _showUnlockDialog(element);
@@ -89,7 +89,7 @@ class _PhotoViewState extends State<PhotoView> {
           child: Container(
             height: 256.w,
             margin: const EdgeInsets.only(bottom: 8),
-            child: (element[Security.security_unlocked] ?? 0) == 0
+            child: (element[Security.security_unlocked] ?? 0) == 0 && widget.isLocked
                 ? _buildLockedImage(element, double.infinity, 256.w)
                 : ClipRRect(
               borderRadius: BorderRadius.circular(16),
@@ -99,13 +99,13 @@ class _PhotoViewState extends State<PhotoView> {
         )
             : GestureDetector(
           onTap: () {
-            if ((element[Security.security_unlocked] ?? 0) != 0) {
+            if ((element[Security.security_unlocked] ?? 0) != 0 || !widget.isLocked) {
               toViewer(element[Security.security_url] ?? '');
             } else {
               _showUnlockDialog(element);
             }
           },
-          child: (element[Security.security_unlocked] ?? 0) == 0
+          child: (element[Security.security_unlocked] ?? 0) == 0 && widget.isLocked
               ? _buildLockedImage(element, double.infinity, 256.w)
               : CachedImage.clipImage(
             imageUrl: element[Security.security_url] ?? '',
