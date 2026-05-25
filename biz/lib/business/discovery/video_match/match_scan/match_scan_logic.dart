@@ -66,7 +66,7 @@ class MatchScanLogic extends GetxController {
     CallManager.instance.curCall = null;
     await CallManager.instance.refuse(callId: callId);
     MatchService.to.startVideoCallMatch().then((value) {
-      if (value.isSuccess) {
+      if (value.isSuccess || value.bsnsCode == 8) {
         Get.offNamed(Routers.matchScan);
       } else {
         EasyLoading.showToast(value.description);

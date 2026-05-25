@@ -907,11 +907,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
           Expanded(child: tabBar),
           GestureDetector(
             onTap: () {
-              if (Preferences.instance.isRv) {
-                CreateOcRvDialog.show();
-              } else {
-                CreateOcDialog.show();
-              }
+              CreateOcDialog.show();
             },
             behavior: HitTestBehavior.opaque,
             child: Container(
@@ -989,20 +985,18 @@ class AccountViewController extends GetxController
 
   setupTabs() {
     tabNames.value = [Security.security_companions];
-    if (!Preferences.instance.isRv) {
-      tabNames.add(Copywriting.security_group_Chat);
-      tabNames.add(Security.security_moment);
-      tabPage.add(KeepAliveWrapper(child: MyGroupView()));
-      tabPage.add(
-        KeepAliveWrapper(
-          child: MomentItemView(
-            EMomentListType.MOMENT_LIST_USER,
-            targetUid: 0,
-            canRefresh: false,
-          ),
+    tabNames.add(Copywriting.security_group_Chat);
+    tabNames.add(Security.security_moment);
+    tabPage.add(KeepAliveWrapper(child: MyGroupView()));
+    tabPage.add(
+      KeepAliveWrapper(
+        child: MomentItemView(
+          EMomentListType.MOMENT_LIST_USER,
+          targetUid: 0,
+          canRefresh: false,
         ),
-      );
-    }
+      ),
+    );
     tabController = TabController(vsync: this, length: tabNames.length);
   }
 

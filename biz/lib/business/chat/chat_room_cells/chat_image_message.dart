@@ -345,7 +345,7 @@ class ChatImageCell extends ChatCell {
     return Stack(
       fit: StackFit.expand,
       children: [
-        CachedImage(imageUrl: imageUrl, fit: BoxFit.cover),
+        ClipRRect(borderRadius: BorderRadius.circular(12),child: imageMessage.isPrepared ? CachedImage(imageUrl: imageUrl, fit: BoxFit.cover) : ImageView(Images.security_chat_img_placeholder_png, fit: BoxFit.cover),),
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 16.0, sigmaY: 16.0),
           //显示imageMessage的thumbnailBase64

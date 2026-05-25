@@ -447,7 +447,7 @@ class AdvancePage extends StatelessWidget {
                 // 禁用状态颜色
                 child: Text(
                   Security.security_Generate,
-                  style: TextStyle(color: _logic.toGen.value ? Colors.white : Colors.white.withValues(alpha: 0.6), fontSize: 14, fontWeight: FontWeight.w900),
+                  style: TextStyle(color: _logic.toGen.value ? Colors.black : Colors.black.withValues(alpha: 0.6), fontSize: 14, fontWeight: FontWeight.w900),
                 ),
               ),
             ),

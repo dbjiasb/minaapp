@@ -154,9 +154,9 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
   Widget _buildRecommendView() {
     return Obx(
       () =>
-          !Preferences.instance.isRv &&
-                  logic.showRecommend.value &&
-                  logic.recommendList.isNotEmpty
+          !Preferences.instance.isPreUIA
+              && logic.showRecommend.value
+              && logic.recommendList.isNotEmpty
               ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -283,9 +283,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
   }
 
   void _showSessionSetting() {
-    List<String> titles = Preferences.instance.isRv
-        ? [Copywriting.security_mark_all_as_read, Security.security_notification]
-        : [Copywriting.security_mark_all_as_read, Security.security_notification, Copywriting.security_message_setting];
+    List<String> titles = [Copywriting.security_mark_all_as_read, Security.security_notification, Copywriting.security_message_setting];
     Get.dialog(
       InkWell(
         onTap: Get.back,

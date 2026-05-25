@@ -98,11 +98,9 @@ class RoleCardWidget extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: [0.0, 0.7, 0.9, 1.0],
+                    stops: [0.0, 1.0],
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.6),
-                      Colors.black.withValues(alpha: 0.9),
                       Colors.black.withValues(alpha: 1),
                     ],
                   ),
@@ -146,7 +144,7 @@ class RoleCardWidget extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                         height: 1.3
                       ),
-                      maxLines: 3,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
 

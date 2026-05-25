@@ -260,7 +260,7 @@ class ChatVideoCell extends ChatCell {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -359,12 +359,7 @@ class ChatVideoCell extends ChatCell {
   }
 
   void unLockOrGenerateVideo() {
-    //如果未生成
-    if (isInitialization) {
-      generateVideo?.call(videoMessage);
-    } else {
-      unlock?.call(videoMessage);
-    }
+    unlock?.call(videoMessage);
   }
 
   void showUnlockDialog() {
@@ -389,6 +384,7 @@ class ChatVideoCell extends ChatCell {
         : '${videoMessage.reloadPrice} ${videoMessage.reloadCurrencyType == 1 ? 'Gems' : 'Coins'}';
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         GestureDetector(
           onTap: () {

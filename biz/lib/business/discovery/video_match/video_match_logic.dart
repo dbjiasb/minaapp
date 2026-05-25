@@ -23,7 +23,7 @@ class VideoMatchLogic extends GetxController {
     EasyLoading.show();
     ReportManager.sendEvent(Security.security_click_user_match_video, {Security.security_action: Security.security_startMatch});
     MatchService.to.startVideoCallMatch().then((value) {
-      if (value.isSuccess) {
+      if (value.isSuccess || value.bsnsCode == 8) {
         RH.toPage(Routers.matchScan);
       } else {
         EasyLoading.showToast(value.description);
@@ -63,6 +63,8 @@ class VideoMatchLogic extends GetxController {
   void onReady() {
     MatchService.to.getMatchTaskProcess();
     _timer = Timer.periodic(const Duration(milliseconds: 2000), (timer) {
+      int len = MatchService.to.avatarUrlPlaceHolders.length;
+      if (len == 0) return;
       currentIndex.value = (currentIndex.value + 1) % MatchService.to.avatarUrlPlaceHolders.length;
     });
     // TaskService.to.queryRealReward();

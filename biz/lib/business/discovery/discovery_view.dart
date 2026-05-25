@@ -170,7 +170,7 @@ class DiscoveryController extends GetxController with GetTickerProviderStateMixi
   }
 
   setupTabs({bool isInit = false}) {
-    bool rv = Preferences.instance.isPreUIA;
+    bool rv = Preferences.instance.isPreUIA || Preferences.instance.isRv;
     if (isRv == rv && !isInit) return;
     isRv = rv;
     List newTabs = [];

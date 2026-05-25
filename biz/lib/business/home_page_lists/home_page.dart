@@ -223,10 +223,10 @@ class HomePageViewController extends GetxController with GetTickerProviderStateM
         Category(Security.security_real, RoleListType.real),
         Category(Security.security_oC, RoleListType.ugc),
         Category(Security.security_featured, RoleListType.dating),
+        Category(Security.security_story, RoleListType.story),
         Category(Security.security_anime, RoleListType.anime),
         Category(Security.security_realistic, RoleListType.realistic),
         Category(Copywriting.security_pro_only, RoleListType.pro_only),
-        Category(Security.security_story, RoleListType.story),
       ];
 
       if (categories.length == tabs.length) {
