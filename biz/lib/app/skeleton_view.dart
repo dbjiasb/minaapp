@@ -54,18 +54,18 @@ class SkeletonView extends StatelessWidget {
             isSelected: viewController.selectedIndex.value == index,
             highlightColor: Colors.transparent,
           ),
-          // if (index == MINE_INDEX)
-          //   Positioned(
-          //     top: 8,
-          //     right: 8,
-          //     child: Obx(() {
-          //       bool needRedot = UserManager.instance.notificationReminder.value || UserManager.instance.taskReminder.value;
-          //       if (!needRedot) return Container();
-          //       return IgnorePointer(
-          //         child: Container(width: 8, height: 8, decoration: BoxDecoration(color: const Color(0xFFF84652), borderRadius: BorderRadius.circular(20))),
-          //       );
-          //     }),
-          //   ),
+          if (index == MINE_INDEX)
+            Positioned(
+              top: 8,
+              right: 8,
+              child: Obx(() {
+                bool needRedot = UserManager.instance.notificationReminder.value || UserManager.instance.taskReminder.value;
+                if (!needRedot) return Container();
+                return IgnorePointer(
+                  child: Container(width: 8, height: 8, decoration: BoxDecoration(color: const Color(0xFFF84652), borderRadius: BorderRadius.circular(20))),
+                );
+              }),
+            ),
           if (index == MESSAGE_INDEX)
             Positioned(
               top: 5,

@@ -34,6 +34,7 @@ class UserCardView extends StatelessWidget {
         coverUrl: defaultUrl,
         width: width,
         height: height,
+        autoScale: true,
       );
     } else if ((userBgUrl ?? "").isNotEmpty && (userCardUrl ?? "").isNotEmpty) {
       child = Stack(
@@ -131,16 +132,29 @@ class _VideoViewState extends State<VideoView> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-      ..initialize().then((_) {
-        vWidth = _controller.value.size.width;
-        vHeight = _controller.value.size.height;
-        setState(() {});
-        _controller.setVolume(0.0);
-        _controller.play();
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+    _initVideo();
+  }
+
+  bool _showVideo = false;
+
+  Future<void> _initVideo() async {
+    await _controller.initialize();
+
+    vWidth = _controller.value.size.width;
+    vHeight = _controller.value.size.height;
+
+    await _controller.setLooping(true);
+    await _controller.setVolume(0);
+    await _controller.play();
+
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    if (mounted) {
+      setState(() {
+        _showVideo = true;
       });
-    _controller.setLooping(true);
-    _controller.addListener(() {});
+    }
   }
 
   @override
@@ -151,52 +165,47 @@ class _VideoViewState extends State<VideoView> {
 
   @override
   Widget build(BuildContext context) {
-    double scaleRatio = 0;
-    if (widget.autoScale) {
-      final Size screenSize = MediaQuery.of(context).size;
-      final Size videoSize = Size(720 * 0.5, 1280 * 0.5);
+    Widget videoWidget = _controller.value.isInitialized
+        ? (widget.autoScale
+        ? SizedBox.expand(
+      child: FittedBox(
+        fit: BoxFit.cover,
+        child: SizedBox(width: _controller.value.size.width, height: _controller.value.size.height, child: VideoPlayer(_controller)),
+      ),
+    )
+        : Center(
+      child: AspectRatio(aspectRatio: _controller.value.aspectRatio, child: VideoPlayer(_controller)),
+    ))
+        : const SizedBox();
 
-      double wRatio = screenSize.width / videoSize.width;
-      double hRatio = screenSize.height / videoSize.height;
-      scaleRatio = wRatio > hRatio ? wRatio : hRatio;
-      // final videoWidth = 1280.0 / (screenSize.height / screenSize.width);
-    }
+    return SizedBox(
+      width: widget.width,
+      height: widget.height,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          /// 封面
+          AnimatedOpacity(
+            opacity: _showVideo ? 0 : 1,
+            duration: const Duration(milliseconds: 300),
+            child: CachedImage(
+              imageUrl: widget.coverUrl ?? "",
+              width: widget.width,
+              height: widget.height,
+              fit: BoxFit.cover,
+              errorWidget: (context, url, error) {
+                return _defaultBg();
+              },
+              placeholder: (context, url) {
+                return _defaultBg();
+              },
+            ),
+          ),
 
-    return Container(
-      color: Colors.transparent,
-      height: double.infinity,
-      width: double.infinity,
-      alignment: Alignment.center,
-      child:
-          _controller.value.isInitialized
-              ? (scaleRatio > 0
-                  ? Transform.scale(
-                    scale: scaleRatio, // 放大1.2倍
-                    child: Center(
-                      child: AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
-                      ),
-                    ),
-                  )
-                  : Center(
-                    child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    ),
-                  ))
-              : CachedImage(
-                imageUrl: widget.coverUrl ?? "",
-                width: widget.width,
-                height: widget.height,
-                fit: BoxFit.cover,
-                errorWidget: (context, url, error) {
-                  return _defaultBg();
-                },
-                placeholder: (context, url) {
-                  return _defaultBg();
-                },
-              ),
+          /// 视频
+          AnimatedOpacity(opacity: _showVideo ? 1 : 0, duration: const Duration(milliseconds: 300), child: videoWidget),
+        ],
+      ),
     );
   }
 

@@ -1154,13 +1154,16 @@ class ChatRoomViewController extends GetxController {
       Toast.dismiss();
       replaceMessage(newMessage);
     } else {
-      if (response.bsnsCode == ApiError.notEnoughBalance.v ||
-          response.bsnsCode == ApiError.notEnoughGems.v) {
-        message.currencyType == 1
-            ? RouteHelper.toGems()
-            : RouteHelper.toPremium();
-      }
       Toast.error(response.description);
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        Toast.dismiss();
+        if (response.bsnsCode == ApiError.notEnoughBalance.v ||
+            response.bsnsCode == ApiError.notEnoughGems.v) {
+          message.currencyType == 1
+              ? RouteHelper.toGems()
+              : RouteHelper.toPremium();
+        }
+      });
     }
     return Future.value(response.isSuccess);
   }

@@ -54,7 +54,7 @@ dependencies:
   archive: #3.6.1  # 压缩/解压工具  <<  archive: ^3.1.2
 
   # ========== 设备功能 ==========
-  path_provider: 2.1.4  # 文件路径访问  <<  path_provider: 2.1.2
+  path_provider: 2.1.5  # 文件路径访问  <<  path_provider: 2.1.2
   wakelock_plus: 1.3.2  # 屏幕常亮控制  << wakelock_plus: ^1.3.2
   permission_handler: 12.0.1  # 权限管理  <<  permission_handler: ^12.0.1
   in_app_purchase: 3.2.0  # 应用内购  <<  in_app_purchase: ^3.2.0
@@ -78,7 +78,7 @@ dependencies:
   logger: 2.6.1
   flutter_screenutil: 5.9.3
   flip_card: 0.7.0
-#  card_swiper: 3.0.1
+  card_swiper: 3.0.1
   bubble_pop_up: ^2.1.0
   video_thumbnail: ^0.5.6
   flutter_linkify: 6.0.0

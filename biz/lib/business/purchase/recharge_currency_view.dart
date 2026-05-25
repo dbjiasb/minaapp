@@ -234,7 +234,11 @@ class RechargeCurrencyViewController extends GetxController {
       Toast.show(Copywriting.security_no_recharge_item_available__try_again_later);
       return;
     }
-    Toast.dismiss();
+
+    /// 如果有缓存的时候loading立刻dismiss不生效
+    Future.delayed(const Duration(milliseconds: 100), () {
+      Toast.dismiss();
+    });
 
     rechargeList.value = itemList;
     selectedPro.value = rechargeList.first;

@@ -363,40 +363,40 @@ class PersonViewPage extends StatelessWidget {
                       ),
                   ],
                 ),
-                // SizedBox(height: 12),
-                // Row(
-                //   children: [
-                //     Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Text(controller.linkNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                //         Text(
-                //           Security.security_connectors,
-                //           style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
-                //         ),
-                //       ],
-                //     ),
-                //     SizedBox(width: 12),
-                //     Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Text(controller.followersNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                //         Text(
-                //           Security.security_followers,
-                //           style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
-                //         ),
-                //       ],
-                //     ),
-                //     SizedBox(width: 12),
-                //     Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Text(controller.heatNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                //         Text(Security.security_heat, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500)),
-                //       ],
-                //     ),
-                //   ],
-                // ),
+                SizedBox(height: 12),
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(controller.linkNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                        Text(
+                          Security.security_connectors,
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(controller.followersNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                        Text(
+                          Security.security_followers,
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(controller.heatNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                        Text(Security.security_heat, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ],
+                ),
                 if (controller.characters.isNotEmpty) SizedBox(height: 12),
                 if (controller.characters.isNotEmpty)
                   Wrap(

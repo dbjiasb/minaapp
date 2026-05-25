@@ -791,7 +791,7 @@ class BasicPage extends StatelessWidget {
                 child: Text(
                   Security.security_Next,
                   style: TextStyle(
-                    color: _controller.canProceed.value ? Colors.white : Colors.white.withValues(alpha: 0.6),
+                    color: _controller.canProceed.value ? Colors.black : Colors.black.withValues(alpha: 0.6),
                     fontSize: 14,
                     fontWeight: FontWeight.w900,
                   ),

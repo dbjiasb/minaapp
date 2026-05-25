@@ -114,6 +114,10 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
     return Stack(
       children: [
         Obx(() {
+          String sb = curMode[ES.sb] ?? '';
+          String cb = curMode[ES.cb] ?? '';
+          String img = sb.isEmpty ? cb : sb;
+
           return InkWell(
             onTap: () {
               if (controller.expand.value) {
@@ -128,7 +132,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                   color: Colors.black,
                   image: DecorationImage(
                     image: CachedNetworkImageProvider(
-                      curMode[ES.cb] ?? "",
+                      img,
                     ),
                     fit: BoxFit.cover,
                     // colorFilter: curPersonality.own == 0 ? const ColorFilter.mode(Colors.black, BlendMode.color) : null,
@@ -368,6 +372,9 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
               controller.resetCurAIMode(mode);
             },
             child: Obx(() {
+              String sb = mode[ES.sb] ?? '';
+              String cb = mode[ES.cb] ?? '';
+              String img = sb.isEmpty ? cb : sb;
               return SizedBox(
                 // height: 110, width: 57,
                 child: Column(
@@ -387,7 +394,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(4),
                             child: CachedImage(
-                              imageUrl: mode[ES.sb] ?? mode[ES.cb] ?? "",
+                              imageUrl: img,
                               height: 100,
                               width: 57,
                               fit: BoxFit.cover,

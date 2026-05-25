@@ -198,7 +198,7 @@ class GiftPanelViewController extends GetxController {
     ApiResponse response = await GiftManager.instance.queryGifts(recipient);
     if (response.isSuccess) {
       List tmpItems = response.data[Security.security_panels]?[0]?[Security.security_gifts] as List? ?? [];
-      if (Preferences.instance.isRv) tmpItems = tmpItems.reversed.toList();
+      if (Preferences.instance.isRv || Preferences.instance.isPreUIA) tmpItems.shuffle();
       items.value = tmpItems.map<GiftItem>((item) => GiftItem(item)).toList();
       listStatus.value = items.isEmpty ? ListStatus.empty : ListStatus.success;
       if (items.isNotEmpty) {

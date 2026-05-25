@@ -1,9 +1,12 @@
+import 'package:biz/base/database/data_center.dart';
+import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/business/home_page_lists/role_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:biz/base/api_service/api_response.dart';
 import '../../base/crypt/security.dart';
+import '../../base/event_center/event_center.dart';
 
 
 class RoleListLogic extends GetxController {
@@ -38,6 +41,8 @@ class RoleListLogic extends GetxController {
     super.onClose();
   }
 
+  bool isRV = Preferences.instance.isRv;
+
   void initData() {
     isLoading.value = true;
     getListData();
@@ -47,6 +52,15 @@ class RoleListLogic extends GetxController {
         refreshController.requestRefresh();
       };
     }
+
+    EventCenter.instance.addListener(Preferences.kDicChangedAppConfig, (Event event) {
+      bool isRV = Preferences.instance.isRv;
+      if (this.isRV != isRV && isRV == false) {
+        this.isRV = isRV;
+        refreshController.requestRefresh();
+      }
+    });
+
   }
 
   void onRefresh() async {

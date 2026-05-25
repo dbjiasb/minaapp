@@ -1,4 +1,6 @@
 import 'package:biz/base/report/report_manager.dart';
+import 'package:biz/business/discovery/video_match/match_scan/match_scan_binding.dart';
+import 'package:biz/business/discovery/video_match/match_scan/match_scan_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -109,6 +111,7 @@ class RootView extends StatelessWidget {
             GetPage(name: Routers.crowedInfo, page: () => CrowedInfoView(), binding: CrowedInfoBinding()),
             GetPage(name: Routers.search, page: () => SearchView(), binding: SearchBinding()),
             GetPage(name: Routers.collections, page: () => CollectionsView()),
+            GetPage(name: Routers.matchScan, page: () => MatchScanPage(), binding: MatchScanBinding()),
           ],
           routingCallback: (route) {
             String? name = route?.current;

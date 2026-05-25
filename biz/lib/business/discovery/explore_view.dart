@@ -1,6 +1,7 @@
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/crypt/apis.dart';
+import 'package:biz/base/preferences/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/business/discovery/explore_item_view.dart';
@@ -82,23 +83,26 @@ class _ExploreViewState extends State<ExploreView> {
       child: UiUtils.buildCommonEmptyView(tips: Copywriting.security_no_datas__click_to_retry_),
     );
 
-    return GetBuilder<DiscoveryController>(builder: (_) {
-      return Container(
-        alignment: Alignment.center,
-        child: UiUtils.buildFutureView<List<dynamic>?>(getDataList(0), (
-            data,
-            context
-            ) {
-          if ((data ?? []).isEmpty) {
-            return emptyView;
-          } else {
-            return Obx(() {
-              _preAllImage(0, rxList);
-              return _buildBody(data!);
-            });
-          }
-        }, emptyView: emptyView),
-      );
+    return Obx(() {
+      Preferences.instance.isRv;
+      return GetBuilder<DiscoveryController>(builder: (_) {
+        return Container(
+          alignment: Alignment.center,
+          child: UiUtils.buildFutureView<List<dynamic>?>(getDataList(0), (
+              data,
+              context
+              ) {
+            if ((data ?? []).isEmpty) {
+              return emptyView;
+            } else {
+              return Obx(() {
+                _preAllImage(0, rxList);
+                return _buildBody(data!);
+              });
+            }
+          }, emptyView: emptyView),
+        );
+      });
     });
   }
 
