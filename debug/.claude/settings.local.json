@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/roll/Dokai/Code/minaapp/**)",
+      "Bash(flutter --version)",
+      "Bash(flutter doctor *)",
+      "Bash(lipo *)",
+      "Bash(xcrun otool *)",
+      "WebSearch",
+      "Bash(xcrun simctl *)",
+      "Bash(xcodebuild -version)",
+      "Bash(swift --version)",
+      "WebFetch(domain:pub.dev)"
+    ]
+  }
+}
