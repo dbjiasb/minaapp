@@ -255,7 +255,7 @@ class OCVoicePage extends StatelessWidget {
           width: 343,
           alignment: Alignment.center,
           decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.ocMain),
-          child: Text(Security.security_Save, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900)),
+          child: Text(Security.security_Save, style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w900)),
         ),
       ),
     );

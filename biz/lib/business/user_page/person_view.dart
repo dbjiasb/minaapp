@@ -38,12 +38,26 @@ import '../moment/moment_list_view/moment_item_view.dart';
 class PersonViewPage extends StatelessWidget {
   PersonViewPage({Key? key}) : super(key: key);
 
-  late PersonViewController controller;
+  PersonViewController? _controller;
+  PersonViewController get controller => _controller!;
   PageController pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
-    controller = PersonViewController(Get.arguments[Security.security_personInfo] ?? {});
+    try {
+      Map<String, dynamic> params = Get.arguments[Security.security_personInfo] ?? {};
+      _controller ??= PersonViewController(params);
+    } catch (e) {
+      return Scaffold(
+        appBar: AppBar( 
+          leading: GestureDetector(
+            onTap: Get.back,
+            child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView(Images.security_back_png, width: 24, height: 24)),
+          ),
+        ),
+        body: Center(child: Text('An error occured, please try agin later'))
+      );
+    }
     RxInt tabSelectIndex = RxInt(0);
     Obx obxTabBars = Obx(
       () => StyleTabBars(

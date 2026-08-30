@@ -158,7 +158,7 @@ class _EditAiPageState extends State<EditAiPage>
           child: Text(
             Security.security_Save,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
