@@ -1,3 +1,5 @@
+// @dart=3.10
+
 part of 'player.dart';
 
 class _SVGAPainter extends CustomPainter {

@@ -19,7 +19,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.1.1+5
 
 environment:
-  sdk: ^3.7.2
+  # The Android Billing 8 implementation requires Flutter 3.38 / Dart 3.10
+  # or newer. iOS remains on the existing StoreKit 1 plugin below.
+  sdk: ^3.10.0
+  flutter: ">=3.38.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -58,6 +61,12 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+# Retain the previous in_app_purchase / StoreKit 1 API on iOS while replacing
+# only the Android implementation with the Billing Library 8 version.
+dependency_overrides:
+  in_app_purchase_android: 0.5.0
+  in_app_purchase_storekit: 0.3.22+1
 
   # To add assets to your application, add an assets section, like this:
   # assets:

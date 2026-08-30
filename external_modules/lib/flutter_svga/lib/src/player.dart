@@ -1,3 +1,5 @@
+// @dart=3.10
+
 library;
 
 import 'dart:math';

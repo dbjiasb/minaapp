@@ -228,6 +228,8 @@ class PurchaseManager {
   Future<void> onPurchaseEventCallback(PurchaseDetails purchase) async {
     debugPrint("[IAP]  purchase callback: ${purchase.productID} pid ${purchase.purchaseID} status: ${purchase.status} error: ${purchase.error}");
 
+    bool verified = false;
+
     switch (purchase.status) {
       case PurchaseStatus.purchased:
       case PurchaseStatus.restored:
@@ -241,11 +243,11 @@ class PurchaseManager {
         if (purchasingItem?.iapId == purchase.productID) {
           purchasingItem!.iapReceipt = purchase.verificationData.serverVerificationData;
           purchasingItem!.iapPurchaseId = purchase.purchaseID ?? '';
-          await rechargeCallback(purchasingItem!);
+          verified = await rechargeCallback(purchasingItem!);
         } else {
           /// 其他商品，走通用的createAndCallback
-          var isSuc = await verifyPurchase(purchase);
-          completion?.call(isSuc, isSuc ? null : Copywriting.security_receipt_Not_Available);
+          verified = await verifyPurchase(purchase);
+          completion?.call(verified, verified ? null : Copywriting.security_receipt_Not_Available);
         }
         break;
       case PurchaseStatus.error:
@@ -266,9 +268,16 @@ class PurchaseManager {
         break;
     }
 
-    if (purchase.pendingCompletePurchase && Platform.isIOS) {
-      InAppPurchase.instance.completePurchase(purchase);
-      L.i("[IAP] ✅ completePurchase 已调用: ${purchase.productID}");
+    // Billing 8 requires non-consumable purchases and subscriptions to be
+    // acknowledged. Complete only after the server has granted entitlement so
+    // a failed verification can be delivered again by Google Play.
+    if (verified && purchase.pendingCompletePurchase) {
+      try {
+        await iap.completePurchase(purchase);
+        L.i("[IAP] ✅ completePurchase 已调用: ${purchase.productID}");
+      } catch (e) {
+        L.e("[IAP] completePurchase failed for ${purchase.productID}: $e");
+      }
     }
   }
 
@@ -354,9 +363,17 @@ class PurchaseManager {
       String verifyId = item.iapOurOrderId.isNotEmpty ? item.iapOurOrderId : MyAccount.id;
       final PurchaseParam purchaseParam = PurchaseParam(productDetails: product, applicationUserName: verifyId);
       if (item.iapVip) {
-        iap.buyNonConsumable(purchaseParam: purchaseParam);
+        final started = await iap.buyNonConsumable(purchaseParam: purchaseParam);
+        if (!started) {
+          purchasingItem = null;
+          Toast.show('Unable to start purchase, please try again');
+        }
       } else {
-        iap.buyConsumable(purchaseParam: purchaseParam);
+        final started = await iap.buyConsumable(purchaseParam: purchaseParam);
+        if (!started) {
+          purchasingItem = null;
+          Toast.show('Unable to start purchase, please try again');
+        }
       }
     } catch (e) {
       L.e("[IAP] buy error for ${item.iapId}, $e");
@@ -421,7 +438,7 @@ class PurchaseManager {
   String iapCachedKey = Security.security_kCachedIAPOrders;
 
   /// 验单
-  Future rechargeCallback(Map item, {bool isRetry = false}) async {
+  Future<bool> rechargeCallback(Map item, {bool isRetry = false}) async {
     Map<String, dynamic> arg = {Security.security_ourOrderId: item.iapOurOrderId, Security.security_purchaseToken: item.iapReceipt};
 
     ApiRequest request = ApiRequest(Apis.security_rechargeCallback, params: arg);
@@ -441,11 +458,12 @@ class PurchaseManager {
       purchasingItem = null;
       Toast.dismiss();
       showConfirmAlert(Copywriting.security_payment_successful, '${item.iapName} purchased successfully');
+      return true;
     } else {
       L.e('[IAP] rechargeCallback failed, $code, ${rsp.description}');
       if (!isRetry) {
         /// 重试一次
-        rechargeCallback(item, isRetry: true);
+        return await rechargeCallback(item, isRetry: true);
       } else {
         purchasingItem = null;
         completion?.call(false, rsp.description);
@@ -454,6 +472,7 @@ class PurchaseManager {
         showConfirmAlert(Copywriting.security_payment_failed, rsp.description, cancelText: Security.security_cancel, confirmText: Copywriting.security_contact_us, onConfirm: () {
           RouteHelper.toSupportChat();
         });
+        return false;
       }
     }
   }

@@ -12,14 +12,14 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:31.2.0"))
     implementation("com.google.firebase:firebase-messaging")
     implementation("com.google.firebase:firebase-analytics")
-    implementation("com.android.billingclient:billing:7.0.0")
 }
 
 android {
     namespace = "com.telemifystudio.mina"
     compileSdk = 36
-    ndkVersion = "27.0.12077973"
-    buildToolsVersion = "35.0.0"
+    // Required by the current Flutter dependency graph; newer NDKs remain
+    // backward-compatible with plugins that use an older NDK.
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -43,7 +43,7 @@ android {
         applicationId = "com.telemifystudio.mina"
 
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
 
@@ -69,4 +69,3 @@ android {
 flutter {
     source = "../.."
 }
-
