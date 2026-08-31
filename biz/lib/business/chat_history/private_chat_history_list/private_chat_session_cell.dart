@@ -18,7 +18,9 @@ class PrivateChatSessionCell extends StatelessWidget {
   });
 
   Widget _buildAccountTypeBadge() {
-    if (session.accountType == 1 || session.accountType == 3 || session.accountType == 4) {
+    if (session.accountType == 1 ||
+        session.accountType == 3 ||
+        session.accountType == 4) {
       // AI badge
       return Container(
         margin: EdgeInsets.only(left: 4.w),
@@ -29,7 +31,10 @@ class PrivateChatSessionCell extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          border: Border.all(color: const Color(0xFFAFB2FF).withOpacity(0.6), width: 1),
+          border: Border.all(
+            color: const Color(0xFFAFB2FF).withOpacity(0.6),
+            width: 1,
+          ),
           borderRadius: BorderRadius.circular(6.w),
         ),
         child: Text(
@@ -52,7 +57,10 @@ class PrivateChatSessionCell extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          border: Border.all(color: const Color(0xFFFDBAA2).withOpacity(0.6), width: 1),
+          border: Border.all(
+            color: const Color(0xFFFDBAA2).withOpacity(0.6),
+            width: 1,
+          ),
           borderRadius: BorderRadius.circular(6.w),
         ),
         child: Text(
@@ -95,21 +103,32 @@ class PrivateChatSessionCell extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      // 名称
-                      Text(
-                        session.name,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            // 名称
+                            Flexible(
+                              child: Text(
+                                session.name,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            // 账号类型徽章
+                            AppWidgets.userTag(
+                              session.accountType,
+                              id: session.id,
+                            ),
+                          ],
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      // 账号类型徽章
-                      AppWidgets.userTag(session.accountType, id: session.id),
                       // _buildAccountTypeBadge(),
-                      const Spacer(),
+                      SizedBox(width: 8.w),
                       // 时间
                       Text(
                         DateFormatter.diff(session.lastMessageTime),
@@ -139,14 +158,22 @@ class PrivateChatSessionCell extends StatelessWidget {
                       if (session.unreadNumber.value > 0)
                         Container(
                           margin: EdgeInsets.only(left: 8.w),
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.w),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6.w,
+                            vertical: 1.w,
+                          ),
                           decoration: BoxDecoration(
                             color: const Color(0xFFF0443E),
                             borderRadius: BorderRadius.circular(7.w),
                           ),
-                          constraints: BoxConstraints(minWidth: 14.w, minHeight: 14.w),
+                          constraints: BoxConstraints(
+                            minWidth: 14.w,
+                            minHeight: 14.w,
+                          ),
                           child: Text(
-                            session.unreadNumber.value > 99 ? '99+' : '${session.unreadNumber.value}',
+                            session.unreadNumber.value > 99
+                                ? '99+'
+                                : '${session.unreadNumber.value}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10.sp,

@@ -28,6 +28,7 @@ class ChatHistoryView extends StatefulWidget {
 
 class _ChatHistoryViewState extends State<ChatHistoryView> {
   final logic = Get.put(ChatHistoryViewController());
+  final ScrollController _recommendScrollController = ScrollController();
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
 
   @override
   void dispose() {
+    _recommendScrollController.dispose();
     super.dispose();
   }
 
@@ -53,7 +55,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
           padding: EdgeInsets.only(left: 16.w),
           alignment: Alignment.centerLeft,
           child: Text(
-            Security.security_history,
+            'Chats',
             style: TextStyle(
               color: Colors.white,
               fontSize: 16.sp,
@@ -75,7 +77,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               SliverToBoxAdapter(
-                child: _buildRecommendView().marginSymmetric(vertical: 4.w),
+                child: _buildRecommendView().marginSymmetric(vertical: 6.w),
               ),
               SliverPersistentHeader(
                 pinned: true,
@@ -154,131 +156,135 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
   Widget _buildRecommendView() {
     return Obx(
       () =>
-          !Preferences.instance.isPreUIA
-              && logic.showRecommend.value
-              && logic.recommendList.isNotEmpty
-              ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+          !Preferences.instance.isPreUIA &&
+              logic.showRecommend.value &&
+              logic.recommendList.isNotEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SingleChildScrollView(
+                  controller: _recommendScrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        Security.security_Trending,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 6.w),
-                      Obx(
-                        () =>
-                            logic.refreshingRecommend.value
-                                ? Container(
-                                  margin: const EdgeInsets.only(left: 2),
-                                  width: 11.w,
-                                  height: 11.w,
-                                  child: const CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation(
-                                      Colors.white,
-                                    ),
-                                    backgroundColor: Colors.transparent,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                                : GestureDetector(
-                                  onTap: () {
-                                    logic.queryRecommendList(true);
-                                  },
-                                  child: ImageView(
-                                    Images.mina_refresh_trend,
-                                    width: 11.w,
-                                    height: 11.w,
-                                  ),
-                                ),
-                      ),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          logic.showRecommend.value = false;
-                        },
-                        child: Icon(Icons.close, size: 22, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children:
-                          logic.recommendList.map((e) {
-                            return GestureDetector(
-                              onTap: () {
-                                RouteHelper.toChat(
-                                  id: e[Security.security_uid].toString(),
-                                  name: e[Security.security_nickname],
-                                  avatar: e[Security.security_avatar],
-                                  accountType: e[Security.security_accountType],
-                                  type: 0,
-                                );
-                              },
-                              child: Column(
+                      ...logic.recommendList.map((e) {
+                        return GestureDetector(
+                          onTap: () {
+                            RouteHelper.toChat(
+                              id: e[Security.security_uid].toString(),
+                              name: e[Security.security_nickname],
+                              avatar: e[Security.security_avatar],
+                              accountType: e[Security.security_accountType],
+                              type: 0,
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              Stack(
+                                alignment: Alignment.topCenter,
+                                clipBehavior: Clip.none,
                                 children: [
-                                  Stack(
-                                    alignment: Alignment.topCenter,
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      const SizedBox(width: 70, height: 54),
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(24),
-                                        child: CachedImage(
-                                          imageUrl:
-                                              e[Security.security_avatar] ?? '',
-                                          width: 48,
-                                          height: 48,
-                                          fit: BoxFit.cover,
-                                          borderRadius: BorderRadius.circular(
-                                            24,
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: 0,
-                                        bottom: -4,
-                                        left: 0,
-                                        child: AppWidgets.userTag(
-                                          e[Security.security_accountType],
-                                          id:
-                                              e[Security.security_uid]
-                                                  .toString(),
-                                        ),
-                                      ),
-                                    ],
+                                  const SizedBox(width: 70, height: 54),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(24),
+                                    child: CachedImage(
+                                      imageUrl:
+                                      e[Security.security_avatar] ?? '',
+                                      width: 48,
+                                      height: 48,
+                                      fit: BoxFit.cover,
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
                                   ),
-                                  SizedBox(height: 4.w),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    width: 66,
-                                    child: Text(
-                                      e[Security.security_nickname] ?? '',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                  Positioned(
+                                    right: 0,
+                                    bottom: -4,
+                                    left: 0,
+                                    child: AppWidgets.userTag(
+                                      e[Security.security_accountType],
+                                      id: e[Security.security_uid].toString(),
                                     ),
                                   ),
                                 ],
                               ),
-                            ).marginOnly(bottom: 8);
-                          }).toList(),
-                    ),
+                              SizedBox(height: 4.w),
+                              Container(
+                                alignment: Alignment.center,
+                                width: 66,
+                                child: Text(
+                                  e[Security.security_nickname] ?? '',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ).marginOnly(bottom: 8);
+                      }),
+                      _buildRecommendRefreshButton(),
+                    ],
                   ),
-                ],
-              ).marginOnly(left: 16.w, right: 16.w)
-              : Container(),
+                ),
+              ],
+            )
+          : Container(),
+    );
+  }
+
+  Widget _buildRecommendRefreshButton() {
+    return GestureDetector(
+      onTap: logic.refreshingRecommend.value
+          ? null
+          : _refreshRecommendList,
+      child: Column(
+        children: [
+          SizedBox(
+            width: 60,
+            height: 36,
+            child: Center(
+              child: logic.refreshingRecommend.value
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : ImageView(Images.mina_refresh_trend, width: 22, height: 22),
+            ),
+          ),
+          // SizedBox(height: 4.w),
+          const SizedBox(
+            width: 66,
+            child: Text(
+              'Refresh',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ).marginOnly(bottom: 8);
+  }
+
+  Future<void> _refreshRecommendList() async {
+    await logic.queryRecommendList(true);
+    if (!mounted || !_recommendScrollController.hasClients) return;
+
+    await _recommendScrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
     );
   }
 

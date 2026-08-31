@@ -87,7 +87,7 @@ class ChatHistoryViewController extends GetxController with GetTickerProviderSta
   RxBool showRecommend = true.obs;
   RxBool refreshingRecommend = false.obs;
 
-  void queryRecommendList(bool isReload) async {
+  Future<void> queryRecommendList(bool isReload) async {
     if (!showRecommend.value) return;
     refreshingRecommend.value = true;
     ApiResponse response = await ApiService.instance.sendRequest(ApiRequest(Apis.security_getUserRecommendList, params: {Security.security_version: 2}));

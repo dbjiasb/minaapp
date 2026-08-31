@@ -49,7 +49,7 @@ class PersonViewPage extends StatelessWidget {
       _controller ??= PersonViewController(params);
     } catch (e) {
       return Scaffold(
-        appBar: AppBar( 
+        appBar: AppBar(
           leading: GestureDetector(
             onTap: Get.back,
             child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView(Images.security_back_png, width: 24, height: 24)),

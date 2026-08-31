@@ -446,13 +446,15 @@ class ChatRoomView extends StatelessWidget {
             ),
           ),
           SizedBox(width: 10),
-          GetBuilder<ChatRoomViewController>(
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: GetBuilder<ChatRoomViewController>(
             id: Security.security_kTagChatRoomHeader,
             builder: (_) {
               return Container(
                 padding: EdgeInsets.only(left: 2, right: 12),
                 height: 40,
-                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: Color(0xCC333333),
                   borderRadius: BorderRadius.circular(20),
@@ -489,7 +491,9 @@ class ChatRoomView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 10),
-                    Column(
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -546,13 +550,16 @@ class ChatRoomView extends StatelessWidget {
                                 );
                           }),
                       ],
+                      ),
                     ),
                   ],
                 ),
               );
-            },
+              },
+              ),
+            ),
           ),
-          Spacer(),
+          SizedBox(width: 8),
           GestureDetector(
             onTap: () {
               RH.toRecharge((session.isAiChat || session.isGroup) ? 0 : 1);
@@ -1103,6 +1110,7 @@ class ChatRoomViewController extends GetxController {
       replaceMessage(message);
       Toast.dismiss();
       AccountService.instance.refreshBalance();
+      AdsManager.getBalanceAdAward();
     } else {
       Toast.show(rsp.description);
     }
@@ -1119,6 +1127,7 @@ class ChatRoomViewController extends GetxController {
       replaceMessage(message);
       Toast.dismiss();
       AccountService.instance.refreshBalance();
+      AdsManager.getBalanceAdAward();
     } else {
       Toast.show(rsp.description);
     }
@@ -1277,6 +1286,12 @@ class ChatRoomViewController extends GetxController {
       updateUserInfoIfNeed();
     }
     initUserProfileInfo();
+
+    Future.delayed(const Duration(seconds: 3), () {
+      AccountService.instance.refreshBalance();
+      AccountService.instance.getPremInfo();
+      AdsManager.getBalanceAdAward();
+    });
   }
 
   void updateUserInfoIfNeed() async {
