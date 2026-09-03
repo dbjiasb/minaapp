@@ -31,13 +31,18 @@ class CreateOcDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final bottomInset = mediaQuery.padding.bottom;
+    final extraBottomInset = bottomInset > 24 ? bottomInset - 24 : 0.0;
+    final dialogHeight = (480.0 + extraBottomInset).clamp(0.0, mediaQuery.size.height).toDouble();
+
     return Container(
-      height: 440.w,
+      height: dialogHeight,
       // color: Colors.red,
       // decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       child: Stack(children: [
         _buildHeaderSection(),
-        Positioned(top: 131.w, left: 0, right: 0, bottom: 0, child: _buildFooterSection())
+        Positioned(top: 131.w, left: 0, right: 0, bottom: 0, child: _buildFooterSection(bottomInset))
       ]),
     );
   }
@@ -289,7 +294,7 @@ class CreateOcDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildFooterSection() {
+  Widget _buildFooterSection(double bottomInset) {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -302,7 +307,7 @@ class CreateOcDialog extends StatelessWidget {
           ),
           borderRadius: BorderRadius.vertical(top: Radius.circular(16))
       ),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      padding: EdgeInsets.only(left: 16, top: 24, right: 16, bottom: bottomInset > 24 ? bottomInset : 24),
       child: Column(
         children: [
           _buildCreateOcView(),

@@ -57,11 +57,11 @@ class ChatHistoryViewController extends GetxController with GetTickerProviderSta
       // if (!rv)
         SessionListTab('All', SessionListType.all),
       // if (!rv)
-        SessionListTab(Security.security_aI, SessionListType.ai),
+        SessionListTab('Virtual', SessionListType.ai),
       // if (!rv)
         SessionListTab(Security.security_real, SessionListType.real),
       // if (!rv)
-        SessionListTab(Security.security_Group, SessionListType.group),
+        SessionListTab('Group Chat', SessionListType.group),
       SessionListTab(Security.security_story, SessionListType.theater),
     ];
 

@@ -35,8 +35,8 @@ class AccountSettings extends StatelessWidget {
     // SettingItem(title: Security.security_about, onTap: toAbout),
     SettingItem(title: Copywriting.security_terms_of_service, onTap: checkTermsOfService),
     SettingItem(title: Copywriting.security_privacy_policy, onTap: checkPrivacyPolicy),
+    SettingItem(title: Copywriting.security_feedback_Log, onTap: feedbackLog),
     SettingItem(title: Copywriting.security_account_Deletion, onTap: deleteAccount),
-    // SettingItem(title: Copywriting.security_feedback_Log, onTap: feedbackLog),
   ];
 
   @override
@@ -150,7 +150,12 @@ class AccountSettings extends StatelessWidget {
 
   void feedbackLog() async {
     Toast.loading();
-    await L.upload();
-    Toast.show(Copywriting.security_upload_Log_success);
+    final uploaded = await L.upload();
+    Toast.dismiss();
+    if (uploaded) {
+      Toast.success(Copywriting.security_upload_Log_success);
+    } else {
+      Toast.error(Copywriting.security_upload_failed__please_try_again_later);
+    }
   }
 }
