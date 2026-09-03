@@ -173,12 +173,14 @@ class PurchaseManager {
     //   getFirstRechargeTask();
     // }
     // getFirstRechargeTask();
-    fixedExceptionOrdersIfNeeded();
     InAppPurchase.instance.purchaseStream.listen((List<PurchaseDetails> purchases) {
       for (var purchase in purchases) {
         onPurchaseEventCallback(purchase);
       }
     });
+    if (AccountService.instance.loggedIn) {
+      fixedExceptionOrdersIfNeeded();
+    }
   }
 
   dispose() {
@@ -187,6 +189,7 @@ class PurchaseManager {
 
   void onUserDidLogin(Event event) {
     // getFirstRechargeTask();
+    fixedExceptionOrdersIfNeeded();
   }
 
   void onUserDidLogout(Event event) {

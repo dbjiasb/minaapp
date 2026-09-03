@@ -22,6 +22,7 @@ import 'business/chat/call/call_manager.dart';
 import 'business/crowd/crowd_manager.dart';
 import 'business/discovery/services/match_service.dart';
 import 'business/moment/moment_service.dart';
+import 'business/purchase/payment_service.dart';
 import 'core/util/device_util.dart';
 import 'core/util/log_util.dart';
 import 'core/util/video_cache_manager_fix.dart';
@@ -68,5 +69,6 @@ void startApp(List<String> args) async {
   AdsManager.init();
   Get.put<MatchService>(MatchService());
   Get.put(MomentService());
+  PurchaseManager.instance.setup();
   runApp(const RootView());
 }

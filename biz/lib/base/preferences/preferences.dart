@@ -412,8 +412,12 @@ class Preferences {
   }
 
   bool get showListCardTags {
-    return false;
     String str = appConfig['show_list_card_tags'] ?? '1';
+    return str == '1';
+  }
+
+  bool get showRealGirls {
+    String str = appConfig['show_real_girl'] ?? '0';
     return str == '1';
   }
 }

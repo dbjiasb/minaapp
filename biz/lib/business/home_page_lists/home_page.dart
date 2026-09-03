@@ -220,7 +220,7 @@ class HomePageViewController extends GetxController with GetTickerProviderStateM
     try {
       List<Category> tabs = [
         Category(Security.security_recommend, RoleListType.ai_and_script),
-        Category('Real Girls', RoleListType.real),
+        Category(Preferences.instance.showRealGirls ? 'Real Girls' : Security.security_real, RoleListType.real),
         Category(Security.security_oC, RoleListType.ugc),
         Category(Security.security_featured, RoleListType.dating),
         Category(Security.security_story, RoleListType.story),
