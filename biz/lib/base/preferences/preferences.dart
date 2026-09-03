@@ -405,4 +405,9 @@ class Preferences {
       Copywriting.security_rest_your_head_back_against_the_cushion__eyes_half_closed__relaxed_and_unguarded_
     ];
   }
+
+  bool get showGenerateAudio {
+    String str = appConfig['show_gen_audio'] ?? '1';
+    return str == '1';
+  }
 }

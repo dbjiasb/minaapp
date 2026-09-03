@@ -20,20 +20,41 @@ import 'payment_service.dart';
 class RechargeCurrencyView extends StatelessWidget {
   RechargeCurrencyView({super.key});
 
-  final RechargeCurrencyViewController controller = Get.put(RechargeCurrencyViewController());
+  final RechargeCurrencyViewController controller = Get.put(
+    RechargeCurrencyViewController(),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF07070A),
-        extendBody: true,
+      extendBody: true,
       appBar: AppBar(
-        leading: InkWell(overlayColor: WidgetStateProperty.all(Colors.transparent), onTap: Get.back, child: Container(alignment: Alignment.center, padding: EdgeInsets.only(left: 16), child: ImageView(Images.security_back_png, fit: BoxFit.cover, height: 24, width: 24))),
+        leading: InkWell(
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          onTap: Get.back,
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.only(left: 16),
+            child: ImageView(
+              Images.security_back_png,
+              fit: BoxFit.cover,
+              height: 24,
+              width: 24,
+            ),
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         title: Text(
-          controller.rcgType == 0 ? EncHelper.rcg_titlCois : EncHelper.rcg_titlGms,
-          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          controller.rcgType == 0
+              ? EncHelper.rcg_titlCois
+              : EncHelper.rcg_titlGms,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Stack(
@@ -56,7 +77,6 @@ class RechargeCurrencyView extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-
           // 右上角旋转矩形装饰
           Positioned(
             right: -134,
@@ -91,7 +111,9 @@ class RechargeCurrencyView extends StatelessWidget {
   }
 
   Widget _rechargeCurrencyView() {
-    final rcgImage = controller.rcgType == 0 ? Images.security_coin_png : Images.security_gem_png;
+    final rcgImage = controller.rcgType == 0
+        ? Images.security_coin_png
+        : Images.security_gem_png;
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -107,13 +129,25 @@ class RechargeCurrencyView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        controller.rcgType == 0 ? Copywriting.security_coins_balance : Copywriting.security_gems_balance,
-                        style: TextStyle(color: Color(0xFFA19C9A), fontSize: 14, fontWeight: AppFonts.medium),
+                        controller.rcgType == 0
+                            ? Copywriting.security_coins_balance
+                            : Copywriting.security_gems_balance,
+                        style: TextStyle(
+                          color: Color(0xFFA19C9A),
+                          fontSize: 14,
+                          fontWeight: AppFonts.medium,
+                        ),
                       ),
-                      Obx(() => Text(
-                        '${controller.rcgType == 0 ? MyAccount.coins : MyAccount.gems}',
-                        style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: AppFonts.bold),
-                      )),
+                      Obx(
+                        () => Text(
+                          '${controller.rcgType == 0 ? MyAccount.coins : MyAccount.gems}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: AppFonts.bold,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   Spacer(),
@@ -134,9 +168,15 @@ class RechargeCurrencyView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24),
                 ),
                 alignment: Alignment.center,
-                child: Text(
-                  Security.security_Recharge,
-                  style: TextStyle(color: const Color(0xFF07070A), fontSize: 16, fontWeight: FontWeight.bold),
+                child: Obx(
+                  () => Text(
+                    _purchaseButtonText(),
+                    style: TextStyle(
+                      color: const Color(0xFF07070A),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -152,14 +192,15 @@ class RechargeCurrencyView extends StatelessWidget {
     return Expanded(
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            childAspectRatio: 110 / 80
+          crossAxisCount: 3,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          childAspectRatio: 110 / 90,
         ),
         itemCount: controller.rechargeList.length,
         itemBuilder: (context, index) {
           Map product = controller.rechargeList[index];
+          final hasBonus = isGem && product.iapExtra > 0;
           return GestureDetector(
             onTap: () {
               controller.selectedPro.value = product;
@@ -172,10 +213,15 @@ class RechargeCurrencyView extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: const Color(0xFF2A2A23),
                       borderRadius: BorderRadius.circular(8),
-                      border: controller.selectedPro == product ? Border.all(width: 1, color: Color(0xffFFF37C)) : null,
+                      border: controller.selectedPro == product
+                          ? Border.all(width: 1, color: Color(0xffFFF37C))
+                          : null,
                     ),
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 0,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -187,18 +233,41 @@ class RechargeCurrencyView extends StatelessWidget {
                           children: [
                             ImageView(rcgImage, height: 24, width: 24),
                             SizedBox(width: 4),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('${product.iapValue}', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                                if (product.iapExtra > 0) SizedBox(width: 2),
-                                if (product.iapExtra > 0) Text('+${product.iapExtra}', style: TextStyle(color: Color(0xffF84652), fontSize: 11, fontWeight: AppFonts.black)),
-                              ],
+                            Text(
+                              '${product.iapValue}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
+                        SizedBox(height: 4),
+                        SizedBox(
+                          height: 14,
+                          child: hasBonus
+                              ? Text(
+                                  '+${product.iapExtra}',
+                                  style: TextStyle(
+                                    color: Color(0xffF84652),
+                                    fontSize: 12,
+                                    fontWeight: AppFonts.black,
+                                  ),
+                                )
+                              : null,
+                        ),
                         SizedBox(height: 8),
-                        Text(product.iapPriceStr, style: TextStyle(color: controller.selectedPro == product ? Color(0xffFFF37C) : Color(0xFFA19C9A), fontSize: 12, fontWeight: FontWeight.w600)),
+                        Text(
+                          product.iapPriceStr,
+                          style: TextStyle(
+                            color: controller.selectedPro == product
+                                ? Color(0xffFFF37C)
+                                : Color(0xFFA19C9A),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -209,6 +278,15 @@ class RechargeCurrencyView extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _purchaseButtonText() {
+    if (controller.rcgType != 1 || controller.selectedPro.isEmpty) {
+      return Security.security_Recharge;
+    }
+
+    final product = controller.selectedPro;
+    return 'Purchase for ${product.iapValue + product.iapExtra} Gems';
   }
 }
 
@@ -229,9 +307,13 @@ class RechargeCurrencyViewController extends GetxController {
 
   void getRechargeList() async {
     Toast.loading();
-    List itemList = await PurchaseManager.instance.getRechargeItem(currencyType: rcgType);
+    List itemList = await PurchaseManager.instance.getRechargeItem(
+      currencyType: rcgType,
+    );
     if (itemList.isEmpty) {
-      Toast.show(Copywriting.security_no_recharge_item_available__try_again_later);
+      Toast.show(
+        Copywriting.security_no_recharge_item_available__try_again_later,
+      );
       return;
     }
 
@@ -257,5 +339,4 @@ class RechargeCurrencyViewController extends GetxController {
   void onStartPurchase() {
     PurchaseManager.instance.purchaseItem(selectedPro);
   }
-
 }

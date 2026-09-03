@@ -319,8 +319,8 @@ class GenerateVideoDialog extends StatelessWidget {
                     _buildSettingSelector(selectItem).marginOnly(top: 10),
                 ],
               ),
-            24.w.verticalSpace,
-            _buildAudioSetting(),
+            if (Preferences.instance.showGenerateAudio) 24.w.verticalSpace,
+            if (Preferences.instance.showGenerateAudio) _buildAudioSetting(),
             24.w.verticalSpace,
             _buildCostEstimated(),
             GestureDetector(
