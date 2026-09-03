@@ -410,4 +410,10 @@ class Preferences {
     String str = appConfig['show_gen_audio'] ?? '1';
     return str == '1';
   }
+
+  bool get showListCardTags {
+    return false;
+    String str = appConfig['show_list_card_tags'] ?? '1';
+    return str == '1';
+  }
 }

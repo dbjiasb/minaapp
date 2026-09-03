@@ -1,5 +1,6 @@
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
+import 'package:biz/base/preferences/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -61,6 +62,7 @@ class VirtualRoleItem extends RoleItem {
   String get heatNum => RoleItem.shortStringForCount(info[Security.security_heatInfo]?[Security.security_heatValue] ?? 0);
 
   List get tags => info[Security.security_tags] ?? [];
+  bool get showTags => tags.isNotEmpty && Preferences.instance.showListCardTags;
 
   void _onItemClicked() {
     RH.toChat(
@@ -119,8 +121,8 @@ class VirtualRoleItem extends RoleItem {
                         ],
                       ),
                       if (bio.isNotEmpty) Text(bio, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500), maxLines: 3),
-                      if (tags.isNotEmpty) SizedBox(height: 4),
-                      if (tags.isNotEmpty)
+                      if (showTags) SizedBox(height: 4),
+                      if (showTags)
                         Wrap(
                           spacing: 3,
                           children:

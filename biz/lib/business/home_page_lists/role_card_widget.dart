@@ -6,6 +6,7 @@ import 'package:biz/core/util/cached_image.dart';
 
 import '../../base/assets/image_view.dart';
 import '../../base/crypt/images.dart';
+import '../../base/preferences/preferences.dart';
 import '../../shared/widget/app_widgets.dart';
 import 'list_item.dart';
 
@@ -50,7 +51,6 @@ class RoleCardWidget extends StatelessWidget {
         if (tag is String) {
           tags.add(tag);
         } else if (tag is Map) {
-          // If it's a map, try to get a name or title field
           String tagName = tag[Security.security_name] ?? tag[Security.security_title] ?? tag.toString();
           tags.add(tagName);
         }
@@ -59,7 +59,6 @@ class RoleCardWidget extends StatelessWidget {
         tags.removeAt(0);
       }
     } catch (e) {
-      // If parsing fails, just use empty tags
       tags = [];
     }
 
@@ -152,14 +151,14 @@ class RoleCardWidget extends StatelessWidget {
                     SizedBox(height: 8.w),
 
                   // Tags
-                  if (tags.isNotEmpty)
+                  if (tags.isNotEmpty && Preferences.instance.showListCardTags)
                     Wrap(
                       spacing: 4.w,
                       runSpacing: 4.w,
                       children: tags.take(4).map((tag) => _buildTag(tag)).toList(),
                     ),
 
-                  if (!isRealType) SizedBox(height: 8),
+                  if (!isRealType && Preferences.instance.showListCardTags) SizedBox(height: 8),
                   if (!isRealType)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

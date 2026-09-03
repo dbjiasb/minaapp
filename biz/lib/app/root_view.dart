@@ -1,4 +1,5 @@
 import 'package:biz/base/report/report_manager.dart';
+import 'package:biz/business/chat/script/scene_play/binding.dart';
 import 'package:biz/business/discovery/video_match/match_scan/match_scan_binding.dart';
 import 'package:biz/business/discovery/video_match/match_scan/match_scan_view.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,9 @@ import '../business/chat/chat_record/chat_record_view.dart';
 import '../business/chat/chat_room/chat_room_view.dart';
 import '../business/chat/chat_room/chat_theater_room_view.dart';
 import '../business/chat/chat_room/chat_private_room_view.dart';
+import '../business/chat/script/scene_list/binding.dart';
+import '../business/chat/script/scene_list/view.dart';
+import '../business/chat/script/scene_play/view.dart';
 import '../business/chat_history/chat_history_view.dart';
 import '../business/create_center/advance_page.dart';
 import '../business/create_center/basic_page.dart';
@@ -61,15 +65,23 @@ class RootView extends StatelessWidget {
       splitScreenMode: true,
       builder: (_, child) {
         return GetMaterialApp(
-          theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple), useMaterial3: true),
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
           builder: Toast.init(),
-          initialRoute: AccountService.instance.loggedIn ? Routers.root : Routers.loginChannel,
+          initialRoute: AccountService.instance.loggedIn
+              ? Routers.root
+              : Routers.loginChannel,
           getPages: [
             GetPage(name: Routers.login, page: () => CreateAccountView()),
             GetPage(name: Routers.root, page: () => SkeletonView()),
             GetPage(name: Routers.chat, page: () => ChatRoomView()),
             GetPage(name: Routers.chatHistory, page: () => ChatRecordView()),
-            GetPage(name: Routers.chatTheater, page: () => ChatTheaterRoomView()),
+            GetPage(
+              name: Routers.chatTheater,
+              page: () => ChatTheaterRoomView(),
+            ),
             GetPage(name: Routers.home, page: () => HomePageView()),
             GetPage(name: Routers.webView, page: () => WebView()),
             GetPage(name: Routers.loginChannel, page: () => LoginChannelView()),
@@ -77,12 +89,30 @@ class RootView extends StatelessWidget {
             GetPage(name: Routers.editMe, page: () => EditMyInfoPage()),
             GetPage(name: Routers.person, page: () => PersonViewPage()),
             GetPage(name: Routers.videoPlayer, page: () => VideoPlayerView()),
-            GetPage(name: Routers.crowedInfo, page: () => CrowedInfoView(), binding: CrowedInfoBinding()),
+            GetPage(
+              name: Routers.crowedInfo,
+              page: () => CrowedInfoView(),
+              binding: CrowedInfoBinding(),
+            ),
             GetPage(name: Routers.call, page: () => CallView()),
             GetPage(name: Routers.aiCall, page: () => AICallView()),
             GetPage(name: Routers.modeStore, page: () => AIModeStoreView()),
-            GetPage(name: Routers.modeList, page: () => MyAIModeView(), binding: MyAIModeBinding()),
-            // GetPage(name: Routers.datingList, page: () => SceneListView(), binding: SceneListBinding()),
+            GetPage(
+              name: Routers.modeList,
+              page: () => MyAIModeView(),
+              binding: MyAIModeBinding(),
+            ),
+            GetPage(
+              name: Routers.datingList,
+              page: () => SceneListView(),
+              binding: SceneListBinding(),
+            ),
+            GetPage(
+              name: Routers.datingGame,
+              page: () => ScenePlayView(),
+              binding: ScenePlayBinding(),
+            ),
+
             GetPage(name: Routers.createBasic, page: () => BasicPage()),
             GetPage(name: Routers.createVoice, page: () => OCVoicePage()),
             GetPage(name: Routers.editOC, page: () => EditAiPage()),
@@ -90,8 +120,14 @@ class RootView extends StatelessWidget {
             GetPage(name: Routers.createGen, page: () => GenPage()),
             GetPage(name: Routers.setting, page: () => AccountSettings()),
             // GetPage(name: Routers.myOC, page: () => MyCompanionView(), binding: ScenePlayBinding()),
-            GetPage(name: Routers.rechargePremium, page: () => RechargePremiumView()),
-            GetPage(name: Routers.rechargeCurrency, page: () => RechargeCurrencyView()),
+            GetPage(
+              name: Routers.rechargePremium,
+              page: () => RechargePremiumView(),
+            ),
+            GetPage(
+              name: Routers.rechargeCurrency,
+              page: () => RechargeCurrencyView(),
+            ),
             GetPage(
               name: Routers.createPostImage,
               page: () => const CreatePostImagePage(),
@@ -107,11 +143,22 @@ class RootView extends StatelessWidget {
               page: () => const MomentDetailViewPage(),
               binding: MomentDetailViewBinding(),
             ),
-            GetPage(name: Routers.createCrowed, page: () => CreateCrowedPage(), binding: CreateCrowedBinding()),
-            GetPage(name: Routers.crowedInfo, page: () => CrowedInfoView(), binding: CrowedInfoBinding()),
-            GetPage(name: Routers.search, page: () => SearchView(), binding: SearchBinding()),
+            GetPage(
+              name: Routers.createCrowed,
+              page: () => CreateCrowedPage(),
+              binding: CreateCrowedBinding(),
+            ),
+            GetPage(
+              name: Routers.search,
+              page: () => SearchView(),
+              binding: SearchBinding(),
+            ),
             GetPage(name: Routers.collections, page: () => CollectionsView()),
-            GetPage(name: Routers.matchScan, page: () => MatchScanPage(), binding: MatchScanBinding()),
+            GetPage(
+              name: Routers.matchScan,
+              page: () => MatchScanPage(),
+              binding: MatchScanBinding(),
+            ),
           ],
           routingCallback: (route) {
             String? name = route?.current;

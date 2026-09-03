@@ -168,8 +168,10 @@ class RechargeCurrencyView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24),
                 ),
                 alignment: Alignment.center,
-                child: Obx(
-                  () => Text(
+                child:
+                Obx(
+                  () =>
+                      Text(
                     _purchaseButtonText(),
                     style: TextStyle(
                       color: const Color(0xFF07070A),
@@ -281,12 +283,12 @@ class RechargeCurrencyView extends StatelessWidget {
   }
 
   String _purchaseButtonText() {
-    if (controller.rcgType != 1 || controller.selectedPro.isEmpty) {
+    if (controller.selectedPro.isEmpty) {
       return Security.security_Recharge;
     }
 
     final product = controller.selectedPro;
-    return 'Purchase for ${product.iapValue + product.iapExtra} Gems';
+    return 'Purchase for ${product.iapValue + product.iapExtra} ${controller.rcgType == 1 ? 'Gems' : 'Coins'}';
   }
 }
 
