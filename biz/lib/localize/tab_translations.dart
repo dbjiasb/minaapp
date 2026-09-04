@@ -28,6 +28,7 @@ abstract final class TabTranslations {
     'videos': 'Videos',
     'select': 'Select',
     'enter': 'Enter',
+    'chats': 'Chats',
   };
 
   static const Map<String, String> de = <String, String>{
@@ -56,6 +57,7 @@ abstract final class TabTranslations {
     'videos': 'Videos',
     'select': 'Auswählen',
     'enter': 'Eingeben',
+    'chats': 'Chats',
   };
 
   static const Map<String, String> fr = <String, String>{
@@ -84,6 +86,7 @@ abstract final class TabTranslations {
     'videos': 'Vidéos',
     'select': 'Sélectionner',
     'enter': 'Saisir',
+    'chats': 'Discussions',
   };
 
   static const Map<String, String> it = <String, String>{
@@ -112,6 +115,7 @@ abstract final class TabTranslations {
     'videos': 'Video',
     'select': 'Seleziona',
     'enter': 'Inserisci',
+    'chats': 'Chat',
   };
 
   static const Map<String, String> pt = <String, String>{
@@ -140,6 +144,7 @@ abstract final class TabTranslations {
     'videos': 'Vídeos',
     'select': 'Selecionar',
     'enter': 'Introduzir',
+    'chats': 'Conversas',
   };
 
   static const Map<String, String> es = <String, String>{
@@ -168,6 +173,7 @@ abstract final class TabTranslations {
     'videos': 'Vídeos',
     'select': 'Seleccionar',
     'enter': 'Introducir',
+    'chats': 'Chats',
   };
 
   static const Map<String, String> ar = <String, String>{
@@ -196,6 +202,7 @@ abstract final class TabTranslations {
     'videos': 'الفيديوهات',
     'select': 'اختيار',
     'enter': 'إدخال',
+    'chats': 'الدردشات',
   };
 
   static Map<String, String> valuesFor(Locale locale) {

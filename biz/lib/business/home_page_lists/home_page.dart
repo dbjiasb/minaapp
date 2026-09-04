@@ -130,7 +130,7 @@ class HomePageView extends StatelessWidget {
                       border: Border.all(color: Color(0xFF2A3144), width: 1)
                   ),
                   child: Obx(() {
-                    return Row(
+                    return Row( 
                       children: [
                         ImageView(Images.mina_filter, width: 14.w, height: 14.w),
                         SizedBox(width: 4.w),

@@ -33,6 +33,7 @@ abstract final class TabLabels {
   static String get videos => _text('videos');
   static String get select => _text('select');
   static String get enter => _text('enter');
+  static String get chats => _text('chats');
 
   static String get groupChat => Copywriting.security_group_Chat;
   static String get forYou => Copywriting.security_for_You;

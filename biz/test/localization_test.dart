@@ -75,7 +75,7 @@ void main() {
       TabTranslations.ar,
     ];
 
-    expect(expectedKeys, hasLength(25));
+    expect(expectedKeys, hasLength(26));
     for (final locale in locales) {
       expect(locale.keys.toSet(), expectedKeys);
       expect(locale.values, everyElement(isNotEmpty));
@@ -86,10 +86,12 @@ void main() {
     Get.locale = const Locale('de', 'DE');
     expect(TabLabels.all, 'Alle');
     expect(TabLabels.gallery, 'Galerie');
+    expect(TabLabels.chats, 'Chats');
 
     Get.locale = const Locale('ar', 'AE');
     expect(TabLabels.all, 'الكل');
     expect(TabLabels.gallery, 'المعرض');
+    expect(TabLabels.chats, 'الدردشات');
 
     Get.locale = null;
   });

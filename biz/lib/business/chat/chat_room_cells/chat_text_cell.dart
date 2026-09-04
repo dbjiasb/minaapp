@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/assets/image_path.dart';
+import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/copywriting.dart';
+import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/business/chat/chat_voice_manager.dart';
@@ -182,52 +184,69 @@ class ChatTextCell extends ChatCell {
       textDirection: isMine ? TextDirection.rtl : TextDirection.ltr,
       children: [
         Flexible(
-          child: GestureDetector(
-            onTap: () {
-              onTap?.call(message);
-            },
-            child: Container(
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: isMine ? Color(0xFFFFF9B4).withValues(alpha: 0.9) : Color(0xFF272533).withValues(alpha: 0.9),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
-                ),
-              ),
-              child: Obx(() {
-                final hasTranslation = textMessage.translationText.isNotEmpty;
-                final canTranslate = showTranslateAction && translate != null && textMessage.isText;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildText(),
-                    if (hasTranslation || canTranslate) Divider(height: 26, thickness: 2.0, color: Color(0x0DFFFFFF)),
-                    if (hasTranslation)
-                      Text(
-                        textMessage.translationText.value,
-                        style: TextStyle(color: isMine ? Color(0xFF3D3734) : Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
-                      )
-                    else if (canTranslate)
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () => translate?.call(textMessage),
-                        child: Text(
-                          Security.security_translate,
-                          style: TextStyle(
-                            color: isMine ? Color(0xFF3D3734).withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.6),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+          child: Obx(() {
+            final hasTranslation = textMessage.translationText.isNotEmpty;
+            final hasTranslatedText = hasTranslation && textMessage.translationText.value != 'Translating…';
+            final canTranslate = showTranslateAction && translate != null && textMessage.isText;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    onTap?.call(message);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: isMine ? Color(0xFFFFF9B4).withValues(alpha: 0.9) : Color(0xFF272533).withValues(alpha: 0.9),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                        bottomLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
                       ),
-                  ],
-                );
-              }),
-            ),
-          ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildText(),
+                        if (hasTranslation) Divider(height: 26, thickness: 2.0, color: Color(0x0DFFFFFF)),
+                        if (hasTranslation)
+                          Text(
+                            textMessage.translationText.value,
+                            style: TextStyle(color: isMine ? Color(0xFF3D3734) : Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                if (canTranslate)
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      if (hasTranslatedText) {
+                        textMessage.translationText.value = '';
+                      } else {
+                        translate?.call(textMessage);
+                      }
+                    },
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      margin: EdgeInsets.only(top: 6),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), shape: BoxShape.circle),
+                      child: ImageView(
+                        hasTranslatedText ? Images.security_ic_chat_msg_hide_translate_webp : Images.security_ic_chat_msg_translate_webp,
+                        width: 16,
+                        height: 16,
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          }),
         ),
         if (isMine) Obx(() => buildSendStatusView()),
         buildContinueView(),

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/shared/widget/keep_alive_wrapper.dart';
+import 'package:biz/localize/tab_labels.dart';
 import '../../base/app_info/app_manager.dart';
 import '../../base/crypt/copywriting.dart';
 import '../../base/crypt/images.dart';
@@ -55,7 +56,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
           padding: EdgeInsets.only(left: 16.w),
           alignment: Alignment.centerLeft,
           child: Text(
-            'Chats',
+            TabLabels.chats,
             style: TextStyle(
               color: Colors.white,
               fontSize: 16.sp,
