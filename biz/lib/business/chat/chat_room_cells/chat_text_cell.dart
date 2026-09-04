@@ -157,7 +157,21 @@ class ChatTextMessage extends ChatMessage {
 }
 
 class ChatTextCell extends ChatCell {
-  ChatTextCell(ChatTextMessage super.message, {super.key, super.resend, super.onTap, super.unlock, super.reload, super.download, super.onContinue});
+  final Future<void> Function(ChatTextMessage message)? translate;
+  final bool showTranslateAction;
+
+  ChatTextCell(
+    ChatTextMessage super.message, {
+    super.key,
+    super.resend,
+    super.onTap,
+    super.unlock,
+    super.reload,
+    super.download,
+    super.onContinue,
+    this.translate,
+    this.showTranslateAction = false,
+  });
 
   ChatTextMessage get textMessage => super.message as ChatTextMessage;
 
@@ -184,14 +198,30 @@ class ChatTextCell extends ChatCell {
                 ),
               ),
               child: Obx(() {
+                final hasTranslation = textMessage.translationText.isNotEmpty;
+                final canTranslate = showTranslateAction && translate != null && textMessage.isText;
                 return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     buildText(),
-                    if (textMessage.translationText.isNotEmpty) Divider(height: 26, thickness: 2.0, color: Color(0x0DFFFFFF)),
-                    if (textMessage.translationText.isNotEmpty)
+                    if (hasTranslation || canTranslate) Divider(height: 26, thickness: 2.0, color: Color(0x0DFFFFFF)),
+                    if (hasTranslation)
                       Text(
                         textMessage.translationText.value,
                         style: TextStyle(color: isMine ? Color(0xFF3D3734) : Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                      )
+                    else if (canTranslate)
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => translate?.call(textMessage),
+                        child: Text(
+                          Security.security_translate,
+                          style: TextStyle(
+                            color: isMine ? Color(0xFF3D3734).withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.6),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                   ],
                 );

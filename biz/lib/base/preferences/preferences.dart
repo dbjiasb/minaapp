@@ -420,4 +420,9 @@ class Preferences {
     String str = appConfig['show_real_girl'] ?? '0';
     return str == '1';
   }
+
+  bool get showMomentListTime {
+    String str = appConfig['show_mom_list_time'] ?? '1';
+    return str == '1';
+  }
 }

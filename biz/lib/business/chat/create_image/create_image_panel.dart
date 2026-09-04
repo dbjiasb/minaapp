@@ -3,6 +3,7 @@ import 'package:biz/base/crypt/copywriting.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:biz/localize/tab_labels.dart';
 import 'package:biz/base/api_service/api_response.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/privacy/ai_consent_service.dart';
@@ -290,12 +291,12 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                     indicatorWeight: 0,
                     tabs:
                         [
-                          Security.security_select,
-                          Security.security_enter,
+                          TabLabels.select,
+                          TabLabels.enter,
                         ].map((e) {
                           final index = [
-                            Security.security_select,
-                            Security.security_enter,
+                            TabLabels.select,
+                            TabLabels.enter,
                           ].indexOf(e);
                           return Tab(
                             child: Obx(() {

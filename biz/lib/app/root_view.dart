@@ -3,6 +3,7 @@ import 'package:biz/business/chat/script/scene_play/binding.dart';
 import 'package:biz/business/discovery/video_match/match_scan/match_scan_binding.dart';
 import 'package:biz/business/discovery/video_match/match_scan/match_scan_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -52,6 +53,8 @@ import '../business/search/binding.dart';
 import '../business/search/view.dart';
 import '../business/user_page/person_view.dart';
 import '../shared/toast/toast.dart';
+import '../localize/copywriting_translations.dart';
+import '../localize/localization_service.dart';
 import './skeleton_view.dart';
 
 class RootView extends StatelessWidget {
@@ -65,6 +68,11 @@ class RootView extends StatelessWidget {
       splitScreenMode: true,
       builder: (_, child) {
         return GetMaterialApp(
+          translations: CopywritingTranslations(),
+          locale: LocalizationService.initialLocale,
+          fallbackLocale: LocalizationService.fallbackLocale,
+          supportedLocales: LocalizationService.supportedLocales,
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,

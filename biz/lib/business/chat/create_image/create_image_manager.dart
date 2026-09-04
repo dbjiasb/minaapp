@@ -1,4 +1,3 @@
-import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:get/get.dart';
@@ -6,6 +5,7 @@ import 'package:biz/base/api_service/api_request.dart';
 import 'package:biz/base/api_service/api_response.dart';
 import 'package:biz/base/api_service/api_service.dart';
 import 'package:biz/base/buffer_queue/buffer_queue.dart';
+import 'package:biz/localize/localization_service.dart';
 
 class PromptModel {
   final Map data;
@@ -58,7 +58,8 @@ class CreateImageManager {
   BufferQueue cache = BufferQueue(10);
 
   Future<CreateImageConfig> getCreateImageConfigs(int userId) async {
-    CreateImageConfig? config = cache.getObject(userId);
+    final cacheKey = '$userId:${LocalizationService.currentLocale.languageCode}';
+    CreateImageConfig? config = cache.getObject(cacheKey);
     if (config != null) {
       return config;
     }
@@ -68,7 +69,7 @@ class CreateImageManager {
     if (response.isSuccess) {
       List<PromptModel> prompts = (response.data[Security.security_groups] as List).map((e) => PromptModel(e)).toList();
       CreateImageConfig config = CreateImageConfig(prompts, response.data[Security.security_cost] ?? 0, response.data[Security.security_costType] ?? 0);
-      cache.setObject(userId, config);
+      cache.setObject(cacheKey, config);
       return config;
     } else {
       return CreateImageConfig([], 0, 0)..success = false;

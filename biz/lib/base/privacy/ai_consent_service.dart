@@ -90,7 +90,7 @@ class _AIConsentDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     const bodyStyle = TextStyle(
       color: Color(0xFFB9B9B9),
-      fontSize: 13,
+      fontSize: 12,
       fontWeight: FontWeight.w500,
       height: 1.45,
     );
@@ -121,7 +121,7 @@ class _AIConsentDialog extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

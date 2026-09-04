@@ -2,6 +2,7 @@ import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:biz/localize/tab_labels.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/core/util/ui_util.dart';
@@ -83,8 +84,8 @@ class _EditAiPageState extends State<EditAiPage>
                   child: TabBar(
                     overlayColor: WidgetStateProperty.all(Colors.transparent),
                     tabs: [
-                      Tab(text: Security.security_basic),
-                      Tab(text: Security.security_advance)
+                      Tab(text: TabLabels.basic),
+                      Tab(text: TabLabels.advanced)
                     ],
                     controller: _tabController,
                     indicatorColor: AppColors.primary,

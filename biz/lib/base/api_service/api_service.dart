@@ -11,6 +11,7 @@ import 'package:biz/base/crypt/other.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/environment/environment.dart';
 import 'package:biz/base/preferences/preferences.dart';
+import 'package:biz/localize/localization_service.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/util/device_util.dart';
@@ -85,7 +86,7 @@ class ApiService {
       Security.security_app: Platform.isAndroid ? "mina&google" : "mina&apple",
 
       ///channel
-      Security.security_lang: Security.security_en,
+      Security.security_lang: LocalizationService.currentLocale.languageCode,
       Security.security_ver: AppManager.instance.appVersion,
       Security.security_build: "1",
 

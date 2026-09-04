@@ -6,7 +6,6 @@ import 'package:biz/base/preferences/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/business/moment/constant_state.dart';
 import 'package:biz/core/account/account_service.dart';
@@ -22,6 +21,7 @@ import '../../../base/router/router_names.dart';
 import '../../../base/ui/overlay_popup.dart';
 import '../../../base/ui/user_card_view.dart';
 import '../../../core/util/cached_image.dart';
+import '../../../core/util/date_util.dart';
 import '../../../shared/common_widget.dart';
 import '../moment_service.dart';
 import '../report/report_view.dart';
@@ -37,12 +37,13 @@ class MomentItemView extends StatefulWidget {
 
   final GestureTapCallback? onCreateTap;
 
-  const MomentItemView(this.listType, {
+  const MomentItemView(
+    this.listType, {
     this.targetUid = 0,
     this.canRefresh = true,
     this.onCreateTap,
     super.key,
-    this.baseInfo
+    this.baseInfo,
   });
 
   @override
@@ -68,18 +69,27 @@ class _MomentItemViewState extends State<MomentItemView> {
         momentInfoList.refresh();
       }
     });
-    deleteEvent = EventCenter.instance.addListener(kDeleteMomentSuccess, (object) {
-      momentInfoList.removeWhere((element) => element[Security.security_id]?.toString() == object.data[Security.security_momentId]?.toString());
+    deleteEvent = EventCenter.instance.addListener(kDeleteMomentSuccess, (
+      object,
+    ) {
+      momentInfoList.removeWhere(
+        (element) =>
+            element[Security.security_id]?.toString() ==
+            object.data[Security.security_momentId]?.toString(),
+      );
       momentInfoList.refresh();
       if (momentInfoList.isEmpty) {
-        setState(() {
-
-        });
+        setState(() {});
       }
     });
-    updateEvent = EventCenter.instance.addListener(kUpdateMomentSuccess, (object) {
+    updateEvent = EventCenter.instance.addListener(kUpdateMomentSuccess, (
+      object,
+    ) {
       Map data = object.data;
-      int index = momentInfoList.indexWhere((element) => element[Security.security_id] == data[Security.security_id]);
+      int index = momentInfoList.indexWhere(
+        (element) =>
+            element[Security.security_id] == data[Security.security_id],
+      );
       if (index != -1) {
         momentInfoList[index] = data;
         momentInfoList.refresh();
@@ -103,8 +113,13 @@ class _MomentItemViewState extends State<MomentItemView> {
 
   @override
   Widget build(BuildContext context) {
-    ReportManager.sendEvent(Security.security_pv_user_moment_list, {Security.security_listType: widget.listType.toString()});
-    return AppBarExt.mainBody<Map?>(getListData(0), loadColor: Colors.white, (data, context) {
+    ReportManager.sendEvent(Security.security_pv_user_moment_list, {
+      Security.security_listType: widget.listType.toString(),
+    });
+    return AppBarExt.mainBody<Map?>(getListData(0), loadColor: Colors.white, (
+      data,
+      context,
+    ) {
       var rawData = data?[Security.security_param] ?? [];
       List<Map> listData = (rawData as List).cast<Map>();
       if (listData.isEmpty) {
@@ -127,37 +142,60 @@ class _MomentItemViewState extends State<MomentItemView> {
   Widget _buildEmptyView() {
     return Container(
       alignment: Alignment.center,
-      color: widget.listType == 2 ? AppColors.base_background : Colors.transparent,
+      color: widget.listType == 2
+          ? AppColors.base_background
+          : Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ImageView(Images.mina_empty_list, width: 172, height: 146),
           const SizedBox(height: 16),
-          if (widget.listType == 2 && (widget.baseInfo != null || widget.targetUid == 0))
-          GestureDetector(
-            onTap: () {
-              if (widget.onCreateTap != null) {
-                widget.onCreateTap?.call();
-              } else {
-                ReportManager.sendEvent(Security.security_click_post_bnt, {Security.security_type: "3"});
-                Get.toNamed(Routers.createMoment, arguments: widget.baseInfo);
-              }
-            },
-            child: Container(
-              margin: const EdgeInsets.only(top: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(100)),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16, color: Colors.black),
-                  const SizedBox(width: 4),
-                  Text(Copywriting.security_create_Moment, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
-                ],
+          if (widget.listType == 2 &&
+              (widget.baseInfo != null || widget.targetUid == 0))
+            GestureDetector(
+              onTap: () {
+                if (widget.onCreateTap != null) {
+                  widget.onCreateTap?.call();
+                } else {
+                  ReportManager.sendEvent(Security.security_click_post_bnt, {
+                    Security.security_type: "3",
+                  });
+                  Get.toNamed(Routers.createMoment, arguments: widget.baseInfo);
+                }
+              },
+              child: Container(
+                margin: const EdgeInsets.only(top: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CachedImage(
+                      imageUrl: '${MomentRes.base}iic_add.webp',
+                      width: 16,
+                      height: 16,
+                      color: Colors.black,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      Copywriting.security_create_Moment,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -170,7 +208,7 @@ class _MomentItemViewState extends State<MomentItemView> {
           final metrics = notification.metrics;
           final reachBottom = metrics.pixels >= metrics.maxScrollExtent - 64;
           if (reachBottom && hasMore.value && !isLoadingMore) {
-            isLoadingMore = true;//防抖处理
+            isLoadingMore = true; //防抖处理
             onLoading();
           }
         }
@@ -196,7 +234,12 @@ class _MomentItemViewState extends State<MomentItemView> {
 
   Widget _buildView() {
     return Obx(() {
-      return widget.canRefresh ? RefreshIndicator(onRefresh: () async => onRefresh(), child: _buildListView()) : _buildListView();
+      return widget.canRefresh
+          ? RefreshIndicator(
+              onRefresh: () async => onRefresh(),
+              child: _buildListView(),
+            )
+          : _buildListView();
     });
   }
 
@@ -218,11 +261,25 @@ class _MomentItemViewState extends State<MomentItemView> {
               InkWell(
                 overlayColor: WidgetStateProperty.all(Colors.transparent),
                 onTap: () {
-                  if (((momentInfo[Security.security_robotInfo]?[Security.security_masterInfo]?[Security.security_uid] ?? 0) != 0) &&
-                      (momentInfo[Security.security_robotInfo]?[Security.security_masterInfo]?[Security.security_uid] ?? 0) != MyAccount.userId &&
-                      (momentInfo[Security.security_robotInfo]?[Security.security_shared] == EShareState.PRIVATE ||
-                          momentInfo[Security.security_robotInfo]?[Security.security_audit] != EAiAuditStatus.PASS)) {
-                    EasyLoading.showToast(Copywriting.security_character_is_private);
+                  if (((momentInfo[Security.security_robotInfo]?[Security
+                                  .security_masterInfo]?[Security
+                                  .security_uid] ??
+                              0) !=
+                          0) &&
+                      (momentInfo[Security.security_robotInfo]?[Security
+                                  .security_masterInfo]?[Security
+                                  .security_uid] ??
+                              0) !=
+                          MyAccount.userId &&
+                      (momentInfo[Security.security_robotInfo]?[Security
+                                  .security_shared] ==
+                              EShareState.PRIVATE ||
+                          momentInfo[Security.security_robotInfo]?[Security
+                                  .security_audit] !=
+                              EAiAuditStatus.PASS)) {
+                    EasyLoading.showToast(
+                      Copywriting.security_character_is_private,
+                    );
                   } else {
                     RouteHelper.toPage(
                       Routers.person,
@@ -230,9 +287,12 @@ class _MomentItemViewState extends State<MomentItemView> {
                         Security.security_personInfo: {
                           Security.security_userInfo: {
                             Security.security_baseInfo: {
-                              Security.security_uid: momentInfo[Security.security_posterUid],
-                              Security.security_nickName: momentInfo[Security.security_nickname],
-                              Security.security_avatarUrl: momentInfo[Security.security_avatarUrl],
+                              Security.security_uid:
+                                  momentInfo[Security.security_posterUid],
+                              Security.security_nickName:
+                                  momentInfo[Security.security_nickname],
+                              Security.security_avatarUrl:
+                                  momentInfo[Security.security_avatarUrl],
                             },
                           },
                         },
@@ -240,7 +300,12 @@ class _MomentItemViewState extends State<MomentItemView> {
                     );
                   }
                 },
-                child: CachedImage(imageUrl: momentInfo[Security.security_avatarUrl] ?? '', width: 44, height: 44, borderRadius: BorderRadius.circular(22)),
+                child: CachedImage(
+                  imageUrl: momentInfo[Security.security_avatarUrl] ?? '',
+                  width: 44,
+                  height: 44,
+                  borderRadius: BorderRadius.circular(22),
+                ),
               ),
               const SizedBox(width: 8),
               Column(
@@ -249,12 +314,22 @@ class _MomentItemViewState extends State<MomentItemView> {
                 children: [
                   Text(
                     momentInfo[Security.security_nickname] ?? '',
-                    style: const TextStyle(color: Color(0xFFABABAD), fontSize: 14, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: Color(0xFFABABAD),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  Text(
-                    DateFormat(Copywriting.security_mM_dd_HH_mm).format(DateTime.fromMillisecondsSinceEpoch(momentInfo[Security.security_createTime])),
-                    style: const TextStyle(color: Color(0xFF494C53), fontSize: 12),
-                  ),
+                  if (Preferences.instance.showMomentListTime)
+                    Text(
+                      DateUtilsExt.formatMomentTime(
+                        momentInfo[Security.security_createTime],
+                      ),
+                      style: const TextStyle(
+                        color: Color(0xFF494C53),
+                        fontSize: 12,
+                      ),
+                    ),
                 ],
               ),
               const Spacer(),
@@ -263,40 +338,70 @@ class _MomentItemViewState extends State<MomentItemView> {
                 menuBuilder: () {
                   return Container(
                     width: 72,
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     child: IntrinsicWidth(
                       child: Column(
                         children: [
-                          (MyAccount.userId == momentInfo[Security.security_posterUid] || MyAccount.userId == momentInfo[Security.security_authorUid])
+                          (MyAccount.userId ==
+                                      momentInfo[Security.security_posterUid] ||
+                                  MyAccount.userId ==
+                                      momentInfo[Security.security_authorUid])
                               ? InkWell(
-                                overlayColor: WidgetStateProperty.all(Colors.transparent),
-                                onTap: () {
-                                  controller.hideMenu();
-                                  deleteMoment(momentInfo[Security.security_id]);
-                                },
-                                child: Text(
-                                  Security.security_delete,
-                                  style: TextStyle(color: Color(0xFF080E1B), fontWeight: FontWeight.bold, fontSize: 12),
-                                ).marginSymmetric(vertical: 8),
-                              )
+                                  overlayColor: WidgetStateProperty.all(
+                                    Colors.transparent,
+                                  ),
+                                  onTap: () {
+                                    controller.hideMenu();
+                                    deleteMoment(
+                                      momentInfo[Security.security_id],
+                                    );
+                                  },
+                                  child: Text(
+                                    Security.security_delete,
+                                    style: TextStyle(
+                                      color: Color(0xFF080E1B),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ).marginSymmetric(vertical: 8),
+                                )
                               : InkWell(
-                                overlayColor: WidgetStateProperty.all(Colors.transparent),
-                                onTap: () {
-                                  controller.hideMenu();
-                                  Get.dialog(ReportView(momentInfo[Security.security_id], 1), useSafeArea: false);
-                                },
-                                child: Text(
-                                  Security.security_report,
-                                  style: TextStyle(color: Color(0xFF080E1B), fontWeight: FontWeight.bold, fontSize: 12),
-                                ).marginSymmetric(vertical: 8),
-                              ),
+                                  overlayColor: WidgetStateProperty.all(
+                                    Colors.transparent,
+                                  ),
+                                  onTap: () {
+                                    controller.hideMenu();
+                                    Get.dialog(
+                                      ReportView(
+                                        momentInfo[Security.security_id],
+                                        1,
+                                      ),
+                                      useSafeArea: false,
+                                    );
+                                  },
+                                  child: Text(
+                                    Security.security_report,
+                                    style: TextStyle(
+                                      color: Color(0xFF080E1B),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ).marginSymmetric(vertical: 8),
+                                ),
                         ],
                       ),
                     ),
                   );
                 },
                 pressType: PressType.singleClick,
-                child: CachedImage(imageUrl: MomentRes.base + Images.security_iic__share_webp, width: 20, height: 20),
+                child: CachedImage(
+                  imageUrl: MomentRes.base + Images.security_iic__share_webp,
+                  width: 20,
+                  height: 20,
+                ),
               ),
             ],
           ),
@@ -304,12 +409,18 @@ class _MomentItemViewState extends State<MomentItemView> {
             Container(
               margin: const EdgeInsets.only(left: 52, top: 12),
               width: double.infinity,
-              child: Text(momentInfo[Security.security_content] ?? '', style: const TextStyle(color: Colors.white, fontSize: 14)),
+              child: Text(
+                momentInfo[Security.security_content] ?? '',
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+              ),
             ),
           if ((momentInfo[Security.security_resInfos] ?? []).isNotEmpty)
-            _buildItemRes((momentInfo[Security.security_resInfos] as List).cast<Map>()).marginOnly(left: 52, top: 8),
+            _buildItemRes(
+              (momentInfo[Security.security_resInfos] as List).cast<Map>(),
+            ).marginOnly(left: 52, top: 8),
           _buildOptionView(momentInfo),
-          if (momentInfo[Security.security_auditStatus] == EAiAuditStatus.NOT_PASS &&
+          if (momentInfo[Security.security_auditStatus] ==
+                  EAiAuditStatus.NOT_PASS &&
               widget.listType == EMomentListType.MOMENT_LIST_USER &&
               widget.targetUid == 0)
             _buildWarnView(),
@@ -323,13 +434,24 @@ class _MomentItemViewState extends State<MomentItemView> {
     return Container(
       margin: const EdgeInsets.only(top: 12),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(color: const Color(0xFFFF1E6B).withOpacity(0.2), borderRadius: BorderRadius.circular(4)),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFF1E6B).withOpacity(0.2),
+        borderRadius: BorderRadius.circular(4),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CachedImage(imageUrl: '${MomentRes.base}iic_warning.webp', width: 16, height: 16),
+          CachedImage(
+            imageUrl: '${MomentRes.base}iic_warning.webp',
+            width: 16,
+            height: 16,
+          ),
           const SizedBox(width: 4),
-          Text(Copywriting.security_this_moment_does_not_meet_community_requirements__please_edit, style: TextStyle(color: Color(0xFFFF1E6B), fontSize: 9)),
+          Text(
+            Copywriting
+                .security_this_moment_does_not_meet_community_requirements__please_edit,
+            style: TextStyle(color: Color(0xFFFF1E6B), fontSize: 9),
+          ),
         ],
       ),
     );
@@ -339,7 +461,11 @@ class _MomentItemViewState extends State<MomentItemView> {
     return Container(
       margin: const EdgeInsets.only(top: 12),
       decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: [Color(0x00FFFFFF), Color(0x1AFFFFFF), Color(0x00FFFFFF)], begin: Alignment.centerLeft, end: Alignment.centerRight),
+        gradient: LinearGradient(
+          colors: [Color(0x00FFFFFF), Color(0x1AFFFFFF), Color(0x00FFFFFF)],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
       ),
       height: 1,
       width: double.infinity,
@@ -351,7 +477,12 @@ class _MomentItemViewState extends State<MomentItemView> {
       overlayColor: WidgetStateProperty.all(Colors.transparent),
       onTap: () {
         if (resInfo[Security.security_type] == 2) {
-          Get.toNamed(Routers.videoPlayer, arguments: {Security.security_videoUrl: resInfo[Security.security_url] ?? ''});
+          Get.toNamed(
+            Routers.videoPlayer,
+            arguments: {
+              Security.security_videoUrl: resInfo[Security.security_url] ?? '',
+            },
+          );
           // ViewerRoute.toVideoView(resInfo.url ?? '');
         } else {
           viewImages(resInfo);
@@ -360,25 +491,27 @@ class _MomentItemViewState extends State<MomentItemView> {
 
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child:
-            resInfo[Security.security_type] == EMomentResType.VIDEO
-                ? VideoView(videoUrl: resInfo[Security.security_url] ?? '')
-                : CachedImage(
-                  imageUrl: resInfo[Security.security_url] ?? '',
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorWidget: (context, url, error) {
-                    return Container(color: Colors.grey, width: double.infinity);
-                  },
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                  placeholder: (context, url) {
-                    return Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: BoxDecoration(color: Color(0xFF2F3137), borderRadius: BorderRadius.circular(16)),
-                    );
-                  },
-                ),
+        child: resInfo[Security.security_type] == EMomentResType.VIDEO
+            ? VideoView(videoUrl: resInfo[Security.security_url] ?? '')
+            : CachedImage(
+                imageUrl: resInfo[Security.security_url] ?? '',
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) {
+                  return Container(color: Colors.grey, width: double.infinity);
+                },
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                placeholder: (context, url) {
+                  return Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF2F3137),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }
@@ -388,28 +521,56 @@ class _MomentItemViewState extends State<MomentItemView> {
     if (length == 0) {
       return Container();
     } else if (length == 1) {
-      return SizedBox(width: 188.0, height: 280.0, child: _buildResView(resInfoList.first));
+      return SizedBox(
+        width: 188.0,
+        height: 280.0,
+        child: _buildResView(resInfoList.first),
+      );
     } else {
       return Row(
         children: [
-          Expanded(child: AspectRatio(aspectRatio: 1 / 1, child: _buildResView(resInfoList.first))),
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: 1 / 1,
+              child: _buildResView(resInfoList.first),
+            ),
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Stack(
               children: [
-                AspectRatio(aspectRatio: 1 / 1, child: _buildResView(resInfoList[1])),
+                AspectRatio(
+                  aspectRatio: 1 / 1,
+                  child: _buildResView(resInfoList[1]),
+                ),
                 if (length > 2)
                   Positioned(
                     bottom: 4,
                     right: 4,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(4)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                       child: Row(
                         children: [
-                          CachedImage(imageUrl: '${MomentRes.base}iic_multi.webp', width: 12, height: 12),
+                          CachedImage(
+                            imageUrl: '${MomentRes.base}iic_multi.webp',
+                            width: 12,
+                            height: 12,
+                          ),
                           const SizedBox(width: 4),
-                          Text('+$length', style: const TextStyle(color: Colors.white, fontSize: 10)),
+                          Text(
+                            '+$length',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -430,7 +591,9 @@ class _MomentItemViewState extends State<MomentItemView> {
       child: Row(
         children: [
           CachedImage(
-            imageUrl: momentInfo[Security.security_isLike] == 1 ? MomentRes.base + Images.security_iic_like_webp : MomentRes.base + Images.security_iic_unlike_webp,
+            imageUrl: momentInfo[Security.security_isLike] == 1
+                ? MomentRes.base + Images.security_iic_like_webp
+                : MomentRes.base + Images.security_iic_unlike_webp,
             width: 24,
             height: 24,
             fit: BoxFit.cover,
@@ -439,7 +602,9 @@ class _MomentItemViewState extends State<MomentItemView> {
           Text(
             '${momentInfo[Security.security_likeCount]}',
             style: TextStyle(
-              color: momentInfo[Security.security_isLike] == 1 ? AppColors.primary : const Color(0xFF5C5E64),
+              color: momentInfo[Security.security_isLike] == 1
+                  ? AppColors.primary
+                  : const Color(0xFF5C5E64),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -453,9 +618,21 @@ class _MomentItemViewState extends State<MomentItemView> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CachedImage(imageUrl: '${MomentRes.base}iic_comment.webp', width: 24, height: 24, fit: BoxFit.cover),
+        CachedImage(
+          imageUrl: '${MomentRes.base}iic_comment.webp',
+          width: 24,
+          height: 24,
+          fit: BoxFit.cover,
+        ),
         const SizedBox(width: 4),
-        Text('$commentCount', style: const TextStyle(color: Color(0xFF5C5E64), fontSize: 12, fontWeight: FontWeight.w600)),
+        Text(
+          '$commentCount',
+          style: const TextStyle(
+            color: Color(0xFF5C5E64),
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
     );
   }
@@ -528,19 +705,28 @@ class _MomentItemViewState extends State<MomentItemView> {
 
   Future<Map?> getListData(int wFromId) async {
     fromId = wFromId;
-    return MomentService.getMomentInfoList(listType: widget.listType, fromId: wFromId, targetUid: widget.targetUid);
+    return MomentService.getMomentInfoList(
+      listType: widget.listType,
+      fromId: wFromId,
+      targetUid: widget.targetUid,
+    );
   }
 
   void likeMomentAction(Map momentInfo) async {
     bool wantLikeAction = momentInfo[Security.security_isLike] != 1;
     if (wantLikeAction) {
       momentInfo[Security.security_isLike] = 1;
-      momentInfo[Security.security_likeCount] = momentInfo[Security.security_likeCount] + 1;
+      momentInfo[Security.security_likeCount] =
+          momentInfo[Security.security_likeCount] + 1;
     } else {
       momentInfo[Security.security_isLike] = 0;
-      momentInfo[Security.security_likeCount] = momentInfo[Security.security_likeCount] - 1;
+      momentInfo[Security.security_likeCount] =
+          momentInfo[Security.security_likeCount] - 1;
     }
-    momentInfo[Security.security_likeCount] = momentInfo[Security.security_likeCount] < 0 ? 0 : momentInfo[Security.security_likeCount];
+    momentInfo[Security.security_likeCount] =
+        momentInfo[Security.security_likeCount] < 0
+        ? 0
+        : momentInfo[Security.security_likeCount];
     momentInfoList.refresh();
     await MomentService.likeMomentAction(
       wantLikeAction,
@@ -555,15 +741,22 @@ class _MomentItemViewState extends State<MomentItemView> {
     MomentService.deleteMoment(momentId)
         .then((value) {
           EasyLoading.dismiss();
-          if (value[Security.security_statusInfo]?[Security.security_code] == 0) {
-            momentInfoList.removeWhere((element) => element[Security.security_id]?.toString() == momentId.toString());
+          if (value[Security.security_statusInfo]?[Security.security_code] ==
+              0) {
+            momentInfoList.removeWhere(
+              (element) =>
+                  element[Security.security_id]?.toString() ==
+                  momentId.toString(),
+            );
             momentInfoList.refresh();
             if (momentInfoList.isEmpty) {
-              setState(() {
-              });
+              setState(() {});
             }
           } else {
-            EasyLoading.showToast(value[Security.security_statusInfo]?[Security.security_msg] ?? Copywriting.security_operation_failed);
+            EasyLoading.showToast(
+              value[Security.security_statusInfo]?[Security.security_msg] ??
+                  Copywriting.security_operation_failed,
+            );
           }
         })
         .catchError((e) {
@@ -588,6 +781,9 @@ class _MomentItemViewState extends State<MomentItemView> {
     //   index = 0;
     // }
 
-    Get.toNamed(Routers.imageBrowser, arguments: {Security.security_imageUrl: res[Security.security_url]});
+    Get.toNamed(
+      Routers.imageBrowser,
+      arguments: {Security.security_imageUrl: res[Security.security_url]},
+    );
   }
 }

@@ -16,6 +16,7 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:biz/localize/tab_labels.dart';
 
 import '../../../core/user_manager/user_manager.dart';
 import '../../base/api_service/api_request.dart';
@@ -61,7 +62,7 @@ class PersonViewPage extends StatelessWidget {
     RxInt tabSelectIndex = RxInt(0);
     Obx obxTabBars = Obx(
       () => StyleTabBars(
-        titles: controller.tabsTitle.value,
+        titles: controller.tabTitles,
         onTabSelected: (index) {
           pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.linearToEaseOut);
         },
@@ -457,8 +458,8 @@ class PersonViewPage extends StatelessWidget {
             tabAlignment: TabAlignment.start,
             isScrollable: true,
             tabs: [
-              Tab(text: Security.security_Life),
-              Tab(text: Security.security_Private),
+              Tab(text: TabLabels.life),
+              Tab(text: TabLabels.private),
             ],
             indicator: BoxDecoration(color: AppColors.ocMain, borderRadius: BorderRadius.circular(18)),
             indicatorSize: TabBarIndicatorSize.tab,
@@ -711,7 +712,11 @@ class PersonViewController extends GetxController with GetTickerProviderStateMix
 
   String get followersNum => RoleItem.shortStringForCount(followers);
 
-  RxList<String> tabsTitle = [Security.security_Gallery].obs;
+  RxList<String Function()> tabTitleBuilders = <String Function()>[
+    () => TabLabels.gallery,
+  ].obs;
+
+  List<String> get tabTitles => tabTitleBuilders.map((labelBuilder) => labelBuilder()).toList();
   RxList<Map> myCompanions = RxList<Map>();
 
   List get characters {
@@ -752,10 +757,17 @@ class PersonViewController extends GetxController with GetTickerProviderStateMix
     personalInfo.refresh();
     loading.value = false;
 
-    tabsTitle.value =
+    tabTitleBuilders.value =
         isReal
-            ? [Security.security_Gallery, Security.security_character, if (!Preferences.instance.isRv) Security.security_moment]
-            : [Security.security_Gallery, if (!Preferences.instance.isRv) Security.security_moment];
+            ? [
+              () => TabLabels.gallery,
+              () => TabLabels.character,
+              if (!Preferences.instance.isRv) () => TabLabels.moment,
+            ]
+            : [
+              () => TabLabels.gallery,
+              if (!Preferences.instance.isRv) () => TabLabels.moment,
+            ];
   }
 
   Future fetchMyCompanions() async {

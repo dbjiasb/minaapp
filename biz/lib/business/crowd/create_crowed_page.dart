@@ -428,7 +428,10 @@ class RolePanelView extends StatefulWidget {
 
 class _RolePanelViewState extends State<RolePanelView>
     with SingleTickerProviderStateMixin {
-  final List<String> tabNames = [Copywriting.security_contact_List, Copywriting.security_my_OCs];
+  List<String> get tabNames => [
+    Copywriting.security_contact_List,
+    Copywriting.security_my_OCs,
+  ];
 
   late TabController tabController;
 

@@ -1,8 +1,8 @@
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
-import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:biz/localize/tab_labels.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/shared/widget/keep_alive_wrapper.dart';
 import 'package:biz/shared/widget/title_bar.dart';
@@ -13,10 +13,12 @@ import './chat_category_view.dart';
 
 class ChatHistoryModel {
   ChatMessageType type;
-  String typeName;
+  final String Function() _labelBuilder;
   Widget Function() builder;
 
-  ChatHistoryModel(this.type, this.typeName, this.builder);
+  ChatHistoryModel(this.type, this._labelBuilder, this.builder);
+
+  String get typeName => _labelBuilder();
 }
 
 class ChatRecordView extends StatelessWidget {
@@ -25,8 +27,8 @@ class ChatRecordView extends StatelessWidget {
   final ChatRecordViewController controller = Get.put(ChatRecordViewController());
 
   List<ChatHistoryModel> models = [
-    ChatHistoryModel(ChatMessageType.image, Security.security_Photos, () => KeepAliveWrapper(child: ChatCategoryView(category: ChatMessageType.image))),
-    ChatHistoryModel(ChatMessageType.video, Security.security_Videos, () => KeepAliveWrapper(child: ChatCategoryView(category: ChatMessageType.video))),
+    ChatHistoryModel(ChatMessageType.image, () => TabLabels.photos, () => KeepAliveWrapper(child: ChatCategoryView(category: ChatMessageType.image))),
+    ChatHistoryModel(ChatMessageType.video, () => TabLabels.videos, () => KeepAliveWrapper(child: ChatCategoryView(category: ChatMessageType.video))),
   ];
 
   PageController pageController = PageController();

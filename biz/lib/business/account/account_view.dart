@@ -12,6 +12,7 @@ import 'package:biz/shared/widget/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:biz/localize/tab_labels.dart';
 
 import '../../base/api_service/api_response.dart';
 import '../../base/app_info/app_manager.dart';
@@ -46,8 +47,7 @@ class AccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget obxTabBar = Obx(() {
-      return TabBar(
+    Widget tabBar = TabBar(
         controller: controller.tabController,
         overlayColor: WidgetStateProperty.all(Colors.transparent),
         tabAlignment: TabAlignment.start,
@@ -71,7 +71,6 @@ class AccountView extends StatelessWidget {
           );
         },
       );
-    });
     return Scaffold(
       backgroundColor: AppColors.base_background,
       appBar: AppBar(
@@ -131,7 +130,7 @@ class AccountView extends StatelessWidget {
                       SliverPersistentHeader(
                         pinned: true,
                         floating: true,
-                        delegate: _TabBarDelegate(obxTabBar),
+                        delegate: _TabBarDelegate(tabBar),
                       ),
                     ];
                   },
@@ -964,9 +963,14 @@ class AccountViewController extends GetxController
   late TabController tabController;
   PageController pageController = PageController();
 
-  RxList<String> tabNames = RxList<String>();
-  RxList<Widget> tabPage =
-      [KeepAliveWrapper(child: MyCompanionView(viewAll: 0))].obs;
+  List<String> get tabNames => [
+    TabLabels.companions,
+    TabLabels.groupChat,
+    TabLabels.moment,
+  ];
+  final RxList<Widget> tabPage = <Widget>[
+    KeepAliveWrapper(child: MyCompanionView(viewAll: 0)),
+  ].obs;
 
   @override
   void onInit() {
@@ -984,11 +988,9 @@ class AccountViewController extends GetxController
   }
 
   setupTabs() {
-    tabNames.value = [Security.security_companions];
-    tabNames.add(Copywriting.security_group_Chat);
-    tabNames.add(Security.security_moment);
-    tabPage.add(KeepAliveWrapper(child: MyGroupView()));
-    tabPage.add(
+    tabPage.value = <Widget>[
+      KeepAliveWrapper(child: MyCompanionView(viewAll: 0)),
+      KeepAliveWrapper(child: MyGroupView()),
       KeepAliveWrapper(
         child: MomentItemView(
           EMomentListType.MOMENT_LIST_USER,
@@ -996,7 +998,7 @@ class AccountViewController extends GetxController
           canRefresh: false,
         ),
       ),
-    );
+    ];
     tabController = TabController(vsync: this, length: tabNames.length);
   }
 

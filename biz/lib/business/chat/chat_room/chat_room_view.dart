@@ -109,6 +109,8 @@ class ChatRoomView extends StatelessWidget {
                       onTap: viewController.onTapMessage,
                       onContinue: viewController.onAIContinue,
                       generateVideo: viewController.generateVideo,
+                      translate: viewController.isRealChat ? viewController.translateMessage : null,
+                      showTranslateAction: viewController.isRealChat,
                     );
 
                     if (message is ChatTipsMessage ||
@@ -681,6 +683,20 @@ class ChatRoomViewController extends GetxController {
   bool get isRealChat => session.accountType == 0;
 
   bool get isAiChat => !isRealChat;
+
+  Future<void> translateMessage(ChatTextMessage message) async {
+    if (message.translationText.isNotEmpty) return;
+
+    message.translationText.value = 'Translating…';
+    final request = ApiRequest(Apis.security_choseLangTranslateText, params: {Security.security_text: message.text});
+    final response = await ApiService.instance.sendRequest(request);
+    if (response.isSuccess) {
+      message.translationText.value = response.data[Security.security_translatedText] ?? '';
+    } else {
+      message.translationText.value = '';
+      Toast.show(response.description);
+    }
+  }
 
   ChatRoomViewController(Map<String, dynamic> arguments)
     : session = createSession(arguments);

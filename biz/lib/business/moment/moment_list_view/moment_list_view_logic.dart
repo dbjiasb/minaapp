@@ -1,11 +1,9 @@
-import 'package:biz/base/crypt/routes.dart';
 import 'package:get/get.dart';
 
-import '../../../base/crypt/copywriting.dart';
-import '../../../base/crypt/security.dart';
+import '../../../localize/tab_labels.dart';
 
 class MomentListViewLogic extends GetxController {
-  final titleList = [Copywriting.security_for_You, Security.security_followed];
+  List<String> get titleList => [TabLabels.forYou, TabLabels.followed];
 
   RxInt currentIndex = 0.obs;
 

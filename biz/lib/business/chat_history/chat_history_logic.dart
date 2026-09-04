@@ -1,4 +1,3 @@
-import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/event_center/event_center.dart';
@@ -6,6 +5,7 @@ import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/business/chat/chat_session.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:biz/localize/tab_labels.dart';
 
 import '../../base/api_service/api_request.dart';
 import '../../base/api_service/api_response.dart';
@@ -23,10 +23,12 @@ class SessionListType {
 }
 
 class SessionListTab {
-  String name;
+  final String Function() _labelBuilder;
   int type;
 
-  SessionListTab(this.name, this.type);
+  SessionListTab(this._labelBuilder, this.type);
+
+  String get name => _labelBuilder();
 }
 
 class ChatHistoryViewController extends GetxController with GetTickerProviderStateMixin {
@@ -51,18 +53,17 @@ class ChatHistoryViewController extends GetxController with GetTickerProviderSta
   }
 
   setupTabs() {
-    bool rv = Preferences.instance.isRv;
     List<SessionListTab> ss = [
-      // if (rv) SessionListTab(Security.security_Chats, SessionListType.all),
+      // if (rv) SessionListTab(() => TabLabels.all, SessionListType.all),
       // if (!rv)
-        SessionListTab('All', SessionListType.all),
+        SessionListTab(() => TabLabels.all, SessionListType.all),
       // if (!rv)
-        SessionListTab('Virtual', SessionListType.ai),
+        SessionListTab(() => TabLabels.virtual, SessionListType.ai),
       // if (!rv)
-        SessionListTab(Security.security_real, SessionListType.real),
+        SessionListTab(() => TabLabels.real, SessionListType.real),
       // if (!rv)
-        SessionListTab('Group Chat', SessionListType.group),
-      SessionListTab(Security.security_story, SessionListType.theater),
+        SessionListTab(() => TabLabels.groupChat, SessionListType.group),
+      SessionListTab(() => TabLabels.story, SessionListType.theater),
     ];
 
     if (tabs.length == ss.length) {

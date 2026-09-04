@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:biz/localize/tab_labels.dart';
 
 import '../../base/assets/image_view.dart';
 import '../../base/preferences/preferences.dart';
@@ -103,7 +104,7 @@ class HomePageView extends StatelessWidget {
                 children: [
                   ImageView(Images.mina_search, width: 14.w, height: 14.w),
                   SizedBox(width: 6.w),
-                  Text(Copywriting.security_Search_by_ID__name__tag___, style: TextStyle(color: Color(0xFFAEB6C7), fontSize: 12.sp)),
+                  Flexible(child: Text(Copywriting.security_Search_by_ID__name__tag___, style: TextStyle(color: Color(0xFFAEB6C7), fontSize: 12.sp), maxLines: 1, overflow: TextOverflow.ellipsis,)),
                 ],
               ),
             ),
@@ -182,9 +183,11 @@ class HomePageView extends StatelessWidget {
 }
 
 class Category {
-  String name;
+  final String Function() _labelBuilder;
   RoleListType type;
-  Category(this.name, this.type);
+  Category(this._labelBuilder, this.type);
+
+  String get name => _labelBuilder();
 }
 
 class HomePageViewController extends GetxController with GetTickerProviderStateMixin {
@@ -219,14 +222,17 @@ class HomePageViewController extends GetxController with GetTickerProviderStateM
   void setupCategories() {
     try {
       List<Category> tabs = [
-        Category(Security.security_recommend, RoleListType.ai_and_script),
-        Category(Preferences.instance.showRealGirls ? 'Real Girls' : Security.security_real, RoleListType.real),
-        Category(Security.security_oC, RoleListType.ugc),
-        Category(Security.security_featured, RoleListType.dating),
-        Category(Security.security_story, RoleListType.story),
-        Category(Security.security_anime, RoleListType.anime),
-        Category(Security.security_realistic, RoleListType.realistic),
-        Category(Copywriting.security_pro_only, RoleListType.pro_only),
+        Category(() => TabLabels.recommend, RoleListType.ai_and_script),
+        Category(
+          () => Preferences.instance.showRealGirls ? TabLabels.realGirls : TabLabels.real,
+          RoleListType.real,
+        ),
+        Category(() => TabLabels.oc, RoleListType.ugc),
+        Category(() => TabLabels.featured, RoleListType.dating),
+        Category(() => TabLabels.story, RoleListType.story),
+        Category(() => TabLabels.anime, RoleListType.anime),
+        Category(() => TabLabels.realistic, RoleListType.realistic),
+        Category(() => TabLabels.proOnly, RoleListType.pro_only),
       ];
 
       if (categories.length == tabs.length) {

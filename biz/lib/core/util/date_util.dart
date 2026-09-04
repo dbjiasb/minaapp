@@ -4,10 +4,10 @@ import 'package:biz/base/crypt/copywriting.dart';
 import 'dart:collection';
 import 'package:intl/intl.dart';
 
-const kOnlineCheckInterval = 3 * 60;  // 3 minutes online check
+const kOnlineCheckInterval = 3 * 60; // 3 minutes online check
 
 extension DateTimeExt on DateTime {
-  int get  secondsSinceEpoch => millisecondsSinceEpoch ~/ 1000;
+  int get secondsSinceEpoch => millisecondsSinceEpoch ~/ 1000;
 
   /// util of online
   String onlineDescription() {
@@ -21,13 +21,19 @@ extension DateTimeExt on DateTime {
     } else if (timestamp - secondsSinceEpoch < 24 * 60 * 60) {
       return 'last seen $hour hours ago';
     } else {
-      return DateFormat("yyyy/MM/dd").format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000));
+      return DateFormat(
+        "yyyy/MM/dd",
+      ).format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000));
     }
   }
 
-  bool get isOnline => DateTime.now().secondsSinceEpoch - secondsSinceEpoch < kOnlineCheckInterval;
+  bool get isOnline =>
+      DateTime.now().secondsSinceEpoch - secondsSinceEpoch <
+      kOnlineCheckInterval;
   DateTime newestOfflineTime() {
-    return DateTime.fromMillisecondsSinceEpoch(DateTime.now().microsecondsSinceEpoch - kOnlineCheckInterval * 1000);
+    return DateTime.fromMillisecondsSinceEpoch(
+      DateTime.now().microsecondsSinceEpoch - kOnlineCheckInterval * 1000,
+    );
   }
 }
 
@@ -72,7 +78,6 @@ Map<int, int> MONTH_DAY = {
 
 /// Date Util.
 class DateUtil {
-
   static int oneDayTs = 24 * 60 * 60;
 
   /// get DateTime By DateStr.
@@ -117,7 +122,11 @@ class DateUtil {
 
   /// format date by date str.
   /// dateStr 日期字符串
-  static String formatDateStr(String dateStr, {bool isUtc = false, String? format}) {
+  static String formatDateStr(
+    String dateStr, {
+    bool isUtc = false,
+    String? format,
+  }) {
     return formatDate(getDateTime(dateStr, isUtc: isUtc), format: format);
   }
 
@@ -135,7 +144,9 @@ class DateUtil {
         format = format.replaceAll(Security.security_yyyy, year);
       } else {
         format = format.replaceAll(
-            Security.security_yy, year.substring(year.length - 2, year.length));
+          Security.security_yy,
+          year.substring(year.length - 2, year.length),
+        );
       }
     }
 
@@ -144,25 +155,35 @@ class DateUtil {
     format = _comFormat(dateTime.hour, format, 'H', Security.security_hH);
     format = _comFormat(dateTime.minute, format, 'm', Security.security_mM);
     format = _comFormat(dateTime.second, format, 's', Security.security_sSS);
-    format = _comFormat(dateTime.millisecond, format, 'S', Security.security_sSS);
+    format = _comFormat(
+      dateTime.millisecond,
+      format,
+      'S',
+      Security.security_sSS,
+    );
 
     return format;
   }
 
   /// com format.
   static String _comFormat(
-      int value, String format, String single, String full) {
+    int value,
+    String format,
+    String single,
+    String full,
+  ) {
     if (format.contains(single)) {
       if (format.contains(full)) {
-        format =
-            format.replaceAll(full, value < 10 ? '0$value' : value.toString());
+        format = format.replaceAll(
+          full,
+          value < 10 ? '0$value' : value.toString(),
+        );
       } else {
         format = format.replaceAll(single, value.toString());
       }
     }
     return format;
   }
-
 
   /// get day of year.
   /// 在今年的第几天.
@@ -189,15 +210,19 @@ class DateUtil {
   /// 是否是当天.
   static bool isToday(int milliseconds, {bool isUtc = false, int locMs = 0}) {
     if (milliseconds == 0) return false;
-    DateTime old =
-        DateTime.fromMillisecondsSinceEpoch(milliseconds, isUtc: isUtc);
+    DateTime old = DateTime.fromMillisecondsSinceEpoch(
+      milliseconds,
+      isUtc: isUtc,
+    );
     DateTime? now;
     if (locMs != 0) {
       now = DateUtil.getDateTimeByMs(locMs);
     } else {
       now = isUtc ? DateTime.now().toUtc() : DateTime.now().toLocal();
     }
-    return old.year == now?.year && old.month == now?.month && old.day == now?.day;
+    return old.year == now?.year &&
+        old.month == now?.month &&
+        old.day == now?.day;
   }
 
   /// is yesterday by dateTime.
@@ -218,8 +243,10 @@ class DateUtil {
   /// is yesterday by millis.
   /// 是否是昨天.
   static bool isYesterdayByMs(int ms, int locMs) {
-    return isYesterday(DateTime.fromMillisecondsSinceEpoch(ms),
-        DateTime.fromMillisecondsSinceEpoch(locMs));
+    return isYesterday(
+      DateTime.fromMillisecondsSinceEpoch(ms),
+      DateTime.fromMillisecondsSinceEpoch(locMs),
+    );
   }
 
   /// is Week.
@@ -240,10 +267,12 @@ class DateUtil {
       return false;
     }
 
-    DateTime? tmpOld =
-        now.millisecondsSinceEpoch > old.millisecondsSinceEpoch ? old : now;
-    DateTime tmpNow =
-        now.millisecondsSinceEpoch > old.millisecondsSinceEpoch ? now : old;
+    DateTime? tmpOld = now.millisecondsSinceEpoch > old.millisecondsSinceEpoch
+        ? old
+        : now;
+    DateTime tmpNow = now.millisecondsSinceEpoch > old.millisecondsSinceEpoch
+        ? now
+        : old;
     return (tmpNow.weekday >= tmpOld.weekday) &&
         (tmpNow.millisecondsSinceEpoch - tmpOld.millisecondsSinceEpoch <=
             7 * 24 * 60 * 60 * 1000);
@@ -258,8 +287,10 @@ class DateUtil {
   /// year is equal.
   /// 是否同年.
   static bool yearIsEqualByMs(int ms, int locMs) {
-    return yearIsEqual(DateTime.fromMillisecondsSinceEpoch(ms),
-        DateTime.fromMillisecondsSinceEpoch(locMs));
+    return yearIsEqual(
+      DateTime.fromMillisecondsSinceEpoch(ms),
+      DateTime.fromMillisecondsSinceEpoch(locMs),
+    );
   }
 
   /// Return whether it is leap year.
@@ -276,18 +307,69 @@ class DateUtil {
 }
 
 extension DateUtilsExt on DateUtil {
-
-
   static DateFormat _df1 = DateFormat(Copywriting.security_mM_dd_HH_mm);
   static DateFormat _df2 = DateFormat("HH:mm");
 
-  static String commonCovertTime(int time,{String newPattern = "yyyy-MM-dd"}) {
-    return DateFormat(newPattern).format(DateTime.fromMillisecondsSinceEpoch(time));
+  static String commonCovertTime(int time, {String newPattern = "yyyy-MM-dd"}) {
+    return DateFormat(
+      newPattern,
+    ).format(DateTime.fromMillisecondsSinceEpoch(time));
+  }
+
+  /// Formats a moment timestamp as relative time while it is recent, then
+  /// falls back to an absolute date so old content remains unambiguous.
+  static String formatMomentTime(int milliseconds, {DateTime? now}) {
+    if (milliseconds <= 0) {
+      return '';
+    }
+
+    final currentTime = now ?? DateTime.now();
+    final createdAt = DateTime.fromMillisecondsSinceEpoch(milliseconds);
+    final difference = currentTime.difference(createdAt);
+
+    if (difference.isNegative || difference.inMinutes < 1) {
+      return Copywriting.security_just_now;
+    }
+    if (difference.inMinutes < 60) {
+      final minutes = difference.inMinutes;
+      return minutes == 1
+          ? Copywriting.security_one_minute_ago
+          : _withCount(Copywriting.security_minutes_ago, minutes);
+    }
+    if (difference.inHours < 24) {
+      final hours = difference.inHours;
+      return hours == 1
+          ? Copywriting.security_one_hour_ago
+          : _withCount(Copywriting.security_hours_ago, hours);
+    }
+    if (difference.inDays < 7) {
+      final days = difference.inDays;
+      return days == 1
+          ? Copywriting.security_one_day_ago
+          : _withCount(Copywriting.security_days_ago, days);
+    }
+    if (difference.inDays < 30) {
+      final weeks = difference.inDays ~/ 7;
+      return weeks == 1
+          ? Copywriting.security_one_week_ago
+          : _withCount(Copywriting.security_weeks_ago, weeks);
+    }
+
+    final pattern = createdAt.year == currentTime.year
+        ? Copywriting.security_mM_dd_HH_mm
+        : DateFormats.y_mo_d;
+    return DateFormat(pattern).format(createdAt);
+  }
+
+  static String _withCount(String template, int count) {
+    return template.replaceAll('{count}', count.toString());
   }
 
   ///封号的时间格式化
   static String fhTime(int time) {
-    return DateFormat("yyyy.MM.dd HH:mm").format(DateTime.fromMillisecondsSinceEpoch(time));
+    return DateFormat(
+      "yyyy.MM.dd HH:mm",
+    ).format(DateTime.fromMillisecondsSinceEpoch(time));
   }
 
   ///广场的时间格式化
@@ -318,7 +400,7 @@ extension DateUtilsExt on DateUtil {
     return '';
   }
 
-    ///倒计时 13位时间戳
+  ///倒计时 13位时间戳
   static String downTimeDay(int seconds) {
     if (seconds >= 0) {
       int hour = seconds ~/ (60 * 60);
@@ -337,7 +419,6 @@ extension DateUtilsExt on DateUtil {
 
   ///倒计时 13位时间戳
   static String downTimeWithHH_MMOr_MM_SS(int seconds) {
-
     int hourSecs = 60 * 60;
     int hour = seconds ~/ hourSecs;
     int minu = (seconds - hour * hourSecs) ~/ 60;
@@ -347,8 +428,7 @@ extension DateUtilsExt on DateUtil {
       String time = hour >= 10 ? '$hour:' : '0$hour:';
       return minu >= 10 ? ('$time$minu') : ('${time}0$minu');
     } else {
-      return minu >= 10 ? '$minu:$second': '0$minu:$second';
+      return minu >= 10 ? '$minu:$second' : '0$minu:$second';
     }
   }
-
 }

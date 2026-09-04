@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:biz/localize/tab_labels.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../base/assets/image_view.dart';
@@ -20,10 +21,12 @@ import 'video_match/video_match_view.dart';
 enum DisTabType { character, match, moment }
 
 class DisTab {
-  DisTab(this.type, this.name);
+  DisTab(this.type, this._labelBuilder);
 
   DisTabType type;
-  String name;
+  final String Function() _labelBuilder;
+
+  String get name => _labelBuilder();
 }
 
 class DiscoveryView extends GetView<DiscoveryController> {
@@ -176,14 +179,14 @@ class DiscoveryController extends GetxController with GetTickerProviderStateMixi
     List newTabs = [];
     if (!rv) {
       newTabs = [
-        DisTab(DisTabType.character, Security.security_Discovery),
-        DisTab(DisTabType.moment, Security.security_moment),
-        DisTab(DisTabType.match, Security.security_match),
+        DisTab(DisTabType.character, () => TabLabels.discovery),
+        DisTab(DisTabType.moment, () => TabLabels.moment),
+        DisTab(DisTabType.match, () => TabLabels.match),
       ];
     } else {
       newTabs = [
-        DisTab(DisTabType.character, Security.security_Discovery),
-        DisTab(DisTabType.moment, Security.security_moment),
+        DisTab(DisTabType.character, () => TabLabels.discovery),
+        DisTab(DisTabType.moment, () => TabLabels.moment),
       ];
     }
     tabController = TabController(vsync: this, length: newTabs.length, initialIndex: currentIndex.value);

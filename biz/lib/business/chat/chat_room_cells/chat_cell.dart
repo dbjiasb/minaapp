@@ -50,6 +50,8 @@ class ChatCell extends StatelessWidget {
     Function(ChatMessage message)? download,
     Function(ChatMessage message)? onContinue,
     Function(ChatMessage message)? generateVideo,
+    Future<void> Function(ChatTextMessage message)? translate,
+    bool showTranslateAction = false,
   }) {
     switch (message.type) {
       case ChatMessageType.text:
@@ -62,6 +64,8 @@ class ChatCell extends StatelessWidget {
           reload: reload,
           download: download,
           onContinue: onContinue,
+          translate: translate,
+          showTranslateAction: showTranslateAction,
         );
       case ChatMessageType.generating:
         return ChatGeneratingCell(message: message as ChatGeneratingMessage);
