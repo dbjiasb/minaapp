@@ -3,6 +3,9 @@
 
 abstract final class CopywritingStringsPt {
   static const Map<String, String> values = <String, String>{
+    'security_notifications': 'Notificações',
+    'security_collections': 'Coleções',
+    'security_feedback': 'Comentários',
     'security_about_her': 'Sobre ela',
     'security_account_Deletion': 'Exclusão de conta',
     'security_add_rounds': 'Adicionar rodadas',
@@ -579,5 +582,15 @@ abstract final class CopywritingStringsPt {
     'security_language': 'Idioma',
     'security_select_language': 'Selecione o idioma',
     'security_settings': 'Definições',
+    'security_Cancel': 'Cancelar',
+    'security_Confirm': 'Confirmar',
+    'security_unlock_cost': 'O desbloqueio custará {amount} {currency}',
+    'security_reset': 'Repor',
+    'security_Report': 'Denunciar',
+    'security_block': 'Bloquear',
+    'security_switch': 'Mudar',
+    'security_reset_user': 'Repor {name}?',
+    'security_clear_history_with_user': 'Apagar o histórico com «{name}»',
+    'security_clear_history_confirmation': 'Tens a certeza de que queres apagar todo o histórico com «{name}» (incluindo textos, imagens, vídeos…)? Esta ação não pode ser anulada.',
   };
 }

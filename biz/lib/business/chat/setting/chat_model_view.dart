@@ -119,7 +119,7 @@ class ChatModeView extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
-          Security.security_switch,
+          Copywriting.security_switch,
           style: const TextStyle(
             color: Colors.black,
             fontSize: 16,

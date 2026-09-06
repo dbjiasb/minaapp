@@ -48,8 +48,8 @@ class RechargeCurrencyView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         title: Text(
           controller.rcgType == 0
-              ? EncHelper.rcg_titlCois
-              : EncHelper.rcg_titlGms,
+              ? Copywriting.security_my_Coins
+              : Copywriting.security_my_Gems,
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,

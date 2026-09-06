@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:biz/base/crypt/security.dart';
+import 'package:biz/base/crypt/copywriting.dart';
 
 import 'app_theme.dart';
 
@@ -53,7 +53,7 @@ Future showAlert(Widget? title, Widget? content, {String? confirmText, String? c
                         alignment: Alignment.center,
                         decoration: BoxDecoration(color: Color(0x99EEEEEE), borderRadius: BorderRadius.all(Radius.circular(12))),
                         child: Text(
-                          cancelText ?? Security.security_Cancel,
+                          cancelText ?? Copywriting.security_Cancel,
                           style: TextStyle(color: Color(0xFF333333), fontWeight: FontWeight.w600, fontSize: 16),
                         ),
                       ),
@@ -71,7 +71,7 @@ Future showAlert(Widget? title, Widget? content, {String? confirmText, String? c
                         alignment: Alignment.center,
                         decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.all(Radius.circular(12))),
                         child: Text(
-                          confirmText ?? Security.security_Confirm,
+                          confirmText ?? Copywriting.security_Confirm,
                           style: TextStyle(color: AppColors.mainDarkColor, fontWeight: FontWeight.w600, fontSize: 16),
                         ),
                       ),

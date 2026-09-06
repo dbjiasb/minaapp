@@ -747,7 +747,7 @@ class AccountView extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          Security.security_notifications,
+                          Copywriting.security_notifications,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 10,
@@ -784,7 +784,7 @@ class AccountView extends StatelessWidget {
                     ImageView(Images.mina_collection, width: 28, height: 28),
                     SizedBox(height: 4),
                     Text(
-                      Security.security_collections,
+                      Copywriting.security_collections,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 10,
@@ -811,7 +811,7 @@ class AccountView extends StatelessWidget {
                     ImageView(Images.mina_feedback, width: 28, height: 28),
                     SizedBox(height: 4),
                     Text(
-                      Security.security_feedback,
+                      Copywriting.security_feedback,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 10,

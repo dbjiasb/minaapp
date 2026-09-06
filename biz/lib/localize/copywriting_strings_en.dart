@@ -3,6 +3,9 @@
 
 abstract final class CopywritingStringsEn {
   static const Map<String, String> values = <String, String>{
+    // 'security_notifications': 'Notifications',
+    // 'security_collections': 'Collections',
+    // 'security_feedback': 'Feedback',
     // 'security_about_her': 'About her',
     // 'security_account_Deletion': 'Account Deletion',
     // 'security_add_rounds': 'Add rounds',
@@ -557,5 +560,15 @@ abstract final class CopywritingStringsEn {
     // 'security_language': 'Language',
     // 'security_select_language': 'Select language',
     // 'security_settings': 'Settings',
+    'security_Cancel': 'Cancel',
+    'security_Confirm': 'Confirm',
+    'security_unlock_cost': 'Unlocking will cost {amount} {currency}',
+    'security_reset': 'Reset',
+    'security_Report': 'Report',
+    'security_block': 'Block',
+    'security_switch': 'Switch',
+    'security_reset_user': 'Reset {name}?',
+    'security_clear_history_with_user': 'Clear history with "{name}"',
+    'security_clear_history_confirmation': 'Are you sure you want to clear all history with "{name}" (including texts, images, videos...)? This action cannot be undone.',
   };
 }

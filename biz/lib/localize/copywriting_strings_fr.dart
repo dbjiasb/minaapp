@@ -3,6 +3,9 @@
 
 abstract final class CopywritingStringsFr {
   static const Map<String, String> values = <String, String>{
+    'security_notifications': 'Notifications',
+    'security_collections': 'Collections',
+    'security_feedback': 'Commentaires',
     'security_about_her': 'À propos d\'elle',
     'security_account_Deletion': 'Suppression de compte',
     'security_add_rounds': 'Ajouter des tours',
@@ -585,5 +588,15 @@ abstract final class CopywritingStringsFr {
     'security_language': 'Langue',
     'security_select_language': 'Sélectionner la langue',
     'security_settings': 'Paramètres',
+    'security_Cancel': 'Annuler',
+    'security_Confirm': 'Confirmer',
+    'security_unlock_cost': 'Le déverrouillage coûtera {amount} {currency}',
+    'security_reset': 'Réinitialiser',
+    'security_Report': 'Signaler',
+    'security_block': 'Bloquer',
+    'security_switch': 'Changer',
+    'security_reset_user': 'Réinitialiser {name} ?',
+    'security_clear_history_with_user': 'Effacer l’historique avec « {name} »',
+    'security_clear_history_confirmation': 'Voulez-vous vraiment effacer tout l’historique avec « {name} » (textes, images, vidéos…) ? Cette action est irréversible.',
   };
 }

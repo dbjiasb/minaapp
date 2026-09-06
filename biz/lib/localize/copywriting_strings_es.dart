@@ -3,6 +3,9 @@
 
 abstract final class CopywritingStringsEs {
   static const Map<String, String> values = <String, String>{
+    'security_notifications': 'Notificaciones',
+    'security_collections': 'Colecciones',
+    'security_feedback': 'Comentarios',
     'security_about_her': 'Sobre ella',
     'security_account_Deletion': 'Eliminación de cuenta',
     'security_add_rounds': 'Agregar rondas',
@@ -578,5 +581,15 @@ abstract final class CopywritingStringsEs {
     'security_language': 'Idioma',
     'security_select_language': 'Seleccionar idioma',
     'security_settings': 'Ajustes',
+    'security_Cancel': 'Cancelar',
+    'security_Confirm': 'Confirmar',
+    'security_unlock_cost': 'El desbloqueo costará {amount} {currency}',
+    'security_reset': 'Restablecer',
+    'security_Report': 'Denunciar',
+    'security_block': 'Bloquear',
+    'security_switch': 'Cambiar',
+    'security_reset_user': '¿Restablecer a {name}?',
+    'security_clear_history_with_user': 'Borrar el historial con «{name}»',
+    'security_clear_history_confirmation': '¿Seguro que quieres borrar todo el historial con «{name}» (incluidos textos, imágenes, vídeos…)? Esta acción no se puede deshacer.',
   };
 }

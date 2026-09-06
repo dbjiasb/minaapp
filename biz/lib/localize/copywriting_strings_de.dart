@@ -3,6 +3,9 @@
 
 abstract final class CopywritingStringsDe {
   static const Map<String, String> values = <String, String>{
+    'security_notifications': 'Benachrichtigungen',
+    'security_collections': 'Sammlungen',
+    'security_feedback': 'Feedback',
     'security_about_her': 'Über sie',
     'security_account_Deletion': 'Kontolöschung',
     'security_add_rounds': 'Runden hinzufügen',
@@ -589,5 +592,15 @@ abstract final class CopywritingStringsDe {
     'security_language': 'Sprache',
     'security_select_language': 'Sprache auswählen',
     'security_settings': 'Einstellungen',
+    'security_Cancel': 'Abbrechen',
+    'security_Confirm': 'Bestätigen',
+    'security_unlock_cost': 'Das Freischalten kostet {amount} {currency}',
+    'security_reset': 'Zurücksetzen',
+    'security_Report': 'Melden',
+    'security_block': 'Blockieren',
+    'security_switch': 'Wechseln',
+    'security_reset_user': '{name} zurücksetzen?',
+    'security_clear_history_with_user': 'Verlauf mit „{name}“ löschen',
+    'security_clear_history_confirmation': 'Möchtest du wirklich den gesamten Verlauf mit „{name}“ löschen (einschließlich Texten, Bildern, Videos …)? Diese Aktion kann nicht rückgängig gemacht werden.',
   };
 }

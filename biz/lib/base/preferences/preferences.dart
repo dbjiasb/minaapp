@@ -417,7 +417,7 @@ class Preferences {
   }
 
   bool get showRealGirls {
-    String str = appConfig['show_real_girl'] ?? '0';
+    String str = appConfig['show_real_girl'] ?? '1';
     return str == '1';
   }
 

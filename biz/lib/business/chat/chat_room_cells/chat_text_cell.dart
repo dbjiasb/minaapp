@@ -562,7 +562,7 @@ class ChatTextAudioView extends StatelessWidget {
   void showUnlockAlert() {
     showConfirmAlert(
       Copywriting.security_unlock_Audio,
-      'Unlocking will cost ${textMessage.unlockPrice} ${textMessage.unlockCurrency == 1 ? 'Gems' : 'Coins'}',
+      Copywriting.unlockCost(textMessage.unlockPrice, textMessage.unlockCurrency),
       onConfirm: () {
         //解锁资源
         unlockMessage(0);

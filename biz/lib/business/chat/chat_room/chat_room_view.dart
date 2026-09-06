@@ -189,7 +189,7 @@ class ChatRoomView extends StatelessWidget {
                   ),
                 if (viewController.isAiChat && !session.isGroup)
                   _drawerTemplate(
-                    Security.security_reset,
+                    Copywriting.security_reset,
                     onTap: () {
                       ChatSettingHelper.doReset(
                         tUid: viewController.userId,
@@ -208,7 +208,7 @@ class ChatRoomView extends StatelessWidget {
                   },
                 ),
                 _drawerTemplate(
-                  Security.security_Report,
+                  Copywriting.security_Report,
                   onTap: () {
                     ReportHelper.showReportDialog(
                       int.parse(viewController.session.id),
@@ -217,10 +217,10 @@ class ChatRoomView extends StatelessWidget {
                 ),
                 Obx(() {
                   return _drawerOption(
-                    Security.security_block,
+                    Copywriting.security_block,
                     onChange: (value) {
                       showConfirmAlert(
-                        Security.security_block,
+                        Copywriting.security_block,
                         Copywriting
                             .security_are_you_sure_you_want_to_block_this_user_,
                         onConfirm: () {
@@ -353,19 +353,21 @@ class ChatRoomView extends StatelessWidget {
         onTap?.call();
       },
       child: Container(
-        height: 44,
+        constraints: const BoxConstraints(minHeight: 44),
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Row(
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-            Spacer(),
+            const SizedBox(width: 8),
             tail ??
                 ImageView(
                   Images.security_arrow_right_png,
@@ -384,20 +386,22 @@ class ChatRoomView extends StatelessWidget {
     required bool value,
   }) {
     return Container(
-      height: 44,
+      constraints: const BoxConstraints(minHeight: 44),
       margin: EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-          Spacer(),
+          const SizedBox(width: 8),
           Switch(
             value: value,
             activeColor: Colors.white,

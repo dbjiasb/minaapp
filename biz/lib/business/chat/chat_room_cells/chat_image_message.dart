@@ -384,7 +384,7 @@ class ChatImageCell extends ChatCell {
   void showUnlockDialog() {
     showConfirmAlert(
       Copywriting.security_unlock_Image,
-      'Unlocking will cost ${imageMessage.unlockPrice} ${imageMessage.currencyType == 1 ? 'Gems' : 'Coins'}',
+      Copywriting.unlockCost(imageMessage.unlockPrice, imageMessage.currencyType),
       onConfirm: () {
         prompted = true;
         unlock?.call(imageMessage);

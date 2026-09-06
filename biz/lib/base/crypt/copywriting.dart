@@ -5,6 +5,9 @@ abstract final class Copywriting {
   Copywriting._();
 
   // dart format off
+  static String get security_notifications => LocalizationService.text('security_notifications', () => decrypt('YjV7vgdGeQQRtUNRxQ6/mw==')); // Notifications
+  static String get security_collections => LocalizationService.text('security_collections', () => decrypt('k4mhttmTrqCFNQ814Xsceg==')); // Collections
+  static String get security_feedback => LocalizationService.text('security_feedback', () => decrypt('TsiTxFT59MoQ8Py4eTIjZg==')); // Feedback
   static String get security_about_her => LocalizationService.text('security_about_her', () => decrypt('Phrblx+R4aOO/QDJW67bDQ==')); // About her
   static String get security_account_Deletion => LocalizationService.text('security_account_Deletion', () => decrypt('Vv8LORkZ1APwPZBPJZ3CyscOWWHGPm7H0drnTGQBV8Y=')); // Account Deletion
   static String get security_add_rounds => LocalizationService.text('security_add_rounds', () => decrypt('mWAPk1zYjOyZD6rdH1pymw==')); // Add rounds
@@ -429,5 +432,25 @@ abstract final class Copywriting {
   static String get security_language => LocalizationService.text('security_language', () => decrypt('AFpXe701hyEy2K0pJPQrOA==')); // Language
   static String get security_select_language => LocalizationService.text('security_select_language', () => decrypt('akdFPjkhFm3WrFVVEumpXg==')); // Select language
   static String get security_settings => LocalizationService.text('security_settings', () => decrypt('meKKZEYY6wmy6pPdfi7vHg==')); // Settings
+  static String get security_Cancel => LocalizationService.text('security_Cancel', () => decrypt('B+fgeFXEkLBLJQO+5fJkww==')); // Cancel
+  static String get security_Confirm => LocalizationService.text('security_Confirm', () => decrypt('/VnQKIb9rLi8ApfaNYHIUA==')); // Confirm
+  static String get security_unlock_cost => LocalizationService.text('security_unlock_cost', () => decrypt('RbkQr9vXK+2sEYSZjNKKM0/G28S1zdR5NU6GENpVhybM+2Z9ebLzj7sAXVGbfim0')); // Unlocking will cost {amount} {currency}
+  static String get security_reset => LocalizationService.text('security_reset', () => decrypt('Z4oItNSwn3rQbZ4fT01aSw==')); // Reset
+  static String get security_Report => LocalizationService.text('security_Report', () => decrypt('/ODQPuClvmQNHTm9OT4ZLQ==')); // Report
+  static String get security_block => LocalizationService.text('security_block', () => decrypt('NF2WAlD+aMVqpJioshoR7w==')); // Block
+  static String get security_switch => LocalizationService.text('security_switch', () => decrypt('jnpSANn8IBSexy+fQIl5Qg==')); // Switch
+  static String get security_reset_user => LocalizationService.text('security_reset_user', () => decrypt('n+q7im4g9isQGV4KqZZRbw==')); // Reset {name}?
+  static String get security_clear_history_with_user => LocalizationService.text('security_clear_history_with_user', () => decrypt('NROfpFzRdzLB4kkqbKVMXZ3fG0PaNoBA24iIYgBhLt0=')); // Clear history with "{name}"
+  static String get security_clear_history_confirmation => LocalizationService.text('security_clear_history_confirmation', () => decrypt('1B9Mb/athAPAgMs8Lyp/HdQobjnlBYtjC/KcdNujI0OFv5eVwYooQDxJlSRnOor5zpYaPD/H0eBN+dWd2a4VP6wRRupnvdH41e+cXJ/iOVabN3DdqohnyDkxGI1YgjNgx01HZnVi65PVpQbxAb1KgD9Ls6/VJrEQK2BCGDB1X0A=')); // Are you sure you want to clear all history with "{name}" (including texts, images, videos...)? This action cannot be undone.
   // dart format on
+
+  static String unlockCost(num amount, int currencyType) {
+    return security_unlock_cost
+        .replaceAll('{amount}', '$amount')
+        .replaceAll(
+          '{currency}',
+          currencyType == 1 ? security_my_Gems : security_my_Coins,
+        );
+  }
+
 }

@@ -3,6 +3,9 @@
 
 abstract final class CopywritingStringsIt {
   static const Map<String, String> values = <String, String>{
+    'security_notifications': 'Notifiche',
+    'security_collections': 'Raccolte',
+    'security_feedback': 'Feedback',
     'security_about_her': 'Su di lei',
     'security_account_Deletion': 'Cancellazione dell\'account',
     'security_add_rounds': 'Aggiungi giri',
@@ -584,5 +587,15 @@ abstract final class CopywritingStringsIt {
     'security_language': 'Linguaggio',
     'security_select_language': 'Selezionare la lingua',
     'security_settings': 'Impostazioni',
+    'security_Cancel': 'Annulla',
+    'security_Confirm': 'Conferma',
+    'security_unlock_cost': 'Lo sblocco costerà {amount} {currency}',
+    'security_reset': 'Reimposta',
+    'security_Report': 'Segnala',
+    'security_block': 'Blocca',
+    'security_switch': 'Cambia',
+    'security_reset_user': 'Reimpostare {name}?',
+    'security_clear_history_with_user': 'Cancella la cronologia con «{name}»',
+    'security_clear_history_confirmation': 'Vuoi davvero cancellare tutta la cronologia con «{name}» (inclusi testi, immagini, video…)? Questa azione non può essere annullata.',
   };
 }

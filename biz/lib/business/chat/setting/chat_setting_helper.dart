@@ -2,7 +2,6 @@ import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/apis.dart';
 import 'dart:ui';
 
-import 'package:get/get.dart';
 import 'package:biz/shared/toast/toast.dart';
 import '../../../base/api_service/api_request.dart';
 import '../../../base/api_service/api_response.dart';
@@ -18,11 +17,12 @@ class ChatSettingHelper {
     int tUid = 0,
   }) async {
     showConfirmAlert(
-      "Reset $userName?",
+      Copywriting.security_reset_user.replaceAll('{name}', userName),
       Copywriting.security_she_will_forget_conversation_history_with_you_,
       onConfirm: () async {
         Toast.loading();
-        ApiRequest request = ApiRequest(Apis.security_resetAiModel,
+        ApiRequest request = ApiRequest(
+          Apis.security_resetAiModel,
           params: {
             Security.security_targetUid: tUid,
             Security.security_sessionId: sessionId,
@@ -40,8 +40,14 @@ class ChatSettingHelper {
 
   static void doClearHistory({String userName = "", VoidCallback? onConfirm}) {
     showConfirmAlert(
-      'Clear history with "$userName"',
-      'Are you sure to clear all history with "$userName" (including texts, images, videos...)? This action cannot be undone.',
+      Copywriting.security_clear_history_with_user.replaceAll(
+        '{name}',
+        userName,
+      ),
+      Copywriting.security_clear_history_confirmation.replaceAll(
+        '{name}',
+        userName,
+      ),
       onConfirm: onConfirm,
     );
   }
@@ -50,7 +56,8 @@ class ChatSettingHelper {
     String sessionId = '',
     int tUid = 0,
   }) async {
-    ApiRequest request = ApiRequest(Apis.security_deleteSession,
+    ApiRequest request = ApiRequest(
+      Apis.security_deleteSession,
       params: {
         Security.security_targetUid: tUid,
         Security.security_sessionId: sessionId,

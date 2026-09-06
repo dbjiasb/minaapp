@@ -25,7 +25,7 @@ void main() {
       CopywritingStringsAr.values,
     ];
 
-    expect(expectedKeys, hasLength(423));
+    expect(expectedKeys, hasLength(436));
     for (final locale in locales) {
       expect(locale.keys.toSet(), expectedKeys);
       expect(locale.values, everyElement(isNotEmpty));
@@ -60,6 +60,25 @@ void main() {
 
     Get.locale = const Locale('ar', 'AE');
     expect(Copywriting.security_language, 'لغة');
+
+    Get.locale = const Locale('fr', 'FR');
+    expect(Copywriting.security_Cancel, 'Annuler');
+    expect(Copywriting.security_Confirm, 'Confirmer');
+    expect(Copywriting.security_reset, 'Réinitialiser');
+    expect(Copywriting.security_Report, 'Signaler');
+    expect(Copywriting.security_block, 'Bloquer');
+    expect(Copywriting.security_switch, 'Changer');
+    expect(
+      Copywriting.security_clear_history_with_user.replaceAll('{name}', 'Alice'),
+      'Effacer l’historique avec « Alice »',
+    );
+    expect(Copywriting.unlockCost(50, 1), 'Le déverrouillage coûtera 50 Gemmes');
+    expect(Copywriting.unlockCost(20, 0), 'Le déverrouillage coûtera 20 Pièces');
+
+    Get.locale = const Locale('en', 'US');
+    expect(Copywriting.security_Cancel, 'Cancel');
+    expect(Copywriting.security_Confirm, 'Confirm');
+    expect(Copywriting.unlockCost(50, 1), 'Unlocking will cost 50 Gems');
 
     Get.locale = null;
   });

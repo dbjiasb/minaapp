@@ -365,7 +365,7 @@ class ChatVideoCell extends ChatCell {
   void showUnlockDialog() {
     showConfirmAlert(
       Copywriting.security_unlock_Video,
-      'Unlocking will cost ${videoMessage.unlockPrice} ${videoMessage.currencyType == 1 ? 'Gems' : 'Coins'}',
+      Copywriting.unlockCost(videoMessage.unlockPrice, videoMessage.currencyType),
       onConfirm: () {
         prompted = true;
         unLockOrGenerateVideo();

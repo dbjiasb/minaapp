@@ -3,6 +3,9 @@
 
 abstract final class CopywritingStringsAr {
   static const Map<String, String> values = <String, String>{
+    'security_notifications': 'الإشعارات',
+    'security_collections': 'المجموعات',
+    'security_feedback': 'الملاحظات',
     'security_about_her': 'عنها',
     'security_account_Deletion': 'حذف الحساب',
     'security_add_rounds': 'أضف جولات',
@@ -568,5 +571,15 @@ abstract final class CopywritingStringsAr {
     'security_language': 'لغة',
     'security_select_language': 'اختر اللغة',
     'security_settings': 'الإعدادات',
+    'security_Cancel': 'إلغاء',
+    'security_Confirm': 'تأكيد',
+    'security_unlock_cost': 'سيكلف فتح القفل {amount} {currency}',
+    'security_reset': 'إعادة تعيين',
+    'security_Report': 'إبلاغ',
+    'security_block': 'حظر',
+    'security_switch': 'تبديل',
+    'security_reset_user': 'إعادة تعيين {name}؟',
+    'security_clear_history_with_user': 'مسح السجل مع «{name}»',
+    'security_clear_history_confirmation': 'هل أنت متأكد من مسح السجل بالكامل مع «{name}» (بما في ذلك النصوص والصور والفيديوهات…)؟ لا يمكن التراجع عن هذا الإجراء.',
   };
 }
