@@ -67,7 +67,24 @@ class ChatManager {
   //单利模式
   static final ChatManager _instance = ChatManager._internal();
 
-  ChatManager._internal();
+  ChatManager._internal({
+    Future<ApiResponse> Function(ApiRequest)? requestSender,
+    String? Function(String)? readTag,
+    void Function(String, String)? writeTag,
+  }) : _requestSender = requestSender ?? ((request) => ApiService.instance.sendRequest(request)),
+       _readTag = readTag ?? ((key) => Preferences.instance.getString(key)),
+       _writeTag = writeTag ?? ((key, value) { Preferences.instance.setString(key, value); });
+
+  @visibleForTesting
+  ChatManager.forTesting({
+    required Future<ApiResponse> Function(ApiRequest) requestSender,
+    required String? Function(String) readTag,
+    required void Function(String, String) writeTag,
+  }) : this._internal(requestSender: requestSender, readTag: readTag, writeTag: writeTag);
+
+  final Future<ApiResponse> Function(ApiRequest) _requestSender;
+  final String? Function(String) _readTag;
+  final void Function(String, String) _writeTag;
 
   factory ChatManager() => _instance;
 
@@ -82,7 +99,10 @@ class ChatManager {
   String lastPullTag = '';
 
   int get intPullTag => int.tryParse(lastPullTag) ?? 0;
-  bool isQueryingMessages = false;
+  Object? _syncRequest;
+  bool get isQueryingMessages => _syncRequest != null;
+
+  bool _isCurrent(Account account) => account.isLoggedIn && identical(account, MyAccount);
   Set<int> sentMessages = {};
   Set<int> didPostOutMessages = {};
 
@@ -116,9 +136,11 @@ class ChatManager {
   }
 
   Future getMessages() async {
-    lastPullTag = Preferences.instance.getString(messagePullTag) ?? '';
+    final account = MyAccount;
+    if (!_isCurrent(account)) return;
+    lastPullTag = _readTag(messagePullTag) ?? '';
     await getHistoryMessages();
-    startTimer();
+    if (_isCurrent(account)) startTimer();
   }
 
   //监听登录、注销事件
@@ -132,16 +154,27 @@ class ChatManager {
   }
 
   void onLogin(Event event) {
+    _resetAccountState();
     getMessages();
   }
 
   void onLogout(Event event) {
+    _resetAccountState();
+  }
+
+  void _resetAccountState() {
     stopTimer();
+    stopDelaySyncMsgTimer();
+    _syncRequest = null;
+    currentSession = null;
+    lastPullTag = '';
+    sentMessages.clear();
+    didPostOutMessages.clear();
   }
 
   void dispose() {
     //释放资源
-    stopTimer();
+    _resetAccountState();
     EventCenter.instance.removeListener(kEventCenterUserDidLogin, onLogin);
     EventCenter.instance.removeListener(kEventCenterUserDidLogout, onLogout);
     PushService.instance.removeObserver(PushId.kBatchMessageKey, onReceivedNewMessages);
@@ -155,8 +188,12 @@ class ChatManager {
   }
 
   Future<void> onImagePrepared(Map data) async {
+    final account = MyAccount;
+    if (!_isCurrent(account)) return;
+
     ChatMessage message = ChatMessage.fromServer(data);
     await messageHandler.insertMessage(message);
+    if (!_isCurrent(account)) return;
     //刷新图片
     EventCenter.instance.sendEvent(kEventCenterDidPreparedImageMessage, {Security.security_message: message});
   }
@@ -166,6 +203,9 @@ class ChatManager {
   }
 
   void onReceivedNewMessages(Event event) async {
+    final account = MyAccount;
+    if (!_isCurrent(account)) return;
+
     Map data = event.data;
     if (data.isEmpty) return;
 
@@ -173,6 +213,7 @@ class ChatManager {
     // if (kDebugMode) getHistoryMessages();
 
     ChatMessage? lastMessage = await messageHandler.selectMessage(lastMessageId);
+    if (!_isCurrent(account)) return;
     if (lastMessage == null) {
       getHistoryMessages();
       return;
@@ -183,6 +224,7 @@ class ChatManager {
 
     ChatMessage firstMessage = ChatMessage.fromServer(rawList.first);
     ChatSession? session = await sessionHandler.querySession(firstMessage.sessionId);
+    if (!_isCurrent(account)) return;
     if (session == null) {
       getHistoryMessages();
       return;
@@ -203,6 +245,7 @@ class ChatManager {
       }
       //插入消息
       await messageHandler.insertMessage(message);
+      if (!_isCurrent(account)) return;
 
       if (didPostOutMessages.contains(message.id) == false) {
         didPostOutMessages.add(message.id);
@@ -230,20 +273,30 @@ class ChatManager {
     }
 
     await updateChatSession(session);
+    if (!_isCurrent(account)) return;
 
     EventCenter.instance.sendEvent(kEventCenterDidReceivedNewMessages, {session.id: messages});
   }
 
   //发送消息
   Future<SendMessageResponse> sendMessage(ChatMessage message) async {
+    final account = MyAccount;
+
+    SendMessageResponse stale() => SendMessageResponse(ApiResponse.withError({
+      Security.security_code: -1,
+      Security.security_description: 'Account changed',
+    }), message);
+    if (!_isCurrent(account) || message.ownerId != account.userId) return stale();
     if (currentSession != null) {
       currentSession!.lastMessageText = message.externalText;
       currentSession!.lastMessageTime = message.date;
       await updateChatSession(currentSession!);
+      if (!_isCurrent(account)) return stale();
     }
 
     ApiRequest request = ApiRequest(Apis.security_sendChatMsg, params: {Security.security_msg: message.toServer()});
-    ApiResponse response = await ApiService.instance.sendRequest(request);
+    ApiResponse response = await _requestSender(request);
+    if (!_isCurrent(account)) return stale();
     if (response.isSuccess) {
       if (message.receiverId == kOffChatSessionId) {
         L.uploadIfNeed();
@@ -251,12 +304,14 @@ class ChatManager {
 
       ChatMessage newMessage = ChatMessage.fromServer(response.data[Security.security_msg]);
       int result = await messageHandler.updateLocalMessage(newMessage);
+      if (!_isCurrent(account)) return stale();
       L.i('插入消息结果: $result');
       addSentMessages(newMessage);
       return SendMessageResponse(response, newMessage);
     } else {
       message.sendState.value = ChatMessageSendStatus.failed;
       await messageHandler.updateLocalMessage(message);
+      if (!_isCurrent(account)) return stale();
       L.i('发送消息失败: ${response.description}');
       Toast.show(response.description);
     }
@@ -278,34 +333,43 @@ class ChatManager {
   }
 
   Future<void> getHistoryMessages() async {
-    if (isQueryingMessages) return;
+    final account = MyAccount;
+    if (!_isCurrent(account) || isQueryingMessages) return;
+    final requestId = Object();
+    _syncRequest = requestId;
     stopDelaySyncMsgTimer();
-
-    lastPullTime = DateTime.now();
-
-    isQueryingMessages = true;
-    debugPrint('[${DateTime.now()}] [Chat][Pull][sync] getHistoryMessages: $lastPullTag ');
-    ApiRequest request = ApiRequest(Apis.security_syncChatHistory, params: {Security.security_position: lastPullTag});
-    ApiResponse response = await ApiService.instance.sendRequest(request);
-    if (response.isSuccess) {
-      await handleApiResponse(response);
-    } else {
-      L.i('获取历史消息失败: ${response.description}');
+    try {
+      bool hasMore;
+      do {
+        lastPullTime = DateTime.now();
+        final response = await _requestSender(ApiRequest(
+          Apis.security_syncChatHistory,
+          params: {Security.security_position: lastPullTag},
+        ));
+        if (!_isCurrent(account)) return;
+        if (!response.isSuccess) {
+          L.i('获取历史消息失败: ${response.description}');
+          return;
+        }
+        final previousTag = lastPullTag;
+        await handleApiResponse(response, forAccount: account);
+        if (!_isCurrent(account)) return;
+        hasMore = response.data[Security.security_hasMore] == true;
+        // A malformed/no-progress page must not create an infinite pull loop.
+        if (lastPullTag == previousTag) return;
+      } while (hasMore);
+    } finally {
+      // An old request must not unlock the new account's in-flight request.
+      if (identical(_syncRequest, requestId)) _syncRequest = null;
     }
-
-    isQueryingMessages = false;
-
-    bool hasMore = response.data[Security.security_hasMore] ?? false;
-    if (hasMore) {
-      getHistoryMessages();
-    } else {}
   }
 
   //处理ApiResponse
-  Future<void> handleApiResponse(ApiResponse response) async {
+  Future<void> handleApiResponse(ApiResponse response, {Account? forAccount}) async {
+    final account = forAccount ?? MyAccount;
+    if (!_isCurrent(account)) return;
     //取出会话
     List rawSessions = response.data[Constants.rawSessions] ?? [];
-    if (rawSessions.isEmpty) return;
 
     //取出消息
     for (var rawSession in rawSessions) {
@@ -325,6 +389,7 @@ class ChatManager {
 
         //插入消息
         int ret = await messageHandler.insertMessage(message);
+        if (!_isCurrent(account)) return;
         if (didPostOutMessages.contains(message.id) == false) {
           didPostOutMessages.add(message.id);
           messages.add(message);
@@ -339,6 +404,7 @@ class ChatManager {
       late ChatSession session;
       ChatMessage lastMessage = messages.last;
       ChatSession? localSession = await sessionHandler.querySession(lastMessage.sessionId);
+      if (!_isCurrent(account)) return;
       if (localSession != null) {
         localSession.lastMessageText = lastMessage.externalText;
         localSession.lastMessageTime = lastMessage.date;
@@ -361,6 +427,7 @@ class ChatManager {
         session.unreadNumber.value += unreadNumber;
       }
       await updateChatSession(session);
+      if (!_isCurrent(account)) return;
 
       EventCenter.instance.sendEvent(kEventCenterDidQueriedNewMessages, {session.id: messages});
 
@@ -394,7 +461,7 @@ class ChatManager {
     if (newKey <= oldKey) return;
 
     lastPullTag = pullTag;
-    Preferences.instance.setString(messagePullTag, pullTag);
+    _writeTag(messagePullTag, pullTag);
     L.i('[${DateTime.now()}] [Chat] [Pull] storePullTag: $newKey [$oldKey]');
   }
 
@@ -422,6 +489,9 @@ class ChatManager {
   }
 
   void sayHelloIfNeeded(ChatSession session) async {
+    final account = MyAccount;
+    if (!_isCurrent(account)) return;
+
     //发送消息
     ApiRequest request = ApiRequest(
       Apis.security_sayHello,
@@ -432,7 +502,8 @@ class ChatManager {
         Security.security_status: session.isRealChat ? 1 : 2,
       },
     );
-    ApiResponse response = await ApiService.instance.sendRequest(request);
+    ApiResponse response = await _requestSender(request);
+    if (!_isCurrent(account)) return;
     if (response.isSuccess) {
       //处理响应
       session.greeted = true;
@@ -454,12 +525,12 @@ class ChatManager {
       usePrem = 1;
     }
     ApiRequest request = ApiRequest(Apis.security_deblockingMessage, params: {Security.security_mid: message.uuid, Security.security_usePrem: usePrem});
-    return await ApiService.instance.sendRequest(request);
+    return await _requestSender(request);
   }
 
   Future<ApiResponse> reloadMessage(ChatMessage message) async {
     ApiRequest request = ApiRequest(Apis.security_replaceMsg, params: {Security.security_uuid: message.uuid, Security.security_action: 1});
-    return await ApiService.instance.sendRequest(request);
+    return await _requestSender(request);
   }
 
   void onResponseCalled(Event object) {
@@ -467,10 +538,13 @@ class ChatManager {
   }
 
   Future updateChatSession(ChatSession session) async {
+    final account = MyAccount;
+    if (!_isCurrent(account) || session.ownerId != account.userId) return 0;
     if (kDebugMode && session.lastMessageText.isEmpty) {
       L.i('[Chat] [updateChatSession] ${StackTrace.current.toString()}');
     }
     int ret = await sessionHandler.upsertSession(session);
+    if (!_isCurrent(account)) return ret;
     EventCenter.instance.sendEvent(kEventCenterDidUpdateSession, {Security.security_kUpdatedSession: session});
     return ret;
   }
@@ -489,7 +563,7 @@ class ChatManager {
 
     Toast.loading();
     ApiRequest request = ApiRequest(Apis.security_aiContinueToSendMsg, params: arg);
-    ApiResponse rsp = await ApiService.instance.sendRequest(request);
+    ApiResponse rsp = await _requestSender(request);
 
     if (rsp.isSuccess) {
       Toast.dismiss();
@@ -521,7 +595,7 @@ class ChatManager {
     };
 
     ApiRequest request = ApiRequest(Apis.security_getMsgDetail, params: arg);
-    ApiResponse rsp = await ApiService.instance.sendRequest(request);
+    ApiResponse rsp = await _requestSender(request);
     return rsp;
   }
 }

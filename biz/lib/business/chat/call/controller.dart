@@ -388,7 +388,7 @@ class CallController extends GetxController {
     curCall.rtcType = callInfo[Security.security_rtcType];
     curCall.rtcToken = callInfo[Security.security_token] ?? '';
     if (callInfo[Security.security_costOrEarnContent]?.isNotEmpty ?? false) {
-      costDescTitle = callInfo[Security.security_costOrEarnContent];
+      costDescTitle.value = callInfo[Security.security_costOrEarnContent].toString();
     }
 
     setupCallEngine();

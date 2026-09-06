@@ -5,6 +5,7 @@ import 'package:biz/core/account/account_service.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../base/database/data_center.dart';
+import '../../base/database/chat_schema.dart';
 import '../../base/event_center/event_center.dart';
 import 'chat_session.dart';
 
@@ -19,48 +20,16 @@ class ChatSessionHandler {
 
   Database get database => DataCenter.instance.database;
 
-  ChatSessionHandler() {
-    Map createInfo = DataCenter.instance.createInfo;
-    if (createInfo.isNotEmpty) {
-      createTable();
-    }
-
-    Map upgradeInfo = DataCenter.instance.upgradeInfo;
-    if (upgradeInfo.isNotEmpty) {
-      upgradeTable();
-    }
-  }
-
-  Future<void> createTable() async {
-    Database database = DataCenter.instance.database;
-    return await database.execute(createTableSql);
-  }
-
   static String get tableName => Security.security_chat_sessions;
 
-  static String get createTableSql => '''
-    CREATE TABLE IF NOT EXISTS $tableName (
-      ${Security.security_id}  TEXT PRIMARY KEY,
-      ${Security.security_ownerId}  INTEGER,
-      ${Security.security_name}  TEXT,
-      ${Security.security_avatar}  TEXT,
-      ${Security.security_lastMessageTime}  INTEGER,
-      ${Security.security_lastMessageText}  TEXT,
-      ${Security.security_backgroundUrl}  TEXT,
-      ${Security.security_unreadNumber}  INTEGER DEFAULT 0,
-      ${Security.security_accountType}  INTEGER DEFAULT 1,
-      ${Security.security_type}  INTEGER DEFAULT 0,
-      ${Security.security_level}  INTEGER DEFAULT 1,
-      ${Security.security_nextLevelRatio} INTEGER DEFAULT 0,
-      ${Security.security_draft} TEXT,
-      ${Security.security_bio} TEXT
-    )
-  ''';
+  static String get createTableSql => ChatSchema.sessionsSql;
 
   //增删查改
   Future<int> upsertSession(ChatSession session) async {
     int ret = await database.insert(tableName, session.toDatabase(), conflictAlgorithm: ConflictAlgorithm.replace);
-    EventCenter.instance.sendEvent(kEventCenterDidChangeSession, {kDidChangeSessionId: session.id});
+    if (session.ownerId == ownerId) {
+      EventCenter.instance.sendEvent(kEventCenterDidChangeSession, {kDidChangeSessionId: session.id});
+    }
     return ret;
   }
 
@@ -72,9 +41,11 @@ class ChatSessionHandler {
     int? sessionType,
     bool? isReal
   }) async {
+    final args = <Object?>[ownerId];
     String where = '${Security.security_ownerId} = ?';
     if (sessionId != null) {
-      where += " AND ${Security.security_id}  = '$sessionId'";
+      where += " AND ${Security.security_id} = ?";
+      args.add(sessionId);
     } else {
       where += " AND ${Security.security_id} <> '$kOffChatSessionId'";
       where += " AND ${Security.security_id} <> '0' AND ${Security.security_id} <> ''";
@@ -91,18 +62,12 @@ class ChatSessionHandler {
       if (isReal == false) where += " AND ${Security.security_accountType} <> 0";
     }
 
-    if (offset != null && offset > 0) {
-      where += " OFFSET $offset";
-    }
-
-    if (limit != null && limit > 0) {
-      where += " LIMIT $limit";
-    }
-
     final List<Map<String, dynamic>> sqlSessions = await database.query(
       tableName,
       where: where,
-      whereArgs: [ownerId.toString()],
+      whereArgs: args,
+      limit: limit,
+      offset: offset,
       orderBy: Other.security_lastMessageTime_DESC,
     );
 
@@ -123,28 +88,6 @@ class ChatSessionHandler {
     );
   }
 
-  Future<void> upgradeTable() async {
-    Map upgradeInfo = DataCenter.instance.upgradeInfo;
-    int oldVersion = upgradeInfo[Security.security_oldVersion] as int;
-    int newVersion = upgradeInfo[Security.security_newVersion] as int;
-
-    for (int i = oldVersion; i < newVersion; i++) {
-      int toVersion = i + 1;
-      await upgradeToVersion(toVersion);
-    }
-  }
-
-  Future<void> upgradeToVersion(int toVersion) async {
-    // 添加 bio 列（如果不存在）
-    try {
-      await database.execute(
-        'ALTER TABLE $tableName ADD COLUMN ${Security.security_bio} TEXT'
-      );
-    } catch (e) {
-      // 列可能已存在，忽略错误
-    }
-  }
-
   Future<int> unreadCount() async {
     try {
       final List<Map<String, dynamic>> ret = await database.rawQuery(
@@ -159,13 +102,13 @@ class ChatSessionHandler {
   }
 
   Future<int> clearUnreadCount({String? sessionId}) async {
+    final args = <Object?>[ownerId];
     String sql = 'UPDATE $tableName SET ${Security.security_unreadNumber} = 0 WHERE ${Security.security_ownerId} = ?';
     if (sessionId != null) {
-      sql += ' AND ${Security.security_id} = "$sessionId"';
+      sql += ' AND ${Security.security_id} = ?';
+      args.add(sessionId);
     }
-    final rowsAffected = await database.rawUpdate(sql, [
-      ownerId.toString(),
-    ]);
+    final rowsAffected = await database.rawUpdate(sql, args);
     if (sessionId == null && rowsAffected > 0) {
       EventCenter.instance.sendEvent(kEventCenterDidClearSessionNumber, {});
     }
@@ -173,7 +116,7 @@ class ChatSessionHandler {
   }
 
   Future<int> deleteSessionById(String id) async {
-    int ret = await database.delete(tableName, where: "${Security.security_id}=?", whereArgs: [id]);
+    int ret = await database.delete(tableName, where: "${Security.security_ownerId}=? AND ${Security.security_id}=?", whereArgs: [ownerId, id]);
     if (ret > 0) {
       EventCenter.instance.sendEvent(kEventCenterDidDeleteSession, {kDidChangeSessionId: id});
     }

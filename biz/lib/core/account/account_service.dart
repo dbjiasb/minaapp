@@ -395,9 +395,11 @@ class AccountService {
 
   /// balance
   Future refreshBalance() async {
+    final requestedAccount = account;
     final req = ApiRequest(Apis.security_fetchBalance, params: {Security.security_uid: account.id});
     final rsp = await ApiService.instance.sendRequest(req);
 
+    if (!identical(account, requestedAccount)) return;
     if (rsp.statusCode != 200 || rsp.bsnsCode != 0) return;
 
     if ((rsp.data[Security.security_balance] ?? {}).isEmpty) return;
@@ -407,9 +409,11 @@ class AccountService {
   RxList premiumConfig = [].obs;
 
   Future getPremInfo() async {
+    final requestedAccount = account;
     try {
       final request = ApiRequest(Security.security_queryPremiumCards, params: {});
       final response = await ApiService.instance.sendRequest(request);
+      if (!identical(account, requestedAccount)) return;
       Map rspData = response.data;
       if (response.isSuccess && rspData.isNotEmpty) {
         account.premInfo.value = rspData[Security.security_ownPremium] ?? {};
@@ -427,7 +431,9 @@ class AccountService {
   bool get isSubscribeCache => Preferences.instance.getBool(kIsSubscribeCache);
 
   Future<void> queryMyInfo() async {
+    final requestedAccount = account;
     UserProfileInfo? profileInfo = await UserManager.instance.getUserInfo(account.userId);
+    if (!identical(account, requestedAccount)) return;
     if (profileInfo != null && !profileInfo.isNone()) {
       account.myProfile = profileInfo;
       account.followerNum.value = profileInfo.data[Security.security_fansCount] ?? 0;

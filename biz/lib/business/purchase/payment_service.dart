@@ -1,3 +1,11 @@
+import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
+import 'package:in_app_purchase_platform_interface/in_app_purchase_platform_interface.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:in_app_purchase_android/billing_client_wrappers.dart';
+import '../../base/database/data_center.dart';
+import 'purchase_journal.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 import 'dart:io';
@@ -11,7 +19,6 @@ import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/event_center/event_center.dart';
-import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/router/route_helper.dart';
 
 import '../../base/api_service/api_service_export.dart';
@@ -19,8 +26,6 @@ import '../../base/environment/environment.dart';
 import '../../core/account/account_service.dart';
 import '../../shared/alert.dart';
 import '../../shared/toast/toast.dart';
-
-String kCachedExceptionOrderKey = Security.security_kCachedErrorPurchase;
 
 const kIapV1ItemId = -1;
 String get curPayMethod => Platform.isAndroid ? '2' : '3';
@@ -150,7 +155,23 @@ class PurchaseManager {
 
   bool _initialized = false;
 
-  Map<String, Map<String, String>> cachedReceipts = {};
+  PurchaseJournal get _journal => PurchaseJournal(DataCenter.instance.database);
+  StreamSubscription<List<PurchaseDetails>>? _subscription;
+  Timer? _retryTimer;
+  Future<void> _work = Future.value();
+  final Map<String, PurchaseDetails> _storePurchases = {};
+  Account? _purchasingAccount;
+
+  String _key(PurchaseDetails purchase) => sha256.convert(utf8.encode(
+      '${purchase.productID}:${purchase.purchaseID?.isNotEmpty == true ? purchase.purchaseID : purchase.verificationData.serverVerificationData}')).toString();
+
+  Future<void> _enqueue(Future<void> Function() task) {
+    _work = _work.then((_) => task()).catchError((Object error, StackTrace stack) {
+      // Receipts remain in the encrypted journal for the next retry.
+      L.e('[IAP] recovery deferred: ${error.runtimeType}');
+    });
+    return _work;
+  }
 
   InAppPurchase get iap => InAppPurchase.instance;
 
@@ -160,55 +181,84 @@ class PurchaseManager {
 
   FirstPurchaseTask firstRechargeTask = FirstPurchaseTask();
 
-  setup() async {
+  Future<void> setup() async {
     if (_initialized) return;
     _initialized = true;
-    _isAvailable = await iap.isAvailable();
-    if (!_isAvailable) {
-      L.e("[IAP] ⚠️  IAP Service not available");
-    }
     EventCenter.instance.addListener(Security.security_kEventCenterUserDidLogin, onUserDidLogin);
     EventCenter.instance.addListener(Security.security_kEventCenterUserDidLogout, onUserDidLogout);
-    // if (AccountService.instance.loggedIn) {
-    //   getFirstRechargeTask();
-    // }
-    // getFirstRechargeTask();
-    InAppPurchase.instance.purchaseStream.listen((List<PurchaseDetails> purchases) {
-      for (var purchase in purchases) {
+    // Subscribe before querying availability so an early transaction isn't lost.
+    _subscription = iap.purchaseStream.listen((purchases) {
+      for (final purchase in purchases) {
         onPurchaseEventCallback(purchase);
       }
-    });
-    if (AccountService.instance.loggedIn) {
-      fixedExceptionOrdersIfNeeded();
+    }, onError: (Object error) => L.e('[IAP] purchase stream: ${error.runtimeType}'));
+    try {
+      _isAvailable = await iap.isAvailable();
+    } catch (error) {
+      L.e('[IAP] store unavailable: ${error.runtimeType}');
     }
+    _retryTimer = Timer.periodic(const Duration(seconds: 30), (_) => fixedExceptionOrdersIfNeeded());
+    fixedExceptionOrdersIfNeeded();
   }
 
-  dispose() {
+  void dispose() {
+    _retryTimer?.cancel();
+    _subscription?.cancel();
     EventCenter.instance.removeListener(Security.security_kEventCenterUserDidLogin, onUserDidLogin);
+    EventCenter.instance.removeListener(Security.security_kEventCenterUserDidLogout, onUserDidLogout);
+    _initialized = false;
   }
 
   void onUserDidLogin(Event event) {
-    // getFirstRechargeTask();
+    if (!identical(_purchasingAccount, MyAccount)) {
+      purchasingItem = null;
+      _purchasingAccount = null;
+    }
     fixedExceptionOrdersIfNeeded();
   }
 
   void onUserDidLogout(Event event) {
-    // firstRechargeTask.task = {};
+    purchasingItem = null;
+    _purchasingAccount = null;
   }
 
-  void fixedExceptionOrdersIfNeeded() async {
-    await Future.delayed(const Duration(seconds: 5));
-
-    var exceptionOrders = Preferences.instance.getMap(kCachedExceptionOrderKey);
-    L.i('[IAP] fixedOrders: $exceptionOrders');
-    if (exceptionOrders.isNotEmpty) {
-      for (var key in exceptionOrders.keys) {
-        var pair = exceptionOrders[key];
-        var productId = pair[Security.security_pid];
-        var receipt = pair[Security.security_receipt];
-        verifyPurchasedToken(productId, receipt, key);
+  bool _recovering = false;
+  void fixedExceptionOrdersIfNeeded() {
+    if (_recovering || !MyAccount.isLoggedIn) return;
+    _recovering = true;
+    _enqueue(() async {
+      try {
+        final account = MyAccount;
+        if (!account.isLoggedIn) return;
+        if (Platform.isAndroid) {
+          // Query without consuming. This also recovers transactions whose
+          // purchase callback was interrupted by process termination.
+          final result = await iap.getPlatformAddition<InAppPurchaseAndroidPlatformAddition>().queryPastPurchases();
+          if (!identical(account, MyAccount)) return;
+          if (result.error == null) {
+            for (final purchase in result.pastPurchases) {
+              await _handlePurchase(purchase);
+              if (!identical(account, MyAccount)) return;
+            }
+          }
+        }
+        if (!Platform.isAndroid) {
+          for (final purchase in _storePurchases.values.toList()) {
+            await _handlePurchase(purchase);
+            if (!identical(account, MyAccount)) return;
+          }
+        }
+        final records = await _journal.all();
+        for (final record in records) {
+          if (!identical(account, MyAccount)) return;
+          if (record['kind'] == 'purchase' && record['ownerId'] == account.userId && record['finished'] != true) {
+            await _recoverRecord(record, account);
+          }
+        }
+      } finally {
+        _recovering = false;
       }
-    }
+    });
   }
 
   Future<List<ProductDetails>> getIapProducts(Set<String> ids) async {
@@ -228,59 +278,147 @@ class PurchaseManager {
     return _products;
   }
 
-  Future<void> onPurchaseEventCallback(PurchaseDetails purchase) async {
-    debugPrint("[IAP]  purchase callback: ${purchase.productID} pid ${purchase.purchaseID} status: ${purchase.status} error: ${purchase.error}");
+  Future<void> onPurchaseEventCallback(PurchaseDetails purchase) =>
+      _enqueue(() => _handlePurchase(purchase));
 
-    bool verified = false;
-
-    switch (purchase.status) {
-      case PurchaseStatus.purchased:
-      case PurchaseStatus.restored:
-        // if (!purchase.productID.contains(Security.security_weekly) && !purchase.productID.contains(Security.security_monthly) && !purchase.productID.contains(Security.security_yearly)) {
-        //   Preferences.instance.setMap(
-        //       iapCachedKey, {Security.security_pid: purchase.productID, Security.security_receipt: purchase.verificationData.serverVerificationData});
-        // }
-        L.i("[IAP] ✅ 购买成功: ${purchase.productID}, status: ${purchase.status} pid ${purchase.purchaseID} 开始验证Receipt");
-
-        /// 存在正在购买的商品，走订单验证逻辑
-        if (purchasingItem?.iapId == purchase.productID) {
-          purchasingItem!.iapReceipt = purchase.verificationData.serverVerificationData;
-          purchasingItem!.iapPurchaseId = purchase.purchaseID ?? '';
-          verified = await rechargeCallback(purchasingItem!);
-        } else {
-          /// 其他商品，走通用的createAndCallback
-          verified = await verifyPurchase(purchase);
-          completion?.call(verified, verified ? null : Copywriting.security_receipt_Not_Available);
-        }
-        break;
-      case PurchaseStatus.error:
-        if (purchasingItem != null) {
-          Toast.show('Purchase Failed: ${purchase.error}');
-        }
+  Future<void> _handlePurchase(PurchaseDetails purchase) async {
+    final key = _key(purchase);
+    _storePurchases[key] = purchase;
+    if (purchase.status == PurchaseStatus.pending) return;
+    if (purchase.status == PurchaseStatus.error || purchase.status == PurchaseStatus.canceled) {
+      _storePurchases.remove(key);
+      if (identical(_purchasingAccount, MyAccount) &&
+          (purchase.productID.isEmpty || purchasingItem?.iapId == purchase.productID)) {
         purchasingItem = null;
-        completion?.call(false, "Purchase Fail: ${purchase.error}");
-        L.e("[IAP] ❌ Purchase Fail: ${purchase.error}");
-        break;
-      case PurchaseStatus.pending:
-        L.i("[IAP]⌛ Pending: ${purchase.productID}");
-        break;
-      case PurchaseStatus.canceled:
+        _purchasingAccount = null;
         Toast.dismiss();
-        L.i("[IAP] ⌛ canceled: ${purchase.productID}");
-        purchasingItem = null;
-        break;
-    }
-
-    // Billing 8 requires non-consumable purchases and subscriptions to be
-    // acknowledged. Complete only after the server has granted entitlement so
-    // a failed verification can be delivered again by Google Play.
-    if (verified && purchase.pendingCompletePurchase) {
-      try {
-        await iap.completePurchase(purchase);
-        L.i("[IAP] ✅ completePurchase 已调用: ${purchase.productID}");
-      } catch (e) {
-        L.e("[IAP] completePurchase failed for ${purchase.productID}: $e");
+        completion?.call(false, purchase.error?.message);
       }
+      return;
+    }
+    final account = MyAccount;
+    if (!account.isLoggedIn) return;
+    var record = await _journal.read(key);
+    if (!identical(account, MyAccount)) return;
+    if (record == null) {
+      Map<String, dynamic>? intent;
+      final storeOrder = purchase is GooglePlayPurchaseDetails
+          ? purchase.billingClientPurchase.obfuscatedAccountId
+          : purchase is AppStorePurchaseDetails
+              ? purchase.skPaymentTransaction.payment.applicationUsername : null;
+      if (storeOrder != null && storeOrder.isNotEmpty) {
+        intent = await _journal.read('intent:$storeOrder');
+      }
+      if (intent == null && (storeOrder == null || storeOrder.isEmpty || storeOrder == purchasingItem?.iapOurOrderId) && identical(account, _purchasingAccount) && purchasingItem?.iapId == purchase.productID) {
+        intent = await _journal.read('intent:${purchasingItem!.iapOurOrderId}');
+      }
+      if (!identical(account, MyAccount)) return;
+      // Known transactions always retain the original account, even if their
+      // callback arrives while a different account is signed in.
+      if (intent != null && intent['transactionKey'] != null && intent['transactionKey'] != key) {
+        intent = {...intent, 'orderId': ''}; // Keep ownership, but verify the renewal independently.
+      }
+      final catalogItem = allRechargeItems.cast<Map>().firstWhereOrNull((item) => item.iapId == purchase.productID);
+      final isVip = intent?['vip'] as bool? ?? catalogItem?.iapVip;
+      // Unknown restored products are classified from store metadata before
+      // settlement; never infer consumability from a product ID's spelling.
+      record = {
+        'kind': 'purchase', 'key': key,
+        'ownerId': intent?['ownerId'] ?? account.userId,
+        'productId': purchase.productID,
+        'purchaseId': purchase.purchaseID ?? '',
+        'receipt': purchase.verificationData.serverVerificationData,
+        'orderId': intent?['orderId'] ?? '',
+        'verificationOrder': '${intent?['ownerId'] ?? account.userId}_${DateTime.now().millisecondsSinceEpoch}',
+        'vip': isVip, 'verified': false, 'finished': false,
+      };
+      await _journal.savePurchase(record, intent);
+    }
+    final latestReceipt = purchase.verificationData.serverVerificationData;
+    if (record['verified'] != true && latestReceipt.isNotEmpty && record['receipt'] != latestReceipt) {
+      record['receipt'] = latestReceipt;
+      await _journal.save(key, record);
+    }
+    if (record['ownerId'] != account.userId || !identical(account, MyAccount)) return;
+    if (record['finished'] == true) {
+      _storePurchases.remove(key);
+      return;
+    }
+    await _recoverRecord(record, account);
+  }
+
+  Future<void> _recoverRecord(Map<String, dynamic> record, Account account) async {
+    final key = record['key'] as String;
+    bool active() => identical(account, MyAccount) && account.isLoggedIn;
+    final done = await PurchaseRecovery.recover(
+      record: record,
+      save: (value) => _journal.save(key, value),
+      isCurrentAccount: active,
+      verify: () async {
+        final orderId = record['orderId'] as String;
+        final request = orderId.isNotEmpty
+            ? ApiRequest(Apis.security_rechargeCallback, params: {
+                Security.security_ourOrderId: orderId,
+                Security.security_purchaseToken: record['receipt'],
+              })
+            : ApiRequest(Apis.security_fullConfirmPurchase, params: {
+                Security.security_receipt: record['receipt'],
+                Security.security_id: record['productId'],
+                Security.security_store: '1',
+                Security.security_order: record['verificationOrder'],
+                Security.security_channel: Platform.isIOS ? 2 : 1,
+              });
+        final response = await ApiService.instance.sendRequest(request);
+        return response.statusCode == 200 && (response.bsnsCode == 0 || response.bsnsCode == 2010);
+      },
+      settle: () async {
+        final purchase = _storePurchases[key];
+        if (Platform.isAndroid && record['vip'] == null) {
+          final products = await iap.queryProductDetails({record['productId'] as String});
+          if (!active()) return false;
+          final product = products.productDetails.firstWhereOrNull((p) => p.id == record['productId']);
+          if (product is! GooglePlayProductDetails) return false;
+          record['vip'] = product.productDetails.productType == ProductType.subs;
+          await _journal.save(key, record);
+          if (!active()) return false;
+        }
+        if (Platform.isAndroid && record['vip'] == false) {
+          final details = purchase ?? PurchaseDetails(
+            productID: record['productId'], purchaseID: record['purchaseId'],
+            verificationData: PurchaseVerificationData(localVerificationData: '',
+                serverVerificationData: record['receipt'], source: 'google_play'),
+            transactionDate: null, status: PurchaseStatus.purchased,
+          );
+          final result = await iap.getPlatformAddition<InAppPurchaseAndroidPlatformAddition>().consumePurchase(details);
+          // If a previous consume succeeded before the app could checkpoint,
+          // Play reports itemNotOwned on retry. Delivery was already verified.
+          return result.responseCode == BillingResponse.ok || result.responseCode == BillingResponse.itemNotOwned;
+        }
+        if (purchase == null) return false;
+        if (purchase.pendingCompletePurchase) {
+          if (Platform.isAndroid) {
+            final result = await (InAppPurchasePlatform.instance as InAppPurchaseAndroidPlatform).completePurchase(purchase);
+            return result.responseCode == BillingResponse.ok;
+          }
+          await iap.completePurchase(purchase);
+        }
+        return true;
+      },
+    );
+    if (!active()) return;
+    if (purchasingItem?.iapId == record['productId'] && purchasingItem?.iapOurOrderId == record['orderId']) {
+      purchasingItem = null;
+      _purchasingAccount = null;
+      Toast.dismiss();
+      completion?.call(done, done ? null : Copywriting.security_receipt_Not_Available);
+    }
+    if (record['verified'] == true) {
+      AccountService.instance.refreshBalance();
+      AccountService.instance.getPremInfo();
+    }
+    if (done) {
+      _storePurchases.remove(key);
+      Toast.show(Copywriting.security_purchase_successful);
     }
   }
 
@@ -317,9 +455,12 @@ class PurchaseManager {
 
     Toast.loading(status: Copywriting.security_purchasing___);
 
+    final account = MyAccount;
+    _purchasingAccount = account;
     purchasingItem = item;
 
     Map? order = await createRechargeOrder(id: item.iapItemId);
+    if (!identical(account, MyAccount)) return;
     if (order == null) {
       /// 创建订单失败，在上面的流程已经提示错误了。
       purchasingItem = null;
@@ -342,6 +483,7 @@ class PurchaseManager {
 
     if (!_isAvailable) {
       L.e("[IAP] IAP Not Available");
+      purchasingItem = null;
       Toast.show(Copywriting.security_iAP_Service_Not_Available);
       return;
     }
@@ -352,6 +494,7 @@ class PurchaseManager {
       product = (await getIapProducts({item.iapId})).firstOrNull;
       if (product == null) {
         L.e("[IAP] error, ${item.iapId} not found");
+        purchasingItem = null;
         Toast.show('Product not found for ${item.iapId}, please try again later');
         return;
       }
@@ -362,7 +505,14 @@ class PurchaseManager {
     //   item.iapPurchaseId = '20251721212';
     //   verifyOrder(item);
     // }
+    if (!identical(account, MyAccount)) return;
     try {
+      if (item.iapOurOrderId.isEmpty) throw StateError('Missing order id');
+      await _journal.save('intent:${item.iapOurOrderId}', {
+        'kind': 'intent', 'orderId': item.iapOurOrderId,
+        'ownerId': account.userId, 'productId': item.iapId, 'vip': item.iapVip,
+      });
+      if (!identical(account, MyAccount)) return;
       String verifyId = item.iapOurOrderId.isNotEmpty ? item.iapOurOrderId : MyAccount.id;
       final PurchaseParam purchaseParam = PurchaseParam(productDetails: product, applicationUserName: verifyId);
       if (item.iapVip) {
@@ -372,7 +522,7 @@ class PurchaseManager {
           Toast.show('Unable to start purchase, please try again');
         }
       } else {
-        final started = await iap.buyConsumable(purchaseParam: purchaseParam);
+        final started = await iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: !Platform.isAndroid);
         if (!started) {
           purchasingItem = null;
           Toast.show('Unable to start purchase, please try again');
@@ -436,83 +586,6 @@ class PurchaseManager {
       Toast.show(rsp.description);
       return null;
     }
-  }
-
-  String iapCachedKey = Security.security_kCachedIAPOrders;
-
-  /// 验单
-  Future<bool> rechargeCallback(Map item, {bool isRetry = false}) async {
-    Map<String, dynamic> arg = {Security.security_ourOrderId: item.iapOurOrderId, Security.security_purchaseToken: item.iapReceipt};
-
-    ApiRequest request = ApiRequest(Apis.security_rechargeCallback, params: arg);
-    ApiResponse rsp = await ApiService.instance.sendRequest(request);
-    int code = rsp.bsnsCode;
-    if (rsp.isSuccess == true || code == 2010) {
-      completion?.call(true, null);
-      cachedReceipts.remove(purchasingItem?.iapPurchaseId ?? '');
-      Preferences.instance.setMap(iapCachedKey, cachedReceipts);
-      if (item.iapVip) {
-        AccountService.instance.getPremInfo();
-      } else {
-        AccountService.instance.refreshBalance();
-      }
-      Preferences.instance.queryRPConfig();
-
-      purchasingItem = null;
-      Toast.dismiss();
-      showConfirmAlert(Copywriting.security_payment_successful, '${item.iapName} purchased successfully');
-      return true;
-    } else {
-      L.e('[IAP] rechargeCallback failed, $code, ${rsp.description}');
-      if (!isRetry) {
-        /// 重试一次
-        return await rechargeCallback(item, isRetry: true);
-      } else {
-        purchasingItem = null;
-        completion?.call(false, rsp.description);
-
-        L.uploadIfNeed();
-        showConfirmAlert(Copywriting.security_payment_failed, rsp.description, cancelText: Security.security_cancel, confirmText: Copywriting.security_contact_us, onConfirm: () {
-          RouteHelper.toSupportChat();
-        });
-        return false;
-      }
-    }
-  }
-
-  /// 旧接口流程，createAndCallback
-
-  Future<bool> verifyPurchase(PurchaseDetails purchase) async {
-    return await verifyPurchasedToken(purchase.productID, purchase.verificationData.serverVerificationData, purchase.purchaseID ?? '');
-  }
-
-  Future<bool> verifyPurchasedToken(String pid, String receipt, String cacheKey) async {
-    final req = ApiRequest(
-      Apis.security_fullConfirmPurchase,
-      params: {
-        Security.security_receipt: receipt,
-        Security.security_id: pid,
-        Security.security_store: "1",
-        Security.security_order: '${MyAccount.id}_${DateTime
-            .now()
-            .millisecondsSinceEpoch}',
-        Security.security_channel: Platform.isIOS ? 2 : 1,
-      },
-    );
-
-    var rsp = await ApiService.instance.sendRequest(req);
-
-    if (rsp.statusCode == 200 && (rsp.bsnsCode == 0 || rsp.bsnsCode == 2010)) {
-      AccountService.instance.refreshBalance();
-      Toast.show(Copywriting.security_purchase_successful);
-      if (cachedReceipts.containsKey(cacheKey)) {
-        cachedReceipts.remove(cacheKey);
-        Preferences.instance.setMap(kCachedExceptionOrderKey, cachedReceipts);
-      }
-      return true;
-    }
-
-    return false;
   }
 
   Future<Map?> fetchPremiumCards() async {

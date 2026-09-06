@@ -1,3 +1,4 @@
+import '../../../base/database/chat_schema.dart';
 import 'dart:convert';
 
 import 'package:get/get.dart';
@@ -173,28 +174,7 @@ class ChatMessage implements AudioInfoInterface {
 
   static String get tableName => Security.security_chat_message;
 
-  static String get createTableSql => '''
-      CREATE TABLE IF NOT EXISTS $tableName (
-        ${Security.security_id} INTEGER PRIMARY KEY,
-        ${Security.security_ownerId} INTEGER NOT NULL,
-        ${Security.security_senderId} INTEGER NOT NULL,
-        ${Security.security_receiverId} INTEGER NOT NULL,
-        ${Security.security_type} INTEGER NOT NULL,
-        ${Security.security_sessionId} TEXT NOT NULL,
-        ${Security.security_date} INTEGER NOT NULL,
-        ${Security.security_nativeId} TEXT,
-        ${Security.security_content}  TEXT,
-        ${Security.security_sendState}  INTEGER NOT NULL DEFAULT 0,
-        ${Security.security_info}  TEXT,
-        ${Security.security_lockInfo}  TEXT,
-        ${Security.security_uuid}  TEXT,
-        ${Security.security_renewInfo}  TEXT,
-        ${Security.security_like}  INTEGER NOT NULL DEFAULT 0,
-        ${Security.security_name}  TEXT,
-        ${Security.security_avatar}  TEXT,
-        ${Security.security_sessionType}  INTEGER DEFAULT 0
-      )
-    ''';
+  static String get createTableSql => ChatSchema.messagesSql;
 
   Map<String, Object?> toDatabase() {
     return {

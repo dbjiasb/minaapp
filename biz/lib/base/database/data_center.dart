@@ -1,3 +1,5 @@
+import '../../business/purchase/purchase_journal.dart';
+import 'chat_schema.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/other.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -23,7 +25,7 @@ class DataCenter {
 
   static DataCenter get instance => _instance;
 
-  static int version = 1;
+  static int version = 2;
   static String name = 'mina.db';
 
   Map<String, int> upgradeInfo = {};
@@ -47,14 +49,22 @@ class DataCenter {
     observers.add(observer);
   }
 
-  void onCreate(Database database, int version) async {
+  Future<void> onCreate(Database database, int version) async {
+    await ChatSchema.create(database);
+    await PurchaseJournal.create(database);
     createInfo[Security.security_version] = version;
-    observers.map((observer) => {observer.onDatabaseCreate(database, version)});
+    for (final observer in observers) {
+      await observer.onDatabaseCreate(database, version);
+    }
   }
 
-  void onUpgrade(Database database, int oldVersion, int newVersion) async {
+  Future<void> onUpgrade(Database database, int oldVersion, int newVersion) async {
+    await ChatSchema.upgrade(database, oldVersion);
+    await PurchaseJournal.create(database);
     upgradeInfo[Security.security_oldVersion] = oldVersion;
     upgradeInfo[Security.security_newVersion] = newVersion;
-    observers.map((observer) => {observer.onDatabaseUpgrade(database, oldVersion, newVersion)});
+    for (final observer in observers) {
+      await observer.onDatabaseUpgrade(database, oldVersion, newVersion);
+    }
   }
 }

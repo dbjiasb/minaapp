@@ -11,36 +11,6 @@ class ChatMessageHandler {
 
   Database get database => DataCenter.instance.database;
 
-  ChatMessageHandler() {
-    Map createInfo = DataCenter.instance.createInfo;
-    if (createInfo.isNotEmpty) {
-      createTable();
-    }
-
-    Map upgradeInfo = DataCenter.instance.upgradeInfo;
-    if (upgradeInfo.isNotEmpty) {
-      upgradeTable();
-    }
-  }
-
-  Future<void> createTable() async {
-    return await database.execute(ChatMessage.createTableSql);
-  }
-
-  Future<void> upgradeTable() async {
-    Map upgradeInfo = DataCenter.instance.upgradeInfo;
-    int oldVersion = upgradeInfo[Security.security_oldVersion] as int;
-    int newVersion = upgradeInfo[Security.security_newVersion] as int;
-
-    for (int i = oldVersion; i < newVersion; i++) {
-      int toVersion = i + 1;
-      await upgradeToVersion(toVersion);
-    }
-  }
-
-  Future<void> upgradeToVersion(int toVersion) async {
-  }
-
   Future<int> insertMessage(ChatMessage message) async {
     Map<String, Object?> values = message.toDatabase();
     return await database.insert(
@@ -55,8 +25,8 @@ class ChatMessageHandler {
     return await database.update(
       ChatMessage.tableName,
       values,
-      where: Other.security_nativeId___,
-      whereArgs: [message.nativeId],
+      where: '${Security.security_ownerId}=? AND ${Security.security_nativeId}=?',
+      whereArgs: [message.ownerId, message.nativeId],
     );
   }
 
@@ -103,8 +73,8 @@ class ChatMessageHandler {
   Future<ChatMessage?> selectMessage(int id) async {
     final List<Map<String, dynamic>> results = await database.query(
       ChatMessage.tableName,
-      where: Other.security_id____,
-      whereArgs: [id],
+      where: '${Security.security_ownerId}=? AND ${Security.security_id}=?',
+      whereArgs: [userId, id],
     );
 
     if (results.isEmpty) return null;
@@ -114,16 +84,16 @@ class ChatMessageHandler {
   Future<int> deleteMessageById(int msgId) async {
     return await database.delete(
       ChatMessage.tableName,
-      where: "id=?",
-      whereArgs: [msgId],
+      where: "${Security.security_ownerId}=? AND id=?",
+      whereArgs: [userId, msgId],
     );
   }
 
   Future<int> deleteMessagesFromId(String sessionId, int msgId) async {
     return await database.delete(
       ChatMessage.tableName,
-      where: '${Security.security_sessionId}=? AND id>?',
-      whereArgs: [sessionId, msgId],
+      where: '${Security.security_ownerId}=? AND ${Security.security_sessionId}=? AND id>?',
+      whereArgs: [userId, sessionId, msgId],
     );
   }
 }

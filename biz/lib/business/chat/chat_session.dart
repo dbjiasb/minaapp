@@ -93,7 +93,7 @@ class ChatSession {
   bool get isPrivateAI => !isGroup && !isRealChat&&!isTheater;
   bool get isAIPlusChat => accountType == AccType.aiPlus.i;
 
-  int get ownerId => AccountService.instance.account.userId;
+  final int ownerId;
 
   ChatSession({
     required this.id,
@@ -102,7 +102,8 @@ class ChatSession {
     required this.lastMessageTime,
     required this.lastMessageText,
     required this.accountType,
-  });
+    int? ownerId,
+  }) : ownerId = ownerId ?? AccountService.instance.account.userId;
 
   @override
   toString() {
@@ -131,7 +132,8 @@ class ChatSession {
   }
 
   ChatSession.fromDatabase(Map<String, dynamic> map)
-    : id = map[Security.security_id] as String,
+    : ownerId = map[Security.security_ownerId] as int,
+      id = map[Security.security_id] as String,
       name = map[Security.security_name] as String,
       avatar = map[Security.security_avatar] as String,
       lastMessageTime = DateTime.fromMillisecondsSinceEpoch(
@@ -153,7 +155,8 @@ class ChatSession {
 
   //从别的页面跳转到聊天页面，用于初始化聊天页面
   ChatSession.fromRouter(Map router)
-    : id = router[Security.security_id],
+    : ownerId = AccountService.instance.account.userId,
+      id = router[Security.security_id],
       name = router[Security.security_name],
       avatar = router[Security.security_avatar],
       lastMessageTime =
@@ -175,7 +178,8 @@ class ChatSession {
     draft = (router[Security.security_draft] as String? ?? '').obs;
 
   ChatSession.fromStory(Map router)
-      : id = "${router["targetRoleInfo"]?[Security.security_targetUid]}",
+      : ownerId = AccountService.instance.account.userId,
+      id = "${router["targetRoleInfo"]?[Security.security_targetUid]}",
         name = router[Security.security_name],
         avatar = router[Security.security_backgroundUrl],
         // backgroundUrl = (router[Security.security_backgroundUrl] as String? ?? '').obs,
@@ -194,7 +198,8 @@ class ChatSession {
 
   // 从角色数据创建私聊会话
   ChatSession.fromAIRole(Map router)
-      : id = router[Security.security_id] ?? "${router[Security.security_uid] ?? ''}",
+      : ownerId = AccountService.instance.account.userId,
+      id = router[Security.security_id] ?? "${router[Security.security_uid] ?? ''}",
         name = router[Security.security_name] ?? '',
         avatar = router[Security.security_avatar] ?? '',
         backgroundUrl = (router[Security.security_backgroundUrl] as String? ?? '').obs,
