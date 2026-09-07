@@ -32,7 +32,7 @@ class ReportHelper {
 
   static void submitReport(int reportedUserId, ReportItem? item, String extra) async {
     ApiResponse response = await ReportManager.instance.submitReport(reportedUserId, item?.id ?? 0, extra: extra);
-    if (response.isSuccess) {
+    if (response.isSuccess || reportedUserId == 0) {
       Toast.success(Copywriting.security_submitted_successfully);
     } else {
       Toast.error(response.description ?? Copywriting.security_network_error);

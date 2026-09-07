@@ -212,7 +212,7 @@ class ChatRoomView extends StatelessWidget {
                   Copywriting.security_Report,
                   onTap: () {
                     ReportHelper.showReportDialog(
-                      int.parse(viewController.session.id),
+                      viewController.session.userId,
                     );
                   },
                 ),

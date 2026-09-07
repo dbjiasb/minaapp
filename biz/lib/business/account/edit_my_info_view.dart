@@ -33,6 +33,7 @@ class EditMyInfoPage extends StatelessWidget {
         title: Text(Copywriting.security_edit_information, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
         actions: [
           InkWell(
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
             onTap: controller.saveMyInfo,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),

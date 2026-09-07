@@ -36,7 +36,7 @@ class ChatSidebar extends StatelessWidget {
     return Preferences.instance.supportGame(userId);
   }
   bool get supportModeStore {
-    if (!isPgcAiKind) return false;
+    if (!isPgcAiKind || isGroup) return false;
     return Preferences.instance.supportGame(userId);
   }
 
@@ -82,7 +82,7 @@ class ChatSidebar extends StatelessWidget {
 
       List<int> supportItem = [
         if (supportAIDating) SideMenuItemType.dating.index,
-        if (isPgcAiKind) SideMenuItemType.mode.index,
+        if (isPgcAiKind && !isGroup) SideMenuItemType.mode.index,
         SideMenuItemType.mission.index,
         if (supportModeStore) SideMenuItemType.store.index,
       ];
