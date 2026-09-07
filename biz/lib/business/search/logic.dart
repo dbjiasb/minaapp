@@ -1,4 +1,5 @@
 import 'package:biz/base/crypt/routes.dart';
+import 'package:biz/base/preferences/preferences.dart';
 import 'package:get/get.dart';
 import 'package:biz/shared/toast/toast.dart';
 
@@ -19,6 +20,25 @@ class SearchLogic extends GetxController {
 
   static RxList recentSearch = [].obs; //可以直接弄成static，那么就说明大家用的永远是这一份，
   //不加static则每次调用都需要传一次全局的变量
+
+
+  List<String> popSearchList = [
+    Security.security_anime,
+    Security.security_fantasy,
+    Security.security_furry,
+    Security.security_cute,
+    Security.security_romance,
+    Security.security_hero,
+    Security.security_royalty,
+  ];
+
+  @override
+  onInit() {
+    super.onInit();
+
+    popSearchList = Preferences.instance.popSearchKeys;
+
+  }
 
   String convertNum(int num) {
     if (num > 1000) {

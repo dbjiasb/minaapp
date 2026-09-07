@@ -255,6 +255,9 @@ class BasicCore extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: _controller.nameInputController,
+                    onTapOutside: (_) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
                     onChanged: _controller.updateCharacterName,
                     inputFormatters: _controller.nameInputRestrictions,
                     decoration: InputDecoration(

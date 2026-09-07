@@ -64,7 +64,7 @@ class PrivateChatHistoryListView extends StatelessWidget {
                                       avatar: session.avatar,
                                       coverUrl: session.backgroundUrl.value,
                                       accountType: session.accountType,
-                                      type: 3,
+                                      type: session.type,
                                       // 私聊
                                       bio: session.bio,
                                     );

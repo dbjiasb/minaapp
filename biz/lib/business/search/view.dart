@@ -22,16 +22,6 @@ class SearchView extends GetView<SearchLogic> {
   ];
   final RxString _searchValue = "".obs;
 
-  final List<String> _popSearchList = [
-    Security.security_anime,
-    Security.security_fantasy,
-    Security.security_furry,
-    Security.security_cute,
-    Security.security_romance,
-    Security.security_hero,
-    Security.security_royalty,
-  ];
-
   SearchView({super.key});
 
   @override
@@ -278,7 +268,7 @@ class SearchView extends GetView<SearchLogic> {
                     spacing: 8,
                     runSpacing: 12,
                     children:
-                        _popSearchList
+                        controller.popSearchList
                             .map(
                               (popularSearch) => Container(
                                 height: 24,

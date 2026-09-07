@@ -28,13 +28,17 @@ enum AccType {
 }
 
 enum ChatStatus {
-  none,     /// 默认，根据type自动选择
+  none,
+
+  /// 默认，根据type自动选择
   real,
   ai,
   script;
 
   get i => index;
+
   bool get isScript => this == ChatStatus.script;
+
   factory ChatStatus.fromIndex(int i) {
     switch (i) {
       case 1:
@@ -63,7 +67,6 @@ enum ChatStatus {
         return ChatStatus.none;
     }
   }
-
 }
 
 class ChatSession {
@@ -73,24 +76,31 @@ class ChatSession {
   String avatar = '';
   DateTime lastMessageTime;
   String lastMessageText = '';
+
   String get showExtMessage => draft.value.isNotEmpty ? '[Draft] ${draft.value}' : lastMessageText;
   RxString backgroundUrl = ''.obs;
   bool greeted = false;
   RxInt unreadNumber = 0.obs;
   int accountType = 1;
-  int type = 0;//0私聊、1群聊、3剧场
+  int type = 0; //0私聊、1群聊、3剧场
   String bio = '';
   RxInt level = 1.obs;
   RxInt nextLevelRatio = 0.obs;
   Rx<ChatStatus> chatStatus = ChatStatus.none.obs;
   RxString draft = ''.obs;
-  String sessionId ='';//这个是sessionId,例如"SINGLE_SCENE:2:10139:1"
+  String sessionId = ''; //这个是sessionId,例如"SINGLE_SCENE:2:10139:1"
+  String get fixedSessionId => sessionId.isNotEmpty ? sessionId : id;
 
   bool get isRealChat => accountType == AccType.real.i;
+
   bool get isAiChat => isGroup || accountType != AccType.real.i && !isTheater;
+
   bool get isScriptChat => accountType == AccType.script.i;
+
   bool get isPGCAI => accountType == AccType.ai.i || accountType == AccType.script.i || accountType == AccType.aiPlus.i;
-  bool get isPrivateAI => !isGroup && !isRealChat&&!isTheater;
+
+  bool get isPrivateAI => !isGroup && !isRealChat && !isTheater;
+
   bool get isAIPlusChat => accountType == AccType.aiPlus.i;
 
   final int ownerId;
@@ -126,6 +136,7 @@ class ChatSession {
       Security.security_draft: draft.value,
       Security.security_lastMessageText: lastMessageText,
       Security.security_bio: bio,
+      Security.security_sessionId: sessionId,
     };
 
     return dbMap;
@@ -136,17 +147,15 @@ class ChatSession {
       id = map[Security.security_id] as String,
       name = map[Security.security_name] as String,
       avatar = map[Security.security_avatar] as String,
-      lastMessageTime = DateTime.fromMillisecondsSinceEpoch(
-        map[Security.security_lastMessageTime] as int,
-      ),
+      lastMessageTime = DateTime.fromMillisecondsSinceEpoch(map[Security.security_lastMessageTime] as int),
       lastMessageText = map[Security.security_lastMessageText] ?? '',
-      backgroundUrl =
-          (map[Security.security_backgroundUrl] as String? ?? '').obs,
+      backgroundUrl = (map[Security.security_backgroundUrl] as String? ?? '').obs,
       unreadNumber = (map[Security.security_unreadNumber] as int? ?? 0).obs,
       accountType = map[Security.security_accountType] as int,
       type = (map[Security.security_type] as int? ?? 0),
       bio = map[Security.security_bio] as String? ?? '',
-      greeted = true {
+      greeted = true,
+      sessionId = map[Security.security_sessionId] as String? ?? '' {
     level.value = map[Security.security_level] as int? ?? 1;
     nextLevelRatio.value = map[Security.security_nextLevelRatio] as int? ?? 0;
     draft.value = map[Security.security_draft] as String? ?? '';
@@ -159,12 +168,7 @@ class ChatSession {
       id = router[Security.security_id],
       name = router[Security.security_name],
       avatar = router[Security.security_avatar],
-      lastMessageTime =
-          router[Security.security_lastMessageTime] == null
-              ? DateTime.now()
-              : DateTime.fromMillisecondsSinceEpoch(
-                router[Security.security_lastMessageTime],
-              ),
+      lastMessageTime = router[Security.security_lastMessageTime] == null ? DateTime.now() : DateTime.fromMillisecondsSinceEpoch(router[Security.security_lastMessageTime]),
       lastMessageText = router[Security.security_lastMessageText] ?? '',
       backgroundUrl = (router[Security.security_backgroundUrl] as String? ?? '').obs,
       unreadNumber = (router[Security.security_unreadNumber] as int? ?? 0).obs,
@@ -173,9 +177,10 @@ class ChatSession {
       accountType = router[Security.security_accountType] ?? 1,
       type = router[Security.security_type] ?? 0,
       bio = router[Security.security_bio] ?? '',
-    level = (router[Security.security_level] as int? ?? 1).obs,
-    nextLevelRatio = (router[Security.security_nextLevelRatio] as int? ?? 0).obs,
-    draft = (router[Security.security_draft] as String? ?? '').obs;
+      level = (router[Security.security_level] as int? ?? 1).obs,
+      nextLevelRatio = (router[Security.security_nextLevelRatio] as int? ?? 0).obs,
+      draft = (router[Security.security_draft] as String? ?? '').obs,
+      sessionId = router[Security.security_sessionId] ?? "";
 
   ChatSession.fromStory(Map router)
       : ownerId = AccountService.instance.account.userId,
@@ -231,22 +236,19 @@ class ChatSession {
       Security.security_level: level.value,
       Security.security_nextLevelRatio: nextLevelRatio.value,
       Security.security_draft: draft.value,
+      Security.security_sessionId: sessionId,
     });
   }
 
-  static ChatSession get offChatSession => ChatSession(
-    id: '$kOffChatSessionId',
-    name: Copywriting.security_Mina_Support,
-    avatar: "${ApiConfig.cdn}/services/${Security.security_client_config}/icon/mina_team.png",
-    lastMessageText: Copywriting.security_contact_us_for_support_,
-    lastMessageTime: DateTime.now(),
-    accountType: 0,
-  );
+  static ChatSession get offChatSession =>
+      ChatSession(id: '$kOffChatSessionId', name: Copywriting.security_Mina_Support, avatar: "${ApiConfig.cdn}/services/${Security.security_client_config}/icon/mina_team.png", lastMessageText: Copywriting.security_contact_us_for_support_, lastMessageTime: DateTime.now(), accountType: 0);
 
   bool get isOffChatSession => id == kOffChatSessionId.toString();
 
   bool get isGroup => type == SessionType.group;
+
   bool get isTheater => type == SessionType.theater;
+
   bool get isPrivateChat => type == SessionType.private;
 
   int get groupId => safeExtractId(id) ?? 0;

@@ -249,13 +249,24 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
               top: 0,
               right: 0,
               child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   controller.addOrRemoveRoleItem(roleItem);
                 },
-                child: ImageView(
-                  Images.security_ic_chat_msg_delete_png,
-                  width: 16,
-                  height: 16,
+                child: Container(
+                  width: 18,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                    // border: Border.all(color: Colors.white, width: 1),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Icon(
+                    Icons.close_rounded,
+                    color: Colors.white,
+                    size: 13,
+                  ),
                 ),
               ),
             ),
@@ -348,7 +359,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                   Text(
                     Copywriting.security_create_Group,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w900,
                     ),
@@ -367,7 +378,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                               Text(
                                 '${MyAccount.freeCrowedLeftTimes == -1 ? "∞" : "(${MyAccount.freeCrowedUsedTimes}/${(MyAccount.freeCrowedLeftTimes + MyAccount.freeCrowedUsedTimes)})"} free',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
@@ -377,7 +388,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                           : const Text(
                             ' Free',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -395,7 +406,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                           Text(
                             ' ${CrowedManager.instance.createCostValue}',
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 16,
                             ),
                           ),
@@ -530,7 +541,8 @@ class _RolePanelViewState extends State<RolePanelView>
           name,
           style: TextStyle(
             fontSize: 12,
-            color: isSelected ? Colors.white : Color(0xFFABABAD),
+            fontWeight: FontWeight.w700,
+            color: isSelected ? Colors.black : Color(0xFFABABAD),
           ),
         ),
       );

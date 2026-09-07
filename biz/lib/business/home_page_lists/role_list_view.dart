@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../shared/app_theme.dart';
+import '../chat/chat_session.dart';
 import 'role_card_widget.dart';
 import 'role_list_logic.dart';
 
@@ -132,7 +133,7 @@ class RoleListView extends StatelessWidget {
                 avatar: item[Security.security_avatarUrl] ?? '',
                 coverUrl: item[Security.security_coverUrl] ?? item[Security.security_backgroundUrl] ?? '',
                 accountType: item[Security.security_accountType] ?? 1,
-                type: 3,
+                type: SessionType.private,
                 bio: item[Security.security_bio] ?? '',
               );
             },

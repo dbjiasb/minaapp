@@ -34,7 +34,7 @@ class RouteHelper {
     await toChat(id: s.id, name: s.name, avatar: s.avatar, accountType: s.accountType);
   }
 
-  static Future toChat({String id = '', String name = '', String avatar = '', String coverUrl = '', int accountType = 0, int type = 0, String bio = ''}) async {
+  static Future toChat({String id = '', String name = '', String avatar = '', String coverUrl = '', int accountType = 0, int type = 0, String bio = '', String sessionId = ''}) async {
     ChatSession? s;
     String? args;
     try {
@@ -52,6 +52,7 @@ class RouteHelper {
       Security.security_accountType: accountType,
       Security.security_type: type,
       Security.security_bio: bio,
+      Security.security_sessionId: sessionId,
     });
 
     Map<String, dynamic> param = {Security.security_session: args};

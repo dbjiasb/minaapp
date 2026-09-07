@@ -66,8 +66,8 @@ class ChatBottomBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (viewController.isGroup) _buildMembersBar(),
-          if (viewController.isReal) buildGreetTips(),
-          if (viewController.isAi) buildAiTrick(),
+          if (viewController.isReal && !viewController.isGroup) buildGreetTips(),
+          if (viewController.isAi  && !viewController.isGroup) buildAiTrick(),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -606,6 +606,7 @@ class ChatBottomBar extends StatelessWidget {
             item[Security.security_userbase]?[Security.security_nickName] ?? '',
         verticalOffset: -60,
         child: InkWell(
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
           onTap: () {
             viewController.selectMember(item);
           },
@@ -710,7 +711,7 @@ class ChatBottomBar extends StatelessWidget {
   Widget buildAiTrick() {
     var items = [
       {
-        Security.security_title: Security.security_Ask,
+        Security.security_title: Copywriting.security_Ask,
         Security.security_icon: Images.security_btn_pic_png,
         Security.security_action: viewController.askForImage,
       },
@@ -720,12 +721,12 @@ class ChatBottomBar extends StatelessWidget {
         Security.security_action: viewController.askForVideo,
       },
       {
-        Security.security_title: Security.security_create,
+        Security.security_title: Copywriting.security_create,
         Security.security_icon: Images.security_btn_pic_png,
         Security.security_action: onCreateImageButtonClicked,
       },
       {
-        Security.security_title: Security.security_Call,
+        Security.security_title: Copywriting.security_Call,
         Security.security_icon: Images.security_btn_call_png,
         Security.security_action: () => viewController.toCall(1),
       },

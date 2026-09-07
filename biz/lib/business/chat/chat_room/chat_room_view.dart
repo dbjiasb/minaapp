@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:biz/business/chat/chat_room_cells/chat_image_message.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/api_service/api_response.dart';
@@ -110,7 +111,7 @@ class ChatRoomView extends StatelessWidget {
                       onContinue: viewController.onAIContinue,
                       generateVideo: viewController.generateVideo,
                       translate: viewController.isRealChat ? viewController.translateMessage : null,
-                      showTranslateAction: viewController.isRealChat,
+                      showTranslateAction: viewController.isRealChat && !viewController.session.isGroup,
                     );
 
                     if (message is ChatTipsMessage ||
@@ -513,6 +514,30 @@ class ChatRoomView extends StatelessWidget {
                           ),
                           maxLines: 1,
                         ),
+                        if (session.isRealChat && !session.isGroup)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 6,
+                                height: 6,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF34C759),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                Security.security_online,
+                                style: TextStyle(
+                                  color: Color(0xFFB8B8B8),
+                                  fontSize: 11,
+                                  height: 1,
+                                ),
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
                         if (session.isPGCAI)
                           Obx(() {
                             Map mod = AIModeService.instance.getCurMode(
@@ -716,9 +741,9 @@ class ChatRoomViewController extends GetxController {
     ChatManager.instance.currentSession = session;
     //刷新session
     await refreshSession();
-    debugPrint('[ChatRoom] sid:${session.id}, greeted: ${session.greeted}');
+    L.i('[ChatRoom] sid:${session.id}, sessionId: ${session.sessionId}, greeted: ${session.greeted}');
 
-    if (!session.greeted) {
+    if (kDebugMode || !session.greeted) {
       ChatManager.instance.sayHelloIfNeeded(session);
     }
 
@@ -1288,11 +1313,14 @@ class ChatRoomViewController extends GetxController {
     if (wantInfo != null) {
       crowdInfo.value = wantInfo;
       session.bio = crowdInfo.value.scenario;
+      String sessionId = crowdInfo.value.sessionId;
       if (crowdInfo.value.name != session.name ||
           crowdInfo.value.avatar != session.avatar ||
-          crowdInfo.value.chatBackground != session.backgroundUrl.value) {
+          crowdInfo.value.chatBackground != session.backgroundUrl.value ||
+          sessionId != session.sessionId) {
         session.name = crowdInfo.value.name;
-        session.avatar = session.avatar;
+        session.avatar = crowdInfo.value.avatar;
+        session.sessionId = sessionId;
         update([Security.security_kTagChatRoomHeader]);
         ChatManager.instance.updateChatSession(session);
       }

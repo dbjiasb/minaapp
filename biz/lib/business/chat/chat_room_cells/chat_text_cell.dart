@@ -93,7 +93,7 @@ class ChatTextMessage extends ChatMessage {
         nativeId: (const Uuid().v4()).replaceAll('-', ''),
       ) {
     sendState = ChatMessageSendStatus.sending.obs;
-    sessionId = sessionType == 0 ? (senderId == ownerId ? receiverId : senderId).toString() : session?.sessionId ?? '';
+    sessionId = sessionType == 0 ? (senderId == ownerId ? receiverId : senderId).toString() : session?.fixedSessionId ?? '';
   }
 
   @override
@@ -187,7 +187,7 @@ class ChatTextCell extends ChatCell {
           child: Obx(() {
             final hasTranslation = textMessage.translationText.isNotEmpty;
             final hasTranslatedText = hasTranslation && textMessage.translationText.value != 'Translating…';
-            final canTranslate = showTranslateAction && translate != null && textMessage.isText;
+            final canTranslate = showTranslateAction && translate != null && textMessage.isText && !textMessage.isMine();
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,

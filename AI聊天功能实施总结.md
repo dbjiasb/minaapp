@@ -58,8 +58,8 @@
 #### 4.2 角色列表导航
 - **文件**: `biz/lib/business/home_page_lists/role_list_view.dart`
 - **更改**:
-  - 点击角色时路由到私聊（`type = 3`）
-  - 使用 `RouteHelper.toChat()` 并传递 `type: 3`
+  - 点击角色时路由到私聊（`type = 0`）
+  - 使用 `RouteHelper.toChat()` 并传递 `type: 0`
 
 ## 架构说明
 
@@ -69,7 +69,6 @@
 - `type = 0`: 常规聊天（默认，暂未使用）
 - `type = 1`: 剧场聊天（基于故事场景）
 - `type = 2`: 群组聊天
-- `type = 3`: 私聊（一对一聊天）← **新增**
 
 **第二层：accountType字段（私聊子分类）**
 - `accountType = 0`: 真人聊天
@@ -81,7 +80,7 @@
 ### 数据流
 
 1. **用户点击角色** → RoleListView
-2. **导航到私聊** → RouteHelper.toChat(type: 3)
+2. **导航到私聊** → RouteHelper.toChat(type: 0)
 3. **创建会话** → ChatSession.fromRouter() 或 ChatSession.fromAIRole()
 4. **显示聊天界面** → ChatTheaterRoomView（复用现有视图）
 5. **消息同步** → ChatManager（类型无关，自动处理）

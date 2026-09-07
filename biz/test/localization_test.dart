@@ -57,9 +57,15 @@ void main() {
   test('Copywriting getters follow the active locale', () {
     Get.locale = const Locale('de', 'DE');
     expect(Copywriting.security_language, 'Sprache');
+    expect(Copywriting.security_Ask, 'Fragen');
+    expect(Copywriting.security_create, 'Erstellen');
+    expect(Copywriting.security_Call, 'Anrufen');
 
     Get.locale = const Locale('ar', 'AE');
     expect(Copywriting.security_language, 'لغة');
+    expect(Copywriting.security_Ask, 'اطلب');
+    expect(Copywriting.security_create, 'إنشاء');
+    expect(Copywriting.security_Call, 'اتصل');
 
     Get.locale = const Locale('fr', 'FR');
     expect(Copywriting.security_Cancel, 'Annuler');

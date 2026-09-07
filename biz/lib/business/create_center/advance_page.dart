@@ -222,6 +222,9 @@ class AdvanceCore extends StatelessWidget {
                 TextField(
                   controller: controller,
                   inputFormatters: formatters,
+                  onTapOutside: (_) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
                   onSubmitted: (value) {
                     try {
                       FocusScope.of(Get.context!).unfocus();
@@ -314,6 +317,9 @@ class AdvanceCore extends StatelessWidget {
                                         child: TextField(
                                           style: TextStyle(color: isUser ? Colors.black : Colors.black, fontSize: 12, fontWeight: FontWeight.w500, height: 1.3),
                                           controller: _logic.controllers[i],
+                                          onTapOutside: (_) {
+                                            FocusManager.instance.primaryFocus?.unfocus();
+                                          },
                                           onChanged: (value) {
                                             _logic.onInputDialog(isUser ? Security.security_user : Security.security_bot, value, i);
                                           },

@@ -11,6 +11,8 @@ import 'package:biz/shared/alert.dart';
 import '../../core/account/account_service.dart';
 import '../../core/util/device_util.dart';
 import '../../core/util/log_util.dart';
+import '../../localize/localization_service.dart';
+import '../../localize/tab_labels.dart';
 import '../api_service/api_request.dart';
 import '../api_service/api_response.dart';
 import '../api_service/api_service.dart';
@@ -416,13 +418,95 @@ class Preferences {
     return str == '1';
   }
 
-  bool get showRealGirls {
-    String str = appConfig['show_real_girl'] ?? '1';
-    return str == '1';
+  String get realGirlTitle {
+    return appConfig['real_girl_title'] ?? TabLabels.real;
   }
 
   bool get showMomentListTime {
     String str = appConfig['show_mom_list_time'] ?? '1';
     return str == '1';
+  }
+
+  List<String> get popSearchKeys {
+    String str = appConfig['pop_search_keys'] ?? '';
+    Map map = {};
+    try {
+      map = json.decode(str);
+    } catch (e) {
+      L.e('decode popSearchKeys error: $e');
+    }
+
+    List<String> defaults = [
+      Security.security_anime,
+      Security.security_fantasy,
+      Security.security_furry,
+      Security.security_cute,
+      Security.security_romance,
+      Security.security_hero,
+      Security.security_royalty,
+    ];
+
+    if (map.isEmpty) {
+      map = {
+        'en': defaults,
+        'de': [
+          'Anime',
+          'Fantasy',
+          'Furry',
+          'Niedlich',
+          'Romantik',
+          'Held',
+          'Adel',
+        ],
+        'fr': [
+          'Anime',
+          'Fantasy',
+          'Furry',
+          'Mignon',
+          'Romance',
+          'Héros',
+          'Royauté',
+        ],
+        'it': [
+          'Anime',
+          'Fantasy',
+          'Furry',
+          'Carino',
+          'Romance',
+          'Eroe',
+          'Regalità',
+        ],
+        'pt': [
+          'Anime',
+          'Fantasia',
+          'Furry',
+          'Fofo',
+          'Romance',
+          'Herói',
+          'Realeza',
+        ],
+        'es': [
+          'Anime',
+          'Fantasía',
+          'Furry',
+          'Lindo',
+          'Romance',
+          'Héroe',
+          'Realeza',
+        ],
+        'ar': [
+          'أنمي',
+          'فانتازيا',
+          'فروي',
+          'لطيف',
+          'رومانسية',
+          'بطل',
+          'العائلة المالكة',
+        ],
+      };
+    }
+
+    String lang = LocalizationService.currentLocale.languageCode;
+    return map[lang] ?? map['en'] ?? defaults;
   }
 }

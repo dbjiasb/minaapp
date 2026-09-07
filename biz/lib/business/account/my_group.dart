@@ -13,6 +13,7 @@ import '../../base/crypt/security.dart';
 import '../../base/event_center/event_center.dart';
 import '../../base/router/route_helper.dart';
 import '../../shared/app_theme.dart';
+import '../chat/chat_session.dart';
 
 class MyGroupView extends StatefulWidget {
   const MyGroupView({super.key});
@@ -66,11 +67,12 @@ class _MyGroupViewState extends State<MyGroupView> {
     return InkWell(
       onTap: () {
         RouteHelper.toChat(
-          id: (info[Security.security_sessionId] ?? ""),
+          id:  (info[Security.security_sessionId] ?? ""),
+          sessionId: (info[Security.security_sessionId] ?? ""),
           name: (info[Security.security_name] ?? ""),
           avatar: (info[Security.security_avatar] ?? ""),
           coverUrl: (info[Security.security_chatBackground] ?? ""),
-          type: 2,
+          type: SessionType.group,
         );
       },
       child: Container(

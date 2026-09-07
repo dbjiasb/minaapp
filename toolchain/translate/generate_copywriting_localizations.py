@@ -55,6 +55,9 @@ MANUAL_TRANSLATIONS = {
         "security_Cancel": "Abbrechen",
         "security_Confirm": "Bestätigen",
         "security_unlock_cost": "Das Freischalten kostet {amount} {currency}",
+        "security_Ask": "Fragen",
+        "security_Call": "Anrufen",
+        "security_create": "Erstellen",
         "security_just_now": "Gerade eben",
         "security_one_minute_ago": "Vor 1 Minute",
         "security_minutes_ago": "Vor {count} Minuten",
@@ -79,6 +82,9 @@ MANUAL_TRANSLATIONS = {
         "security_Cancel": "Annuler",
         "security_Confirm": "Confirmer",
         "security_unlock_cost": "Le déverrouillage coûtera {amount} {currency}",
+        "security_Ask": "Demander",
+        "security_Call": "Appeler",
+        "security_create": "Créer",
         "security_just_now": "À l'instant",
         "security_one_minute_ago": "Il y a 1 minute",
         "security_minutes_ago": "Il y a {count} minutes",
@@ -103,6 +109,9 @@ MANUAL_TRANSLATIONS = {
         "security_Cancel": "Annulla",
         "security_Confirm": "Conferma",
         "security_unlock_cost": "Lo sblocco costerà {amount} {currency}",
+        "security_Ask": "Chiedi",
+        "security_Call": "Chiama",
+        "security_create": "Crea",
         "security_just_now": "Proprio ora",
         "security_one_minute_ago": "1 minuto fa",
         "security_minutes_ago": "{count} minuti fa",
@@ -127,6 +136,9 @@ MANUAL_TRANSLATIONS = {
         "security_Cancel": "Cancelar",
         "security_Confirm": "Confirmar",
         "security_unlock_cost": "O desbloqueio custará {amount} {currency}",
+        "security_Ask": "Pedir",
+        "security_Call": "Ligar",
+        "security_create": "Criar",
         "security_just_now": "Agora mesmo",
         "security_one_minute_ago": "Há 1 minuto",
         "security_minutes_ago": "Há {count} minutos",
@@ -151,6 +163,9 @@ MANUAL_TRANSLATIONS = {
         "security_Cancel": "Cancelar",
         "security_Confirm": "Confirmar",
         "security_unlock_cost": "El desbloqueo costará {amount} {currency}",
+        "security_Ask": "Pedir",
+        "security_Call": "Llamar",
+        "security_create": "Crear",
         "security_just_now": "Ahora mismo",
         "security_one_minute_ago": "Hace 1 minuto",
         "security_minutes_ago": "Hace {count} minutos",
@@ -175,6 +190,9 @@ MANUAL_TRANSLATIONS = {
         "security_Cancel": "إلغاء",
         "security_Confirm": "تأكيد",
         "security_unlock_cost": "سيكلف فتح القفل {amount} {currency}",
+        "security_Ask": "اطلب",
+        "security_Call": "اتصل",
+        "security_create": "إنشاء",
         "security_just_now": "الآن",
         "security_one_minute_ago": "منذ دقيقة واحدة",
         "security_minutes_ago": "منذ {count} د",
@@ -263,7 +281,13 @@ def translate(source: dict[str, str], target_language: str) -> dict[str, str]:
         time.sleep(0.25)
 
     return {
-        key: source[key] if key in DO_NOT_TRANSLATE else manual.get(key, result[key])
+        key: (
+            source[key]
+            if key in DO_NOT_TRANSLATE
+            else manual[key]
+            if key in manual
+            else result[key]
+        )
         for key in source
     }
 

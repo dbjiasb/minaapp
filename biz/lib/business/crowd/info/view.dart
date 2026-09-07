@@ -30,10 +30,8 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
           icon: ImageView(Images.security_back_png, height: 24, width: 24),
         ),
         backgroundColor: Colors.transparent,
-        title: StyleTabBars(
-          titles: [Copywriting.security_group_Info],
-          margin: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-        ),
+        centerTitle: false,
+        title: Text(Copywriting.security_group_Info, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),),
         actions: [_buildEditAction()],
       ),
       body: _buildBody(),
@@ -43,6 +41,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
   Widget _buildEditAction() {
     return Obx(() {
       return InkWell(
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
         onTap: () {
           if (controller.editing.value) {
             controller.updateCrowInfo();

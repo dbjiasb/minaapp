@@ -20,6 +20,7 @@ class ChatSchema {
       ${Security.security_nextLevelRatio} INTEGER DEFAULT 0,
       ${Security.security_draft} TEXT,
       ${Security.security_bio} TEXT,
+      ${Security.security_sessionId} TEXT,
       PRIMARY KEY (${Security.security_ownerId}, ${Security.security_id})
     )
   ''';

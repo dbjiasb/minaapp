@@ -15,6 +15,7 @@ import '../../base/router/route_helper.dart';
 import '../../core/util/cached_image.dart';
 import '../../shared/widget/app_widgets.dart';
 import '../chat/chat_manager.dart';
+import '../chat/chat_session.dart';
 import '../chat/setting/message_setting.dart';
 import 'chat_history_logic.dart';
 import 'theater_history_list/view.dart';
@@ -177,7 +178,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                               name: e[Security.security_nickname],
                               avatar: e[Security.security_avatar],
                               accountType: e[Security.security_accountType],
-                              type: 0,
+                              type: SessionType.private,
                             );
                           },
                           child: Column(
