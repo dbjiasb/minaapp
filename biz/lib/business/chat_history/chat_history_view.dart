@@ -158,7 +158,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
   Widget _buildRecommendView() {
     return Obx(
       () =>
-          !Preferences.instance.isPreUIA &&
+          // !Preferences.instance.isPreUIA &&
               logic.showRecommend.value &&
               logic.recommendList.isNotEmpty
           ? Column(
