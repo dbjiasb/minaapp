@@ -123,6 +123,7 @@ class PrivateChatSessionCell extends StatelessWidget {
                             AppWidgets.userTag(
                               session.accountType,
                               id: session.id,
+                              isGroup: session.isGroup
                             ),
                           ],
                         ),
