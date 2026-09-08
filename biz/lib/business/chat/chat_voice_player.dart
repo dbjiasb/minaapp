@@ -1,6 +1,8 @@
+import 'package:biz/shared/toast/toast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:biz/business/chat/chat_room_cells/chat_audio_message.dart';
 
+import '../../core/util/log_util.dart';
 import './chat_room_cells/chat_message.dart';
 import './chat_room_cells/chat_text_cell.dart';
 import 'chat_voice_manager.dart';
@@ -40,6 +42,7 @@ class ChatVoicePlayer {
   Rx<ChatMessage?> playingMessage = Rx<ChatMessage?>(null);
 
   Future<void> play(ChatMessage message) async {
+    L.i('[Audio] want to play message: ${message.id}, url: ${message.audioUrl}');
     if (playingMessage.value != null) {
       //1.判断与当前播放的是不是一样
       if (playingMessage.value?.id == message.id) {
@@ -57,8 +60,14 @@ class ChatVoicePlayer {
       changeMessageStatus(message, ChatTextAudioStatus.playing);
       if (message is ChatTextMessage || message is ChatAudioMessage) {
         playingMessage.value = message;
-        await player.setFilePath(path);
-        await player.play();
+        try {
+          await player.setFilePath(path);
+          await player.play();
+        } catch (e) {
+          Toast.show('Playback failed: $e');
+          L.e('Playback failed: $e');
+          playingMessage.value = null;
+        }
       }
     }
   }

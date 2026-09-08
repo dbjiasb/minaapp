@@ -63,14 +63,27 @@ class ChatVoiceManager {
     return md5.convert(utf8.encode(url)).toString();
   }
 
+  String _fileExtensionForUrl(String url) {
+    final path = Uri.tryParse(url)?.path ?? '';
+    final fileName = path.substring(path.lastIndexOf('/') + 1);
+    final dotIndex = fileName.lastIndexOf('.');
+    if (dotIndex >= 0 && dotIndex < fileName.length - 1) {
+      final extension = fileName.substring(dotIndex + 1);
+      if (RegExp(r'^[a-zA-Z0-9]+$').hasMatch(extension)) {
+        return extension.toLowerCase();
+      }
+    }
+    return 'mp3';
+  }
+
   String pathForUrl(String url) {
     String fileName = encodeUrl(url);
-    return '$workDirectory/$fileName.mp3';
+    String extension = _fileExtensionForUrl(url);
+    return '$workDirectory/$fileName.$extension';
   }
 
   String? voicePathForUrl(String url) {
-    String fileName = encodeUrl(url);
-    String path = '$workDirectory/$fileName.mp3';
+    String path = pathForUrl(url);
     if (File(path).existsSync()) {
       return path;
     }
