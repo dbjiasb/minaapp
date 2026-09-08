@@ -11,6 +11,7 @@ import '../../base/crypt/copywriting.dart';
 import '../../base/crypt/security.dart';
 import '../../base/event_center/event_center.dart';
 import '../../base/router/route_helper.dart';
+import '../../base/router/router_names.dart';
 import '../../core/util/cached_image.dart';
 import '../../shared/app_theme.dart';
 import '../../shared/widget/list_status_view.dart';
@@ -146,12 +147,10 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
   }
 
   Widget _buildCompanionListItem(dynamic companion) {
-    String uidStr = (companion[Security.security_uid] ?? 0).toString();
-    String linkNum = RoleItem.shortStringForCount(companion[Security.security_heatInfo]?[Security.security_connectors] ?? 0);
-    String heatNum = RoleItem.shortStringForCount(companion[Security.security_heatInfo]?[Security.security_heatValue] ?? 0);
-
+    int uid = companion[Security.security_uid] ?? 0;
+    String uidStr = uid.toString();
     int shared = companion[Security.security_robotInfo]?[Security.security_shared] ?? 0;
-    int audit = companion[Security.security_audit] ?? 0;
+    final popUpKey = GlobalKey<BubblePopUpState>();
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -188,8 +187,59 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
                       Row(
                         children: [
                           Text(companion[Security.security_nickname], style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                          const Spacer(),
+                          SizedBox(width: 6),
                           ImageView(shared == 1 ? "oc_public.png" : "oc_private.png", height: 20, width: 20),
+                          const Spacer(),
+                          BubblePopUp(
+                            key: popUpKey,
+                            config: BubblePopUpConfig(
+                              baseAnchor: Alignment.centerLeft,
+                              popUpAnchor: Alignment.centerRight,
+                              arrowDirection: ArrowDirection.right,
+                              popUpBorderRadius: BorderRadius.circular(12),
+                              baseBorderRadius: BorderRadius.circular(18),
+                            ),
+                            popUpColor: const Color(0xFF2A282E),
+                            onHover: false,
+                            popUp: Material(
+                              color: Colors.transparent,
+                              child: Container(
+                                width: 124,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF2A282E),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    _buildCompanionAction(
+                                      icon: Icons.edit_outlined,
+                                      title: Copywriting.security_edit,
+                                      onTap: () async {
+                                        await popUpKey.currentState?.controller?.remove();
+                                        RH.toPage(Routers.editOC, args: {Security.security_targetUid: uid});
+                                      },
+                                    ),
+                                    Divider(height: 1, thickness: 1, color: Colors.white.withValues(alpha: 0.08)),
+                                    _buildCompanionAction(
+                                      icon: Icons.delete_outline,
+                                      title: Security.security_delete,
+                                      color: const Color(0xFFFF5B61),
+                                      onTap: () async {
+                                        await popUpKey.currentState?.controller?.remove();
+                                        ApiResponse ret = await CharacterService.instance.deleteOC(uidStr);
+                                        if (ret.isSuccess) {
+                                          controller.myCompanions.remove(companion);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            child: SizedBox(width: 36, height: 36, child: Icon(Icons.more_horiz, color: const Color(0xFF9B999F), size: 24)),
+                          ),
                         ],
                       ),
                       SizedBox(height: 8),
@@ -208,6 +258,27 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
         ],
       ),
     ).marginSymmetric(horizontal: 8);
+  }
+
+  Widget _buildCompanionAction({required IconData icon, required String title, required VoidCallback onTap, Color color = Colors.white}) {
+    return InkWell(
+      onTap: onTap,
+      child: SizedBox(
+        height: 44,
+        child: Row(
+          children: [
+            const SizedBox(width: 14),
+            Icon(icon, color: color, size: 18),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: TextStyle(color: color, fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(width: 14),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
