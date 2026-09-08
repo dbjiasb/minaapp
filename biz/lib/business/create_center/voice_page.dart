@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:biz/base/crypt/images.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:biz/base/crypt/copywriting.dart';
@@ -10,8 +12,33 @@ import '../../base/assets/image_view.dart';
 import '../../core/util/es_helper.dart';
 import '../../shared/app_theme.dart';
 
-class OCVoicePage extends StatelessWidget {
+class OCVoicePage extends StatefulWidget {
+  const OCVoicePage({super.key});
+
+  @override
+  State<OCVoicePage> createState() => _OCVoicePageState();
+}
+
+class _OCVoicePageState extends State<OCVoicePage> {
   final _logic = Get.put(OCVoiceLogic());
+  final player = AudioPlayer();
+  late final StreamSubscription<void> _playerCompleteSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _playerCompleteSubscription = player.onPlayerComplete.listen((_) {
+      _logic.playingVoiceItem.value = {};
+    });
+  }
+
+  @override
+  void dispose() {
+    _logic.playingVoiceItem.value = {};
+    unawaited(_playerCompleteSubscription.cancel());
+    unawaited(player.dispose());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,16 +192,15 @@ class OCVoicePage extends StatelessWidget {
     );
   }
 
-  final player = AudioPlayer();
-
-  void playVoice(Map item) async {
+  Future<void> playVoice(Map item) async {
     _logic.playingVoiceItem.value = item;
 
-    await player.stop();
-    player.play(UrlSource(item[EncHelper.cr_eurl]));
-    player.onPlayerComplete.listen((_) {
+    try {
+      await player.stop();
+      await player.play(UrlSource(item[EncHelper.cr_eurl]));
+    } catch (_) {
       _logic.playingVoiceItem.value = {};
-    });
+    }
   }
 
   Widget buildVoiceItem(Map item, String itemName, List<String> labels) {
@@ -203,14 +229,21 @@ class OCVoicePage extends StatelessWidget {
                 ),
               ),
               Obx(() {
-                return _logic.selectedItem[Security.security_name] == itemName
+                return _logic.selectedItem[Security.security_vid] == item[Security.security_vid]
                     ? Container(
                       width: 24,
                       height: 24,
                       decoration: BoxDecoration(color: AppColors.ocMain, shape: BoxShape.circle),
                       child: const Padding(padding: EdgeInsets.all(2), child: Icon(Icons.check, color: Colors.black, size: 16)),
                     )
-                    : Container();
+                    : Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 1.5),
+                      ),
+                    );
               }),
             ],
           ),
@@ -237,6 +270,10 @@ class OCVoicePage extends StatelessWidget {
   Widget buildAction(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        if (_logic.selectedItem.isEmpty) {
+          Get.back();
+          return;
+        }
         Get.back(
           result: {
             Security.security_name: _logic.selectedItem[Security.security_name] ?? "",
@@ -305,7 +342,16 @@ class OCVoiceLogic extends GetxController {
     super.onInit();
 
     playingVoiceItem = {}.obs;
-    final voiceLibs = Get.arguments;
+    final arguments = Get.arguments;
+    final List voiceLibs;
+    String selectedVid = '';
+    if (arguments is Map) {
+      final rawVoiceLibs = arguments[Security.security_ttsConfig];
+      voiceLibs = rawVoiceLibs is List ? rawVoiceLibs : [];
+      selectedVid = arguments[Security.security_ttsVid]?.toString() ?? '';
+    } else {
+      voiceLibs = arguments is List ? arguments : [];
+    }
     config.value =
         voiceLibs.map((item) {
           return {
@@ -314,8 +360,17 @@ class OCVoiceLogic extends GetxController {
             EncHelper.cr_eurl: item[Security.security_exampleUrl] ?? "",
             Security.security_gender: item[Security.security_gender] ?? "",
             Security.security_def: item[Security.security_def] ?? "",
-            Security.security_tags: item[Security.security_tags] != null ? List<String>.from(item[Security.security_tags]) : null,
+            Security.security_tags: item[Security.security_tags] != null ? List<String>.from(item[Security.security_tags]) : <String>[],
           };
         }).toList();
+
+    if (selectedVid.isNotEmpty) {
+      for (final item in config) {
+        if (item[Security.security_vid]?.toString() == selectedVid) {
+          selectItem(item);
+          break;
+        }
+      }
+    }
   }
 }

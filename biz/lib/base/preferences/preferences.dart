@@ -409,7 +409,7 @@ class Preferences {
   }
 
   bool get showGenerateAudio {
-    String str = appConfig['show_gen_audio'] ?? '1';
+    String str = appConfig['show_gen_audio'] ?? '0';
     return str == '1';
   }
 

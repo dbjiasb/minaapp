@@ -1,6 +1,8 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -25,9 +27,33 @@ import '../../core/util/file_upload.dart';
 import '../../shared/app_theme.dart';
 import '../../shared/toast/toast.dart';
 
-class BasicCore extends StatelessWidget {
+class BasicCore extends StatefulWidget {
+  const BasicCore({super.key});
+
+  @override
+  State<BasicCore> createState() => _BasicCoreState();
+}
+
+class _BasicCoreState extends State<BasicCore> {
   final _controller = Get.put(BasicController());
   final soundPlayer = AudioPlayer();
+  late final StreamSubscription<void> _soundPlayerCompleteSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _soundPlayerCompleteSubscription = soundPlayer.onPlayerComplete.listen((_) {
+      _controller.soundPlaying.value = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.soundPlaying.value = false;
+    unawaited(_soundPlayerCompleteSubscription.cancel());
+    unawaited(soundPlayer.dispose());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -378,11 +404,14 @@ class BasicCore extends StatelessWidget {
     });
   }
 
-  void playSelectedSound() {
+  Future<void> playSelectedSound() async {
     if (_controller.selectedSound[EncHelper.cr_eurl] != null && _controller.selectedSound[EncHelper.cr_eurl] != '' && _controller.soundPlaying.value == false) {
       _controller.soundPlaying.value = true;
-      soundPlayer.play(UrlSource(_controller.selectedSound[EncHelper.cr_eurl]));
-      soundPlayer.onPlayerComplete.listen((_) => _controller.soundPlaying.value = false);
+      try {
+        await soundPlayer.play(UrlSource(_controller.selectedSound[EncHelper.cr_eurl]));
+      } catch (_) {
+        _controller.soundPlaying.value = false;
+      }
     }
   }
 
@@ -598,7 +627,7 @@ class BasicCore extends StatelessWidget {
                                       child: Text(
                                         tag,
                                         style: TextStyle(
-                                          color: Color(0xFFB8B7B4),
+                                          color: _controller.physiqueAttributes[itemKey] == tag ? Colors.black : Color(0xFFB8B7B4),
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -657,7 +686,7 @@ class BasicCore extends StatelessWidget {
                                       child: Text(
                                         tag,
                                         style: TextStyle(
-                                          color: Color(0xffB8B7B4),
+                                          color: _controller.physiqueAttributes[itemKey] == tag ? Colors.black : Color(0xffB8B7B4),
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -954,7 +983,13 @@ class BasicController extends GetxController {
   }
 
   void toVoiceLibrary() async {
-    Map? selectedVoice = await RH.toPage(Routers.createVoice, args: voiceConfigurations);//await Get.toNamed(Routers.createVoice, arguments: voiceConfigurations);
+    Map? selectedVoice = await RH.toPage(
+      Routers.createVoice,
+      args: {
+        Security.security_ttsConfig: voiceConfigurations,
+        Security.security_ttsVid: selectedSound[Security.security_vid],
+      },
+    );
     if (selectedVoice == null) return;
     selectVoice(selectedVoice);
   }
