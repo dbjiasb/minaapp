@@ -142,12 +142,12 @@ class RouteHelper {
   }
 
   static Future toGems() async {
-    if (!kDebugMode) {
+    // if (!kDebugMode) {
       String url = Preferences.instance.rpUrl;
       if (url.isNotEmpty) {
         return await toWeb(url, title: '', hideHeader: 1);
       }
-    }
+    // }
     return await toPage(Routers.rechargeCurrency, args: {Security.security_rcgType: 1});
   }
 

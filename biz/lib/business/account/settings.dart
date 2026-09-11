@@ -43,7 +43,7 @@ class AccountSettings extends StatelessWidget {
       subtitle: LocalizationService.currentLanguage.nativeName,
       onTap: selectLanguage,
     ),
-    // SettingItem(title: Security.security_about, onTap: toAbout),
+    SettingItem(title: Security.security_about, onTap: toAbout),
     SettingItem(
       title: Copywriting.security_terms_of_service,
       onTap: checkTermsOfService,
