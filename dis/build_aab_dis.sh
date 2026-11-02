@@ -1,24 +1,21 @@
-#!/bin/bash -l
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")"
+flutter_bin="${FLUTTER_BIN:-flutter}"
 
 echo " ------------- Build AAB Release --------------------"
-export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
-alias flutter329='/Users/roll/Roll/Library/flutter3.35/bin/flutter'
+"$flutter_bin" --version
 
-flutter329 --version
-
-app_path=$(pwd)
-
-yaml_path=$app_path'/pubspec.yaml'
-echo 'yaml: '$yaml_path
-version_and_build=$(python3 -c "import yaml; print(yaml.safe_load(open('$yaml_path'))['version'])")
-version=$(echo $version_and_build | cut -d "+" -f1)
-sybol_path='./sybol_adr_'$version;
-echo 'sybol: '$sybol_path
+# Resolve first so an incompatible Flutter SDK fails before cleaning the build.
+"$flutter_bin" pub get
+version=$(awk '/^version:/ {split($2, parts, "+"); print parts[1]; exit}' pubspec.yaml)
+symbol_path="./sybol_adr_${version}"
 
 echo 'Start clean'
-flutter329 clean
+"$flutter_bin" clean
 echo 'Start pub get'
-flutter329 pub get -v
+"$flutter_bin" pub get
 echo 'Finish pub get'
-echo 'Start build ios release'
-flutter329 build appbundle --release -v --obfuscate --split-debug-info=$sybol_path
+echo 'Start build Android release (target SDK 36 / Billing 8)'
+"$flutter_bin" build appbundle --release --obfuscate --split-debug-info="$symbol_path"
