@@ -18,4 +18,6 @@ echo 'Start pub get'
 "$flutter_bin" pub get
 echo 'Finish pub get'
 echo 'Start build Android release (target SDK 36 / Billing 8)'
-"$flutter_bin" build appbundle --release --obfuscate --split-debug-info="$symbol_path"
+"$flutter_bin" build appbundle --release --target-platform android-arm64 --obfuscate --split-debug-info="$symbol_path"
+
+python3 ../toolchain/verify_android_release.py build/app/outputs/bundle/release/app-release.aab

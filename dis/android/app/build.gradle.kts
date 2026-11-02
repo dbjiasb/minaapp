@@ -53,6 +53,13 @@ android {
     }
 
     buildTypes {
+        // Flutter adds ABI filters on build types, which override defaultConfig.
+        // Keep the intended ARM64 distribution: Tencent x86_64 binaries are 4 KB aligned.
+        configureEach {
+            ndk.abiFilters.clear()
+            ndk.abiFilters.add("arm64-v8a")
+        }
+
         release {
             isMinifyEnabled = true  // 开启代码混淆
             isShrinkResources = true  // 开启资源压缩

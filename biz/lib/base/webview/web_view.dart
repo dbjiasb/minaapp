@@ -229,11 +229,7 @@ class _WebViewState extends State<WebView> {
   }
 
   void _handleBackPress() async {
-    if (await _controller.canGoBack()) {
-      await _controller.goBack();
-    } else {
-      Get.back();
-    }
+    Get.back();
   }
 
   void _reloadPage() {

@@ -4,7 +4,6 @@ import 'package:biz/base/crypt/images.dart';
 import 'dart:io';
 
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,6 @@ import 'package:biz/core/util/log_util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../base/crypt/copywriting.dart';
 import '../toast/toast.dart';
 
 class VideoPlayerView extends StatelessWidget {
@@ -217,21 +215,7 @@ class VideoPlayerViewController extends GetxController {
 
   Future<void> saveVideoToGallery() async {
     try {
-      if (Platform.isAndroid) {
-        final deviceInfo = await DeviceInfoPlugin().androidInfo;
-        var permission = Permission.storage;
-        if (deviceInfo.version.sdkInt >= 33) {
-          permission = Permission.videos;
-        }
-
-        if (await permission.isDenied || await permission.isRestricted) {
-          final status = await permission.request();
-          if (!status.isGranted) {
-            Toast.show(Copywriting.security_please_grant_storage_permission);
-            return;
-          }
-        }
-      } else if (Platform.isIOS) {
+      if (Platform.isIOS) {
         if (await Permission.photos.isDenied || await Permission.photos.isRestricted) {
           final status = await Permission.photos.request();
           if (!status.isGranted) {
