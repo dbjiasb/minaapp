@@ -66,7 +66,7 @@ class ChatAnchorCardCell extends ChatCell {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Color(0xFF1B181F).withValues(alpha: 0.8),
+        color: AppColors.surfaceMuted.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -83,7 +83,7 @@ class ChatAnchorCardCell extends ChatCell {
             },
             child: Row(
               children: [
-                AvatarView(url: cardMessage.anchorInfo[Security.security_userInfo]?[Security.security_baseInfo]?[Security.security_avatarUrl] ?? '', size: 48, strokeWidth: 1, strokeColor: Colors.white),
+                AvatarView(url: cardMessage.anchorInfo[Security.security_userInfo]?[Security.security_baseInfo]?[Security.security_avatarUrl] ?? '', size: 48, strokeWidth: 1, strokeColor: AppColors.surface),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
@@ -91,12 +91,12 @@ class ChatAnchorCardCell extends ChatCell {
                     children: [
                       Text(
                         cardMessage.anchorInfo[Security.security_userInfo]?[Security.security_baseInfo]?[Security.security_nickName] ?? '',
-                        style: TextStyle(fontWeight: AppFonts.semiBold, color: Colors.white, fontSize: 14, height: 20 / 14),
+                        style: TextStyle(fontWeight: AppFonts.semiBold, color: AppColors.textPrimary, fontSize: 14, height: 20 / 14),
                       ),
                       if (cardMessage.anchorInfo[Security.security_userInfo]?[Security.security_bio]?.isNotEmpty ?? false)
                         Text(
                           cardMessage.anchorInfo[Security.security_userInfo]?[Security.security_bio] ?? "",
-                          style: TextStyle(fontWeight: AppFonts.medium, fontSize: 12, color: Color(0xFF9D9EA5), height: 16 / 12),
+                          style: TextStyle(fontWeight: AppFonts.medium, fontSize: 12, color: AppColors.textSecondary, height: 16 / 12),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ).marginOnly(top: 4),

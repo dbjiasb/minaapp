@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -15,7 +16,7 @@ class AppWidgets {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.purple),
           child: Text(
             'Group',
-            style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 11, color: AppColors.onColor, fontWeight: FontWeight.w800),
           )
       );
     }
@@ -28,7 +29,7 @@ class AppWidgets {
 
   static backBtn({VoidCallback? onPressed, Color? color}) {
     return IconButton(
-      icon: ImageView(Images.security_back_png, height: 24, fit: BoxFit.fitHeight, color: color),
+      icon: Icon(Icons.arrow_back_ios_new_rounded, size: 22, color: color ?? AppColors.textPrimary),
       onPressed: onPressed ?? RouteHelper.back,
     );
   }

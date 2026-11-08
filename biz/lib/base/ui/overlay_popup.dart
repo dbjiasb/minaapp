@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'dart:math' as math;
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -39,9 +40,9 @@ class OverlayPopup extends StatefulWidget {
     required this.menuBuilder,
     required this.pressType,
     this.controller,
-    this.arrowColor = const Color(0xFF4C4C4C),
+    this.arrowColor = AppColors.surface,
     this.showArrow = true,
-    this.barrierColor = Colors.black12,
+    this.barrierColor = AppColors.barrier,
     this.arrowSize = 10.0,
     this.horizontalMargin = 10.0,
     this.verticalMargin = 10.0,

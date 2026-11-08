@@ -1,37 +1,39 @@
-import 'package:biz/base/crypt/routes.dart';
+import 'package:biz/shared/app_theme.dart';
+import 'package:biz/base/assets/local_image_assets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import '../../base/crypt/security.dart';
 
-class CachedImageProvider extends CachedNetworkImageProvider {
-  CachedImageProvider._(String url, {
-    int? maxHeight,
-    int? maxWidth,
-    double scale = 1.0,
-    ErrorListener? errorListener,
-    Map<String, String>? headers,
-    BaseCacheManager? cacheManager,
-    String? cacheKey,
-  }) : super(url, maxHeight: maxHeight, maxWidth: maxWidth, scale: scale, errorListener: errorListener, headers: headers, cacheManager: cacheManager, cacheKey: cacheKey);
-
-  factory CachedImageProvider(String originalUrl, {
-    int? maxHeight,
-    int? maxWidth,
-    double scale = 1.0,
-    ErrorListener? errorListener,
-    Map<String, String>? headers,
-    BaseCacheManager? cacheManager,
-    String? cacheKey,
-  }) {
-
-    String processedUrl = CachedImage.processedImageUrl(originalUrl);
-    return CachedImageProvider._(processedUrl, maxHeight: maxHeight, maxWidth: maxWidth, scale: scale, errorListener: errorListener, headers: headers, cacheManager: cacheManager, cacheKey: cacheKey);
+// Keep the existing constructor-style API for decorations and precaching.
+// ignore: non_constant_identifier_names
+ImageProvider CachedImageProvider(
+  String originalUrl, {
+  int? maxHeight,
+  int? maxWidth,
+  double scale = 1.0,
+  ErrorListener? errorListener,
+  Map<String, String>? headers,
+  BaseCacheManager? cacheManager,
+  String? cacheKey,
+}) {
+  final asset = LocalImageAssets.resolve(originalUrl);
+  if (asset != null) {
+    return ResizeImage.resizeIfNeeded(maxWidth, maxHeight, AssetImage(asset));
   }
+  return CachedNetworkImageProvider(
+    CachedImage.processedImageUrl(originalUrl),
+    maxHeight: maxHeight,
+    maxWidth: maxWidth,
+    scale: scale,
+    errorListener: errorListener,
+    headers: headers,
+    cacheManager: cacheManager,
+    cacheKey: cacheKey,
+  );
 }
 
 class CachedImage extends StatelessWidget {
@@ -59,9 +61,8 @@ class CachedImage extends StatelessWidget {
     this.alignment = Alignment.center,
     this.repeat = ImageRepeat.noRepeat,
     this.borderRadius = BorderRadius.zero,
-      this.color,
+    this.color,
   });
-
 
   static Widget clipImage({
     Key? key,
@@ -74,9 +75,10 @@ class CachedImage extends StatelessWidget {
     BoxFit? fit,
     Alignment alignment = Alignment.center,
     ImageRepeat repeat = ImageRepeat.noRepeat,
-    BorderRadiusGeometry borderRadius = BorderRadius.zero
+    BorderRadiusGeometry borderRadius = BorderRadius.zero,
   }) {
-    return CachedImage(imageUrl: imageUrl,
+    return CachedImage(
+      imageUrl: imageUrl,
       key: key,
       placeholder: placeholder,
       errorWidget: errorWidget,
@@ -92,10 +94,39 @@ class CachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final asset = LocalImageAssets.resolve(imageUrl);
+    if (asset != null) {
+      final provider = AssetImage(asset);
+      return ClipRRect(
+        borderRadius: borderRadius,
+        child: imageBuilder != null
+            ? imageBuilder!(context, provider)
+            : Image(
+                image: provider,
+                width: width,
+                height: height,
+                fit: fit,
+                alignment: alignment,
+                repeat: repeat,
+                color: color,
+                errorBuilder: errorWidget == null
+                    ? null
+                    : (context, error, stackTrace) =>
+                          errorWidget!(context, imageUrl, error),
+              ),
+      );
+    }
     if (!imageUrl.startsWith(Security.security_http)) {
       return Container(
-        color: Colors.grey, width: width, height: height,
-        child: kDebugMode ? Text('Invalid image url: $imageUrl', style: TextStyle(color: Colors.red, fontSize: 10.0),) : null,
+        color: AppColors.surfaceMuted,
+        width: width,
+        height: height,
+        child: kDebugMode
+            ? Text(
+                'Invalid image url: $imageUrl',
+                style: TextStyle(color: Colors.red, fontSize: 10.0),
+              )
+            : null,
       );
     }
     return ClipRRect(
@@ -111,7 +142,7 @@ class CachedImage extends StatelessWidget {
         alignment: alignment,
         repeat: repeat,
         color: color,
-      )
+      ),
     );
   }
 
@@ -140,7 +171,7 @@ class CachedNetImage extends CachedNetworkImage {
     super.fit,
     super.alignment,
     super.repeat,
-    super.color
+    super.color,
   });
 
   factory CachedNetImage({
@@ -157,7 +188,6 @@ class CachedNetImage extends CachedNetworkImage {
     int borderRadius = 0,
     Color? color,
   }) {
-
     String processedUrl = CachedImage.processedImageUrl(imageUrl);
     return CachedNetImage._(
       key: key,

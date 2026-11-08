@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/preferences/preferences.dart';
@@ -85,7 +86,7 @@ class VirtualRoleItem extends RoleItem {
           clipBehavior: Clip.antiAlias,
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.surface.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
               image: DecorationImage(image: CachedImageProvider(coverUrl), fit: BoxFit.cover),
             ),
@@ -100,9 +101,9 @@ class VirtualRoleItem extends RoleItem {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [Color(0xFF252230).withValues(alpha: 0.5), Color(0xFF2F253B).withValues(alpha: 0.9)],
+                      colors: [AppColors.surfaceMuted.withValues(alpha: 0.5), AppColors.surfaceMuted.withValues(alpha: 0.9)],
                     ),
-                    border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.4), width: 1)),
+                    border: Border(top: BorderSide(color: AppColors.border.withValues(alpha: 0.4), width: 1)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,14 +114,14 @@ class VirtualRoleItem extends RoleItem {
                             child: Text(
                               nickname,
                               maxLines: 1,
-                              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
+                              style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w900),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           AppWidgets.userTag(accountType),
                         ],
                       ),
-                      if (bio.isNotEmpty) Text(bio, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500), maxLines: 3),
+                      if (bio.isNotEmpty) Text(bio, style: TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.w500), maxLines: 3),
                       if (showTags) SizedBox(height: 4),
                       if (showTags)
                         Wrap(
@@ -132,10 +133,10 @@ class VirtualRoleItem extends RoleItem {
                                     (e) => Container(
                                       margin: EdgeInsets.only(top: 4),
                                       padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
+                                      decoration: BoxDecoration(color: AppColors.surface.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
                                       child: Text(
                                         e[Security.security_name] ?? '',
-                                        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),
+                                        style: TextStyle(color: AppColors.textPrimary, fontSize: 10, fontWeight: FontWeight.w500),
                                       ),
                                     ),
                                   )
@@ -149,16 +150,16 @@ class VirtualRoleItem extends RoleItem {
                             Flexible(
                               child: Text(
                                 masterName.isEmpty ? '' : '@$masterName',
-                                style: TextStyle(color: Color(0xFFBEBFC5), fontSize: 8, fontWeight: FontWeight.w500),
+                                style: TextStyle(color: AppColors.textSecondary, fontSize: 8, fontWeight: FontWeight.w500),
                               ),
                             ),
                             Row(
                               children: [
                                 ImageView(Images.security_linknum_webp, width: 12, height: 12).marginOnly(right: 2),
-                                Text(linkNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
+                                Text(linkNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 8, fontWeight: FontWeight.w500)),
                                 SizedBox(width: 4),
                                 ImageView(Images.security_heart_count_webp, width: 12, height: 12).marginOnly(right: 2),
-                                Text(heatNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
+                                Text(heatNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 8, fontWeight: FontWeight.w500)),
                               ],
                             ),
                           ],

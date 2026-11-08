@@ -23,12 +23,12 @@ class TheaterHistoryListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.base_background,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: AppColors.background,
+        systemOverlayStyle: AppAppearance.overlayStyle,
         elevation: 0,
         toolbarHeight: 0,
       ),
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Obx(
           () =>
@@ -66,7 +66,7 @@ class TheaterHistoryListView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ImageView(Images.mina_empty_list, width: 172.w, height: 146.h),
-          Text(Copywriting.security_no_data, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal)),
+          Text(Copywriting.security_no_data, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.normal)),
         ],
       ),
     ),
@@ -92,7 +92,7 @@ class TheaterHistoryListView extends StatelessWidget {
             ),
           ),
           SizedBox(height: 4.w),
-          Text(name, style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.normal, color: Colors.white), maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(name, style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.normal, color: AppColors.textPrimary), maxLines: 1, overflow: TextOverflow.ellipsis),
         ],
       ),
     );

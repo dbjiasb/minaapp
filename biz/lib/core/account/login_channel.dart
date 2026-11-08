@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_brand.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'dart:core';
 import 'dart:io';
@@ -73,8 +74,8 @@ class LoginChannelView extends StatelessWidget {
   }
 
   Widget _buildBottomTips() {
-    const TextStyle linkStyle = TextStyle(color: AppColors.mainLightColor, fontSize: 12, decoration: TextDecoration.underline);
-    const TextStyle normalStyle = TextStyle(color: Color(0xFF999999), fontSize: 12, fontWeight: FontWeight.w500);
+    const TextStyle linkStyle = TextStyle(color: AppColors.accentText, fontSize: 12, decoration: TextDecoration.underline);
+    const TextStyle normalStyle = TextStyle(color: AppColors.textSecondary, fontSize: 12, fontWeight: FontWeight.w500);
 
     return RichText(
       text: TextSpan(
@@ -126,9 +127,9 @@ class LoginChannelView extends StatelessWidget {
     LoginChannel email = LoginChannel(
       Security.security_email,
       Copywriting.security_sign_in_with_E_mail,
-      CachedImage(imageUrl: ImagePath.email_icon, width: 24, height: 24),
-      Color(0xFF333333),
-      Colors.white,
+      CachedImage(imageUrl: ImagePath.email_icon, width: 24, height: 24, color: AppAppearance.isLight ? AppColors.accentForeground : Colors.white),
+      AppAppearance.isLight ? AppColors.primary : Color(0xFF333333),
+      AppAppearance.isLight ? AppColors.accentForeground : Colors.white,
       () {
         Get.toNamed(Routers.login);
       },
@@ -136,9 +137,9 @@ class LoginChannelView extends StatelessWidget {
     LoginChannel apple = LoginChannel(
       Security.security_apple,
       Copywriting.security_sign_in_with_Apple,
-      CachedImage(imageUrl: ImagePath.apple_icon, width: 24, height: 24, color: Colors.black),
-      Colors.white, //Color(0xFF333333),
-      Colors.black,
+      CachedImage(imageUrl: ImagePath.apple_icon, width: 24, height: 24, color: AppColors.textPrimary),
+      AppColors.surface,
+      AppColors.textPrimary,
       () async {
         Toast.loading(status: Copywriting.security_signing_in___);
         ApiResponse response = await AccountService.instance.loginWithApple();
@@ -155,8 +156,8 @@ class LoginChannelView extends StatelessWidget {
       Security.security_google,
       Copywriting.security_sign_in_with_Google,
       ImageView(Images.security_login_google_png, width: 24, height: 24),
-      Colors.white,
-      AppColors.base_background,
+      AppColors.surface,
+      AppColors.textPrimary,
       () async {
         bool isDebug = kDebugMode || Environment.instance.isDebug;
         if (isDebug) {
@@ -186,7 +187,7 @@ class LoginChannelView extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 48),
         child: Container(
           height: 54,
-          decoration: BoxDecoration(color: channel.channelColor, borderRadius: BorderRadius.all(Radius.circular(12))),
+          decoration: BoxDecoration(color: channel.channelColor, border: Border.all(color: AppColors.border), borderRadius: BorderRadius.all(Radius.circular(12))),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -211,7 +212,7 @@ class LoginChannelView extends StatelessWidget {
       Container(
         height: 300,
         width: double.infinity,
-        decoration: BoxDecoration(color: AppColors.base_background),
+        decoration: BoxDecoration(color: AppColors.background),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,7 +224,7 @@ class LoginChannelView extends StatelessWidget {
                   },
                   child: Text(
                     e.name,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: e == Environment.instance.networkType ? Colors.red : Colors.white),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: e == Environment.instance.networkType ? Colors.red : AppColors.textPrimary),
                   ),
                 );
               }).toList(),
@@ -250,18 +251,30 @@ class LoginChannelView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CachedImage(imageUrl: ImagePath.loginbg, height: double.infinity, width: double.infinity, fit: BoxFit.cover),
+        if (AppAppearance.isLight)
+          Positioned.fill(child: Container(
+            decoration: const BoxDecoration(gradient: LinearGradient(
+              begin: Alignment.topCenter, end: Alignment.bottomCenter,
+              colors: [Color(0xFFFFF4C7), AppColors.background, AppColors.background],
+            )),
+            child: SafeArea(child: Align(alignment: const Alignment(0, -0.55), child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ClipRRect(borderRadius: BorderRadius.circular(24), child: Image.asset(AppBrand.logoAsset, package: 'biz', width: 88, height: 88, semanticLabel: AppBrand.name)),
+                const SizedBox(height: 20),
+                Text(AppBrand.name, style: const TextStyle(color: AppColors.textPrimary, fontSize: 36, fontWeight: FontWeight.w800)),
+              ],
+            ))),
+          ))
+        else
+          CachedImage(imageUrl: ImagePath.loginbg, height: double.infinity, width: double.infinity, fit: BoxFit.cover),
         Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
             toolbarHeight: 0,
-            systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              statusBarIconBrightness: Brightness.light,
-              statusBarBrightness: Brightness.dark,
-            ),
+            systemOverlayStyle: AppAppearance.overlayStyle,
           ),
           backgroundColor: Colors.transparent,
           body: GestureDetector(

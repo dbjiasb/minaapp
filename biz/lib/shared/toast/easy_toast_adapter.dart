@@ -1,4 +1,5 @@
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/widgets.dart';
+import '../app_theme.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import './toast_interface.dart';
@@ -33,6 +34,12 @@ class EasyToastAdapter implements IToast {
 
   @override
   TransitionBuilder init() {
+    EasyLoading.instance
+      ..loadingStyle = EasyLoadingStyle.custom
+      ..backgroundColor = AppColors.surface
+      ..textColor = AppColors.textPrimary
+      ..indicatorColor = AppColors.accentText
+      ..progressColor = AppColors.accentText;
     return EasyLoading.init();
   }
 }

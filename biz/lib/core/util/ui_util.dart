@@ -20,7 +20,7 @@ class UiUtils {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF9EA1A8),
+              color: AppColors.textSecondary,
             ),
           ),
         ],
@@ -31,7 +31,7 @@ class UiUtils {
   static Widget buildFutureView<T>(
     Future<T>? future,
     SyncBuilder<T> builder, {
-    Color loadColor = AppColors.primary,
+    Color loadColor = AppColors.accentText,
         Widget? emptyView
   }) {
     return FutureBuilder<T>(
@@ -44,7 +44,7 @@ class UiUtils {
             child: Text(
               textAlign: TextAlign.center,
               '${snapshot.error}',
-              style: TextStyle(color: Colors.white, fontSize: 12),
+              style: TextStyle(color: AppColors.textPrimary, fontSize: 12),
             ),
           );
         } else if (snapshot.hasData && snapshot.data is T) {
@@ -60,14 +60,8 @@ class UiUtils {
   static PreferredSizeWidget buildSAppBar(Widget child,
       {List<Widget>? actions, double? leadingWidth, double titleSpacing = 10}) {
     return AppBar(
-        backgroundColor: AppColors.base_background,
-        title: Theme(
-          data: ThemeData(
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-          ),
-          child: child,
-        ),
+        backgroundColor: AppColors.background,
+        title: child,
         titleSpacing: titleSpacing,
         elevation: 0,
         actions: actions,

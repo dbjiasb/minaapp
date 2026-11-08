@@ -25,9 +25,9 @@ class RechargePremiumView extends StatelessWidget {
       init: RechargePremiumViewController(),
       builder: (controller) {
         return Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: AppColors.background,
             body: Stack(children: [
-          ImageView(Images.security_premium_buy_bg_png, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
+          if (!AppAppearance.isLight) ImageView(Images.security_premium_buy_bg_png, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
           _buildBackButton(controller),
           _buildContent(controller)
         ]));
@@ -63,12 +63,12 @@ class RechargePremiumView extends StatelessWidget {
 
   Widget _buildLoadingIndicator() {
     return Center(
-      child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.limeAccent))),
+      child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(AppColors.accentText))),
     );
   }
 
   Widget _buildErrorView() {
-    return Center(child: Text(EncHelper.rcg_errLoData, style: TextStyle(color: Colors.white)));
+    return Center(child: Text(EncHelper.rcg_errLoData, style: TextStyle(color: AppColors.textPrimary)));
   }
 
   Widget _buildSubscribedView(RechargePremiumViewController controller) {
@@ -94,7 +94,7 @@ class RechargePremiumView extends StatelessWidget {
       child: Text(
         EncHelper.rcg_fuAces,
         textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
       ),
     );
   }
@@ -140,15 +140,15 @@ class RechargePremiumView extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(children: [Text(MyAccount.name, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold))]),
+            Row(children: [Text(MyAccount.name, style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold))]),
             const SizedBox(height: 4),
             Row(
               spacing: 4,
               children: [
-                Text(EncHelper.rcg_expOn, style: TextStyle(color: Color(0xFFA19C9A), fontSize: 13, fontWeight: FontWeight.w600)),
+                Text(EncHelper.rcg_expOn, style: TextStyle(color: AppColors.textSecondary, fontSize: 13, fontWeight: FontWeight.w600)),
                 Text(
                   CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? EncHelper.rcg_err,
-                  style: const TextStyle(color: Color(0xFFFFF37C), fontSize: 13, fontWeight: FontWeight.w600),
+                  style: const TextStyle(color: AppColors.accentText, fontSize: 13, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -174,9 +174,9 @@ class RechargePremiumView extends StatelessWidget {
           children: [
             ImageView(Images.security_premium_item_right_png, height: 16, width: 16),
             const SizedBox(width: 4),
-            Expanded(child: Text(name, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500))),
+            Expanded(child: Text(name, style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w500))),
             // const Spacer(),
-            Text(leftTime == -1 ? usedInfo[Security.security_desc] ?? '' :'$leftTime/$totalTimes', style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500)),
+            Text(leftTime == -1 ? usedInfo[Security.security_desc] ?? '' :'$leftTime/$totalTimes', style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w500)),
           ],
         ),
       );
@@ -190,7 +190,7 @@ class RechargePremiumView extends StatelessWidget {
         children: [
           ImageView(Images.security_premium_item_right_png, height: 16, width: 16),
           const SizedBox(width: 4),
-          Expanded(child: Text(feature, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600))),
+          Expanded(child: Text(feature, style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w600))),
         ],
       ),
     );
@@ -301,23 +301,23 @@ class RechargePremiumView extends StatelessWidget {
                 height: 104,
                 width: 110,
                 decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF2A2A23) : const Color(0xFF19191E),
+                  color: isSelected ? AppColors.selected : AppColors.surface,
                   borderRadius: BorderRadius.circular(16),
                   border: isSelected
                       ? Border.all(width: 2, color: const Color(0xFFFFF37C))
-                      : Border.all(width: 1, color: const Color(0x4DFFFFFF)),
+                      : Border.all(width: 1, color: AppColors.border),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       prodName,
-                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       '${rcgItem.iapCurrencySymbol}$dailyPay/day',
-                      style: const TextStyle(color: Color(0x99FFFFFF), fontSize: 11, fontWeight: FontWeight.w500),
+                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 11, fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -325,7 +325,7 @@ class RechargePremiumView extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: isSelected ? const Color(0xFFFFF37C) : const Color(0xFF999999),
+                        color: isSelected ? AppColors.accentText : AppColors.textSecondary,
                       ),
                     ),
                     if (hasOrig) ...[
@@ -334,9 +334,9 @@ class RechargePremiumView extends StatelessWidget {
                         '${rcgItem.iapCurrencySymbol}${(origPrice * 0.01).toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontSize: 12,
-                          color: Color(0x66FFFFFF),
+                          color: AppColors.textSecondary,
                           decoration: TextDecoration.lineThrough,
-                          decorationColor: Color(0x66FFFFFF),
+                          decorationColor: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -352,7 +352,7 @@ class RechargePremiumView extends StatelessWidget {
                     strokeColor: Color(0xFFFFF37C),
                     child: Text(
                       'Save ${(dscnt * 100).toInt()}%',
-                      style: const TextStyle(color: Color(0xFF07070A), fontSize: 11, fontWeight: FontWeight.w900),
+                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w900),
                     ),
                   ),
                 ),
@@ -364,7 +364,7 @@ class RechargePremiumView extends StatelessWidget {
 
   List<Widget> _buildFooter(RechargePremiumViewController controller) {
     return [
-      Text(Copywriting.security_by_clicking_subscribe__you_will_be_charged__and_your_subscription_will_automatically_renew_at_the_same_price_and_duration_until_canceled_through_App_Store_settings__By_proceeding__you_agree_to_our_terms_, style: TextStyle(color: Color(0x66FFFFFF), fontSize: 11, fontWeight: FontWeight.w500), textAlign: TextAlign.left),
+      Text(Copywriting.security_by_clicking_subscribe__you_will_be_charged__and_your_subscription_will_automatically_renew_at_the_same_price_and_duration_until_canceled_through_App_Store_settings__By_proceeding__you_agree_to_our_terms_, style: TextStyle(color: AppColors.textSecondary, fontSize: 11, fontWeight: FontWeight.w500), textAlign: TextAlign.left),
       _buildSubscribeButton(controller),
       _buildLegalLinks(),
     ];
@@ -380,7 +380,7 @@ class RechargePremiumView extends StatelessWidget {
         height: 48,
         alignment: Alignment.center,
         decoration: BoxDecoration(color: AppColors.premMain, borderRadius: BorderRadius.circular(24)),
-        child: Text(EncHelper.rcg_btnSubs, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+        child: Text(EncHelper.rcg_btnSubs, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
       ),
     );
   }
@@ -391,12 +391,12 @@ class RechargePremiumView extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () => launchUrl(EncHelper.rcg_urlTrms),
-          child: Text(EncHelper.rcg_trms, style: TextStyle(color: Color(0xFFD5D4D3), fontSize: 10, fontWeight: FontWeight.w500)),
+          child: Text(EncHelper.rcg_trms, style: TextStyle(color: AppColors.textPrimary, fontSize: 10, fontWeight: FontWeight.w500)),
         ),
         const SizedBox(width: 12),
         TextButton(
           onPressed: () => launchUrl(EncHelper.rcg_urlPrivacy),
-          child: Text(EncHelper.rcg_privacy, style: TextStyle(color: Color(0xFFD5D4D3), fontSize: 10, fontWeight: FontWeight.w500)),
+          child: Text(EncHelper.rcg_privacy, style: TextStyle(color: AppColors.textPrimary, fontSize: 10, fontWeight: FontWeight.w500)),
         ),
       ],
     );

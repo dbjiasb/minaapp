@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -52,13 +53,13 @@ class ChatTheaterBriefCell extends ChatCell {
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.all(10),
-          color: Colors.white.withValues(alpha: 0.9),
+          color: AppColors.surface.withValues(alpha: 0.9),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(Copywriting.security_story_background, style: TextStyle(fontSize: 11, color: Color(0xFF0F0F0F), fontWeight: FontWeight.bold)),
+              Text(Copywriting.security_story_background, style: TextStyle(fontSize: 11, color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
               SizedBox(height: 10,),
-              Text(chatTheaterBriefMessage.brief, style: TextStyle(fontSize: 11, color: Color(0x9F0F0F0F), fontWeight: FontWeight.bold)),
+              Text(chatTheaterBriefMessage.brief, style: TextStyle(fontSize: 11, color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
             ],
           ),
         ),

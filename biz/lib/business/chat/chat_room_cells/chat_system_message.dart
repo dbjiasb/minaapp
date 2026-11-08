@@ -57,12 +57,12 @@ class ChatSystemCell extends ChatCell {
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
-                  color: Color(0xFF000000).withValues(alpha: 0.2),
+                  color: (AppAppearance.isLight ? AppColors.surface : Color(0xFF000000).withValues(alpha: 0.2)),
                 ),
                 child: Text(
                   Copywriting.security_notice__Everything_AI_says_is_made_up,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 11,
                     fontWeight: AppFonts.medium,
                   ),

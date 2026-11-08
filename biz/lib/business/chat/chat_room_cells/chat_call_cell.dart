@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
@@ -93,9 +94,9 @@ class ChatCallCell extends ChatCell {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ImageView(callMessage.callIcon, width: 20, height: 20, color: Colors.black),
+                ImageView(callMessage.callIcon, width: 20, height: 20, color: AppColors.textPrimary),
                 SizedBox(width: 4),
-                Text(callMessage.desc, style: TextStyle(color: Colors.black, fontSize: 14)),
+                Text(callMessage.desc, style: TextStyle(color: AppColors.textPrimary, fontSize: 14)),
               ],
             ),
           ),

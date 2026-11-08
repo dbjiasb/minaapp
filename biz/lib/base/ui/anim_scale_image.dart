@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -100,7 +101,7 @@ class _AnimScaleImageState extends State<AnimScaleImage>
           child: Container(
             width: width,
             height: height,
-            color: Colors.grey,
+            color: AppColors.surfaceMuted,
           ));
     };
   }
@@ -116,7 +117,7 @@ class _AnimScaleImageState extends State<AnimScaleImage>
           child: Container(
             width: width,
             height: height,
-            color: Colors.grey,
+            color: AppColors.surfaceMuted,
           ));
     };
   }

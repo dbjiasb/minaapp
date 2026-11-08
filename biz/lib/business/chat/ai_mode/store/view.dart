@@ -25,7 +25,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF12151C),
+      backgroundColor: AppColors.background,
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -34,11 +34,11 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
         leadingWidth: 40,
         centerTitle: false,
         // automaticallyImplyLeading: false,
-        title: Text('Store${''}', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.start,),
+        title: Text('Store${''}', style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.start,),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         // titleSpacing: titleSpacing,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+        systemOverlayStyle: AppAppearance.overlayStyle,
         leading: Center(child: InkWell(
           onTap: () {
             Get.back();
@@ -85,7 +85,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
               } else {
                 return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primary,
+                  color: AppColors.accentText,
                 ),
               );
               }
@@ -96,6 +96,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
   }
 
   Widget drawBG() {
+    if (AppAppearance.isLight) return const ColoredBox(color: AppColors.background);
     return ImageView(
       Images.security_mode_store_top_bg_webp,
       fit: BoxFit.cover,
@@ -156,7 +157,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
                                     end: Alignment.bottomCenter,
                                     colors: [
                                       Colors.transparent,
-                                      Colors.black,
+                                      AppColors.surfaceMuted,
                                     ]
                                 ),
                                 borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
@@ -166,7 +167,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
                                 children: [
                                   Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 5),
-                                      child: Text('${mode[Security.security_name]}', style: const TextStyle(color: Colors.white, fontSize: 13),textAlign: TextAlign.center, maxLines: 3, overflow: TextOverflow.ellipsis,)
+                                      child: Text('${mode[Security.security_name]}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 13),textAlign: TextAlign.center, maxLines: 3, overflow: TextOverflow.ellipsis,)
                                   ),
                                   SizedBox(height: 8,),
                                   Row(
@@ -207,7 +208,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
           Container(
             alignment: Alignment.center,
             height: 34,
-            child: Text('${mode[ES.cName]}', style: const TextStyle(color: Color(0xFFDFD1FF), fontSize: 14),),
+            child: Text('${mode[ES.cName]}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),),
           ),
           GetBuilder<AIModeStoreController>(
               id: 'StoreObj_${mode[Security.security_id]}',
@@ -225,7 +226,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
                             fit: BoxFit.fill
                         )
                     ) : null,
-                    child: mode[Security.security_own] == 0 ? drawPayBtn(mode) : Text(Security.security_owned, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                    child: mode[Security.security_own] == 0 ? drawPayBtn(mode) : Text(Security.security_owned, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
                   ),
                 );
               }
@@ -246,7 +247,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
           children: [
             ImageView(mode[ES.costType] == 0 ? Images.security_coin_png : Images.security_gem_png, width: 16, height: 16),
             const SizedBox(width: 2),
-            Text('${hasDiscount ? mode[ES.dp] : mode[Security.security_price]}', style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold))
+            Text('${hasDiscount ? mode[ES.dp] : mode[Security.security_price]}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold))
           ],
         ),
         if (hasDiscount) Row(
@@ -254,7 +255,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
           children: [
             ImageView(mode[ES.costType] == 0 ?  Images.security_coin_png : Images.security_gem_png, width: 10, height: 10),
             const SizedBox(width: 1),
-            Text('${mode[Security.security_price]}', style: const TextStyle(color: Colors.white, fontSize: 9, decoration: TextDecoration.lineThrough, height: 1))
+            Text('${mode[Security.security_price]}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 9, decoration: TextDecoration.lineThrough, height: 1))
           ],
         )
       ],

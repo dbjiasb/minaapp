@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedTextController {
@@ -68,7 +69,7 @@ class AnimatedTextState extends State<AnimatedTextView>
         String animatedText = widget.text.substring(0, _textAnimation.value);
         return Text(
           animatedText,
-          style: widget.style ?? TextStyle(fontSize: 16, color: Colors.white),
+          style: widget.style ?? TextStyle(fontSize: 16, color: AppColors.textPrimary),
         );
       },
     );

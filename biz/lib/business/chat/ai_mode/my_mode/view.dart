@@ -46,7 +46,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
               child: SizedBox(
                 width: 32,
                 height: 32,
-                child: CircularProgressIndicator(strokeWidth: 3.0, color: Colors.white,),
+                child: CircularProgressIndicator(strokeWidth: 3.0, color: AppColors.accentText,),
               ),
             );
           } else {
@@ -65,7 +65,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                       children: [
                         Text(
                           snapshot.data?.description ?? Copywriting.security_an_error_occurred__please_try_again_later_,
-                          style: const TextStyle(color: Colors.white, fontSize: 16),
+                          style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -74,17 +74,17 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
           }
           return Scaffold(
               extendBodyBehindAppBar: true,
-              backgroundColor: Colors.black,
+              backgroundColor: AppColors.background,
               appBar: AppBar(
                 title: GetBuilder<MyAIModeLogic>(
                     id: kModeAppBarTitleId,
                     builder: (logic) {
                       return Text(hasData ? (curMode[ES.cName] ?? "") : '',
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18));
+                          style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 18));
                     }),
                 backgroundColor: Colors.transparent,
                 elevation: 0.0,
-                systemOverlayStyle: SystemUiOverlayStyle.light,
+                systemOverlayStyle: AppAppearance.overlayStyle,
                 actions: [
                   GestureDetector(
                     onTap: () {
@@ -129,7 +129,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
               width: double.infinity,
               height: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: AppColors.surfaceMuted,
                   image: DecorationImage(
                     image: CachedNetworkImageProvider(
                       img,
@@ -144,7 +144,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
           // margin: EdgeInsets.only(top: 81.w, bottom: 81.w),
           width: double.infinity,
           height: double.infinity,
-          color: Colors.black.withValues(alpha: 0.15),
+          color: AppColors.background.withValues(alpha: AppAppearance.isLight ? 0.94 : 0.15),
         ),
         Obx(() {
           return curMode[Security.security_own] == 0
@@ -154,7 +154,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                   width: double.infinity,
                   height: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.5),
+                    color: AppColors.surfaceMuted.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: ImageView(
@@ -207,7 +207,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
             alignment: Alignment.bottomCenter,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                  stops: [0.0, 0.71, 1], colors: [Colors.transparent, Colors.black, Colors.black], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                  stops: [0.0, 0.71, 1], colors: [Colors.transparent, AppColors.surfaceMuted, AppColors.surfaceMuted], begin: Alignment.topCenter, end: Alignment.bottomCenter),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -216,9 +216,9 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                   height: 40,
                   width: 288,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider(Images.security_mode_name_bg_webp))),
+                  decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(12)),
                   child: Obx(() {
-                    return Text('${curMode[Security.security_name]}'.tr, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold))
+                    return Text('${curMode[Security.security_name]}'.tr, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold))
                         .marginOnly(bottom: 2);
                   }),
                 ),
@@ -251,7 +251,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                       constraints: const BoxConstraints(minHeight: 64),
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text(curMode[Security.security_gainWayDesc] ?? '',
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 14, fontWeight: FontWeight.w500)));
+                          style: TextStyle(color: AppColors.textPrimary.withValues(alpha: 0.5), fontSize: 14, fontWeight: FontWeight.w500)));
                 }),
                 Obx(() {
                   return drawActionButton(curMode);
@@ -314,7 +314,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
             if (toBuy) {
               child = drawPayButton(mode);
             } else {
-              child = Text(aText(), style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold));
+              child = Text(aText(), style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold));
             }
             return child;
           }
@@ -329,7 +329,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
               alignment: Alignment.center,
               height: 37,
               // width: 140,
-              decoration: BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider(btnBg()), fit: BoxFit.fitHeight)),
+              decoration: BoxDecoration(color: AppColors.selected, borderRadius: BorderRadius.circular(20)),
               child: drawChild(),
             ),
           );
@@ -347,7 +347,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
           children: [
             ModeWidget.wealthIcon(mode[ES.costType]),
             const SizedBox(width: 2),
-            Text('${hasDiscount ? mode[ES.dp] : mode[Security.security_price]}', style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold))
+            Text('${hasDiscount ? mode[ES.dp] : mode[Security.security_price]}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold))
           ],
         ),
         if (hasDiscount)
@@ -356,7 +356,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
             children: [
               ModeWidget.wealthIcon(mode[ES.costType], width: 10, height: 10),
               const SizedBox(width: 1),
-              Text('${mode[Security.security_price]}', style: const TextStyle(color: Colors.white, fontSize: 9, decoration: TextDecoration.lineThrough, height: 1))
+              Text('${mode[Security.security_price]}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 9, decoration: TextDecoration.lineThrough, height: 1))
             ],
           )
       ],
@@ -403,7 +403,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                           if (mode[Security.security_own] == 0)
                             Container(
                               alignment: Alignment.center,
-                              color: Colors.black.withOpacity(0.5),
+                              color: AppColors.surfaceMuted.withOpacity(0.5),
                               height: 100,
                               width: 57,
                               child: ImageView(

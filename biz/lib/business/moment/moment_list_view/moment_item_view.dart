@@ -116,34 +116,38 @@ class _MomentItemViewState extends State<MomentItemView> {
     ReportManager.sendEvent(Security.security_pv_user_moment_list, {
       Security.security_listType: widget.listType.toString(),
     });
-    return AppBarExt.mainBody<Map?>(getListData(0), loadColor: Colors.white, (
-      data,
-      context,
-    ) {
-      var rawData = data?[Security.security_param] ?? [];
-      List<Map> listData = (rawData as List).cast<Map>();
-      if (listData.isEmpty) {
-        return InkWell(
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-          onTap: () {
-            setState(() {});
-          },
-          child: _buildEmptyView(),
-        );
-      } else {
-        refreshData(listData);
-        fromId = data?[Security.security_nextId];
-        hasMore.value = data?[Security.security_hasMore] == 1;
-        return _buildView();
-      }
-    });
+    return ColoredBox(
+      color: AppColors.background,
+      child: AppBarExt.mainBody<Map?>(
+        getListData(0),
+        (data, context) {
+          var rawData = data?[Security.security_param] ?? [];
+          List<Map> listData = (rawData as List).cast<Map>();
+          if (listData.isEmpty) {
+            return InkWell(
+              overlayColor: WidgetStateProperty.all(Colors.transparent),
+              onTap: () {
+                setState(() {});
+              },
+              child: _buildEmptyView(),
+            );
+          } else {
+            refreshData(listData);
+            fromId = data?[Security.security_nextId];
+            hasMore.value = data?[Security.security_hasMore] == 1;
+            return _buildView();
+          }
+        },
+        loadColor: AppColors.accentText,
+      ),
+    );
   }
 
   Widget _buildEmptyView() {
     return Container(
       alignment: Alignment.center,
       color: widget.listType == 2
-          ? AppColors.base_background
+          ? AppColors.background
           : Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -181,13 +185,13 @@ class _MomentItemViewState extends State<MomentItemView> {
                       imageUrl: '${MomentRes.base}iic_add.webp',
                       width: 16,
                       height: 16,
-                      color: Colors.black,
+                      color: AppColors.textPrimary,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       Copywriting.security_create_Moment,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: AppColors.textPrimary,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -315,7 +319,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                   Text(
                     momentInfo[Security.security_nickname] ?? '',
                     style: const TextStyle(
-                      color: Color(0xFFABABAD),
+                      color: AppColors.textPrimary,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
@@ -326,7 +330,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                         momentInfo[Security.security_createTime],
                       ),
                       style: const TextStyle(
-                        color: Color(0xFF494C53),
+                        color: AppColors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -339,7 +343,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                   return Container(
                     width: 72,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: IntrinsicWidth(
@@ -362,7 +366,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                                   child: Text(
                                     Security.security_delete,
                                     style: TextStyle(
-                                      color: Color(0xFF080E1B),
+                                      color: AppColors.textPrimary,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12,
                                     ),
@@ -385,7 +389,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                                   child: Text(
                                     Security.security_report,
                                     style: TextStyle(
-                                      color: Color(0xFF080E1B),
+                                      color: AppColors.textPrimary,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12,
                                     ),
@@ -399,6 +403,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                 pressType: PressType.singleClick,
                 child: CachedImage(
                   imageUrl: MomentRes.base + Images.security_iic__share_webp,
+                  color: AppColors.textSecondary,
                   width: 20,
                   height: 20,
                 ),
@@ -411,7 +416,7 @@ class _MomentItemViewState extends State<MomentItemView> {
               width: double.infinity,
               child: Text(
                 momentInfo[Security.security_content] ?? '',
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
               ),
             ),
           if ((momentInfo[Security.security_resInfos] ?? []).isNotEmpty)
@@ -450,7 +455,7 @@ class _MomentItemViewState extends State<MomentItemView> {
           Text(
             Copywriting
                 .security_this_moment_does_not_meet_community_requirements__please_edit,
-            style: TextStyle(color: Color(0xFFFF1E6B), fontSize: 9),
+            style: TextStyle(color: AppColors.link, fontSize: 9),
           ),
         ],
       ),
@@ -462,7 +467,7 @@ class _MomentItemViewState extends State<MomentItemView> {
       margin: const EdgeInsets.only(top: 12),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0x00FFFFFF), Color(0x1AFFFFFF), Color(0x00FFFFFF)],
+          colors: [Colors.transparent, AppColors.border, Colors.transparent],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
@@ -498,7 +503,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                 width: double.infinity,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) {
-                  return Container(color: Colors.grey, width: double.infinity);
+                  return Container(color: AppColors.surfaceMuted, width: double.infinity);
                 },
                 borderRadius: BorderRadius.all(Radius.circular(12)),
                 placeholder: (context, url) {
@@ -506,7 +511,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                     width: double.infinity,
                     height: double.infinity,
                     decoration: BoxDecoration(
-                      color: Color(0xFF2F3137),
+                      color: AppColors.surfaceMuted,
                       borderRadius: BorderRadius.circular(16),
                     ),
                   );
@@ -553,7 +558,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.6),
+                        color: AppColors.surfaceMuted.withOpacity(0.6),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Row(
@@ -567,7 +572,7 @@ class _MomentItemViewState extends State<MomentItemView> {
                           Text(
                             '+$length',
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 10,
                             ),
                           ),
@@ -603,8 +608,8 @@ class _MomentItemViewState extends State<MomentItemView> {
             '${momentInfo[Security.security_likeCount]}',
             style: TextStyle(
               color: momentInfo[Security.security_isLike] == 1
-                  ? AppColors.primary
-                  : const Color(0xFF5C5E64),
+                  ? AppColors.accentText
+                  : AppColors.textSecondary,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -628,7 +633,7 @@ class _MomentItemViewState extends State<MomentItemView> {
         Text(
           '$commentCount',
           style: const TextStyle(
-            color: Color(0xFF5C5E64),
+            color: AppColors.textSecondary,
             fontSize: 12,
             fontWeight: FontWeight.w600,
           ),

@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:ui';
@@ -64,7 +65,7 @@ class CallView extends GetView<CallController> {
     Get.put(controller);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.background,
       extendBodyBehindAppBar: true,
       // appBar: _buildAppBar(),
       body: WillPopScope(
@@ -77,10 +78,14 @@ class CallView extends GetView<CallController> {
                 FocusScope.of(context).unfocus();
               },
               child: Container(
-                color: Colors.black,
+                color: AppColors.surfaceMuted,
                 child: Stack(
                   children: [
                     controller.isVideo ? _drawFullVideoView() : _drawBg(),
+                    if (AppAppearance.isLight)
+                      Positioned(top: 0, left: 0, right: 0,
+                        height: MediaQuery.paddingOf(context).top,
+                        child: const ColoredBox(color: AppColors.background)),
                     Obx(() {
                       return (controller.callState == CallState.answered || controller.everConnected) ? _buildConnectedView() : _drawCallingView();
                     }),
@@ -106,7 +111,7 @@ class CallView extends GetView<CallController> {
         padding: const EdgeInsets.all(16),
         child: const Icon(
           Icons.call_end,
-          color: Colors.white,
+          color: AppColors.onColor,
           size: 32,
         ),
       ),
@@ -125,7 +130,7 @@ class CallView extends GetView<CallController> {
         padding: const EdgeInsets.all(16),
         child: Icon(
           Icons.call,
-          color: Colors.white,
+          color: AppColors.onColor,
           size: 32,
         ),
       ),
@@ -174,14 +179,14 @@ class CallView extends GetView<CallController> {
                     children: [
                       Text(
                         (freeMins > 0 ? '${Copywriting.security_free_for_first}$freeMins minutes' : (needCost ? Copywriting.security_consuming_gems_during_call : Copywriting.security_free_Call)),
-                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       if (!controller.hasFreeTime && needCost)
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Obx(() {
-                              return Text(controller.costDescTitle.value, style: const TextStyle(color: Colors.white, fontSize: 13));
+                              return Text(controller.costDescTitle.value, style: const TextStyle(color: AppColors.textPrimary, fontSize: 13));
                             }),
                           ],
                         ).marginOnly(top: 8)
@@ -193,7 +198,7 @@ class CallView extends GetView<CallController> {
                             children: [
                               AvatarView(url: controller.otherAvatar, size: 44),
                               const SizedBox(height: 16),
-                              Text(controller.otherName, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                              Text(controller.otherName, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
                             ],
                           ).marginOnly(top: 96)
                         : Container();
@@ -208,7 +213,7 @@ class CallView extends GetView<CallController> {
             right: 0,
             child: Column(
               children: [
-                Text(controller.curStatusDesc(), style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                Text(controller.curStatusDesc(), style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w500)),
                 SizedBox(height: 36),
                 _buildWaitingButtons()
               ],
@@ -233,7 +238,10 @@ class CallView extends GetView<CallController> {
   }
 
   Widget _drawTitleWidget() {
-    return Column(
+    return Container(
+      color: AppColors.surface.withValues(alpha: 0.96),
+      padding: const EdgeInsets.all(12),
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Stack(
@@ -255,7 +263,7 @@ class CallView extends GetView<CallController> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Colors.black26,
+                          color: AppColors.surfaceMuted,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
@@ -263,7 +271,7 @@ class CallView extends GetView<CallController> {
                             ImageView(Images.security_gem_png, height: 16, width: 16),
                             SizedBox(width: 4),
                             Obx(() {
-                              return Text('${MyAccount.gems}', style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)).marginOnly(right: 2);
+                              return Text('${MyAccount.gems}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.bold)).marginOnly(right: 2);
                             }),
                           ],
                         ),
@@ -273,7 +281,7 @@ class CallView extends GetView<CallController> {
                 )),
             Obx(() {
               return Text(controller.connectState.value == CallRoomConnectState.connected ? controller.curStatusDesc() : Copywriting.security_connecting___,
-                  style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold));
+                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold));
             }),
             Positioned(
               right: 0,
@@ -293,7 +301,7 @@ class CallView extends GetView<CallController> {
                     padding: const EdgeInsets.all(6),
                     child: const Icon(
                       Icons.call_end,
-                      color: Colors.white,
+                      color: AppColors.onColor,
                       size: 16,
                     ),
                   ),
@@ -311,9 +319,10 @@ class CallView extends GetView<CallController> {
               constraints: BoxConstraints(maxWidth: 150),
               child: Text(
                   finalTips,
-                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)));
+                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)));
         }),
       ],
+      ),
     ).marginSymmetric(horizontal: 16, vertical: 4);
   }
 
@@ -330,7 +339,7 @@ class CallView extends GetView<CallController> {
                 children: [
                   AvatarView(url: controller.otherAvatar, size: 44),
                   const SizedBox(height: 16),
-                  Text(controller.otherName, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                  Text(controller.otherName, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -360,7 +369,7 @@ class CallView extends GetView<CallController> {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.black.withValues(alpha: 0.3),
+                                  color: AppColors.surface.withValues(alpha: 0.96),
                                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                                 ),
                                 constraints: BoxConstraints(maxWidth: 260),
@@ -370,16 +379,16 @@ class CallView extends GetView<CallController> {
                                     children: [
                                       TextSpan(
                                           text: '${msgItem.createSenderName(controller.otherName)}: ',
-                                          style: TextStyle(color: msgItem.isMine() ? const Color(0xFF7FE4FF) : const Color(0xFFFDA7FF), fontSize: 12, fontWeight: FontWeight.w600)),
-                                      if (msgItem.isText) TextSpan(text: (msgItem as ChatTextMessage).text, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                                          style: TextStyle(color: msgItem.isMine() ? AppColors.link : AppColors.link, fontSize: 12, fontWeight: FontWeight.w600)),
+                                      if (msgItem.isText) TextSpan(text: (msgItem as ChatTextMessage).text, style: const TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.w600)),
                                       if (msgItem.isGift)
                                         TextSpan(children: [
                                           TextSpan(
-                                              text: 'Send a ${(msgItem as ChatGiftMessage).giftName} ', style: const TextStyle(color: Color(0xFFFFDD44), fontSize: 12, fontWeight: FontWeight.w600)),
+                                              text: 'Send a ${(msgItem as ChatGiftMessage).giftName} ', style: const TextStyle(color: AppColors.accentText, fontSize: 12, fontWeight: FontWeight.w600)),
                                           WidgetSpan(
                                             child: CachedImage(imageUrl: msgItem.imageUrl, width: 20, height: 20, fit: BoxFit.cover),
                                           ),
-                                          TextSpan(text: ' x${msgItem.giftCount}', style: const TextStyle(color: Color(0xFFFFDD44), fontSize: 12, fontWeight: FontWeight.w600)),
+                                          TextSpan(text: ' x${msgItem.giftCount}', style: const TextStyle(color: AppColors.accentText, fontSize: 12, fontWeight: FontWeight.w600)),
                                         ])
                                     ],
                                   ),
@@ -393,9 +402,9 @@ class CallView extends GetView<CallController> {
                                         width: 12,
                                         height: 12,
                                         child: CircularProgressIndicator(
-                                          color: Colors.white,
+                                          color: AppColors.accentText,
                                           strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.accentText),
                                         ));
                                   case ChatMessageSendStatus.failed:
                                     return GestureDetector(
@@ -406,10 +415,10 @@ class CallView extends GetView<CallController> {
                                         width: 18,
                                         height: 18,
                                         decoration: BoxDecoration(
-                                          color: Colors.black,
+                                          color: AppColors.surfaceMuted,
                                           borderRadius: BorderRadius.circular(10),
                                         ),
-                                        child: const Icon(Icons.refresh, color: Colors.white, size: 12),
+                                        child: const Icon(Icons.refresh, color: AppColors.textPrimary, size: 12),
                                       ),
                                     );
                                   default:
@@ -431,7 +440,7 @@ class CallView extends GetView<CallController> {
                     margin: EdgeInsets.symmetric(horizontal: controller.hasFocusOnInput.value ? 12 : 0),
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                      color: const Color(0xffA1908A),
+                      color: AppColors.surfaceMuted,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(controller.hasFocusOnInput.value ? 20 : 0),
                           bottomLeft: Radius.circular(controller.hasFocusOnInput.value ? 20 : 0),
@@ -449,16 +458,16 @@ class CallView extends GetView<CallController> {
                         controller.focusNode.requestFocus();
                       },
                       textAlignVertical: TextAlignVertical.center,
-                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600, height: 1.4),
+                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.w600, height: 1.4),
                       decoration: InputDecoration(
                         hintText: Copywriting.security_send_a_message_,
-                        hintStyle: const TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.w600, height: 1.4),
+                        hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 13, fontWeight: FontWeight.w600, height: 1.4),
                         filled: true,
                         isCollapsed: true,
                         fillColor: Colors.transparent,
                         border: InputBorder.none,
                       ),
-                      cursorColor: Colors.white,
+                      cursorColor: AppColors.textPrimary,
                       textInputAction: TextInputAction.send,
                       maxLines: 4,
                       keyboardType: TextInputType.text,
@@ -485,7 +494,7 @@ class CallView extends GetView<CallController> {
           },
           icon: Container(
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.3),
+              color: AppColors.surface.withValues(alpha: 0.96),
               borderRadius: const BorderRadius.all(Radius.circular(20)),
             ),
             padding: const EdgeInsets.all(6),
@@ -493,7 +502,7 @@ class CallView extends GetView<CallController> {
               Images.security_func_gift_png,
               width: 28,
               height: 28,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             )
           ),
           iconSize: 40,
@@ -507,14 +516,14 @@ class CallView extends GetView<CallController> {
             },
             icon: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.3),
+                color: AppColors.surface.withValues(alpha: 0.96),
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
               ),
               padding: const EdgeInsets.all(6),
               child: Icon(
                 !controller.isMute.value ? Icons.mic : Icons.mic_off,
                 size: 28,
-                color: !controller.isMute.value ? Colors.white : Colors.white.withValues(alpha: 0.5),
+                color: !controller.isMute.value ? AppColors.textPrimary : AppColors.textPrimary.withValues(alpha: 0.5),
               ),
             ),
             iconSize: 40,
@@ -529,13 +538,13 @@ class CallView extends GetView<CallController> {
             },
             icon: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.3),
+                color: AppColors.surface.withValues(alpha: 0.96),
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
               ),
               padding: const EdgeInsets.all(6),
               child: Icon(
                 controller.isSpeaker.value ? Icons.volume_up : Icons.volume_off,
-                color: controller.isSpeaker.value ? Colors.white : Colors.white54,
+                color: controller.isSpeaker.value ? AppColors.textPrimary : AppColors.textSecondary,
                 size: 28,
               )
             ),
@@ -552,13 +561,13 @@ class CallView extends GetView<CallController> {
               },
               icon: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.3),
+                  color: AppColors.surface.withValues(alpha: 0.96),
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                 ),
                 padding: const EdgeInsets.all(6),
                 child: Icon(
                   controller.cameraEnable.value ? Icons.videocam : Icons.videocam_off,
-                  color: controller.cameraEnable.value ? Colors.white : Colors.white54,
+                  color: controller.cameraEnable.value ? AppColors.textPrimary : AppColors.textSecondary,
                   size: 28,
                 )
               ),
@@ -574,13 +583,13 @@ class CallView extends GetView<CallController> {
             },
             icon: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.3),
+                color: AppColors.surface.withValues(alpha: 0.96),
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
               ),
               padding: const EdgeInsets.all(6),
               child: Icon(
                 Icons.cameraswitch,
-                color: controller.isFrontCamera.value ? Colors.white : Colors.white54,
+                color: controller.isFrontCamera.value ? AppColors.textPrimary : AppColors.textSecondary,
                 size: 24,
               )
             ),
@@ -618,7 +627,7 @@ class CallView extends GetView<CallController> {
 
       return IgnorePointer(
         child: Container(
-          color: Colors.black,
+          color: AppColors.surfaceMuted,
           child: expectFullView ?? _drawBg(),
         ),
       );
@@ -632,17 +641,17 @@ class CallView extends GetView<CallController> {
           child: CachedImage(
             imageUrl: controller.otherAvatar,
             placeholder: (context, url) {
-              return Container(color: Colors.black, width: double.infinity, height: double.infinity);
+              return Container(color: AppColors.surfaceMuted, width: double.infinity, height: double.infinity);
             },
             errorWidget: (context, url, error) {
-              return Container(color: Colors.black, width: double.infinity, height: double.infinity);
+              return Container(color: AppColors.surfaceMuted, width: double.infinity, height: double.infinity);
             },
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
           )),
       Container(
-        color: Colors.black.withValues(alpha: 0.5),
+        color: AppColors.background.withValues(alpha: AppAppearance.isLight ? 0.94 : 0.5),
       )
     ]);
   }
@@ -695,7 +704,7 @@ class CallView extends GetView<CallController> {
       ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: Container(
-              color: Colors.black,
+              color: AppColors.surfaceMuted,
               width: kFloatingWidth,
               height: kFloatingHeight,
               child: Obx(() {
@@ -704,10 +713,10 @@ class CallView extends GetView<CallController> {
                         ? (nativeView ?? const Text('loading...'))
                         : Container(
                             alignment: Alignment.center,
-                            color: Colors.black,
+                            color: AppColors.surfaceMuted,
                             child: Icon(
                               Icons.videocam_off,
-                              color: Colors.white.withValues(alpha: 0.5),
+                              color: AppColors.textPrimary.withValues(alpha: 0.5),
                               size: 36,
                             )
                           ))

@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/crypt/apis.dart';
@@ -87,6 +88,7 @@ class _ExploreViewState extends State<ExploreView> {
       Preferences.instance.isRv;
       return GetBuilder<DiscoveryController>(builder: (_) {
         return Container(
+          color: AppColors.background,
           alignment: Alignment.center,
           child: UiUtils.buildFutureView<List<dynamic>?>(getDataList(0), (
               data,

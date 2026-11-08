@@ -66,8 +66,8 @@ class DiscoveryView extends GetView<DiscoveryController> {
               tab.name,
               style:
                   isSelected
-                      ? TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun)
-                      : TextStyle(color: Colors.white70, fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun),
+                      ? TextStyle(color: AppColors.textPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun)
+                      : TextStyle(color: AppColors.textSecondary, fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun),
             ),
           ),
           Positioned(
@@ -87,18 +87,22 @@ class DiscoveryView extends GetView<DiscoveryController> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: AppColors.base_background,
-      appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.transparent, elevation: 0, systemOverlayStyle: SystemUiOverlayStyle.light),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.transparent, elevation: 0, systemOverlayStyle: AppAppearance.overlayStyle),
       body: Stack(
         children: [
-          TabBarView(controller: controller.tabController, children: controller.tabs.mapIndexed(_buildItemView).toList()),
+          Padding(
+            padding: AppAppearance.isLight ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top + 48) : EdgeInsets.zero,
+            child: TabBarView(controller: controller.tabController, children: controller.tabs.mapIndexed(_buildItemView).toList()),
+          ),
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0x82000000), Color(0x00000000)]),
+              decoration: BoxDecoration(
+                color: AppAppearance.isLight ? AppColors.background : null,
+                gradient: AppAppearance.isLight ? null : const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [AppColors.surfaceMuted, AppColors.surfaceMuted]),
               ),
               padding: const EdgeInsets.only(left: 4, right: 16),
               child: SafeArea(
@@ -138,11 +142,11 @@ class DiscoveryView extends GetView<DiscoveryController> {
                   child: Container(
                     padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                        color: Color(0xFF171C29).withValues(alpha: 0.7),
+                        color: AppAppearance.isLight ? AppColors.surface : Color(0xFF171C29).withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: Color(0xFF2A3144), width: 1)
+                        border: Border.all(color: AppColors.border, width: 1)
                     ),
-                    child: ImageView(Images.mina_search, width: 14, height: 14),
+                    child: ImageView(Images.mina_search, color: AppColors.textPrimary, width: 14, height: 14),
                   )),
                     ],
                   ),

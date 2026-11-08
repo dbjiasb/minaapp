@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'dart:io';
 
@@ -14,7 +15,6 @@ import '../../../base/router/router_names.dart';
 import '../../../base/ui/user_card_view.dart';
 import '../../../core/account/account_service.dart';
 import '../../../core/util/cached_image.dart';
-import '../../../shared/common_widget.dart';
 import '../constant_state.dart';
 import '../report/report_view.dart';
 import 'comment_list_view.dart';
@@ -27,16 +27,20 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
   Widget build(BuildContext context) {
     final OverlayPopupController menuController = OverlayPopupController();
     return Scaffold(
-      backgroundColor: Color(0xFF12151C),
-      appBar: AppBarExt.buildCustomAppBar(
-        _buildBarView(),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: _buildBarView(),
+        backgroundColor: AppColors.background,
+        foregroundColor: AppColors.textPrimary,
+        systemOverlayStyle: AppAppearance.overlayStyle,
+        leading: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back_ios_new_rounded)),
         actions: [
           _buildCollectView(),
           OverlayPopup(
             menuBuilder: () {
               return Container(
                 width: 72,
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(8)),
                 child: IntrinsicWidth(
                   child: Column(
                     children: [
@@ -48,7 +52,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
                             },
                             child: Text(
                               Security.security_delete,
-                              style: TextStyle(color: Color(0xFF080E1B), fontWeight: FontWeight.bold, fontSize: 12),
+                              style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 12),
                             ).marginSymmetric(vertical: 8),
                           )
                           : InkWell(
@@ -58,7 +62,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
                             },
                             child: Text(
                               Security.security_report,
-                              style: TextStyle(color: Color(0xFF080E1B), fontWeight: FontWeight.bold, fontSize: 12),
+                              style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 12),
                             ).marginSymmetric(vertical: 8),
                           ),
                     ],
@@ -68,7 +72,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
             },
             pressType: PressType.singleClick,
             showArrow: false,
-            child: CachedImage(imageUrl: '${MomentRes.base}iic_chat_more.webp', width: 24, height: 24).marginOnly(right: 16),
+            child: CachedImage(imageUrl: '${MomentRes.base}iic_chat_more.webp', color: AppColors.textSecondary, width: 24, height: 24).marginOnly(right: 16),
           ),
         ],
       ),
@@ -82,7 +86,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
         children: [
           CachedImage(imageUrl: controller.rxMomentInfo.value[Security.security_avatarUrl] ?? '', width: 36, height: 36, borderRadius: BorderRadius.circular(18)),
           const SizedBox(width: 8),
-          Text(controller.rxMomentInfo.value[Security.security_nickname] ?? "", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(controller.rxMomentInfo.value[Security.security_nickname] ?? "", style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16)),
         ],
       );
     });
@@ -99,6 +103,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
           width: 24,
           height: 24,
           fit: BoxFit.cover,
+          color: AppAppearance.isLight ? (controller.rxCollectStatus.value ? AppColors.accentText : AppColors.textSecondary) : null,
         ).marginOnly(right: 16);
       }),
     );
@@ -113,12 +118,12 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          border: Border.all(color: controller.isFollowed.value ? Colors.white.withOpacity(0.5) : Colors.transparent, width: 1),
-          color: controller.isFollowed.value ? Colors.transparent : Colors.white,
+          border: Border.all(color: controller.isFollowed.value ? AppColors.textSecondary : Colors.transparent, width: 1),
+          color: controller.isFollowed.value ? Colors.transparent : AppColors.selected,
         ),
         child: Text(
           controller.isFollowed.value ? Security.security_followed : Security.security_follow,
-          style: TextStyle(color: controller.isFollowed.value ? Colors.white.withOpacity(0.5) : Color(0xFF12151C), fontSize: 12, fontWeight: FontWeight.bold),
+          style: TextStyle(color: controller.isFollowed.value ? AppColors.textSecondary : AppColors.accentForeground, fontSize: 12, fontWeight: FontWeight.bold),
         ),
       );
     });
@@ -130,7 +135,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
           ? Container(
             margin: const EdgeInsets.only(top: 16),
             width: double.infinity,
-            child: Text(controller.rxMomentInfo.value[Security.security_content] ?? '', style: const TextStyle(color: Colors.white, fontSize: 14)),
+            child: Text(controller.rxMomentInfo.value[Security.security_content] ?? '', style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
           )
           : Container();
     });
@@ -200,7 +205,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
             Text(
               '${controller.rxMomentInfo.value[Security.security_likeCount]}',
               style: TextStyle(
-                color: controller.rxMomentInfo.value[Security.security_isLike] == 1 ? Color(0xFFFF56BB) : const Color(0xFF5C5E64),
+                color: controller.rxMomentInfo.value[Security.security_isLike] == 1 ? AppColors.accentText : AppColors.textSecondary,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -224,7 +229,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
           Obx(() {
             return Text(
               '${controller.rxMomentInfo.value[Security.security_commentCount]}',
-              style: const TextStyle(color: Color(0xFF5C5E64), fontSize: 12, fontWeight: FontWeight.w600),
+              style: const TextStyle(color: AppColors.textSecondary, fontSize: 12, fontWeight: FontWeight.w600),
             );
           }),
         ],
@@ -286,7 +291,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                   errorWidget: (context, url, error) {
                     return Container(
-                      color: Colors.grey,
+                      color: AppColors.surfaceMuted,
                       width: double.infinity,
                     );
                   },
@@ -294,7 +299,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
                     return Container(
                       width: double.infinity,
                       height: double.infinity,
-                      decoration: BoxDecoration(color: Color(0xFF2F3137), borderRadius: BorderRadius.circular(16)),
+                      decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(16)),
                     );
                   },
                 ),
@@ -306,7 +311,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
     return Container(
       margin: const EdgeInsets.only(top: 12),
       decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: [Color(0x00FFFFFF), Color(0x1AFFFFFF), Color(0x00FFFFFF)], begin: Alignment.centerLeft, end: Alignment.centerRight),
+        gradient: LinearGradient(colors: [Colors.transparent, AppColors.border, Colors.transparent], begin: Alignment.centerLeft, end: Alignment.centerRight),
       ),
       height: 1,
       width: double.infinity,
@@ -322,9 +327,9 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
           SliverPersistentHeader(
             delegate: StickyHeaderDelegate(
               child: Container(
-                color: Color(0xFF12151C),
+                color: AppColors.background,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(Security.security_comments, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                child: Text(Security.security_comments, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
               ),
             ),
             pinned: true,
@@ -345,7 +350,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(color: const Color(0xFFB9B9B9).withOpacity(0.3), borderRadius: BorderRadius.circular(100)),
+        decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(100)),
         child: TextField(
           focusNode: controller.focusNode,
           onChanged: (value) {
@@ -358,19 +363,19 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
           inputFormatters: [LengthLimitingTextInputFormatter(250)],
           controller: controller.textController,
           textAlignVertical: TextAlignVertical.center,
-          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500, height: 1.4),
+          style: const TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.w500, height: 1.4),
           decoration: InputDecoration(
             hintText:
                 (controller.rxReplyCommentInfo.value[Security.security_nickname] ?? "").isEmpty
                     ? Copywriting.security_post_your_reply
                     : "reply to @${controller.rxReplyCommentInfo.value[Security.security_nickname]}",
-            hintStyle: const TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.w600),
+            hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 13, fontWeight: FontWeight.w600),
             filled: true,
             isCollapsed: true,
             fillColor: Colors.transparent,
             border: InputBorder.none,
           ),
-          cursorColor: Colors.white,
+          cursorColor: AppColors.textPrimary,
           textInputAction: TextInputAction.send,
           maxLines: 1,
           // 固定最大行数

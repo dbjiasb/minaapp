@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -81,83 +83,86 @@ class ChatTheaterRoomView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvokedWithResult: (didPop, ret) {
-        if (didPop) {
-          ChatManager.instance.updateChatSession(session);
-        }
-      },
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: Color(0xFF0A0B12),
-        resizeToAvoidBottomInset: true,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            _buildBackgroundView(),
-            Obx(
-              () =>
-                  bottomBarController.isHideView.value
-                      ? SizedBox.shrink()
-                      : Stack(
-                        children: [
-                          Container(
-                            color: Colors.black.withAlpha((255 * 0.3).toInt()),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            height: Get.statusBarHeight,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.black.withValues(alpha: 0.8),
-                                    Colors.black.withValues(alpha: 0),
-                                  ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppAppearance.overlayStyle,
+      child: PopScope(
+        onPopInvokedWithResult: (didPop, ret) {
+          if (didPop) {
+            ChatManager.instance.updateChatSession(session);
+          }
+        },
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: AppColors.background,
+          resizeToAvoidBottomInset: true,
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              _buildBackgroundView(),
+              Obx(
+                () =>
+                    bottomBarController.isHideView.value
+                        ? SizedBox.shrink()
+                        : Stack(
+                          children: [
+                            Container(
+                              color: AppAppearance.isLight ? Colors.transparent : Colors.black.withAlpha((255 * 0.3).toInt()),
+                            ),
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              height: Get.statusBarHeight,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      AppAppearance.isLight ? AppColors.background : Colors.black.withValues(alpha: 0.8),
+                                      AppColors.surfaceMuted.withValues(alpha: 0),
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SafeArea(
-                            bottom: false,
-                            child: Column(
-                              children: [
-                                _buildNavigationBar(),
-                                _buildChatRoomView(),
-                              ],
+                            SafeArea(
+                              bottom: false,
+                              child: Column(
+                                children: [
+                                  _buildNavigationBar(),
+                                  _buildChatRoomView(),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-            ),
-            Positioned(
-              top: 0,
-              right: 0,
-              bottom: 0,
-              left: 0,
-              child: Obx(
-                () =>
-                    bottomBarController.isKeyboardVisible.value
-                        ? GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: () {
-                            bottomBarController.focusNode.unfocus();
-                          },
-                        )
-                        : SizedBox.shrink(),
+                          ],
+                        ),
               ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: ChatTheaterBottomBar(sendText: viewController.sendText),
-            ),
-          ],
+              Positioned(
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                child: Obx(
+                  () =>
+                      bottomBarController.isKeyboardVisible.value
+                          ? GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              bottomBarController.focusNode.unfocus();
+                            },
+                          )
+                          : SizedBox.shrink(),
+                ),
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: ChatTheaterBottomBar(sendText: viewController.sendText),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -176,7 +181,9 @@ class ChatTheaterRoomView extends StatelessWidget {
               width: 32,
               height: 32,
               alignment: Alignment.center,
-              child: CachedImage(
+              child: AppAppearance.isLight
+                ? const Icon(Icons.arrow_back_ios_new_rounded, size: 22, color: AppColors.textPrimary)
+                : CachedImage(
                 imageUrl: ImagePath.ic_arrow_left_circle,
                 width: 32,
                 height: 32,
@@ -192,7 +199,7 @@ class ChatTheaterRoomView extends StatelessWidget {
                 height: 40,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Color(0xCC333333),
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -214,7 +221,7 @@ class ChatTheaterRoomView extends StatelessWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 1),
+                          border: Border.all(color: AppColors.textPrimary, width: 1),
                           borderRadius: BorderRadius.circular(18),
                           image: DecorationImage(
                             image: CachedImageProvider(
@@ -233,7 +240,7 @@ class ChatTheaterRoomView extends StatelessWidget {
                         Text(
                           viewController.session.name,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             overflow: TextOverflow.ellipsis,
@@ -243,7 +250,7 @@ class ChatTheaterRoomView extends StatelessWidget {
                         Text(
                           Security.security_theater,
                           style: TextStyle(
-                            color: Color(0xFFFFE407),
+                            color: AppColors.accentText,
                             fontSize: 12,
                           ),
                         ),
@@ -261,7 +268,7 @@ class ChatTheaterRoomView extends StatelessWidget {
                 viewController.session.id.safeParse(),
               );
             },
-            icon: Icon(Icons.more_horiz, color: Colors.white, size: 20),
+            icon: Icon(Icons.more_horiz, color: AppColors.textPrimary, size: 20),
           ),
           SizedBox(width: 5),
         ],
@@ -279,10 +286,10 @@ class ChatTheaterRoomView extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.white,
+                AppColors.textPrimary,
                 Colors.transparent,
                 Colors.transparent,
-                Colors.white,
+                AppColors.textPrimary,
               ],
               stops: [
                 0.0,
@@ -350,17 +357,20 @@ class ChatTheaterRoomView extends StatelessWidget {
 
   Widget _buildBackgroundView() {
     return Obx(() {
-      String url = viewController.session.backgroundUrl.value;
-      debugPrint('viewController.session.backgroundUrl.value: $url');
-      return url.isNotEmpty
-          ? CachedImage(
-            imageUrl: url,
-            fit: BoxFit.cover,
-            errorWidget: (context, url, error) => SizedBox.shrink(),
-          )
-          : SizedBox.shrink();
+      final url = viewController.session.backgroundUrl.value;
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          if (url.isNotEmpty)
+            CachedImage(imageUrl: url, fit: BoxFit.cover,
+              errorWidget: (context, url, error) => const SizedBox.shrink()),
+          if (AppAppearance.isLight)
+            ColoredBox(color: AppColors.background.withValues(alpha: url.isEmpty ? 1 : 0.94)),
+        ],
+      );
     });
   }
+
 }
 
 class ChatTheaterRoomViewController extends GetxController {

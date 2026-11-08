@@ -74,8 +74,8 @@ class ChatBottomBar extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  AppColors.mainDarkColor.withValues(alpha: 0.0),
-                  AppColors.mainDarkColor.withValues(alpha: 0.9),
+                  AppColors.background.withValues(alpha: 0.0),
+                  AppColors.background.withValues(alpha: 0.98),
                 ],
               ),
             ),
@@ -153,10 +153,7 @@ class ChatBottomBar extends StatelessWidget {
           child: Container(
             height: 44,
             decoration: BoxDecoration(
-              color:
-                  _audioInputMode.value
-                      ? Colors.white.withValues(alpha: 0.6)
-                      : Color(0xFF999999).withValues(alpha: 0.8),
+              color: AppColors.surfaceMuted,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -225,7 +222,7 @@ class ChatBottomBar extends StatelessWidget {
                                 Text(
                                   Copywriting.security_hold_to_talk,
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.textPrimary,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14,
                                   ),
@@ -243,7 +240,7 @@ class ChatBottomBar extends StatelessWidget {
                                       viewController.sendText(value);
                                     },
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -260,7 +257,7 @@ class ChatBottomBar extends StatelessWidget {
                                       filled: true,
                                       hintText: viewController.messageHints,
                                       hintStyle: TextStyle(
-                                        color: Color(0x99FFFFFF),
+                                        color: AppColors.textSecondary,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 14,
                                       ),
@@ -286,7 +283,7 @@ class ChatBottomBar extends StatelessWidget {
                                                   viewController
                                                       .buildGroupAtText(),
                                                   style: TextStyle(
-                                                    color: Colors.white,
+                                                    color: AppColors.textPrimary,
                                                     fontSize: 11,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -568,7 +565,7 @@ class ChatBottomBar extends StatelessWidget {
                   height: 60,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Color(0x26FFFFFF),
+                    color: AppColors.border,
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
                   child: ImageView(
@@ -584,7 +581,7 @@ class ChatBottomBar extends StatelessWidget {
                   child: Text(
                     item[Security.security_title] ?? '',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w400,
                       fontSize: 11,
                     ),
@@ -640,7 +637,7 @@ class ChatBottomBar extends StatelessWidget {
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black.withAlpha((255.0 * 0.4).round()),
+                        color: (AppAppearance.isLight ? AppColors.surface : Colors.black.withAlpha((255.0 * 0.4).round())),
                         borderRadius: const BorderRadius.all(
                           Radius.circular(16),
                         ),
@@ -659,7 +656,7 @@ class ChatBottomBar extends StatelessWidget {
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black.withAlpha((255.0 * 0.4).round()),
+                        color: (AppAppearance.isLight ? AppColors.surface : Colors.black.withAlpha((255.0 * 0.4).round())),
                         borderRadius: const BorderRadius.all(
                           Radius.circular(16),
                         ),
@@ -687,7 +684,7 @@ class ChatBottomBar extends StatelessWidget {
           padding: const EdgeInsets.all(4),
           margin: const EdgeInsets.only(left: 12, right: 12, bottom: 4),
           decoration: const BoxDecoration(
-            color: Color(0x66252230),
+            color: (AppAppearance.isLight ? AppColors.surface : Color(0x66252230)),
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           height: 40,
@@ -722,7 +719,7 @@ class ChatBottomBar extends StatelessWidget {
       },
       {
         Security.security_title: Copywriting.security_create,
-        Security.security_icon: Images.security_btn_pic_png,
+        Security.security_icon: Images.chatCreateImage,
         Security.security_action: onCreateImageButtonClicked,
       },
       {
@@ -742,9 +739,9 @@ class ChatBottomBar extends StatelessWidget {
                 height: 30,
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
-                  color: Color(0x99333333),
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.all(Radius.circular(6)),
-                  border: Border.all(color: Color(0x66FFFFFF), width: 1),
+                  border: Border.all(color: AppColors.border, width: 1),
                 ),
                 child: GestureDetector(
                   onTap: () {
@@ -762,7 +759,7 @@ class ChatBottomBar extends StatelessWidget {
                       Text(
                         (item[Security.security_title] as String?) ?? '',
                         style: const TextStyle(
-                          color: Color(0xCCFFFFFF),
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                         ),
@@ -797,7 +794,7 @@ class ChatBottomBar extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.4),
+                        color: (AppAppearance.isLight ? AppColors.surface : Colors.black.withOpacity(0.4)),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       alignment: Alignment.center,
@@ -806,7 +803,7 @@ class ChatBottomBar extends StatelessWidget {
                       // width: 32,
                       child: Text(
                         e,
-                        style: TextStyle(color: Colors.white, fontSize: 12),
+                        style: TextStyle(color: AppColors.textPrimary, fontSize: 12),
                       ),
                     ),
                   ),
@@ -818,7 +815,7 @@ class ChatBottomBar extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
+                      color: (AppAppearance.isLight ? AppColors.surface : Colors.black.withOpacity(0.4)),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     alignment: Alignment.center,
@@ -827,7 +824,7 @@ class ChatBottomBar extends StatelessWidget {
                     // width: 32,
                     child: const Icon(
                       Icons.close,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       size: 14,
                       weight: 100,
                     ),

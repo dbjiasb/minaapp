@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,9 +11,9 @@ class StyleTabBars extends StatelessWidget {
 
   EdgeInsets? margin;
 
-  TextStyle? get _defaultSelectedStyle => const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900);
+  TextStyle? get _defaultSelectedStyle => const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w900);
 
-  TextStyle? get _defaultUnselectedStyle => TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 16, fontWeight: FontWeight.bold);
+  TextStyle? get _defaultUnselectedStyle => TextStyle(color: AppColors.textSecondary, fontSize: 16, fontWeight: FontWeight.bold);
 
   TextStyle? selectedStyle;
   TextStyle? unselectedStyle;

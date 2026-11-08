@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -36,8 +37,8 @@ class ChatPrivateBottomBar extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            const Color(0xFF0F0F0F).withOpacity(0.0),
-            const Color(0xFF0F0F0F).withOpacity(0.9),
+            AppColors.background.withValues(alpha: 0.0),
+            AppColors.background.withValues(alpha: 0.98),
           ],
         ),
       ),
@@ -67,7 +68,7 @@ class ChatPrivateBottomBar extends StatelessWidget {
         height: 44.w,
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         decoration: BoxDecoration(
-          color: const Color(0xFF999999).withOpacity(0.8),
+          color: AppColors.surfaceMuted,
           borderRadius: BorderRadius.circular(12.w),
         ),
         child: Row(
@@ -86,11 +87,11 @@ class ChatPrivateBottomBar extends StatelessWidget {
             // 文本输入框
             Expanded(
               child: TextField(
-                cursorColor: Colors.white,
+                cursorColor: AppColors.textPrimary,
                 onChanged: controller.onTextChanged,
                 onSubmitted: controller.sendText,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                 ),
@@ -103,7 +104,7 @@ class ChatPrivateBottomBar extends StatelessWidget {
                   filled: true,
                   hintText: Copywriting.security_send_message__reply_by_AI,
                   hintStyle: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
                     fontSize: 14.sp,
                   ),
@@ -147,14 +148,14 @@ class ChatPrivateBottomBar extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.w),
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF30292D).withOpacity(0.6),
+              color: (AppAppearance.isLight ? AppColors.surface : AppColors.surfaceMuted.withOpacity(0.6)),
               borderRadius: BorderRadius.circular(28.w),
-              border: Border.all(width: 1, color: const Color(0xFFFFFBA3)),
+              border: Border.all(width: 1, color: AppColors.border),
             ),
             child: Text(
               text,
               style: TextStyle(
-                color: const Color(0xFFFCFACD),
+                color: AppColors.textPrimary,
                 fontSize: 12.sp,
                 fontWeight: FontWeight.bold,
               ),

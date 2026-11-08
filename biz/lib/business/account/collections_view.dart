@@ -34,14 +34,14 @@ class CollectionsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         leading: InkWell(overlayColor: WidgetStateProperty.all(Colors.transparent), onTap: Get.back, child: Container(alignment: Alignment.center, padding: EdgeInsets.only(left: 16), child: ImageView(Images.security_back_png, fit: BoxFit.cover, height: 24, width: 24))),
         centerTitle: true,
-        backgroundColor: AppColors.base_background,
+        backgroundColor: AppColors.background,
         title: Text(
           Security.security_collection,
-          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
@@ -196,7 +196,7 @@ class CollectionsCard extends RoleItem {
               ),
               child: Stack(
                 children: [
-                  if (isLoading) const Center(child: CircularProgressIndicator(color: Colors.white)),
+                  if (isLoading) const Center(child: CircularProgressIndicator(color: AppColors.accentText)),
 
                   Column(
                     children: [
@@ -216,14 +216,14 @@ class CollectionsCard extends RoleItem {
                                   child: Text(
                                     nickname,
                                     maxLines: 1,
-                                    style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
+                                    style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w900),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 // AppWidgets.userTag(accountType),
                               ],
                             ),
-                            Text(bio, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500), maxLines: 3),
+                            Text(bio, style: const TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.w500), maxLines: 3),
                           ],
                         ),
                       ),

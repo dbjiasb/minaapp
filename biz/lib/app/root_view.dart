@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:biz/base/report/report_manager.dart';
 import 'package:biz/business/chat/script/scene_play/binding.dart';
 import 'package:biz/business/discovery/video_match/match_scan/match_scan_binding.dart';
@@ -56,6 +57,8 @@ import '../shared/toast/toast.dart';
 import '../localize/copywriting_translations.dart';
 import '../localize/localization_service.dart';
 import './skeleton_view.dart';
+import '../shared/app_theme.dart';
+import '../shared/app_brand.dart';
 
 class RootView extends StatelessWidget {
   const RootView({super.key});
@@ -67,17 +70,19 @@ class RootView extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) {
+        final toastBuilder = Toast.init();
         return GetMaterialApp(
+          title: AppBrand.name,
           translations: CopywritingTranslations(),
           locale: LocalizationService.initialLocale,
           fallbackLocale: LocalizationService.fallbackLocale,
           supportedLocales: LocalizationService.supportedLocales,
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
+          theme: AppTheme.theme,
+          builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
+            value: AppAppearance.overlayStyle,
+            child: toastBuilder(context, child),
           ),
-          builder: Toast.init(),
           initialRoute: AccountService.instance.loggedIn
               ? Routers.root
               : Routers.loginChannel,

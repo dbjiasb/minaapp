@@ -1,3 +1,4 @@
+import 'package:biz/core/util/ui_util.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/routes.dart';
@@ -9,7 +10,6 @@ import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/core/util/collections_util.dart';
 import '../../base/crypt/copywriting.dart';
 import '../../base/crypt/security.dart';
-import '../../core/util/ui_util.dart';
 import '../../shared/app_theme.dart';
 import '../home_page_lists/list_item.dart';
 import 'logic.dart';
@@ -27,9 +27,10 @@ class SearchView extends GetView<SearchLogic> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
-      appBar: UiUtils.buildSAppBar(
-        _buildSearchInput(),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: AppColors.background,
+        title: _buildSearchInput(),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 16, left: 8),
@@ -41,7 +42,7 @@ class SearchView extends GetView<SearchLogic> {
               child: Text(
                 Security.security_Cancel,
                 style: const TextStyle(
-                  color: Color(0x66FFFFFF),
+                  color: AppColors.textSecondary,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
@@ -81,8 +82,8 @@ class SearchView extends GetView<SearchLogic> {
         value != "" ? controller.search(value) : null;
         controller.rxSearchList.clear();
       },
-      style: const TextStyle(color: Colors.white, fontSize: 12),
-      cursorColor: Colors.white70,
+      style: const TextStyle(color: AppColors.textPrimary, fontSize: 12),
+      cursorColor: AppColors.textSecondary,
       textInputAction: TextInputAction.search,
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
@@ -93,7 +94,7 @@ class SearchView extends GetView<SearchLogic> {
         ),
         prefixIcon: Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8),
-          child: ImageView(Images.security_small_search_webp, width: 24, height: 24),
+          child: ImageView(Images.security_small_search_webp, color: AppColors.textSecondary, width: 24, height: 24),
         ),
         suffixIconConstraints: BoxConstraints(maxWidth: 40, maxHeight: 24),
         suffixIcon: Padding(
@@ -106,17 +107,17 @@ class SearchView extends GetView<SearchLogic> {
             },
             child: const Icon(
               Icons.clear, // 可替换为其他图标
-              color: Color(0xFF636268),
+              color: AppColors.textPrimary,
               size: 20,
             ),
           ),
         ),
-        labelStyle: const TextStyle(color: Color(0xFF636268), fontSize: 13),
+        labelStyle: const TextStyle(color: AppColors.textPrimary, fontSize: 13),
         hintText: Copywriting.security_search_Users_by_ID_or_Name,
-        fillColor: const Color(0XFF1B1E25),
+        fillColor: AppColors.surfaceMuted,
         isCollapsed: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 10),
-        hintStyle: const TextStyle(color: Color(0xFF636268), fontSize: 13),
+        hintStyle: const TextStyle(color: AppColors.textPrimary, fontSize: 13),
         enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(30)),
           borderSide: BorderSide(
@@ -160,7 +161,7 @@ class SearchView extends GetView<SearchLogic> {
                                     fontSize: 13,
                                     fontFamily: Copywriting.security_sF_Pro,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.white,
+                                    color: AppColors.textPrimary,
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -187,10 +188,10 @@ class SearchView extends GetView<SearchLogic> {
                                             borderRadius: BorderRadius.circular(
                                               14,
                                             ),
-                                            color: Color(0x1AFFFFFF),
+                                            color: AppColors.surfaceMuted,
                                             border: Border.all(
                                               width: 1,
-                                              color: Color(0x4dffffff),
+                                              color: AppColors.border,
                                             ),
                                           ),
                                           child: Row(
@@ -212,7 +213,7 @@ class SearchView extends GetView<SearchLogic> {
                                                 child: Text(
                                                   tag.toString(),
                                                   style: TextStyle(
-                                                    color: Colors.white,
+                                                    color: AppColors.textPrimary,
                                                     fontFamily: Copywriting.security_sF_Pro,
                                                     fontSize: 11,
                                                     fontWeight: FontWeight.w500,
@@ -228,7 +229,7 @@ class SearchView extends GetView<SearchLogic> {
                                                 child: Icon(
                                                   Icons.close,
                                                   size: 12,
-                                                  color: Colors.white,
+                                                  color: AppColors.textPrimary,
                                                 ),
                                               ),
                                               const SizedBox(width: 7),
@@ -257,7 +258,7 @@ class SearchView extends GetView<SearchLogic> {
                           fontSize: 13,
                           fontFamily: Copywriting.security_sF_Pro,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       SizedBox(width: 4),
@@ -274,10 +275,10 @@ class SearchView extends GetView<SearchLogic> {
                                 height: 24,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(14),
-                                  color: Color(0x1AFFFFFF),
+                                  color: AppColors.surfaceMuted,
                                   border: Border.all(
                                     width: 1,
-                                    color: Color(0x4dffffff),
+                                    color: AppColors.border,
                                   ),
                                 ),
                                 child: Row(
@@ -304,7 +305,7 @@ class SearchView extends GetView<SearchLogic> {
                                       child: Text(
                                         popularSearch,
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: AppColors.textPrimary,
                                           fontFamily: Copywriting.security_sF_Pro,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w500,
@@ -326,7 +327,7 @@ class SearchView extends GetView<SearchLogic> {
 
       case "1":
         return Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
+          child: CircularProgressIndicator(color: AppColors.accentText),
         );
       case "2":
         return _buildSearchContent();

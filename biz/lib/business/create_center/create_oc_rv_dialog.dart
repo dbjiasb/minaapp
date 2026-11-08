@@ -74,13 +74,13 @@ class CreateOcRvDialog extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16),
           margin: EdgeInsets.only(bottom: 8),
           alignment: Alignment.center,
-          decoration: BoxDecoration(color: _logic.consent.value ? Color(0xFF07070A) : Color(0xFFCCCCCC), borderRadius: BorderRadius.circular(26)),
+          decoration: BoxDecoration(color: _logic.consent.value ? AppColors.surfaceMuted : AppColors.surfaceMuted, borderRadius: BorderRadius.circular(26)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _logic.canContinue ? Security.security_Continue : Copywriting.security_start_Create,
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
               ),
               if (!_logic.canContinue)
                 Container(
@@ -95,7 +95,7 @@ class CreateOcRvDialog extends StatelessWidget {
                                 WidgetSpan(
                                   child: Text(
                                     _logic.freeText,
-                                    style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 14, color: AppColors.textPrimary, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ],
@@ -107,7 +107,7 @@ class CreateOcRvDialog extends StatelessWidget {
                                 WidgetSpan(child: ImageView(_logic.costType == 0 ? Images.security_coin_png : Images.security_gem_png, width: 18, height: 18)),
                                 TextSpan(
                                   text: ' ${_logic.costValue}',
-                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                                  style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
                                 ),
                               ],
                             ),
@@ -125,7 +125,7 @@ class CreateOcRvDialog extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16),
       margin: EdgeInsets.only(top: 127),
       height: 170,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topRight: Radius.circular(16), topLeft: Radius.circular(16))),
+      decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.only(topRight: Radius.circular(16), topLeft: Radius.circular(16))),
       alignment: Alignment.center,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -155,12 +155,12 @@ class CreateOcRvDialog extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: Copywriting.security_before_creation__please_review,
-                        style: TextStyle(color: const Color(0xFFABABAD), fontSize: 11, fontWeight: AppFonts.medium),
+                        style: TextStyle(color: AppColors.textSecondary, fontSize: 11, fontWeight: AppFonts.medium),
                       ),
                       TextSpan(
                         text: Copywriting.security_copyright_Agreement,
                         style: TextStyle(
-                          color: Color(0xFFB86AFF),
+                          color: AppColors.link,
                           fontWeight: AppFonts.medium,
                           fontSize: 11,
                           fontFamily: Copywriting.security_sF_Pro,
@@ -177,7 +177,7 @@ class CreateOcRvDialog extends StatelessWidget {
                       //   style: TextStyle(color: const Color(0xFFABABAD), fontSize: 11, fontWeight: AppFonts.medium),
                       // ),
                     ],
-                    style: const TextStyle(fontSize: 14, color: Colors.white),
+                    style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
                   ),
                 ),
               ),

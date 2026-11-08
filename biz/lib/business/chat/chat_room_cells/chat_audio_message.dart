@@ -160,8 +160,8 @@ class ChatAudioCell extends ChatCell {
               decoration: BoxDecoration(
                 color:
                     isMine
-                        ? Color(0xffFFF9B4).withValues(alpha: 0.9)
-                        : Color(0xff272533).withValues(alpha: 0.9),
+                        ? AppColors.chatOutgoing
+                        : AppColors.chatIncoming,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
@@ -310,12 +310,12 @@ class ChatAudioView extends StatelessWidget {
         Text(
           '$length"',
           style: TextStyle(
-            color: Colors.white,
+            color: message.isMine() ? AppColors.chatOutgoingText : AppColors.textPrimary,
             fontSize: 14,
             fontWeight: AppFonts.medium,
           ),
         ),
-        CachedImage(imageUrl: ImagePath.play_icon, height: 20, width: 20, color: Colors.white),
+        CachedImage(imageUrl: ImagePath.play_icon, height: 20, width: 20, color: message.isMine() ? AppColors.chatOutgoingText : AppColors.textPrimary),
       ],
     );
   }

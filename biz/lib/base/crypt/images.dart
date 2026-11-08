@@ -2,6 +2,7 @@ import 'decrypt.dart';
 
 abstract final class Images {
   Images._();
+  static const String chatCreateImage = 'assets/img/chat-create-image.png';
   static late final String security__webp = decrypt('9BreZ90SlUmz+8ivTD03rg=='); // .webp
   static late final String security_ai_continue_png = decrypt('6NgZjJuq9pKE+fTZHuzWqA=='); // ai_continue.png
   static late final String security_arrow_down_png = decrypt('j63nhJ84IQFDl6sG1kq9ng=='); // arrow_down.png

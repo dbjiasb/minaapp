@@ -76,16 +76,16 @@ class PersonViewPage extends StatelessWidget {
           Positioned.fill(
             child: Stack(
               children: [
-                Container(width: double.infinity, height: double.infinity, color: Colors.black),
+                Container(width: double.infinity, height: double.infinity, color: AppColors.surfaceMuted),
                 Obx(() {
                   return ColorFiltered(
-                    colorFilter: ColorFilter.mode(Color(0xFF000000).withValues(alpha: 0.1), BlendMode.srcOver),
+                    colorFilter: ColorFilter.mode(AppColors.background.withValues(alpha: 0.1), BlendMode.srcOver),
                     child: CachedImage(
                       imageUrl: controller.background,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
-                      errorWidget: (context, url, error) => Container(width: double.infinity, height: double.infinity, color: AppColors.main),
+                      errorWidget: (context, url, error) => Container(width: double.infinity, height: double.infinity, color: AppColors.background),
                     ),
                   );
                 }),
@@ -107,7 +107,7 @@ class PersonViewPage extends StatelessWidget {
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [Colors.black.withValues(alpha: 0), Colors.black, Colors.black],
+                          colors: [AppColors.background.withValues(alpha: 0), AppColors.background, AppColors.background],
                         ),
                       ),
                       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [_buildHeaderSection(), _buildProfileSection()]),
@@ -120,7 +120,7 @@ class PersonViewPage extends StatelessWidget {
                 return MediaQuery.of(context).padding.top + kToolbarHeight + 48;
               },
               body: Container(
-                color: AppColors.base_background,
+                color: AppColors.background,
                 child: PageView(
                   controller: pageController,
                   onPageChanged: (i) {
@@ -132,6 +132,10 @@ class PersonViewPage extends StatelessWidget {
             ),
           ),
 
+          if (AppAppearance.isLight)
+            Positioned(top: 0, left: 0, right: 0,
+              height: MediaQuery.paddingOf(context).top + 52,
+              child: const ColoredBox(color: AppColors.background)),
           // 返回按钮
           Positioned(
             left: 16,
@@ -153,7 +157,7 @@ class PersonViewPage extends StatelessWidget {
                               width: 24,
                               height: 24,
                               alignment: Alignment.center,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                              child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accentText),
                             )
                             : Container(),
                   ),
@@ -189,9 +193,9 @@ class PersonViewPage extends StatelessWidget {
               child: SafeArea(
                 child: Container(
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: AppColors.surface),
                   height: 52,
-                  child: Text(Security.security_Chat, style: TextStyle(color: Color(0xFF07070A), fontSize: 14, fontWeight: FontWeight.w900)),
+                  child: Text(Security.security_Chat, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w900)),
                 ),
               ),
             ),
@@ -250,9 +254,9 @@ class PersonViewPage extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(8),
                                       gradient: LinearGradient(
                                         colors: [
-                                          Colors.black.withValues(alpha: 0.01),
-                                          Colors.black.withValues(alpha: 0.6),
-                                          Colors.black.withValues(alpha: 0.9),
+                                          AppColors.surfaceMuted.withValues(alpha: 0.01),
+                                          AppColors.surface.withValues(alpha: 0.96),
+                                          AppColors.surface.withValues(alpha: 0.98),
                                         ],
                                         begin: Alignment.topCenter,
                                         end: Alignment.bottomCenter,
@@ -267,7 +271,7 @@ class PersonViewPage extends StatelessWidget {
                                               child: Text(
                                                 nickname,
                                                 maxLines: 1,
-                                                style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                                                style: TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
@@ -281,10 +285,10 @@ class PersonViewPage extends StatelessWidget {
                                             Row(
                                               children: [
                                                 ImageView(Images.security_linknum_webp, width: 12, height: 12).marginOnly(right: 2),
-                                                Text(linkNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
+                                                Text(linkNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 8, fontWeight: FontWeight.w500)),
                                                 SizedBox(width: 4),
                                                 Image.asset(Images.security_heart_count_webp, width: 12, height: 12).marginOnly(right: 2),
-                                                Text(heatNum, style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w500)),
+                                                Text(heatNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 8, fontWeight: FontWeight.w500)),
                                               ],
                                             ),
                                           ],
@@ -324,7 +328,7 @@ class PersonViewPage extends StatelessWidget {
                           Flexible(
                             child: Text(
                               controller.name,
-                              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                              style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -347,7 +351,7 @@ class PersonViewPage extends StatelessWidget {
                         Clipboard.setData(ClipboardData(text: controller.uid.toString()));
                         Toast.show(Copywriting.security_copied_ID_to_clipboard);
                       },
-                      child: Text('ID: ${controller.uid}', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+                      child: Text('ID: ${controller.uid}', style: TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.w500)),
                     ),
                     if (!controller.isReal)
                       GestureDetector(
@@ -358,7 +362,7 @@ class PersonViewPage extends StatelessWidget {
                         child: Row(
                           children: [
                             SizedBox(width: 12),
-                            Text('Creator:', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                            Text('Creator:', style: TextStyle(color: AppColors.textPrimary, fontSize: 10, fontWeight: FontWeight.w500)),
                             SizedBox(width: 4),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
@@ -367,12 +371,12 @@ class PersonViewPage extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 width: 16,
                                 height: 16,
-                                errorWidget: (context, url, error) => Container(color: Colors.grey, height: 16, width: 16),
+                                errorWidget: (context, url, error) => Container(color: AppColors.surfaceMuted, height: 16, width: 16),
                               ),
                             ),
                             SizedBox(width: 4),
-                            Text(controller.masterName, style: TextStyle(color: Color(0xFFFFEF3B), fontSize: 10, fontWeight: FontWeight.w500)),
-                            Icon(Icons.arrow_forward_ios, color: Color(0xFFFFEF3B), size: 10),
+                            Text(controller.masterName, style: TextStyle(color: AppColors.accentText, fontSize: 10, fontWeight: FontWeight.w500)),
+                            Icon(Icons.arrow_forward_ios, color: AppColors.accentText, size: 10),
                           ],
                         ),
                       ),
@@ -384,10 +388,10 @@ class PersonViewPage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(controller.linkNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                        Text(controller.linkNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)),
                         Text(
                           Security.security_connectors,
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
+                          style: TextStyle(color: AppColors.textPrimary.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -395,10 +399,10 @@ class PersonViewPage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(controller.followersNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                        Text(controller.followersNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)),
                         Text(
                           Security.security_followers,
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
+                          style: TextStyle(color: AppColors.textPrimary.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -406,8 +410,8 @@ class PersonViewPage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(controller.heatNum, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                        Text(Security.security_heat, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500)),
+                        Text(controller.heatNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)),
+                        Text(Security.security_heat, style: TextStyle(color: AppColors.textPrimary.withValues(alpha: 0.7), fontSize: 9, fontWeight: FontWeight.w500)),
                       ],
                     ),
                   ],
@@ -424,10 +428,10 @@ class PersonViewPage extends StatelessWidget {
                                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white.withValues(alpha: 0.1),
-                                  border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                                  color: AppColors.surface.withValues(alpha: 0.1),
+                                  border: Border.all(color: AppColors.border.withValues(alpha: 0.3)),
                                 ),
-                                child: Text(char, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
+                                child: Text(char, style: TextStyle(color: AppColors.textPrimary, fontSize: 10, fontWeight: FontWeight.w500)),
                               ),
                             )
                             .toList(),
@@ -463,8 +467,8 @@ class PersonViewPage extends StatelessWidget {
             ],
             indicator: BoxDecoration(color: AppColors.ocMain, borderRadius: BorderRadius.circular(18)),
             indicatorSize: TabBarIndicatorSize.tab,
-            labelColor: Colors.black,
-            unselectedLabelColor: Color(0xFF9D9EA5),
+            labelColor: AppColors.textPrimary,
+            unselectedLabelColor: AppColors.textSecondary,
             labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             dividerColor: Colors.transparent,
@@ -542,14 +546,14 @@ class PersonViewPage extends StatelessWidget {
         RH.toPage(Routers.editOC, args: {Security.security_targetUid: controller.uid});
       },
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.surface),
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         child: Center(
           child: Row(
             spacing: 4,
             children: [
-              Icon(Icons.edit, color: Colors.black, size: 14),
-              Text(Copywriting.security_edit, style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+              Icon(Icons.edit, color: AppColors.textPrimary, size: 14),
+              Text(Copywriting.security_edit, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w500)),
             ],
           ),
         ),
@@ -558,8 +562,8 @@ class PersonViewPage extends StatelessWidget {
   }
 
   Widget _buildButtonContent(bool followed) {
-    final color = followed ? Colors.white.withValues(alpha: 0.1) : Color(0xFFFFF37C);
-    final textColor = followed ? Colors.white : Color(0xFF07070A);
+    final color = followed ? AppColors.textPrimary.withValues(alpha: 0.1) : Color(0xFFFFF37C);
+    final textColor = followed ? AppColors.textPrimary : AppColors.textPrimary;
     final text = followed ? Security.security_followed : Security.security_follow;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -581,7 +585,7 @@ class PersonViewPage extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 12),
           child: Obx(
-            () => Text(controller.bio.isEmpty ? '......' : controller.bio, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+            () => Text(controller.bio.isEmpty ? '......' : controller.bio, style: TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.bold)),
           ),
         ),
       ],
@@ -611,7 +615,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Column(children: [Container(color: Colors.black, padding: EdgeInsets.only(left: 16, right: 16, bottom: 4), child: tabBar)]);
+    return Column(children: [Container(color: AppColors.surfaceMuted, padding: EdgeInsets.only(left: 16, right: 16, bottom: 4), child: tabBar)]);
   }
 
   @override

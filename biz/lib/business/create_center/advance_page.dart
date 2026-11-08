@@ -52,9 +52,9 @@ class AdvanceCore extends StatelessWidget {
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.draw, size: 12, color: AppColors.primary),
+                          Icon(Icons.draw, size: 12, color: AppColors.accentText),
                           SizedBox(width: 2),
-                          Text(Copywriting.security_aI_Writer, style: TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w500)),
+                          Text(Copywriting.security_aI_Writer, style: TextStyle(color: AppColors.accentText, fontSize: 12, fontWeight: FontWeight.w500)),
                         ],
                       ),
                     ),
@@ -74,7 +74,7 @@ class AdvanceCore extends StatelessWidget {
                     () => CupertinoSlidingSegmentedControl(
                       padding: EdgeInsets.zero,
                       thumbColor: AppColors.primary,
-                      backgroundColor: Colors.white.withValues(alpha: 0.3),
+                      backgroundColor: AppColors.surfaceMuted,
                       groupValue: _logic.imagePromptsGlobal.value,
                       onValueChanged: (value) {
                         _logic.resetImagePromptsGlobal(value ?? false);
@@ -83,7 +83,7 @@ class AdvanceCore extends StatelessWidget {
                         false: Text(
                           Security.security_background,
                           style: TextStyle(
-                            color: !_logic.imagePromptsGlobal.value ? Color(0xFF07070A) : Colors.white,
+                            color: !_logic.imagePromptsGlobal.value ? AppColors.textPrimary : AppColors.textPrimary,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -91,7 +91,7 @@ class AdvanceCore extends StatelessWidget {
                         true: Text(
                           Security.security_global,
                           style: TextStyle(
-                            color: _logic.imagePromptsGlobal.value ? Color(0xFF07070A) : Colors.white,
+                            color: _logic.imagePromptsGlobal.value ? AppColors.textPrimary : AppColors.textPrimary,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -153,12 +153,12 @@ class AdvanceCore extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(Copywriting.security_generating_Gallery, style: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
+              Text(Copywriting.security_generating_Gallery, style: const TextStyle(fontSize: 14, color: AppColors.textPrimary, fontWeight: FontWeight.w700)),
               Obx(() {
                 return CupertinoSlidingSegmentedControl(
                   padding: EdgeInsets.zero,
                   thumbColor: AppColors.primary,
-                  backgroundColor: Colors.white.withValues(alpha: 0.3),
+                  backgroundColor: AppColors.surface.withValues(alpha: 0.3),
                   groupValue: _logic.generatingGallery.value,
                   onValueChanged: (value) {
                     _logic.generatingGallery.value = value ?? false;
@@ -167,11 +167,11 @@ class AdvanceCore extends StatelessWidget {
                   children: {
                     false: Text(
                       Security.security_off,
-                      style: TextStyle(color: !_logic.generatingGallery.value ? Color(0xFF07070A) : Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: !_logic.generatingGallery.value ? AppColors.textPrimary : AppColors.textPrimary, fontSize: 10, fontWeight: FontWeight.bold),
                     ),
                     true: Text(
                       Security.security_on,
-                      style: TextStyle(color: _logic.generatingGallery.value ? Color(0xFF07070A) : Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: _logic.generatingGallery.value ? AppColors.textPrimary : AppColors.textPrimary, fontSize: 10, fontWeight: FontWeight.bold),
                     ),
                   },
                 );
@@ -181,7 +181,7 @@ class AdvanceCore extends StatelessWidget {
           SizedBox(height: 8),
           Text(
             Copywriting.security_enable_this_option_to_allow_the_AI_to_generate_image_galleries_based_on_your_information_,
-            style: TextStyle(color: Color(0xFF999999), fontWeight: FontWeight.w500, fontSize: 11),
+            style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w500, fontSize: 11),
           ),
         ],
       ),
@@ -209,14 +209,14 @@ class AdvanceCore extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
+              Text(title, style: const TextStyle(fontSize: 14, color: AppColors.textPrimary, fontWeight: FontWeight.w700)),
               if (titleTrailing != null) titleTrailing,
             ],
           ),
           Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Color(0xFF1A181E)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.surfaceMuted),
             child: Column(
               children: [
                 TextField(
@@ -243,17 +243,17 @@ class AdvanceCore extends StatelessWidget {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: hintText,
-                    hintStyle: const TextStyle(color: Color(0xFF636268), fontSize: 11, fontWeight: FontWeight.w500),
+                    hintStyle: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w500),
                   ),
                   maxLines: maxLines,
-                  style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500),
+                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w500),
                 ),
                 Obx(
                   () => Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(curString.value.length.toString(), style: const TextStyle(color: Color(0xFF636268), fontSize: 11, fontWeight: FontWeight.w500)),
-                      Text('/$limited', style: const TextStyle(color: Color(0xFF636268), fontSize: 11, fontWeight: FontWeight.w500)),
+                      Text(curString.value.length.toString(), style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w500)),
+                      Text('/$limited', style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w500)),
                     ],
                   ),
                 ),
@@ -272,12 +272,12 @@ class AdvanceCore extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 12,
         children: [
-          Text(title, style: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
+          Text(title, style: const TextStyle(fontSize: 14, color: AppColors.textPrimary, fontWeight: FontWeight.w700)),
           Container(
             height: 356,
             alignment: Alignment.center,
             padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.ocBox),
+            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.surfaceMuted),
             child: Obx(
               () => Column(
                 spacing: 8,
@@ -285,7 +285,7 @@ class AdvanceCore extends StatelessWidget {
                   Text(
                     Copywriting
                         .security_defines_the_conversational_patterns_between_you_and_your_character__This_crucial_setting_determines_how_your_character_formulates_responses_and_maintains_personality_consistency_,
-                    style: TextStyle(color: Color(0xFF999999), fontWeight: FontWeight.w500, fontSize: 11),
+                    style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w500, fontSize: 11),
                   ),
                   Expanded(
                     child: SingleChildScrollView(
@@ -306,7 +306,7 @@ class AdvanceCore extends StatelessWidget {
                                       child: Container(
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
-                                          color: isUser ? Colors.white : AppColors.ocMain,
+                                          color: isUser ? AppColors.surface : AppColors.ocMain,
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(12),
                                             topRight: Radius.circular(12),
@@ -315,7 +315,7 @@ class AdvanceCore extends StatelessWidget {
                                           ),
                                         ),
                                         child: TextField(
-                                          style: TextStyle(color: isUser ? Colors.black : Colors.black, fontSize: 12, fontWeight: FontWeight.w500, height: 1.3),
+                                          style: TextStyle(color: isUser ? AppColors.textPrimary : AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.w500, height: 1.3),
                                           controller: _logic.controllers[i],
                                           onTapOutside: (_) {
                                             FocusManager.instance.primaryFocus?.unfocus();
@@ -331,7 +331,7 @@ class AdvanceCore extends StatelessWidget {
                                             border: InputBorder.none,
                                             hintText: '${Copywriting.security_click_to_add} $from’s message',
                                             hintStyle: TextStyle(
-                                              color: isUser ? Colors.black54 : Colors.black54,
+                                              color: isUser ? AppColors.textPrimary : AppColors.textPrimary,
                                               fontSize: 11,
                                               fontWeight: FontWeight.w500,
                                               height: 1.4,
@@ -352,7 +352,7 @@ class AdvanceCore extends StatelessWidget {
                     onTap: _logic.addRound,
                     child: Container(
                       height: 44,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: Color(0xff2F3031)),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: AppColors.surfaceMuted),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -361,10 +361,10 @@ class AdvanceCore extends StatelessWidget {
                             spacing: 4,
                             children: [
                               ImageView(Images.security_chat_add_png, height: 16, width: 16),
-                              Text(Copywriting.security_add_rounds, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+                              Text(Copywriting.security_add_rounds, style: TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.w500)),
                               Text(
                                 '(${_logic.dialogStyle.length ~/ 2}/5）',
-                                style: const TextStyle(color: Color(0xFF666666), fontSize: 11, fontWeight: FontWeight.w400),
+                                style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w400),
                               ),
                             ],
                           ),
@@ -393,10 +393,10 @@ class AdvancePage extends StatelessWidget {
   Widget build(BuildContext context) {
     _logic.loadCharacterInfo(CharacterService.instance.createRoleConfigs);
     return Scaffold(
-      backgroundColor: Color(0xff07070A),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color(0xff07070A),
+        backgroundColor: AppColors.background,
         leading: IconButton(
           onPressed: () {
             CharacterService.instance.save();
@@ -407,15 +407,15 @@ class AdvancePage extends StatelessWidget {
         title: Text(
           textAlign: TextAlign.center,
           Copywriting.security_create_My_Character,
-          style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),
+          style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),
         ),
         actions: [
           Container(
             padding: EdgeInsets.all(16),
             child: Row(
               children: [
-                Text('2', style: TextStyle(color: AppColors.ocMain, fontWeight: FontWeight.w700, fontSize: 14, fontFamily: Copywriting.security_sF_Pro_bold)),
-                Text('/2', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 9, fontFamily: Copywriting.security_sF_Pro_bold)),
+                Text('2', style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.w700, fontSize: 14, fontFamily: Copywriting.security_sF_Pro_bold)),
+                Text('/2', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 9, fontFamily: Copywriting.security_sF_Pro_bold)),
               ],
             ),
           ),
@@ -448,12 +448,12 @@ class AdvancePage extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
-                  color: _logic.toGen.value ? AppColors.ocMain : Color(0xFF2F3031),
+                  color: _logic.toGen.value ? AppColors.ocMain : AppColors.surfaceMuted,
                 ),
                 // 禁用状态颜色
                 child: Text(
                   Security.security_Generate,
-                  style: TextStyle(color: _logic.toGen.value ? Colors.black : Colors.black.withValues(alpha: 0.6), fontSize: 14, fontWeight: FontWeight.w900),
+                  style: TextStyle(color: _logic.toGen.value ? AppColors.textPrimary : AppColors.textPrimary.withValues(alpha: 0.6), fontSize: 14, fontWeight: FontWeight.w900),
                 ),
               ),
             ),
@@ -483,11 +483,11 @@ class AdvancePage extends StatelessWidget {
               child: Text(
                 textAlign: TextAlign.center,
                 Copywriting.security_create_My_Character,
-                style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),
+                style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),
               ),
             ),
-            Text('2', style: TextStyle(color: AppColors.ocMain, fontWeight: FontWeight.w700, fontSize: 14, fontFamily: Copywriting.security_sF_Pro_bold)),
-            Text('/2', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 9, fontFamily: Copywriting.security_sF_Pro_bold)),
+            Text('2', style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.w700, fontSize: 14, fontFamily: Copywriting.security_sF_Pro_bold)),
+            Text('/2', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 9, fontFamily: Copywriting.security_sF_Pro_bold)),
           ],
         ),
       ),

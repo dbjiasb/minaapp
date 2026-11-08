@@ -15,7 +15,7 @@ fi
 
 flutter --version
 
-IPA_NAME="Mina"
+IPA_NAME="Miora"
 APP_NAME="Runner"
 CONFIGURATION="Release"
 upload_script=$build_dir'/pgyer_upload.sh'

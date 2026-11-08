@@ -51,7 +51,7 @@ class GenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.arguments != null ? _logic.initEditPage(Get.arguments as Map) : _logic.initCreatePage();
     return Scaffold(
-      backgroundColor: AppColors.main,
+      backgroundColor: AppColors.background,
       body: Obx(() => AnimatedSwitcher(duration: const Duration(milliseconds: 200), child: _logic.isGenPage.value ? generatingView() : resultBody())),
     );
   }
@@ -60,7 +60,7 @@ class GenPage extends StatelessWidget {
   Widget generatingView() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 44),
-      color: Color(0xFF07070A),
+      color: AppColors.surfaceMuted,
       // decoration: BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider("oc_create_bg.png"), fit: BoxFit.fill)),
       child: Stack(
         children: [
@@ -79,9 +79,9 @@ class GenPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 44, width: 44, child: CircularProgressIndicator(strokeWidth: 4, color: AppColors.primary)),
+                SizedBox(height: 44, width: 44, child: CircularProgressIndicator(strokeWidth: 4, color: AppColors.accentText)),
                 SizedBox(height: 12),
-                Text(Copywriting.security_generating___, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Color(0xFFFFFFFF))),
+                Text(Copywriting.security_generating___, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.textPrimary)),
               ],
             ),
           ),
@@ -111,7 +111,7 @@ class GenPage extends StatelessWidget {
                         onTap: () {
                           startRegeneration();
                         },
-                        child: Icon(Icons.refresh, size: 32, color: Colors.white,),
+                        child: Icon(Icons.refresh, size: 32, color: AppColors.textPrimary,),
                       ).marginOnly(bottom: 10),
                     ],
                   ),
@@ -129,7 +129,7 @@ class GenPage extends StatelessWidget {
                         children: [
                           Text(
                             _logic.isEditPage ? Copywriting.security_modify_Now : Copywriting.security_create_Now,
-                            style: TextStyle(color: Color(0xFF07070A), fontWeight: FontWeight.w900, fontSize: 16),
+                            style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 16),
                           ),
                           const SizedBox(width: 8),
                           if (_logic.isEditPage)
@@ -138,7 +138,7 @@ class GenPage extends StatelessWidget {
                                   (_logic.modifyCostInfo[Security.security_freeText] ?? '').isEmpty
                                       ? Security.security_free
                                       : _logic.modifyCostInfo[Security.security_freeText] ?? '',
-                                  style: const TextStyle(color: Colors.white, fontSize: 12, height: 1),
+                                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 12, height: 1),
                                 )
                                 : RichText(
                                   text: TextSpan(
@@ -153,7 +153,7 @@ class GenPage extends StatelessWidget {
                                       ),
                                       TextSpan(
                                         text: '${_logic.modifyCostInfo[Security.security_costValue]}',
-                                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                                        style: const TextStyle(color: AppColors.textPrimary, fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -169,7 +169,7 @@ class GenPage extends StatelessWidget {
                     },
                     child: Text(
                       Security.security_quit,
-                      style: TextStyle(color: Colors.white, fontSize: 14, decoration: TextDecoration.underline, decorationColor: Colors.white),
+                      style: TextStyle(color: AppColors.textPrimary, fontSize: 14, decoration: TextDecoration.underline, decorationColor: AppColors.textPrimary),
                     ),
                   ),
                   SafeArea(top: false, child: SizedBox(height: Platform.isAndroid ? 10 : 0)),
@@ -235,7 +235,7 @@ class GenPage extends StatelessWidget {
                 height: 68,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(35)),
-                  color: Colors.grey,
+                  color: AppColors.surfaceMuted,
                 ),
               );
             }
@@ -258,7 +258,7 @@ class GenPage extends StatelessWidget {
                       ? const SizedBox(
                         width: 20,
                         height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2, backgroundColor: Colors.transparent, color: AppColors.primary),
+                        child: CircularProgressIndicator(strokeWidth: 2, backgroundColor: Colors.transparent, color: AppColors.accentText),
                       )
                       : const SizedBox(),
                 ],
@@ -270,7 +270,7 @@ class GenPage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.ocMain),
-              child: Text(Security.security_focus, style: TextStyle(color: Color(0xFF07070A), fontSize: 11, fontWeight: FontWeight.bold)),
+              child: Text(Security.security_focus, style: TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.bold)),
             ),
           ),
         ],
@@ -298,7 +298,7 @@ class GenPage extends StatelessWidget {
     for (int i = 0; i < _logic.resultImages.length; i++) {
       indicators.add(
         Container(
-          decoration: BoxDecoration(color: i == index ? Colors.white : AppColors.ocMain, borderRadius: const BorderRadius.all(Radius.circular(3))),
+          decoration: BoxDecoration(color: i == index ? AppColors.surface : AppColors.ocMain, borderRadius: const BorderRadius.all(Radius.circular(3))),
           height: 6,
           width: 6,
         ),

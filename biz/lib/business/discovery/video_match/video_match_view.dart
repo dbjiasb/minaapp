@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/preferences/preferences.dart';
@@ -29,17 +30,18 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
     ReportManager.sendEvent(Security.security_pv_user_user_video_match, {});
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(
+        color: AppColors.background,
+        image: AppAppearance.isLight ? null : DecorationImage(
           image: CachedImageProvider(MatchRes.base + Images.security_ic_match_bg_png), // 替换为你的图片路径
           fit: BoxFit.cover, // 图片填充整个屏幕
         ),
       ),
       child: Scaffold(
-        appBar: AppBar(backgroundColor: Colors.transparent, surfaceTintColor: Colors.transparent, elevation: 0, toolbarHeight: 0),
+        primary: false,
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Container(
-            margin: const EdgeInsets.only(top: 50),
+            margin: EdgeInsets.only(top: AppAppearance.isLight ? 8 : 50),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -90,12 +92,12 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(Copywriting.security_start_Match, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                              Text(Copywriting.security_start_Match, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
                               Obx(() {
                                 return CallManager.instance.isFreeCall
                                     ? Text(
                                       'Get ${CallManager.instance.freeCallMinutes} minutes Free Call Trial',
-                                      style: const TextStyle(color: Color(0x99FFFFFF), fontSize: 11),
+                                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
                                     )
                                     : Container();
                               }),
@@ -160,7 +162,7 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
             child: Container(
               height: 32,
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(color: AppColors.surface.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -172,9 +174,9 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
                     fit: BoxFit.cover,
                   ),
                   const SizedBox(width: 4),
-                  Text(Copywriting.security_get_30s_Free_Trial, style: TextStyle(color: Color(0xFFDCC3FF), fontSize: 13)),
+                  Text(Copywriting.security_get_30s_Free_Trial, style: TextStyle(color: AppColors.link, fontSize: 13)),
                   const SizedBox(width: 4),
-                  ImageView(Images.security_arrow_right_png, width: 16, height: 16, fit: BoxFit.cover, color: const Color(0xFFDCC3FF)),
+                  ImageView(Images.security_arrow_right_png, width: 16, height: 16, fit: BoxFit.cover, color: AppColors.link),
                 ],
               ),
             ),
@@ -197,9 +199,9 @@ class VideoMatchView extends GetView<VideoMatchLogic> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(Copywriting.security_currently_owns_, style: TextStyle(color: Color(0xFFDCC3FF), fontSize: 13)),
+          Text(Copywriting.security_currently_owns_, style: TextStyle(color: AppColors.link, fontSize: 13)),
           Obx(() {
-            return Text(" x${CallManager.instance.freeCallMinutes}  ", style: const TextStyle(color: Color(0xFFDCC3FF), fontSize: 13));
+            return Text(" x${CallManager.instance.freeCallMinutes}  ", style: const TextStyle(color: AppColors.link, fontSize: 13));
           }),
         ],
       ).marginOnly(top: 20),

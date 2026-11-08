@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class AIModeIntro extends StatelessWidget {
           width: double.infinity,
           height: 400,
           decoration: BoxDecoration(
-            color: Color(0xFF5B1C9B),
+            color: AppColors.surface,
             borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24))
           ),
         ),
@@ -53,7 +54,7 @@ class AIModeIntro extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontSize: 13,
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.bold
                         ),
                       ),
@@ -69,7 +70,7 @@ class AIModeIntro extends StatelessWidget {
                   child: Text(
                     curMode[ES.dd] ?? "",
                     style: const TextStyle(
-                        fontSize: 16, height: 1.5, color: Colors.white),
+                        fontSize: 16, height: 1.5, color: AppColors.textPrimary),
                   ),
                 ),
               ),

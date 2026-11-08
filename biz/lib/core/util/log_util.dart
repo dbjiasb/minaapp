@@ -13,8 +13,8 @@ import 'package:path_provider/path_provider.dart';
 import '../../base/crypt/security.dart';
 import 'file_upload.dart';
 
-class MinaLogPrinter extends PrettyPrinter {
-  MinaLogPrinter() : super(
+class MioraLogPrinter extends PrettyPrinter {
+  MioraLogPrinter() : super(
       methodCount: 0,
       errorMethodCount: 8,
       noBoxingByDefault: true,
@@ -40,8 +40,8 @@ class AppLog {
   static String _logDirPath = '';
 
   static init() async {
-    _logDirPath = '${(await getTemporaryDirectory()).path}/mina_logs';
-    String fileName = 'mina_log_${DateFormat('MM-dd-yyyy').format(DateTime.now())}.log';
+    _logDirPath = '${(await getTemporaryDirectory()).path}/miora_logs';
+    String fileName = 'miora_log_${DateFormat('MM-dd-yyyy').format(DateTime.now())}.log';
     final path = '$_logDirPath/$fileName';
     File file = await File(path).create(recursive: true);
     FileOutput output = FileOutput(file: file);
@@ -49,23 +49,23 @@ class AppLog {
     _logger = Logger(
         filter: ProductionFilter(),
         output: output,
-        printer: MinaLogPrinter()
+        printer: MioraLogPrinter()
     );
   }
 
   void imp_d(String msg) {
-    if (kDebugMode) debugPrint('[MinaLog] $msg');
+    if (kDebugMode) debugPrint('[MioraLog] $msg');
     // _logger.d(msg);
   }
 
   void imp_i(String msg) {
-    if (kDebugMode) debugPrint('[MinaLog] $msg');
-    _logger.i('[MinaLog] $msg');
+    if (kDebugMode) debugPrint('[MioraLog] $msg');
+    _logger.i('[MioraLog] $msg');
   }
 
   void imp_e(String msg) {
-    if (kDebugMode) debugPrint('[MinaLog] $msg');
-    _logger.e('[MinaLog] $msg');
+    if (kDebugMode) debugPrint('[MioraLog] $msg');
+    _logger.e('[MioraLog] $msg');
   }
 
   static void d(String msg) => AppLog().imp_d(msg);
@@ -77,7 +77,7 @@ class AppLog {
     try {
       await deleteLogBefore5Days();
     } catch (e) {
-      L.e('[MinaLog] failed error: $e');
+      L.e('[MioraLog] failed error: $e');
     }
     String? zipPath = await getCompressLogPath();
     final file = File(zipPath ?? '');
@@ -119,7 +119,7 @@ class AppLog {
     }).toList();
     for (File file in filesToDelete) {
       await file.delete();
-      L.i('[MinaLog] Delete file：${file.path}');
+      L.i('[MioraLog] Delete file：${file.path}');
     }
   }
 }

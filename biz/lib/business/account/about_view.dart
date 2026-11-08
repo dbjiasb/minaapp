@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_brand.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:biz/base/app_info/app_manager.dart';
@@ -14,10 +15,10 @@ class AboutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(Security.security_about, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-        backgroundColor: AppColors.base_background,
+        title: Text(Security.security_about, style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
+        backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(icon: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, width: 32, height: 32), onPressed: () => RH.back()),
       ),
@@ -28,11 +29,13 @@ class AboutView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 100),
-              ClipRRect(borderRadius: BorderRadius.circular(12), child: CachedImage(imageUrl: ImagePath.logo512, width: 94, height: 94)),
-              SizedBox(height: 6),
+              ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.asset(AppBrand.logoAsset, package: 'biz', width: 94, height: 94, semanticLabel: AppBrand.name)),
+              const SizedBox(height: 12),
+              const Text(AppBrand.fullName, style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.w700)),
+              const SizedBox(height: 6),
               Text(
                 'V ${AppManager.instance.appVersion} (${AppManager.instance.appBuild})',
-                style: TextStyle(fontWeight: AppFonts.semiBold, fontSize: 12, color: Color(0xFFBEBFC5)),
+                style: TextStyle(fontWeight: AppFonts.semiBold, fontSize: 12, color: AppColors.textSecondary),
               ),
             ],
           ),

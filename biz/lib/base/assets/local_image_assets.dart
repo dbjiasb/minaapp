@@ -1,0 +1,240 @@
+import '../api_service/api_config.dart';
+
+/// Bundled UI artwork. Dynamic user images continue to use their remote URLs.
+abstract final class LocalImageAssets {
+  static const package = 'biz';
+  static const prefix = 'packages/biz/assets/images/';
+  static const redesignedPrefix = 'packages/biz/assets/img/';
+
+  /// Original resource keys remain stable across all balance/empty-state views.
+  static const redesigned = <String, String>{
+    'premium.png': 'premium.png',
+    'btn_pic.png': 'chat-photo.png',
+    'chat-create-image.png': 'chat-create-image.png',
+    'btn_video.png': 'chat-video.png',
+    'btn_call.png': 'chat-call.png',
+    'ai_continue.png': 'chat-continue.png',
+    'tip_on.png': 'chat-inspiration-on.png',
+    'tip_off.png': 'chat-inspiration-off.png',
+    'chat_add.png': 'chat-add.png',
+    'audio_mode.png': 'chat-microphone.png',
+    'keyboard.png': 'chat-keyboard.png',
+    'more.png': 'chat-menu.png',
+    'coin.png': 'coin.png',
+    'gem.png': 'gem.png',
+    '0e46d8d6b7a0096b06c0603c9fca9aad.webp': 'daily-task.png',
+    '5660bcd256ba0012c41d3d6f22c17472.webp': 'notification.png',
+    'ae336cd047a6b0d10ffdc05dece4f3c3.webp': 'collection.png',
+    '1d50fa5b3a01d0b513df8f4b8be40158.webp': 'feedback.png',
+    'dc5d2219fb4416476764f288c47c6ed4.webp': 'empty-state.png',
+  };
+
+  static const paths = <String>{
+    '045c857c462f37b38ba5170a9164dd38.webp',
+    '0de42c77c36ca66c2439f8c9c203ed65.webp',
+    '0e46d8d6b7a0096b06c0603c9fca9aad.webp',
+    '1025b6fc22805f3c7b558818df4ba483.webp',
+    '1d50fa5b3a01d0b513df8f4b8be40158.webp',
+    '212cf1b244c5d282aa707c111f721d96.webp',
+    '21e35a23151bbf16fbd9f27be874b3e6.webp',
+    '25177767420e31db474b31e6c6f2cc34.webp',
+    '27fddb8302bb2a02a5cc370b01c50004.webp',
+    '2863f5ce4769c8c794e972c4df95422e.webp',
+    '29ad999436ed93a599b2fa297c29aa3c.webp',
+    '3675d3acea7f2db0bacd40cd7780d405.webp',
+    '36b62ccf72d7e4ae7f5bbedc9b8a7f10.webp',
+    '3bac13283a8bbc3f41836ab5b577ef64.webp',
+    '3bf4e543880b57f0fea9a70427c3f637.webp',
+    '3d14650895e431ae6c31df66767d749d.webp',
+    '3d53b0da46b2c07d4c985cee7d5dc0da.webp',
+    '444fb0559fb6deac9622311340517f6c.webp',
+    '491f7aea802ef50f9fb79cad9c090e29.webp',
+    '529355b03ad27464236e2b6639ddc133.webp',
+    '5660bcd256ba0012c41d3d6f22c17472.webp',
+    '57d2cddb21222ec8dd84f5903fb3e160.webp',
+    '59d03e68ca99a383d47cdfcf244a4c61.webp',
+    '5bcbc095631015cd9e3818b16bae795b.webp',
+    '64024c5146272f11e43e01d636763251.webp',
+    '64e1832fccdc26a3bdac2fd749715692.webp',
+    '6ac0755719313ea3adf7635a85e589ad.webp',
+    '6b643df085de4b4e5fe666c0f7088c3c.webp',
+    '6cf69990f528138aa6c55d22dc6329db.webp',
+    '7db4153c8e6086a4df06da6baeaba6ab.webp',
+    '830cf76ba0712fbff901c537b727fcfe.webp',
+    '8617d56b1d2f4f1a6682359744c8ad78.png',
+    '992c611907f7b1d7e472dbaab36ba82e.webp',
+    '9a3a351460bb72298cce89d62242aa74.png',
+    'a022d293c817c05e82fbd89e45ad185e.webp',
+    'ad8e3e4e0ec6541b89ae28ae86414e19.webp',
+    'ae336cd047a6b0d10ffdc05dece4f3c3.webp',
+    'ai_continue.png',
+    'arrow_down.png',
+    'arrow_right.png',
+    'audio_cancel.png',
+    'audio_mask.png',
+    'audio_mode.png',
+    'audio_msg.png',
+    'audio_on.webp',
+    'b9c24b6bbfdbb06c14cadd2882e35a76.webp',
+    'back.png',
+    'btn_call.png',
+    'btn_gift.png',
+    'btn_history.png',
+    'btn_pic.png',
+    'btn_video.png',
+    'btn_video_call.png',
+    'c0cf63c7d8ad642d834ce8fbc0cbbf8c.webp',
+    'c5739a7b7d642258e46877ba4c9b3e85.webp',
+    'c5f211ba0997ea93ec0287aa75dac308.webp',
+    'c75cd7ba530b7fabb63396db28b4a0e4.webp',
+    'cc7bfa872faec3cb58a982afa490b949.webp',
+    'cffbab8fda02e957df7291c5cd20e439.webp',
+    'chat_add.png',
+    'chat_img_placeholder.png',
+    'chat_side_game.webp',
+    'chat_side_mod.webp',
+    'chat_side_more_bg.webp',
+    'chat_side_more_co.webp',
+    'chat_side_more_xp.png',
+    'chat_side_store.webp',
+    'chat_side_task.webp',
+    'coin.png',
+    'd4b3190ba59ad151d53385f4c52f153b.webp',
+    'd8c2db8d6d3dc265dbcbf6d385c4735c.webp',
+    'dc5d2219fb4416476764f288c47c6ed4.webp',
+    'e00583bfe3fc75750341a593cd75527c.webp',
+    'e2405af18f5d72461b813814a6ad6788.webp',
+    'f23d85a6583ae650d94ba81395a61dbb.webp',
+    'f8d88139d856767251d7cb0028f8c0b1.webp',
+    'fa0378aaf998a8881ddd110a9510307e.webp',
+    'fe87f7f624b844fddcad2e6566fc001d.webp',
+    'female.png',
+    'ffaa15e596a2d3ed993513c7a6a26fe5.webp',
+    'func_gift.png',
+    'gem.png',
+    'hang_up.png',
+    'heart_count.webp',
+    'ic_add_create.png',
+    'ic_chat_msg_copy.png',
+    'ic_chat_msg_delete.png',
+    'ic_chat_msg_gen_video.png',
+    'ic_chat_msg_hide_translate.webp',
+    'ic_chat_msg_like.png',
+    'ic_chat_msg_like_select.png',
+    'ic_chat_msg_reset.png',
+    'ic_chat_msg_translate.webp',
+    'ic_chat_msg_unlike.png',
+    'ic_chat_msg_unlike_select.png',
+    'ic_check.png',
+    'ic_close.png',
+    'ic_question.png',
+    'ic_uncheck.png',
+    'interrupt_task.png',
+    'keyboard.png',
+    'level_up.webp',
+    'level_up_avatar_frame.webp',
+    'level_up_bg.webp',
+    'linknum.webp',
+    'login_google.png',
+    'male.png',
+    'match/ic_match_bg.png',
+    'match/ic_match_scan_bg.webp',
+    'match/ic_match_task_bg.webp',
+    'match/ic_match_task_chat.webp',
+    'match/ic_match_task_hot.webp',
+    'match/ic_match_task_photo.webp',
+    'match/ic_match_unlike.webp',
+    'mode_buy.webp',
+    'mode_change.png',
+    'mode_flip.webp',
+    'mode_frame.webp',
+    'mode_frame_using.webp',
+    'mode_get_new.webp',
+    'mode_lock.webp',
+    'mode_select.webp',
+    'mode_star_light.webp',
+    'mode_star_unlight.webp',
+    'mode_store_top_bg.webp',
+    'mode_story.webp',
+    'mode_used.webp',
+    'moment/iic__share.webp',
+    'moment/iic_add.webp',
+    'moment/iic_ai_replys.webp',
+    'moment/iic_album.webp',
+    'moment/iic_chat_more.webp',
+    'moment/iic_close.webp',
+    'moment/iic_collect.webp',
+    'moment/iic_comment.webp',
+    'moment/iic_create_from_gen.webp',
+    'moment/iic_like.webp',
+    'moment/iic_loading_img.png',
+    'moment/iic_moment_send.webp',
+    'moment/iic_multi.webp',
+    'moment/iic_pic_add.webp',
+    'moment/iic_pics_remove.webp',
+    'moment/iic_uncollect.webp',
+    'moment/iic_unlike.webp',
+    'moment/iic_warning.webp',
+    'more.png',
+    'oc_create_door.webp',
+    'oc_dialog_bg.png',
+    'oc_dialog_rv_bg.png',
+    'oc_group_door.webp',
+    'oc_moment_door.webp',
+    'oc_private.png',
+    'oc_public.png',
+    'open_mic.png',
+    'premium.png',
+    'premium_avatar_bg.png',
+    'premium_bg.png',
+    'premium_buy_bg.png',
+    'premium_item_right.png',
+    'refresh.png',
+    'small_search.webp',
+    'sound_play.png',
+    'tab_moment_0.png',
+    'tab_moment_1.png',
+    'tag_ai.png',
+    'tag_official.png',
+    'tag_real.png',
+    'tip_off.png',
+    'tip_on.png',
+    'triangle_arrow.png',
+    'unlock.png',
+    'user_collect.png',
+    'user_collected.png',
+    'video_msg.png',
+  };
+
+  /// Accepts legacy filenames/CDN URLs as well as Flutter package asset keys.
+  static String? resolve(String name) {
+    var path = name;
+    if (path.startsWith(redesignedPrefix) || path.startsWith('assets/img/')) {
+      final asset = path.startsWith(redesignedPrefix)
+          ? path.substring(redesignedPrefix.length)
+          : path.substring('assets/img/'.length);
+      return redesigned.containsValue(asset) ? '$redesignedPrefix$asset' : null;
+    }
+    if (path.startsWith(prefix)) {
+      path = path.substring(prefix.length);
+    } else if (path.startsWith('assets/images/')) {
+      path = path.substring('assets/images/'.length);
+    } else if (path.startsWith(ApiConfig.cdnApp)) {
+      path = path
+          .substring(ApiConfig.cdnApp.length)
+          .split('?')
+          .first
+          .split('#')
+          .first;
+      // Older named artwork was served from the versioned ZIP directory.
+      if (path.startsWith('assets/')) {
+        final match = RegExp(r'^assets/[^/]+/images/(.+)$').firstMatch(path);
+        if (match == null) return null;
+        path = match.group(1)!;
+      }
+    }
+    final replacement = redesigned[path];
+    if (replacement != null) return '$redesignedPrefix$replacement';
+    return paths.contains(path) ? '$prefix$path' : null;
+  }
+}

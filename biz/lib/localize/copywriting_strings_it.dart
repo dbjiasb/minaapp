@@ -551,7 +551,7 @@ abstract final class CopywritingStringsIt {
     'security_create_your_account': 'Crea il tuo account',
     'security_input_content_here__Option_':
         'Inserisci il contenuto qui (opzione)',
-    'security_mina_Team': 'Squadra Mina',
+    'security_miora_Team': 'Squadra Miora',
     'security_story_background': 'Contesto della storia',
     'security_tap_to_continue___': 'Toccare per continuare...',
     'security_aI_Character': 'Personaggio IA',
@@ -574,7 +574,7 @@ abstract final class CopywritingStringsIt {
     'security_All_Chat': 'Tutte le chat',
     'security_Create_Video': 'Crea video',
     'security_Generate_Video': 'Genera video',
-    'security_Mina_Support': 'Supporto Mina',
+    'security_Miora_Support': 'Supporto Miora',
     'security_No_groups_yet__go_create_one_':
         'Nessun gruppo ancora, creane uno!',
     'security_Please_input_description': 'Inserisci la descrizione',

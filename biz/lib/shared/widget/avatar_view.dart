@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 //生成一个头像框组件，可以设置头像框大小，头像url，描边大小，描边颜色
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class AvatarView extends StatelessWidget {
         imageUrl: url,
         fit: BoxFit.cover,
         errorWidget: (_, _, _) {
-          return Container(color: Colors.grey, width: size, height: size);
+          return Container(color: AppColors.surfaceMuted, width: size, height: size);
         },
       ),
     );

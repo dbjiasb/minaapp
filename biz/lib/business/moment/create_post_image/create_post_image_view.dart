@@ -10,7 +10,6 @@ import '../../../base/crypt/security.dart';
 import '../../../base/report/report_manager.dart';
 import '../../../core/util/cached_image.dart';
 import '../../../shared/app_theme.dart';
-import '../../../shared/common_widget.dart';
 import '../constant_state.dart';
 import 'create_post_image_logic.dart';
 
@@ -22,11 +21,13 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
     controller.initArguments();
     ReportManager.sendEvent(Security.security_pv_generate_image, {});
     return Scaffold(
-      backgroundColor: Color(0xFF12151C),
-      appBar: AppBarExt.darkAppBar(
-        returnIconColor: Colors.white,
-        backgroundColor: Color(0xFF12151C),
-        title: Copywriting.security_generate_for_Moment,
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        foregroundColor: AppColors.textPrimary,
+          systemOverlayStyle: AppAppearance.overlayStyle,
+          leading: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+        backgroundColor: AppColors.background,
+        title: Text(Copywriting.security_generate_for_Moment, style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
         actions: [
           Obx(() {
             return GestureDetector(
@@ -37,7 +38,7 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
               },
               child: Text(
                 Security.security_select,
-                style: TextStyle(color: controller.rxResInfoList.isNotEmpty ? AppColors.primary : Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                style: TextStyle(color: controller.rxResInfoList.isNotEmpty ? AppColors.accentText : AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
               ).marginOnly(right: 16),
             );
           }),
@@ -86,7 +87,7 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         _buildItemDesc(userCreationRecord[Security.security_prompt] ?? ""),
-        Text(Security.security_image, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)).marginOnly(top: 16, bottom: 8),
+        Text(Security.security_image, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)).marginOnly(top: 16, bottom: 8),
         if (res.isNotEmpty) _buildItemImage(res),
         if (userCreationRecord[Security.security_reloadInfo]?[Security.security_reload] == 1)
           _buildItemRefreshView(userCreationRecord[Security.security_reloadInfo] ?? {}, userCreationRecord[Security.security_id]),
@@ -112,8 +113,8 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
     return Container(
       margin: const EdgeInsets.only(right: 34),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(color: const Color(0xFF2D3442).withOpacity(0.9), borderRadius: BorderRadius.circular(12)),
-      child: SelectableText(desc, style: const TextStyle(color: Colors.white, fontSize: 14)),
+      decoration: BoxDecoration(color: AppColors.surfaceMuted.withOpacity(0.9), borderRadius: BorderRadius.circular(12)),
+      child: SelectableText(desc, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
     );
   }
 
@@ -148,13 +149,13 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
                           fit: BoxFit.cover,
                           borderRadius: BorderRadius.circular(16),
                           errorWidget: (context, url, error) {
-                            return Container(color: Colors.grey, width: double.infinity);
+                            return Container(color: AppColors.surfaceMuted, width: double.infinity);
                           },
                           placeholder: (context, url) {
                             return Container(
                               width: double.infinity,
                               height: double.infinity,
-                              decoration: BoxDecoration(color: Color(0xFF2F3137), borderRadius: BorderRadius.circular(16)),
+                              decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(16)),
                             );
                           },
                         ),
@@ -197,16 +198,16 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
           Container(
             margin: const EdgeInsets.only(top: 8),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), borderRadius: BorderRadius.circular(100)),
+            decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(100)),
             child: Row(
               children: [
-                Icon(Icons.refresh, size: 16, color: Colors.white),
+                Icon(Icons.refresh, size: 16, color: AppColors.textPrimary),
                 const SizedBox(width: 4),
                 Text(
                   reloadInfo[Security.security_cost] == 0
                       ? Security.security_free
                       : "${reloadInfo[Security.security_cost]} ${reloadInfo[Security.security_costType] == ECurrencyType.COINS ? "Coins" : "Gems"}",
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
                 ),
               ],
             ),
@@ -217,7 +218,7 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
   }
 
   Widget _buildItemLineView() {
-    return Container(margin: const EdgeInsets.only(top: 24), color: const Color(0xFF403F45), width: double.infinity, height: 1);
+    return Container(margin: const EdgeInsets.only(top: 24), color: AppColors.border, width: double.infinity, height: 1);
   }
 
   Widget _buildInputView() {
@@ -233,7 +234,7 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.only(left: 12, right: 36, top: 12, bottom: 12),
-            decoration: BoxDecoration(color: const Color(0xFFB9B9B9).withOpacity(0.6), borderRadius: BorderRadius.circular(100)),
+            decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(100)),
             child: TextField(
               focusNode: controller.focusNode,
               onChanged: (value) {
@@ -246,17 +247,17 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
               inputFormatters: [LengthLimitingTextInputFormatter(250)],
               controller: controller.controller,
               textAlignVertical: TextAlignVertical.center,
-              style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500, height: 1.4),
+              style: const TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.w500, height: 1.4),
               decoration: InputDecoration(
                 // contentPadding: const EdgeInsets.only(left: 15, right: 45, top: 12, bottom: 12),
                 hintText: Copywriting.security_image_details__facial_features__clothing,
-                hintStyle: TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.w600),
+                hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 13, fontWeight: FontWeight.w600),
                 filled: true,
                 isCollapsed: true,
                 fillColor: Colors.transparent,
                 border: InputBorder.none,
               ),
-              cursorColor: Colors.white,
+              cursorColor: AppColors.textPrimary,
               textInputAction: TextInputAction.send,
               maxLines: 1,
               // 固定最大行数
@@ -300,7 +301,7 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
               child: Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(color: Colors.black.withOpacity(0.48), borderRadius: BorderRadius.circular(100)),
+                decoration: BoxDecoration(color: AppColors.surfaceMuted.withOpacity(0.48), borderRadius: BorderRadius.circular(100)),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -313,7 +314,7 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
                     ),
                     Text(
                       '${controller.costInfo.value[Security.security_costValue] ?? 15}',
-                      style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 9, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

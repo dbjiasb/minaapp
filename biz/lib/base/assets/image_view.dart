@@ -1,20 +1,18 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/security.dart';
-import 'package:biz/base/crypt/images.dart';
-import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-// import 'package:extended_image/extended_image.dart' as http;
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'local_image_assets.dart';
 
 import '../../core/util/cached_image.dart';
 import '../api_service/api_config.dart';
-import '../environment/environment.dart';
-import '../file_manager/zip_image_manager.dart';
 
 class ImageView extends StatelessWidget {
   final String name;
@@ -27,32 +25,42 @@ class ImageView extends StatelessWidget {
 
   final BoxFit? fit;
 
-  const ImageView(this.name, {this.width, this.height, this.color, this.fit, super.key});
+  const ImageView(
+    this.name, {
+    this.width,
+    this.height,
+    this.color,
+    this.fit,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (Environment.instance.isDebug && !name.startsWith(ApiConfig.cdnApp)) {
-      String pathPre = '../assets/images/';
-      if (Platform.isAndroid) {
-        pathPre = Images.security_packages_biz_assets_images_;
-      }
+    final asset = LocalImageAssets.resolve(name);
+    if (asset != null) {
       return Image.asset(
-        '$pathPre$name',
+        asset,
         width: width,
         height: height,
         color: color,
         fit: fit,
-        errorBuilder: (context, error, stackTrace) => _buildRemoteImage(),
       );
     }
     return _buildRemoteImage();
   }
 
   Widget _buildRemoteImage() {
-    // final path = !name.startsWith(Security.security_http) ? ZipImageManager.instance.getImagePathOrUrl(name) : name;
-    final path = !name.startsWith(Security.security_http) ? "${ApiConfig.cdnApp}$name" : name;
-    if (ZipImageManager.instance.isLocalImage(path)) {
-      return Image.file(File(path), fit: fit, color: color, width: width, height: height);
+    final path = name.startsWith('/') || name.startsWith(Security.security_http)
+        ? name
+        : '${ApiConfig.cdnApp}$name';
+    if (path.startsWith('/')) {
+      return Image.file(
+        File(path),
+        fit: fit,
+        color: color,
+        width: width,
+        height: height,
+      );
     } else {
       return CachedImage(
         imageUrl: path,
@@ -61,45 +69,52 @@ class ImageView extends StatelessWidget {
         color: color,
         fit: fit,
         errorWidget: (BuildContext context, String url, Object error) {
-          return Container(width: width, height: height, color: color ?? Colors.grey);
+          return Container(
+            width: width,
+            height: height,
+            color: color ?? AppColors.surfaceMuted,
+          );
         },
       );
     }
   }
 
   static ImageProvider getImageProvider(String name) {
-    if (Environment.instance.isDebug && !name.startsWith(ApiConfig.cdnApp)) {
-      String pathPre = '../assets/images/';
-      if (Platform.isAndroid) {
-        pathPre = Images.security_packages_biz_assets_images_;
-      }
-      if (File('$pathPre$name').existsSync()) {
-        return AssetImage('assets/images/$name', package: Security.security_biz);
-      }
-    }
-    // final path = ZipImageManager.instance.getImagePathOrUrl(name);
-    final path = !name.startsWith(Security.security_http) ? "${ApiConfig.cdnApp}$name" : name;
-    if (ZipImageManager.instance.isLocalImage(path)) {
+    final asset = LocalImageAssets.resolve(name);
+    if (asset != null) return AssetImage(asset);
+    final path = name.startsWith('/') || name.startsWith(Security.security_http)
+        ? name
+        : '${ApiConfig.cdnApp}$name';
+    if (path.startsWith('/')) {
       return FileImage(File(path));
     } else {
       return CachedImageProvider(path);
     }
   }
 
-  static Future<ui.Image> getImage(String name) {
-    final path = ZipImageManager.instance.getImagePathOrUrl(name);
-    if (ZipImageManager.instance.isLocalImage(path)) {
-      return loadImageFromFile(path);
-    } else {
-      return loadImageFromNetwork(path);
+  static Future<ui.Image> getImage(String name) async {
+    final asset = LocalImageAssets.resolve(name);
+    if (asset != null) {
+      final data = await rootBundle.load(asset);
+      return _decodeImageFromBytes(
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+      );
     }
+    if (name.startsWith('/')) return loadImageFromFile(name);
+    final url = name.startsWith(Security.security_http)
+        ? name
+        : '${ApiConfig.cdnApp}$name';
+    return loadImageFromNetwork(url);
   }
 
   static Future<ui.Image> loadImageFromNetwork(String url) async {
     Dio dio = Dio();
-    final response = await dio.get(url);
+    final response = await dio.get<List<int>>(
+      url,
+      options: Options(responseType: ResponseType.bytes),
+    );
     if (response.statusCode == 200) {
-      return await _decodeImageFromBytes(response.data);
+      return await _decodeImageFromBytes(Uint8List.fromList(response.data!));
     } else {
       throw Exception('Failed to load image: ${response.statusCode}');
     }

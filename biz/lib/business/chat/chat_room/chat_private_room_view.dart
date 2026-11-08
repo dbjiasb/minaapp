@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -33,7 +34,7 @@ class ChatPrivateRoomView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFF07070A),
+        backgroundColor: AppColors.background,
         resizeToAvoidBottomInset: true,
         body: Stack(
           fit: StackFit.expand,
@@ -41,7 +42,7 @@ class ChatPrivateRoomView extends StatelessWidget {
             // 背景图片
             _buildBackground(controller),
             // 深色遮罩
-            Container(color: Colors.black.withOpacity(0.2)),
+            Container(color: AppAppearance.isLight ? AppColors.background.withValues(alpha: 0.94) : Colors.black.withOpacity(0.2)),
             // 主要内容
             SafeArea(
               child: Column(
@@ -72,7 +73,7 @@ class ChatPrivateRoomView extends StatelessWidget {
   Widget _buildBackground(ChatPrivateRoomViewController controller) {
     final bgUrl = controller.session.backgroundUrl.value;
     if (bgUrl.isEmpty) {
-      return Container(color: const Color(0xFF07070A));
+      return Container(color: AppColors.background);
     }
     return Obx(
       () => CachedImage(
@@ -96,7 +97,7 @@ class ChatPrivateRoomView extends StatelessWidget {
               ChatManager.instance.updateChatSession(controller.session);
               RouteHelper.back();
             },
-            child: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20.w),
+            child: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary, size: 20.w),
           ),
           SizedBox(width: 12.w),
           // 头像
@@ -114,7 +115,7 @@ class ChatPrivateRoomView extends StatelessWidget {
           Text(
             controller.session.name,
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 14.sp,
               fontWeight: FontWeight.bold,
               fontFamily: Copywriting.security_sF_Pro,
@@ -128,7 +129,7 @@ class ChatPrivateRoomView extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.4),
+                color: AppAppearance.isLight ? AppColors.surface : Colors.black.withOpacity(0.4),
                 borderRadius: BorderRadius.circular(7.r),
               ),
               child: Row(
@@ -137,7 +138,7 @@ class ChatPrivateRoomView extends StatelessWidget {
                   Text(
                     'Current:AI',
                     style: TextStyle(
-                      color: const Color(0xFFFFF37C),
+                      color: AppColors.accentText,
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
                       fontFamily: Copywriting.security_sF_Pro,
@@ -146,7 +147,7 @@ class ChatPrivateRoomView extends StatelessWidget {
                   SizedBox(width: 4.w),
                   Icon(
                     Icons.swap_horiz,
-                    color: const Color(0xFFFFF37C),
+                    color: AppColors.accentText,
                     size: 14.w,
                   ),
                 ],
@@ -158,7 +159,7 @@ class ChatPrivateRoomView extends StatelessWidget {
             onTap: () {
               // TODO: 显示更多菜单
             },
-            child: Icon(Icons.more_vert, color: Colors.white, size: 24.w),
+            child: Icon(Icons.more_vert, color: AppColors.textPrimary, size: 24.w),
           ),
         ],
       ),
@@ -170,13 +171,13 @@ class ChatPrivateRoomView extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 50.w, vertical: 12.w),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.w),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.2),
+        color: AppColors.surfaceMuted.withOpacity(0.2),
         borderRadius: BorderRadius.circular(22.w),
       ),
       child: Text(
         Copywriting
             .security_notice__AI_responses_are_fictional_and_for_entertainment_only,
-        style: TextStyle(color: Colors.white, fontSize: 11.sp),
+        style: TextStyle(color: AppColors.textPrimary, fontSize: 11.sp),
         textAlign: TextAlign.center,
       ),
     );
@@ -242,7 +243,7 @@ class ChatPrivateRoomView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.w),
       child: Text(
         Copywriting.security_unsupported_message_type,
-        style: TextStyle(color: Colors.white.withOpacity(0.5)),
+        style: TextStyle(color: AppColors.textSecondary),
       ),
     );
   }

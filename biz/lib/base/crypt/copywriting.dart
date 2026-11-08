@@ -401,7 +401,7 @@ abstract final class Copywriting {
   static String get security_wrap_your_arms_around_your_knees__sitting_curled_up_slightly__eyes_warm_on_me_ => LocalizationService.text('security_wrap_your_arms_around_your_knees__sitting_curled_up_slightly__eyes_warm_on_me_', () => decrypt('KJbulitvX//0HUVmBs2j+DTPcwpkcJsyUqq+IKrXFhFeyPw4DZUKgtVvjem/F0LATqBpl0YMLdPSUAZvu0Wb8jtVILgX/YXkd3tstJo4xGE=')); // Wrap your arms around your knees, sitting curled up slightly, eyes warm on me.
   static String get security_create_your_account => LocalizationService.text('security_create_your_account', () => decrypt('B3/2y3lzkUbRh7P8fHU+eUM2LEeU8LOXYftMGXy1yb4=')); // Create your account
   static String get security_input_content_here__Option_ => LocalizationService.text('security_input_content_here__Option_', () => decrypt('00WQZCaXimRDywSMByfOqzFE6RIE4ZsAmB2ZXyKpvmM=')); // Input content here (Option)
-  static String get security_mina_Team => LocalizationService.text('security_mina_Team', () => decrypt('NVlKHbr46BTBAtw3+S4zkQ==')); // Mina Team
+  static String get security_miora_Team => LocalizationService.text('security_miora_Team', () => decrypt('GqC7aNuDM5QrWhZYEwJqhA==')); // Miora Team
   static String get security_story_background => LocalizationService.text('security_story_background', () => decrypt('kCeSRjXKbdWVNDEWZNXjhLnd6kQXjInicaEc01XTed0=')); // Story background
   static String get security_tap_to_continue___ => LocalizationService.text('security_tap_to_continue___', () => decrypt('CwDDQ1OW5mtJYJDnZkmHz4Qx5JhUeWP0r/lc67TdNFo=')); // Tap to continue...
   static String get security_aI_Character => LocalizationService.text('security_aI_Character', () => decrypt('hIhi92tbWiNP84PpPUqLbQ==')); // AI Character
@@ -422,7 +422,7 @@ abstract final class Copywriting {
   static String get security_All_Chat => LocalizationService.text('security_All_Chat', () => decrypt('pni3Mjuo4qSqbFpIFNd4bQ==')); // All Chat
   static String get security_Create_Video => LocalizationService.text('security_Create_Video', () => decrypt('d7qXD04OQiNgBILH4t7/sw==')); // Create Video
   static String get security_Generate_Video => LocalizationService.text('security_Generate_Video', () => decrypt('7MdYoekAFPVyoyl+8dqWyg==')); // Generate Video
-  static String get security_Mina_Support => LocalizationService.text('security_Mina_Support', () => decrypt('fgXa5yFXUfSca9d1x4aTKA==')); // Mina Support
+  static String get security_Miora_Support => LocalizationService.text('security_Miora_Support', () => decrypt('qrZJ71VDC8kfWihJFhcVJQ==')); // Miora Support
   static String get security_No_groups_yet__go_create_one_ => LocalizationService.text('security_No_groups_yet__go_create_one_', () => decrypt('DvSjb+xMrug7ezTOm7/cD/ETmB0r//rPaafyMAiHD/4=')); // No groups yet, go create one!
   static String get security_Please_input_description => LocalizationService.text('security_Please_input_description', () => decrypt('bBvpGohWrkV4+grdfpCG4ZZa0sapV5V8Wr49ieC7ffY=')); // Please input description
   static String get security_Search_by_ID__name__tag___ => LocalizationService.text('security_Search_by_ID__name__tag___', () => decrypt('z/Hpk4Fk90++YudyXP7SDlWsrOdauwhWjYEZ3n3DZ7U=')); // Search by ID, name, tag...

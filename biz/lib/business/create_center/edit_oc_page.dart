@@ -62,7 +62,7 @@ class _EditAiPageState extends State<EditAiPage>
       backgroundColor: Colors.transparent,
       title: Text(
         Copywriting.security_edit_My_Character,
-        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -91,8 +91,8 @@ class _EditAiPageState extends State<EditAiPage>
                     indicatorColor: AppColors.primary,
                     indicatorSize: TabBarIndicatorSize.label,
                     indicatorPadding: const EdgeInsets.only(bottom: 10),
-                    labelColor: AppColors.primary,
-                    unselectedLabelColor: Colors.white,
+                    labelColor: AppColors.accentText,
+                    unselectedLabelColor: AppColors.textPrimary,
                     dividerColor: Colors.transparent,
 
                   ),
@@ -130,7 +130,7 @@ class _EditAiPageState extends State<EditAiPage>
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.main,
+        backgroundColor: AppColors.background,
         appBar: _buildAppBar(),
         body: _buildBody(),
       ),
@@ -159,7 +159,7 @@ class _EditAiPageState extends State<EditAiPage>
           child: Text(
             Security.security_Save,
             style: TextStyle(
-              color: Colors.black,
+              color: AppColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),

@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 import 'dart:io';
@@ -261,7 +262,7 @@ class ScenePlayLogic extends GetxController {
     );
     return file.existsSync()
         ? Image.file(file, fit: fit, width: width, height: height)
-        : Container(color: Colors.black);
+        : Container(color: AppColors.surfaceMuted);
   }
 
   void onSelectAction(Map action) async {

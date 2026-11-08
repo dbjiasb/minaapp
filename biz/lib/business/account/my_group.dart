@@ -42,7 +42,7 @@ class _MyGroupViewState extends State<MyGroupView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.base_background,
+      color: AppColors.background,
       child: UiUtils.buildFutureView<List<dynamic>?>(getDataList(), (
         data,
         context,
@@ -96,7 +96,7 @@ class _MyGroupViewState extends State<MyGroupView> {
                     Text(
                       '${info[Security.security_name]}',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -105,7 +105,7 @@ class _MyGroupViewState extends State<MyGroupView> {
                     Text(
                       '${info['memberCount']} Members',
                       style: TextStyle(
-                        color: Color(0xFFABABAD),
+                        color: AppColors.textSecondary,
                         fontSize: 12,
                         height: 16 / 12,
                       ),

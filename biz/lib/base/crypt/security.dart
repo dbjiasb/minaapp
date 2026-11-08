@@ -2585,9 +2585,9 @@ abstract final class Security {
   static late final String security_Group = decrypt(
     'pmGB/2lTJTEylPLCXdS6zw==',
   ); // Group
-  static late final String security_Mina = decrypt(
-    'M7CKswUyMPTxkepXMiD/aA==',
-  ); // Mina
+  static late final String security_Miora = decrypt(
+    'Tlqpwm3g6K+D5rlas4y4Dw==',
+  ); // Miora
   static late final String security_Official = decrypt(
     'QcfCN2WadFwPCjqoCNK2TQ==',
   ); // Official

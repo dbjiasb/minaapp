@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flip_card/flip_card_controller.dart';
@@ -23,7 +24,7 @@ class AiModeCard extends StatefulWidget {
   AiModeCard(this.curMode, {super.key, this.isAutoPlay = false, this.needUpdate = false, this.needBuyBtn = true});
 
   Future show() {
-    return Get.dialog(this, barrierColor: Colors.black.withOpacity(0.8));
+    return Get.dialog(this, barrierColor: AppColors.barrier.withOpacity(0.8));
   }
 
   @override
@@ -57,7 +58,7 @@ class AiModeCardState extends State<AiModeCard> {
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(bottomRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
                 gradient: LinearGradient(
-                  colors: [Color(0x002D2D2F), Color(0xFF2D2D2F)],
+                  colors: [AppColors.surfaceMuted, AppColors.surfaceMuted],
                   // 渐变色数组
                   begin: Alignment.topCenter,
                   // 渐变起始点
@@ -75,7 +76,7 @@ class AiModeCardState extends State<AiModeCard> {
                   Text(
                     aiPersonality[Security.security_name] ?? "",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, decoration: TextDecoration.none),
+                    style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w900, decoration: TextDecoration.none),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -89,13 +90,13 @@ class AiModeCardState extends State<AiModeCard> {
                     maxLines: 2,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12, fontWeight: FontWeight.w500, decoration: TextDecoration.none),
+                    style: TextStyle(color: AppColors.textPrimary.withValues(alpha: 0.7), fontSize: 12, fontWeight: FontWeight.w500, decoration: TextDecoration.none),
                   ).marginOnly(top: 8),
                 ],
               ),
             ),
           ),
-          Positioned.fill(child: ImageView(Images.security_mode_frame_webp, fit: BoxFit.fill)),
+          if (!AppAppearance.isLight) Positioned.fill(child: ImageView(Images.security_mode_frame_webp, fit: BoxFit.fill)),
           Positioned(top: 32, left: 20, child: ImageView(Images.security_mode_flip_webp, height: 32, width: 32, fit: BoxFit.cover)),
           if ((aiPersonality[ES.tagURL] ?? '').isNotEmpty)
             Positioned(
@@ -122,10 +123,10 @@ class AiModeCardState extends State<AiModeCard> {
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              decoration: BoxDecoration(color: Color(0xFF5F2F80), borderRadius: BorderRadius.all(Radius.circular(12))),
+              decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.all(Radius.circular(12))),
             ),
           ),
-          Positioned.fill(child: ImageView(Images.security_mode_frame_webp, fit: BoxFit.fill)),
+          if (!AppAppearance.isLight) Positioned.fill(child: ImageView(Images.security_mode_frame_webp, fit: BoxFit.fill)),
           Positioned(
             top: 40,
             left: 24.w,
@@ -138,17 +139,17 @@ class AiModeCardState extends State<AiModeCard> {
                   width: double.infinity,
                   height: 48,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(image: DecorationImage(image: ImageView.getImageProvider(Images.security_mode_about_bg_webp))),
+                  decoration: BoxDecoration(color: AppColors.selected, borderRadius: BorderRadius.circular(12)),
                   child: Text(
                     Copywriting.security_about_Me,
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16, decoration: TextDecoration.none),
+                    style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16, decoration: TextDecoration.none),
                   ),
                 ),
                 SizedBox(height: 20),
                 Text(
                   aiPersonality[Security.security_name] ?? "",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16, decoration: TextDecoration.none),
+                  style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 16, decoration: TextDecoration.none),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -161,7 +162,7 @@ class AiModeCardState extends State<AiModeCard> {
                 Text(
                   aiPersonality[ES.dd] ?? "",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white, fontSize: 12, height: 1.5, fontWeight: FontWeight.w500, decoration: TextDecoration.none),
+                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 12, height: 1.5, fontWeight: FontWeight.w500, decoration: TextDecoration.none),
                 ).marginOnly(top: 8),
               ],
             ),
@@ -196,7 +197,7 @@ class AiModeCardState extends State<AiModeCard> {
           ),
         ),
         const SizedBox(height: 20),
-        Text(curMode[ES.cName] ?? '', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16, decoration: TextDecoration.none)),
+        Text(curMode[ES.cName] ?? '', style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16, decoration: TextDecoration.none)),
         if (widget.needBuyBtn) const SizedBox(height: 20),
         if (widget.needBuyBtn) buildActionBtn(),
       ],
@@ -227,7 +228,7 @@ class AiModeCardState extends State<AiModeCard> {
                         const SizedBox(width: 2),
                         Text(
                           '${hasDiscount ? curMode[ES.dp] : curMode[Security.security_price]}',
-                          style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
+                          style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
                         ),
                       ],
                     ),
@@ -239,13 +240,13 @@ class AiModeCardState extends State<AiModeCard> {
                           const SizedBox(width: 1),
                           Text(
                             '${curMode[Security.security_price]}',
-                            style: const TextStyle(color: Colors.white, fontSize: 9, decoration: TextDecoration.lineThrough, height: 1),
+                            style: const TextStyle(color: AppColors.textPrimary, fontSize: 9, decoration: TextDecoration.lineThrough, height: 1),
                           ),
                         ],
                       ),
                   ],
                 )
-                : Text(Security.security_owned, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
+                : Text(Security.security_owned, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
       ),
     );
   }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Miora</string>
+    <color name="miora_launch_background">#F8F7F3</color>
+    <color name="miora_brand_yellow">#FFE07A</color>
+</resources>

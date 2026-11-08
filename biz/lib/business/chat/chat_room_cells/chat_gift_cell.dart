@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'dart:convert';
 
@@ -74,7 +75,7 @@ class ChatGiftCell extends ChatCell {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: giftMessage.isMine() ? Color(0xffB661EF).withValues(alpha: 0.9) : Color(0xff272533).withValues(alpha: 0.9),
+              color: giftMessage.isMine() ? AppColors.chatOutgoing : AppColors.chatIncoming,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
@@ -88,17 +89,17 @@ class ChatGiftCell extends ChatCell {
               children: [
                 Column(
                   children: [
-                    Text(giftMessage.giftName, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16)),
+                    Text(giftMessage.giftName, style: TextStyle(color: giftMessage.isMine() ? AppColors.chatOutgoingText : AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 16)),
                     Text(
                       'You ${giftMessage.isMine() ? Security.security_Send : 'Received'}',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 11),
+                      style: TextStyle(color: giftMessage.isMine() ? AppColors.chatOutgoingText : AppColors.textPrimary, fontWeight: FontWeight.w500, fontSize: 11),
                     ),
                   ],
                 ),
                 SizedBox(width: 4),
                 CachedImage(imageUrl: giftMessage.imageUrl, width: 32, height: 32),
                 SizedBox(width: 4),
-                Text('x${giftMessage.giftCount}', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 11, fontFamily: '.SF Pro Text')),
+                Text('x${giftMessage.giftCount}', style: TextStyle(color: giftMessage.isMine() ? AppColors.chatOutgoingText : AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 11, fontFamily: '.SF Pro Text')),
               ],
             ),
           ),

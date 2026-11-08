@@ -167,7 +167,7 @@ class _PhotoViewState extends State<PhotoView> {
                   const SizedBox(width: 4),
                   Text(
                     '${resInfo[Security.security_costValue]}',
-                    style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
+                    style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w900),
                   ),
                 ],
               ),
@@ -182,12 +182,12 @@ class _PhotoViewState extends State<PhotoView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.lock, color: Colors.black, size: 16),
+                    Icon(Icons.lock, color: AppColors.textPrimary, size: 16),
                     // ImageView(ImageNames.lock_icon, width: 16, height: 16),
                     const SizedBox(width: 4),
                     Text(
                       ' Unlock',
-                      style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -203,7 +203,7 @@ class _PhotoViewState extends State<PhotoView> {
     Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.surface,
         child: Container(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -211,7 +211,7 @@ class _PhotoViewState extends State<PhotoView> {
             children: [
               Text(
                 Copywriting.security_Unlock_this_photo,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.base_background),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
               ),
               const SizedBox(height: 16),
               Row(
@@ -219,7 +219,7 @@ class _PhotoViewState extends State<PhotoView> {
                 children: [
                   Text(
                     Security.security_price,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.base_background),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
                   Row(
                     children: [
@@ -227,7 +227,7 @@ class _PhotoViewState extends State<PhotoView> {
                       const SizedBox(width: 4),
                       Text(
                         '${resInfo[Security.security_costValue]}',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.base_background),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                       ),
                     ],
                   ),
@@ -239,7 +239,7 @@ class _PhotoViewState extends State<PhotoView> {
                 children: [
                   Text(
                     Copywriting.security_Your_balance,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.base_background),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
                   Row(
                     children: [
@@ -248,7 +248,7 @@ class _PhotoViewState extends State<PhotoView> {
                       const SizedBox(width: 4),
                       Text(
                         '${resInfo[Security.security_costType] == 0 ? MyAccount.coins : MyAccount.gems}',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.base_background),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                       ),
                     ],
                   ),
@@ -265,7 +265,7 @@ class _PhotoViewState extends State<PhotoView> {
                       child: Container(
                         height: 42,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(color: Color(0xFFEEEEEE), borderRadius: BorderRadius.circular(12)),
+                        decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(12)),
                         child: Text(
                           Security.security_cancel,
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.undo),
@@ -291,7 +291,7 @@ class _PhotoViewState extends State<PhotoView> {
                         decoration: BoxDecoration(color: AppColors.ocMain, borderRadius: BorderRadius.circular(12)),
                         child: Text(
                           ' Unlock',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                         ),
                       ),
                     ),

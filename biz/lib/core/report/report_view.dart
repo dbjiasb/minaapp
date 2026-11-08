@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/core/util/cached_image.dart';
@@ -54,13 +55,13 @@ class _ReportContentViewState extends State<ReportContentView> {
                     children: [
                       ImageView(selectedIndex == index ? ImagePath.selecet_1 : ImagePath.selecet_0, width: 16, height: 16),
                       SizedBox(width: 4),
-                      Text(item.desc, style: TextStyle(color: Color(0xFF999999), fontSize: 13, fontWeight: FontWeight.w500)),
+                      Text(item.desc, style: TextStyle(color: AppColors.textSecondary, fontSize: 13, fontWeight: FontWeight.w500)),
                     ],
                   ),
                   if (index == items.length - 1)
                     Container(
                       margin: const EdgeInsets.only(top: 18),
-                      decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.all(Radius.circular(8))),
+                      decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.all(Radius.circular(8))),
                       child: TextField(
                         onChanged: (value) {
                           widget.extra = value;
@@ -68,7 +69,7 @@ class _ReportContentViewState extends State<ReportContentView> {
                         controller: textEditingController,
                         decoration: InputDecoration(
                           hintText: Copywriting.security_input_content_here__Option_,
-                          hintStyle: TextStyle(color: Color(0xFFAFAFAF), fontSize: 11, fontWeight: FontWeight.w500),
+                          hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 11, fontWeight: FontWeight.w500),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.all(12),
                         ),
@@ -81,7 +82,7 @@ class _ReportContentViewState extends State<ReportContentView> {
         },
         separatorBuilder: (context, index) {
           return Container();
-          return Divider(height: 1, color: Color(0xFFF1F0F4));
+          return Divider(height: 1, color: AppColors.surface);
         },
         itemCount: items.length,
       ),

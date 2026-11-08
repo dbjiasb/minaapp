@@ -24,7 +24,7 @@ class ChatHistoryImageSelectView extends GetView<ChatHistoryImageSelectControlle
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => Get.back(),
@@ -38,7 +38,7 @@ class ChatHistoryImageSelectView extends GetView<ChatHistoryImageSelectControlle
         centerTitle: true,
         elevation: 0,
         // leadingWidth: 44,
-        title: Text(Security.security_photo, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+        title: Text(Security.security_photo, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -51,7 +51,7 @@ class ChatHistoryImageSelectView extends GetView<ChatHistoryImageSelectControlle
               child: Obx(
                 () => Text(
                   Security.security_select,
-                  style: TextStyle(color: controller.selectedImageEmpty ? Colors.white : AppColors.primary, fontSize: 14, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: controller.selectedImageEmpty ? AppColors.textPrimary : AppColors.accentText, fontSize: 14, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

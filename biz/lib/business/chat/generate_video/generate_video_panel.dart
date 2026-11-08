@@ -214,7 +214,7 @@ class GenerateVideoDialog extends StatelessWidget {
         topLeft: Radius.circular(24.w),
         topRight: Radius.circular(24.w),
       ),
-      color: const Color(0xFF202028),
+      color: AppColors.surface,
     ),
     child: SafeArea(
       child: SingleChildScrollView(
@@ -229,7 +229,7 @@ class GenerateVideoDialog extends StatelessWidget {
                     child: Text(
                       Copywriting.security_generate_Video,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 16.w,
                       ),
@@ -253,7 +253,7 @@ class GenerateVideoDialog extends StatelessWidget {
               height: 132.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.surfaceMuted,
               ),
               child: TextField(
                 controller: controller.promptTextFileController,
@@ -267,13 +267,13 @@ class GenerateVideoDialog extends StatelessWidget {
                   hintText: Preferences.instance.generateVideoPromptHints,
                   border: InputBorder.none,
                   hintStyle: const TextStyle(
-                    color: Color(0xFF636268),
+                    color: AppColors.textSecondary,
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                 ),
@@ -295,7 +295,7 @@ class GenerateVideoDialog extends StatelessWidget {
                     Copywriting.security_aI_Writer,
                     style: TextStyle(
                       fontSize: 11.w,
-                      color: const Color(0xFFABABAD),
+                      color: AppColors.textSecondary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -311,7 +311,7 @@ class GenerateVideoDialog extends StatelessWidget {
                     Security.security_settings,
                     style: TextStyle(
                       fontSize: 14.w,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -346,7 +346,7 @@ class GenerateVideoDialog extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16.w,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -380,7 +380,7 @@ class GenerateVideoDialog extends StatelessWidget {
           typeDesc,
           style: TextStyle(
             fontSize: 12.w,
-            color: const Color(0xFFABABAD),
+            color: AppColors.textSecondary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -390,7 +390,7 @@ class GenerateVideoDialog extends StatelessWidget {
             padding: EdgeInsets.all(4.w),
             thumbColor: const Color(0xFF8761F1),
             groupValue: selectTagDesc.value,
-            backgroundColor: Colors.white.withValues(alpha: 0.05),
+            backgroundColor: AppColors.surfaceMuted,
             onValueChanged: (value) {
               if (value == null) return;
               selectTagDesc.value = value;
@@ -416,7 +416,7 @@ class GenerateVideoDialog extends StatelessWidget {
                       Text(
                         _asString(subItem[Security.security_desc]),
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                         ),
@@ -447,7 +447,7 @@ class GenerateVideoDialog extends StatelessWidget {
         Text(
           audioTitle,
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.textPrimary,
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
@@ -464,7 +464,7 @@ class GenerateVideoDialog extends StatelessWidget {
             width: 48.w,
             height: 24.w,
             child: CupertinoSwitch(
-              thumbColor: Colors.white,
+              thumbColor: AppColors.textPrimary,
               inactiveTrackColor: const Color(
                 0xFFD2C0FF,
               ).withValues(alpha: 0.16),
@@ -497,7 +497,7 @@ class GenerateVideoDialog extends StatelessWidget {
                   Text(
                     'estimated Cost',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
@@ -517,7 +517,7 @@ class GenerateVideoDialog extends StatelessWidget {
                     return Text(
                       '${controller.estimatedCost} ${_currencyText(controller.costType.value)}',
                       style: const TextStyle(
-                        color: Color(0xFFFFEF3B),
+                        color: AppColors.accentText,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -527,7 +527,7 @@ class GenerateVideoDialog extends StatelessWidget {
                   Text(
                     Security.security_Detail,
                     style: TextStyle(
-                      color: Color(0xFFFFEF3B),
+                      color: AppColors.accentText,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
@@ -576,7 +576,7 @@ class GenerateVideoDialog extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-            color: const Color(0xFFABABAD),
+            color: AppColors.textSecondary,
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),
@@ -593,7 +593,7 @@ class GenerateVideoDialog extends StatelessWidget {
                     ? Copywriting.security_premium_Free
                     : Security.security_Free,
                 style: TextStyle(
-                  color: const Color(0xFFFFE96F),
+                  color: AppColors.accentText,
                   fontSize: 12,
                   fontWeight: AppFonts.medium,
                 ),
@@ -604,7 +604,7 @@ class GenerateVideoDialog extends StatelessWidget {
           Text(
             '$cost ${_currencyText(controller.costType.value)}',
             style: const TextStyle(
-              color: Color(0xFFFFEF3B),
+              color: AppColors.accentText,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),

@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,7 @@ class ChatSidebar extends StatelessWidget {
                     left: 2, right: 2, top: 38, bottom: 0,
                     child: Container(
                         height: double.infinity,
-                        color: Colors.black.withValues(alpha: 0.3)
+                        color: AppColors.surfaceMuted.withValues(alpha: 0.3)
                     )),
                 Column(
                   children: actions,

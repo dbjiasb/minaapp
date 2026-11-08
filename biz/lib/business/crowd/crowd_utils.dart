@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -56,7 +57,7 @@ Future<Uint8List?> generateGroupAvatarBytes(
   // 🎨 先画白色背景
   canvas.drawRect(
     Rect.fromLTWH(0, 0, size.toDouble(), size.toDouble()),
-    Paint()..color = Colors.white,
+    Paint()..color = AppColors.textPrimary,
   );
 
   final count = images.length;

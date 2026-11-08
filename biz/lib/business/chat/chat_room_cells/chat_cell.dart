@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
@@ -165,7 +166,7 @@ class ChatCell extends StatelessWidget {
   Widget _buildOwnerName() {
     return Container(
       margin: EdgeInsets.only(bottom: 8),
-      child: Text(message.senderName, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white)),
+      child: Text(message.senderName, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
     );
   }
 

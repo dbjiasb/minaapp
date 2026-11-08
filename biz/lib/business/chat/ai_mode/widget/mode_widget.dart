@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,7 @@ class ModeWidget {
       Center(
           child: Container(
             decoration: const BoxDecoration(
-              color: Colors.white12,
+              color: AppColors.surfaceMuted,
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -26,7 +27,7 @@ class ModeWidget {
               children: [
                 ImageView(type == 0 ? Images.security_coin_png : Images.security_gem_png, width: 16, height: 16),
                 4.horizontalSpace,
-                Text('$value', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))
+                Text('$value', style: const TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.bold))
               ],
             ),
           )

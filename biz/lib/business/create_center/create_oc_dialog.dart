@@ -88,7 +88,7 @@ class CreateOcDialog extends StatelessWidget {
           height: 70,
           padding: EdgeInsets.symmetric(horizontal: 16),
           alignment: Alignment.center,
-          decoration: BoxDecoration(color: Color(0xFFF9F6FF), borderRadius: BorderRadius.circular(16)),
+          decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -104,13 +104,13 @@ class CreateOcDialog extends StatelessWidget {
                       children: [
                         Text(
                           _logic.canContinue ? Security.security_Continue : Security.security_character,
-                          style: TextStyle(color: AppColors.base_background, fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 16),
                         if (!_logic.canContinue)
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.4), borderRadius: BorderRadius.circular(9)),
+                            decoration: BoxDecoration(color: AppColors.surface.withValues(alpha: 0.4), borderRadius: BorderRadius.circular(9)),
                             child:
                                 _logic.costValue == 0
                                     ? RichText(
@@ -120,7 +120,7 @@ class CreateOcDialog extends StatelessWidget {
                                           WidgetSpan(
                                             child: Text(
                                               _logic.freeText,
-                                              style: TextStyle(fontSize: 14, color: AppColors.base_background, fontWeight: FontWeight.bold),
+                                              style: TextStyle(fontSize: 14, color: AppColors.textPrimary, fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                         ],
@@ -132,7 +132,7 @@ class CreateOcDialog extends StatelessWidget {
                                           WidgetSpan(child: ImageView(_logic.costType == 0 ? Images.security_coin_png : Images.security_gem_png, width: 18, height: 18)),
                                           TextSpan(
                                             text: ' ${_logic.costValue}',
-                                            style: const TextStyle(color: AppColors.base_background, fontWeight: FontWeight.bold, fontSize: 14),
+                                            style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
                                           ),
                                         ],
                                       ),
@@ -143,11 +143,11 @@ class CreateOcDialog extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 3),
-                    Text(Copywriting.security_design_your_own_unique_character_and_bring_it_to_life_, style: TextStyle(color: Color(0xFFB8B7B4), fontSize: 10)),
+                    Text(Copywriting.security_design_your_own_unique_character_and_bring_it_to_life_, style: TextStyle(color: AppColors.textSecondary, fontSize: 10)),
                   ],
                 ),
               ),
-              Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFFB8B7B4)).marginOnly(left: 8)
+              Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.textSecondary).marginOnly(left: 8)
             ],
           ),
         ),
@@ -172,7 +172,7 @@ class CreateOcDialog extends StatelessWidget {
           width: double.infinity,
           alignment: Alignment.center,
           height: 74,
-          decoration: BoxDecoration(color: Color(0xFFF9F6FF), borderRadius: BorderRadius.circular(16)),
+          decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
           child: Row(
             children: [
               ImageView(Images.security_oc_group_door_webp, width: 36, height: 36),
@@ -183,12 +183,12 @@ class CreateOcDialog extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(Copywriting.security_group_Chat, style: TextStyle(color: AppColors.base_background, fontSize: 16, fontWeight: FontWeight.bold)),
+                        Text(Copywriting.security_group_Chat, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
                         SizedBox(width: 8),
                         (CrowedManager.instance.onlyForPremium == 1 && !MyAccount.isSubscribed)
                             ? Container(
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: AppColors.surface,
                                 borderRadius: BorderRadius.circular(100),
                               ),
                               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
@@ -196,13 +196,13 @@ class CreateOcDialog extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   ImageView(Images.security_premium_png, width: 18, height: 18).marginOnly(right: 4),
-                                  Text(Copywriting.security_premium_Only, style: TextStyle(color: Color(0xFFFF59D9), fontSize: 9, fontWeight: FontWeight.bold)),
+                                  Text(Copywriting.security_premium_Only, style: TextStyle(color: AppColors.link, fontSize: 9, fontWeight: FontWeight.bold)),
                                 ],
                               ),
                             )
                             : Container(
                               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.4), borderRadius: BorderRadius.circular(9)),
+                              decoration: BoxDecoration(color: AppColors.surface.withValues(alpha: 0.4), borderRadius: BorderRadius.circular(9)),
                               child:
                                   (CrowedManager.instance.createCostValue == 0
                                       ? Row(
@@ -215,7 +215,7 @@ class CreateOcDialog extends StatelessWidget {
                                                     ? "∞"
                                                     : "(${MyAccount.freeCrowedUsedTimes}/${(MyAccount.freeCrowedLeftTimes + MyAccount.freeCrowedUsedTimes)})")
                                                 : Security.security_free,
-                                            style: TextStyle(color: AppColors.base_background, fontWeight: FontWeight.bold, fontSize: 14),
+                                            style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
                                           ),
                                         ],
                                       )
@@ -231,7 +231,7 @@ class CreateOcDialog extends StatelessWidget {
                                             ),
                                             TextSpan(
                                               text: ' ${CrowedManager.instance.createCostValue}',
-                                              style: const TextStyle(color: AppColors.base_background, fontWeight: FontWeight.bold, fontSize: 14),
+                                              style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
                                             ),
                                           ],
                                         ),
@@ -242,11 +242,11 @@ class CreateOcDialog extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 3),
-                    Text(Copywriting.security_connect_with_everyone_in_one_place, style: TextStyle(color: Color(0xFFB8B7B4), fontSize: 10)),
+                    Text(Copywriting.security_connect_with_everyone_in_one_place, style: TextStyle(color: AppColors.textSecondary, fontSize: 10)),
                   ],
                 ),
               ),
-              Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFFB8B7B4)).marginOnly(left: 8)
+              Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.textSecondary).marginOnly(left: 8)
             ],
           ),
         ),
@@ -267,7 +267,7 @@ class CreateOcDialog extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         width: double.infinity,
         height: 74,
-        decoration: BoxDecoration(color: Color(0xFFF9F6FF), borderRadius: BorderRadius.circular(16)),
+        decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -278,16 +278,16 @@ class CreateOcDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(Security.security_moment, style: TextStyle(color: AppColors.base_background, fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(Security.security_moment, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
                   SizedBox(height: 3),
                   Text(
                     Copywriting.security_post_updates_for_your_character_and_bring_every_moment_of_their_story_to_life_,
-                    style: TextStyle(color: Color(0xFFABABAD), fontSize: 10),
+                    style: TextStyle(color: AppColors.textSecondary, fontSize: 10),
                   ),
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFFB8B7B4)).marginOnly(left: 8)
+            Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.textSecondary).marginOnly(left: 8)
           ],
         ),
       ),
@@ -301,8 +301,8 @@ class CreateOcDialog extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFF9F0FF),
-              Color(0xFFEBD8FE),
+              AppColors.surface,
+              AppColors.surface,
             ],
           ),
           borderRadius: BorderRadius.vertical(top: Radius.circular(16))
@@ -338,12 +338,12 @@ class CreateOcDialog extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: Copywriting.security_prior_to_the_creation_process__please_review_our,
-                        style: TextStyle(color: const Color(0xFFABABAD), fontSize: 11, fontWeight: AppFonts.medium),
+                        style: TextStyle(color: AppColors.textSecondary, fontSize: 11, fontWeight: AppFonts.medium),
                       ),
                       TextSpan(
                         text: Copywriting.security_copyright_Agreement,
                         style: TextStyle(
-                          color: Color(0xFFB86AFF),
+                          color: AppColors.link,
                           fontWeight: AppFonts.medium,
                           fontSize: 11,
                           fontFamily: Copywriting.security_sF_Pro,
@@ -357,10 +357,10 @@ class CreateOcDialog extends StatelessWidget {
                       ),
                       TextSpan(
                         text: Copywriting.security_and_indicate_your_consent_,
-                        style: TextStyle(color: const Color(0xFFB8B7B4), fontSize: 11, fontWeight: AppFonts.medium),
+                        style: TextStyle(color: AppColors.textSecondary, fontSize: 11, fontWeight: AppFonts.medium),
                       ),
                     ],
-                    style: const TextStyle(fontSize: 14, color: Colors.white),
+                    style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
                   ),
                 ),
               ),

@@ -78,12 +78,12 @@ class UserCardView extends StatelessWidget {
             height: width,
             width: height,
             alignment: Alignment.center,
-            child: const CircularProgressIndicator(color: AppColors.primary),
+            child: const CircularProgressIndicator(color: AppColors.accentText),
           );
         },
       );
     }
-    return child;
+    return ColoredBox(color: AppColors.background, child: child);
   }
 
   Widget _defaultBg() {

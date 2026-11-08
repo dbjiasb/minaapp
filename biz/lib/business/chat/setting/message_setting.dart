@@ -29,18 +29,18 @@ class MessageSettingView extends GetView<SettingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(Copywriting.security_message_Setting, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-        backgroundColor: AppColors.base_background,
+        title: Text(Copywriting.security_message_Setting, style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
+        backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white), onPressed: () => Get.back()),
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary), onPressed: () => Get.back()),
       ),
       body: Obx(() {
         return controller.isLoading.value
             ? Container(
               alignment: Alignment.center,
-              child: const CircularProgressIndicator(color: AppColors.primary),
+              child: const CircularProgressIndicator(color: AppColors.accentText),
             )
             : Column(
               children: [
@@ -76,14 +76,14 @@ class MessageSettingView extends GetView<SettingController> {
           Text(
             title,
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
           ),
           const Spacer(),
           CupertinoSwitch(
-            thumbColor: Colors.white,
+            thumbColor: AppColors.textPrimary,
             inactiveTrackColor: Color(0x29D2C0FF),
             activeTrackColor: AppColors.primary,
             value: selected,

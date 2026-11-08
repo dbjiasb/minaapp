@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -168,7 +169,7 @@ class ChatRoomView extends StatelessWidget {
 
   Widget _buildChatDrawer() {
     return Drawer(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       child: SafeArea(
         child: Align(
           alignment: Alignment.topRight,
@@ -176,7 +177,7 @@ class ChatRoomView extends StatelessWidget {
             margin: EdgeInsets.only(top: 10, left: 16, right: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(8)),
-              color: Color(0xFF202026),
+              color: AppColors.surface,
             ),
             child: ListView(
               shrinkWrap: true, // 自适应高度
@@ -273,9 +274,9 @@ class ChatRoomView extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withValues(alpha: 0),
-                Colors.black.withValues(alpha: 0.61),
-                Colors.black.withValues(alpha: 0.75),
+                AppColors.surfaceMuted.withValues(alpha: 0),
+                AppColors.surfaceMuted.withValues(alpha: 0.61),
+                AppColors.surfaceMuted.withValues(alpha: 0.75),
               ],
             ),
           ),
@@ -298,7 +299,7 @@ class ChatRoomView extends StatelessWidget {
                             : Text(
                               Copywriting.security_release_Send,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontSize: 13,
                                 fontWeight: AppFonts.medium,
                               ),
@@ -362,7 +363,7 @@ class ChatRoomView extends StatelessWidget {
               child: Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
@@ -396,7 +397,7 @@ class ChatRoomView extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),
@@ -405,9 +406,9 @@ class ChatRoomView extends StatelessWidget {
           const SizedBox(width: 8),
           Switch(
             value: value,
-            activeColor: Colors.white,
-            inactiveThumbColor: Colors.white,
-            activeTrackColor: AppColors.mainLightColor,
+            activeColor: AppColors.textPrimary,
+            inactiveThumbColor: AppColors.textPrimary,
+            activeTrackColor: AppColors.primary,
             inactiveTrackColor: const Color(0x33D2C0FF),
             onChanged: (bool val) {
               onChange?.call(val);
@@ -422,13 +423,18 @@ class ChatRoomView extends StatelessWidget {
     return Obx(() {
       String url = viewController.session.backgroundUrl.value;
       debugPrint('viewController.session.backgroundUrl.value: $url');
-      return url.isNotEmpty
-          ? CachedImage(
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          if (url.isNotEmpty) CachedImage(
             imageUrl: url,
             fit: BoxFit.cover,
             errorWidget: (context, url, error) => SizedBox.shrink(),
-          )
-          : SizedBox.shrink();
+          ),
+          if (AppAppearance.isLight)
+            ColoredBox(color: AppColors.background.withValues(alpha: url.isEmpty ? 1 : 0.94)),
+        ],
+      );
     });
   }
 
@@ -445,7 +451,9 @@ class ChatRoomView extends StatelessWidget {
               width: 32,
               height: 32,
               alignment: Alignment.center,
-              child: CachedNetworkImage(
+              child: AppAppearance.isLight
+                ? const Icon(Icons.arrow_back_ios_new_rounded, size: 22, color: AppColors.textPrimary)
+                : CachedNetworkImage(
                 imageUrl: ImagePath.ic_arrow_left_circle,
                 width: 32,
                 height: 32,
@@ -463,7 +471,7 @@ class ChatRoomView extends StatelessWidget {
                 padding: EdgeInsets.only(left: 2, right: 12),
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Color(0xCC333333),
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -486,7 +494,7 @@ class ChatRoomView extends StatelessWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 1),
+                          border: Border.all(color: AppColors.textPrimary, width: 1),
                           borderRadius: BorderRadius.circular(18),
                           image: DecorationImage(
                             image: CachedImageProvider(
@@ -507,7 +515,7 @@ class ChatRoomView extends StatelessWidget {
                         Text(
                           viewController.session.name,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             overflow: TextOverflow.ellipsis,
@@ -530,7 +538,7 @@ class ChatRoomView extends StatelessWidget {
                               Text(
                                 Security.security_online,
                                 style: TextStyle(
-                                  color: Color(0xFFB8B8B8),
+                                  color: AppColors.textSecondary,
                                   fontSize: 11,
                                   height: 1,
                                 ),
@@ -563,7 +571,7 @@ class ChatRoomView extends StatelessWidget {
                                       Text(
                                         mod[Security.security_name] ?? '',
                                         style: TextStyle(
-                                          color: Color(0xFF999999),
+                                          color: AppColors.textSecondary,
                                           fontSize: 11,
                                           overflow: TextOverflow.ellipsis,
                                           height: 1,
@@ -598,7 +606,7 @@ class ChatRoomView extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 7, vertical: 4),
               decoration: BoxDecoration(
-                color: Color(0xCC333333),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Row(
@@ -616,7 +624,7 @@ class ChatRoomView extends StatelessWidget {
                       session.isAiChat || session.isGroup
                           ? MyAccount.coins.toFixString
                           : MyAccount.gems.toFixString,
-                      style: TextStyle(color: Colors.white, fontSize: 12),
+                      style: TextStyle(color: AppColors.textPrimary, fontSize: 12),
                     ),
                   ),
                 ],
@@ -638,41 +646,44 @@ class ChatRoomView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvokedWithResult: (didPop, ret) {
-        if (didPop) {
-          ChatManager.instance.updateChatSession(session);
-        }
-      },
-      child: GestureDetector(
-        onTap: _onBackgroundClicked,
-        behavior: HitTestBehavior.opaque,
-        child: Scaffold(
-          key: _scaffoldKey,
-          endDrawer: _buildChatDrawer(),
-          backgroundColor: AppColors.base_background,
-          resizeToAvoidBottomInset: true,
-          body: Stack(
-            fit: StackFit.expand,
-            children: [
-              _buildBackgroundView(),
-              SafeArea(
-                bottom: false,
-                child: Column(
-                  children: [
-                    _buildNavigationBar(),
-                    Obx(() => _buildChatRoomView()),
-                    ChatBottomBar(
-                      showAudioInputMask: showAudioMask,
-                      cancelAudio: cancelAudio,
-                      sendText: viewController.sendText,
-                    ),
-                  ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppAppearance.overlayStyle,
+      child: PopScope(
+        onPopInvokedWithResult: (didPop, ret) {
+          if (didPop) {
+            ChatManager.instance.updateChatSession(session);
+          }
+        },
+        child: GestureDetector(
+          onTap: _onBackgroundClicked,
+          behavior: HitTestBehavior.opaque,
+          child: Scaffold(
+            key: _scaffoldKey,
+            endDrawer: _buildChatDrawer(),
+            backgroundColor: AppColors.background,
+            resizeToAvoidBottomInset: true,
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                _buildBackgroundView(),
+                SafeArea(
+                  bottom: false,
+                  child: Column(
+                    children: [
+                      _buildNavigationBar(),
+                      Obx(() => _buildChatRoomView()),
+                      ChatBottomBar(
+                        showAudioInputMask: showAudioMask,
+                        cancelAudio: cancelAudio,
+                        sendText: viewController.sendText,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              _buildAudioInputMask(),
-              RvHelper.packWidget(ChatSidebar()),
-            ],
+                _buildAudioInputMask(),
+                RvHelper.packWidget(ChatSidebar()),
+              ],
+            ),
           ),
         ),
       ),

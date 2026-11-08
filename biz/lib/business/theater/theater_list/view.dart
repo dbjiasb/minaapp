@@ -26,12 +26,12 @@ class TheaterListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.base_background,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: AppColors.background,
+        systemOverlayStyle: AppAppearance.overlayStyle,
         elevation: 0,
         toolbarHeight: 0,
       ),
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -69,18 +69,18 @@ class TheaterListView extends StatelessWidget {
     child: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text(Copywriting.security_no_data, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal))],
+        children: [Text(Copywriting.security_no_data, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.normal))],
       ),
     ),
   );
 
   Widget _buildTagItem(String name) => Container(
     // margin: EdgeInsets.only(right: 6.w),
-    decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(9.r)),
+    decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(9.r)),
     // alignment: Alignment.center,
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
     // height: 18.w,
-    child: Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10.sp, color: Color(0xFFF9627A))),
+    child: Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10.sp, color: AppColors.rose)),
   );
 
   Widget _buildListItem(Map item) {
@@ -102,8 +102,8 @@ class TheaterListView extends StatelessWidget {
               margin: EdgeInsets.only(top: 14.w),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(color: Color(0xFF3E3A55), width: 1.w),
-                gradient: LinearGradient(colors: [Color(0xFF231938), Color(0xFF211E32)]),
+                border: Border.all(color: AppColors.border, width: 1.w),
+                gradient: LinearGradient(colors: [AppColors.surface, AppColors.surface]),
               ),
               child: Padding(
                 padding: EdgeInsets.only(left: 124.w, right: 12.w),
@@ -111,13 +111,13 @@ class TheaterListView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 12.w),
-                    Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp, color: Colors.white)),
+                    Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp, color: AppColors.textPrimary)),
                     SizedBox(height: 12.w),
                     Text(
                       brief,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp, color: Color(0xFF999999)),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp, color: AppColors.textSecondary),
                     ),
                     Spacer(),
                     Row(
@@ -138,7 +138,7 @@ class TheaterListView extends StatelessWidget {
                           height: 28.w,
                           width: 52.w,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.r), color: Color(0xFFFFE407)),
-                          child: Text(Security.security_gO, style: TextStyle(color: Color(0xFF0F0F0F), fontWeight: FontWeight.bold, fontSize: 13.sp)),
+                          child: Text(Security.security_gO, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 13.sp)),
                         ),
                       ],
                     ),

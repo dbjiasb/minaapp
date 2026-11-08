@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,22 +63,22 @@ class CommentListView extends GetView<MomentDetailViewLogic> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(commentInfo[Security.security_nickname] ?? "", style: const TextStyle(color: Color(0xFFABABAD), fontSize: 12)),
+              Text(commentInfo[Security.security_nickname] ?? "", style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
               const SizedBox(height: 4),
-              Text(content ?? commentInfo[Security.security_content] ?? "", style: const TextStyle(color: Colors.white, fontSize: 14)),
+              Text(content ?? commentInfo[Security.security_content] ?? "", style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
               const SizedBox(height: 8),
               Row(
                 children: [
                   Text(
                     DateFormat(Copywriting.security_mM_dd_HH_mm).format(DateTime.fromMillisecondsSinceEpoch(commentInfo[Security.security_createTime])),
-                    style: const TextStyle(color: Color(0xFF494C53), fontSize: 12),
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                   ),
                   const SizedBox(width: 8),
                   InkWell(
                     onTap: () {
                       controller.replyComment(commentInfo);
                     },
-                    child: Text(Security.security_reply, style: TextStyle(color: Color(0xFFABABAD), fontSize: 12)),
+                    child: Text(Security.security_reply, style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                   ),
                   const Spacer(),
                   InkWell(
@@ -87,10 +88,10 @@ class CommentListView extends GetView<MomentDetailViewLogic> {
                     child: Text(
                       hasTran ? Security.security_recovery : Security.security_translate,
                       style: const TextStyle(
-                        color: Color(0xFF85C0FF),
+                        color: AppColors.link,
                         fontSize: 12,
                         decoration: TextDecoration.underline,
-                        decorationColor: Color(0xFF85C0FF),
+                        decorationColor: AppColors.link,
                         // 下划线颜色（可选）
                         decorationStyle: TextDecorationStyle.solid,
                       ),
@@ -130,15 +131,15 @@ class CommentListView extends GetView<MomentDetailViewLogic> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(commentInfo[Security.security_nickname] ?? "", style: const TextStyle(color: Color(0xFFABABAD), fontSize: 12)),
+              Text(commentInfo[Security.security_nickname] ?? "", style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
               const SizedBox(height: 4),
-              Text(content ?? commentInfo[Security.security_content] ?? "", style: const TextStyle(color: Colors.white, fontSize: 14)),
+              Text(content ?? commentInfo[Security.security_content] ?? "", style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
               const SizedBox(height: 8),
               Row(
                 children: [
                   Text(
                     DateFormat(Copywriting.security_mM_dd_HH_mm).format(DateTime.fromMillisecondsSinceEpoch(commentInfo[Security.security_createTime])),
-                    style: const TextStyle(color: Color(0xFF494C53), fontSize: 12),
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                   ),
                   const Spacer(),
                   InkWell(
@@ -148,10 +149,10 @@ class CommentListView extends GetView<MomentDetailViewLogic> {
                     child: Text(
                       hasTran ? Security.security_recovery : Security.security_translate,
                       style: const TextStyle(
-                        color: Color(0xFF85C0FF),
+                        color: AppColors.link,
                         fontSize: 12,
                         decoration: TextDecoration.underline,
-                        decorationColor: Color(0xFF85C0FF),
+                        decorationColor: AppColors.link,
                         // 下划线颜色（可选）
                         decorationStyle: TextDecorationStyle.solid,
                       ),

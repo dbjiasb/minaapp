@@ -29,7 +29,7 @@ class RoleListView extends StatelessWidget {
     return Obx(
       () =>
           controller.isLoading.value
-              ? Center(child: CircularProgressIndicator(color: AppColors.primary))
+              ? Center(child: CircularProgressIndicator(color: AppColors.accentText))
               : RefreshConfiguration(
                 springDescription: SpringDescription.withDampingRatio(
                   mass: 1.0,
@@ -67,7 +67,7 @@ class RoleListView extends StatelessWidget {
         physics: AlwaysScrollableScrollPhysics(),
         children: [
           SizedBox(height: 200.w),
-          Center(child: Text(Copywriting.security_no_data, style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.normal))),
+          Center(child: Text(Copywriting.security_no_data, style: TextStyle(color: AppColors.textPrimary, fontSize: 16.sp, fontWeight: FontWeight.normal))),
         ],
       ),
     );
@@ -101,8 +101,8 @@ class RoleListView extends StatelessWidget {
                   pagination: SwiperPagination(
                     alignment: Alignment.bottomCenter,
                     builder: DotSwiperPaginationBuilder(
-                      activeColor: Colors.white,
-                      color: Color(0x66FFFFFF),
+                      activeColor: AppColors.textPrimary,
+                      color: AppColors.textSecondary,
                       size: 6,
                       space: 2,
                       activeSize: 6,

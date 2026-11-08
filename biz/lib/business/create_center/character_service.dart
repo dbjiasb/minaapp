@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -218,7 +219,7 @@ class CharacterService {
     if (shareAndAudit != null) {
       return Container(
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.6),
+            color: AppColors.surfaceMuted.withValues(alpha: 0.6),
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           padding: EdgeInsets.symmetric(vertical: isUserPage ? 4 : 3, horizontal: isUserPage ? 8 : 6),
@@ -239,14 +240,14 @@ class CharacterService {
       return null;
     }
     if (shared == 0) {
-      return [Security.security_private, Colors.white];
+      return [Security.security_private, AppColors.textPrimary];
     } else {
       if (audit == 0) {
         return [Copywriting.security_under_review, const Color(0xFFFE56BB)];
       } else if (audit == 2) {
         return [Copywriting.security_not_approved, const Color(0xFFFE3A3A)];
       } else if (audit == 1){
-        return [Security.security_public, Colors.white];
+        return [Security.security_public, AppColors.textPrimary];
       } else {
         return null;
       }

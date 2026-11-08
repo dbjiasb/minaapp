@@ -1,5 +1,3 @@
-import '../../base/api_service/api_config.dart';
-import '../../base/app_info/app_manager.dart';
 
 class EAiAuditStatus
 {
@@ -58,6 +56,6 @@ class ECurrencyType
 }
 
 class MomentRes {
-  static String base = '${ApiConfig.cdnApp}moment/';
+  static String base = 'packages/biz/assets/images/moment/';
 }
 

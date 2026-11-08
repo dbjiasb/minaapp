@@ -27,7 +27,7 @@ class RechargeCurrencyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF07070A),
+      backgroundColor: AppColors.background,
       extendBody: true,
       appBar: AppBar(
         leading: InkWell(
@@ -51,7 +51,7 @@ class RechargeCurrencyView extends StatelessWidget {
               ? Copywriting.security_my_Coins
               : Copywriting.security_my_Gems,
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.textPrimary,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -89,7 +89,7 @@ class RechargeCurrencyView extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: Color(0xFFFCC8FF).withValues(alpha: 0.6),
+                    color: AppColors.border.withValues(alpha: 0.6),
                     width: 1,
                   ),
                   gradient: LinearGradient(
@@ -133,7 +133,7 @@ class RechargeCurrencyView extends StatelessWidget {
                             ? Copywriting.security_coins_balance
                             : Copywriting.security_gems_balance,
                         style: TextStyle(
-                          color: Color(0xFFA19C9A),
+                          color: AppColors.textSecondary,
                           fontSize: 14,
                           fontWeight: AppFonts.medium,
                         ),
@@ -142,7 +142,7 @@ class RechargeCurrencyView extends StatelessWidget {
                         () => Text(
                           '${controller.rcgType == 0 ? MyAccount.coins : MyAccount.gems}',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 24,
                             fontWeight: AppFonts.bold,
                           ),
@@ -174,7 +174,7 @@ class RechargeCurrencyView extends StatelessWidget {
                       Text(
                     _purchaseButtonText(),
                     style: TextStyle(
-                      color: const Color(0xFF07070A),
+                      color: AppColors.textPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -213,7 +213,7 @@ class RechargeCurrencyView extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2A2A23),
+                      color: AppColors.surfaceMuted,
                       borderRadius: BorderRadius.circular(8),
                       border: controller.selectedPro == product
                           ? Border.all(width: 1, color: Color(0xffFFF37C))
@@ -238,7 +238,7 @@ class RechargeCurrencyView extends StatelessWidget {
                             Text(
                               '${product.iapValue}',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -252,7 +252,7 @@ class RechargeCurrencyView extends StatelessWidget {
                               ? Text(
                                   '+${product.iapExtra}',
                                   style: TextStyle(
-                                    color: Color(0xffF84652),
+                                    color: AppColors.error,
                                     fontSize: 12,
                                     fontWeight: AppFonts.black,
                                   ),
@@ -264,8 +264,8 @@ class RechargeCurrencyView extends StatelessWidget {
                           product.iapPriceStr,
                           style: TextStyle(
                             color: controller.selectedPro == product
-                                ? Color(0xffFFF37C)
-                                : Color(0xFFA19C9A),
+                                ? AppColors.accentText
+                                : AppColors.textSecondary,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),

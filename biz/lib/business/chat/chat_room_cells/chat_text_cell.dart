@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -199,7 +200,7 @@ class ChatTextCell extends ChatCell {
                   child: Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: isMine ? Color(0xFFFFF9B4).withValues(alpha: 0.9) : Color(0xFF272533).withValues(alpha: 0.9),
+                      color: isMine ? AppColors.chatOutgoing : AppColors.chatIncoming,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12),
                         topRight: Radius.circular(12),
@@ -211,11 +212,11 @@ class ChatTextCell extends ChatCell {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         buildText(),
-                        if (hasTranslation) Divider(height: 26, thickness: 2.0, color: Color(0x0DFFFFFF)),
+                        if (hasTranslation) Divider(height: 26, thickness: 2.0, color: AppColors.border),
                         if (hasTranslation)
                           Text(
                             textMessage.translationText.value,
-                            style: TextStyle(color: isMine ? Color(0xFF3D3734) : Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                            style: TextStyle(color: isMine ? AppColors.chatOutgoingText : AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                       ],
                     ),
@@ -236,7 +237,7 @@ class ChatTextCell extends ChatCell {
                       height: 28,
                       margin: EdgeInsets.only(top: 6),
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), shape: BoxShape.circle),
+                      decoration: BoxDecoration(color: AppColors.surfaceMuted.withValues(alpha: 0.45), shape: BoxShape.circle),
                       child: ImageView(
                         hasTranslatedText ? Images.security_ic_chat_msg_hide_translate_webp : Images.security_ic_chat_msg_translate_webp,
                         width: 16,
@@ -265,8 +266,8 @@ class ChatTextCell extends ChatCell {
           if (link.url.startsWith(Security.security_http)) RH.handleRoute(link.url);
         },
         text: text,
-        style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
-        linkStyle: const TextStyle(color: Colors.blue, fontSize: 14, height: 1.5, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
+        style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w500),
+        linkStyle: const TextStyle(color: AppColors.link, fontSize: 14, height: 1.5, fontWeight: FontWeight.bold, decoration: TextDecoration.none),
       );
     }
 
@@ -274,7 +275,7 @@ class ChatTextCell extends ChatCell {
     Widget textWidget() => Text(
       text,
       style: TextStyle(
-        color: isMine ? Color(0xFF3D3734) : (textMessage.isText ? Colors.white : Colors.white.withValues(alpha: 0.6)),
+        color: isMine ? AppColors.chatOutgoingText : (textMessage.isText ? AppColors.textPrimary : AppColors.textSecondary),
         fontSize: 14,
         fontWeight: FontWeight.w500,
         fontStyle: textMessage.isText ? FontStyle.normal : FontStyle.italic,
@@ -297,7 +298,7 @@ class ChatTextCell extends ChatCell {
           TextSpan(
             text: String.fromCharCodes(charCodes),
             style: TextStyle(
-              color: value == 1 ? Colors.white : Colors.white.withValues(alpha: 0.5),
+              color: value == 1 ? AppColors.textPrimary : AppColors.textSecondary,
               fontSize: 14,
               height: 1.4,
               fontStyle: value == 1 ? FontStyle.normal : FontStyle.italic,
@@ -339,7 +340,7 @@ class ChatTheaterTextCell extends ChatCell {
     Widget textWidget() => Text(
       text,
       style: TextStyle(
-        color: Color(0xFF0F0F0F),
+        color: isMine ? AppColors.chatOutgoingText : AppColors.textPrimary,
         // color: isMine ? Color(0xFF3D3734) : (textMessage.isText ? Colors.white : Colors.white.withValues(alpha: 0.6)),
         fontSize: 14,
         fontWeight: FontWeight.w500,
@@ -363,7 +364,7 @@ class ChatTheaterTextCell extends ChatCell {
           TextSpan(
             text: String.fromCharCodes(charCodes),
             style: TextStyle(
-              color: value == 1 ? Colors.white : Colors.white.withValues(alpha: 0.5),
+              color: value == 1 ? AppColors.textPrimary : AppColors.textSecondary,
               fontSize: 14,
               height: 1.4,
               fontStyle: value == 1 ? FontStyle.normal : FontStyle.italic,
@@ -390,14 +391,14 @@ class ChatTheaterTextCell extends ChatCell {
             padding: EdgeInsets.only(right: 12, left: 24),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), gradient: LinearGradient(colors: [Color(0xFF823AF9), Color(0xFFB63AFF)])),
             height: 24,
-            child: Text(name, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+            child: Text(name, style: TextStyle(color: AppColors.onColor, fontSize: 12, fontWeight: FontWeight.bold)),
           ),
         ),
         Container(
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.white, width: 2),
+            border: Border.all(color: AppColors.border, width: 2),
             borderRadius: BorderRadius.circular(18),
             image: DecorationImage(image: CachedImageProvider(url), fit: BoxFit.cover),
           ),
@@ -419,7 +420,7 @@ class ChatTheaterTextCell extends ChatCell {
             padding: EdgeInsets.only(left: 12, right: 24),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), gradient: LinearGradient(colors: [Color(0xFFFF703A), Color(0xFFF93A98)])),
             height: 24,
-            child: Text(name, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+            child: Text(name, style: TextStyle(color: AppColors.onColor, fontSize: 12, fontWeight: FontWeight.bold)),
           ),
         ),
 
@@ -427,7 +428,7 @@ class ChatTheaterTextCell extends ChatCell {
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.white, width: 2),
+            border: Border.all(color: AppColors.border, width: 2),
             borderRadius: BorderRadius.circular(18),
             image: DecorationImage(image: CachedImageProvider(url), fit: BoxFit.cover),
           ),
@@ -450,7 +451,7 @@ class ChatTheaterTextCell extends ChatCell {
               margin: EdgeInsets.only(top: 20),
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: isMine ? Color(0xFFFFF9B4).withValues(alpha: 0.9) : Colors.white.withValues(alpha: 0.9),
+                color: isMine ? AppColors.chatOutgoing : AppColors.chatIncoming,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
@@ -462,11 +463,11 @@ class ChatTheaterTextCell extends ChatCell {
                 return Column(
                   children: [
                     buildText(),
-                    if (textMessage.translationText.isNotEmpty) Divider(height: 26, thickness: 2.0, color: Color(0x0DFFFFFF)),
+                    if (textMessage.translationText.isNotEmpty) Divider(height: 26, thickness: 2.0, color: AppColors.border),
                     if (textMessage.translationText.isNotEmpty)
                       Text(
                         textMessage.translationText.value,
-                        style: TextStyle(color: isMine ? Color(0xFF3D3734) : Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                        style: TextStyle(color: isMine ? AppColors.chatOutgoingText : AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w500),
                       ),
                   ],
                 );
@@ -521,7 +522,7 @@ class ChatTextAudioView extends StatelessWidget {
       case ChatTextAudioStatus.loading:
         return Container(
           padding: EdgeInsets.all(2),
-          child: SizedBox(width: 12, height: 12, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)),
+          child: SizedBox(width: 12, height: 12, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accentText)),
         );
       case ChatTextAudioStatus.ready:
         return CachedImage(imageUrl: ImagePath.play_icon, width: 16, height: 16);
@@ -666,7 +667,7 @@ class ChatTextAudioView extends StatelessWidget {
             if (textMessage.audioDuration > 0)
               Container(
                 margin: EdgeInsets.only(left: 4),
-                child: Text('${textMessage.audioDuration}"', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                child: Text('${textMessage.audioDuration}"', style: TextStyle(color: AppColors.onColor, fontSize: 11, fontWeight: FontWeight.bold)),
               ),
           ],
         ),
@@ -702,7 +703,7 @@ class ChatTextAudioView extends StatelessWidget {
             if (textMessage.audioDuration > 0)
               Container(
                 margin: EdgeInsets.only(left: 4),
-                child: Text('${textMessage.audioDuration}"', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                child: Text('${textMessage.audioDuration}"', style: TextStyle(color: AppColors.onColor, fontSize: 11, fontWeight: FontWeight.bold)),
               ),
           ],
         ),

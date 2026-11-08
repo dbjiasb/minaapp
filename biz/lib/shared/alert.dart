@@ -10,11 +10,11 @@ Future showConfirmAlert(String title, String content, {String? confirmText, Stri
   return await showAlert(
     Padding(
       padding: EdgeInsets.only(left: 24, top: 24, right: 24, bottom: 20),
-      child: Text(title, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+      child: Text(title, textAlign: TextAlign.center, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
     ),
     Padding(
       padding: EdgeInsets.only(left: 24, right: 24, top: 0, bottom: 24),
-      child: Text(content, style: TextStyle(fontSize: 13, color: Color(0xFF999999), fontWeight: FontWeight.w500)),
+      child: Text(content, style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
     ),
     confirmText: confirmText,
     cancelText: cancelText,
@@ -30,7 +30,7 @@ Future showAlert(Widget? title, Widget? content, {String? confirmText, String? c
     child: Material(
       color: Colors.transparent,
       child: Container(
-        decoration: BoxDecoration(color: Color(0xFF333333), borderRadius: BorderRadius.all(Radius.circular(24))),
+        decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.all(Radius.circular(24))),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,10 +51,10 @@ Future showAlert(Widget? title, Widget? content, {String? confirmText, String? c
                         width: 134,
                         height: 42,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(color: Color(0x99EEEEEE), borderRadius: BorderRadius.all(Radius.circular(12))),
+                        decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.all(Radius.circular(12))),
                         child: Text(
                           cancelText ?? Copywriting.security_Cancel,
-                          style: TextStyle(color: Color(0xFF333333), fontWeight: FontWeight.w600, fontSize: 16),
+                          style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 16),
                         ),
                       ),
                     ),
@@ -72,7 +72,7 @@ Future showAlert(Widget? title, Widget? content, {String? confirmText, String? c
                         decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.all(Radius.circular(12))),
                         child: Text(
                           confirmText ?? Copywriting.security_Confirm,
-                          style: TextStyle(color: AppColors.mainDarkColor, fontWeight: FontWeight.w600, fontSize: 16),
+                          style: TextStyle(color: AppColors.accentForeground, fontWeight: FontWeight.w600, fontSize: 16),
                         ),
                       ),
                     ),

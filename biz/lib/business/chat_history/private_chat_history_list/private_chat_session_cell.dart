@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,7 +41,7 @@ class PrivateChatSessionCell extends StatelessWidget {
         child: Text(
           Security.security_aI,
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.onColor,
             fontSize: 11.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -66,7 +67,7 @@ class PrivateChatSessionCell extends StatelessWidget {
         child: Text(
           Security.security_real,
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.onColor,
             fontSize: 11.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -111,7 +112,7 @@ class PrivateChatSessionCell extends StatelessWidget {
                               child: Text(
                                 session.name,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -134,7 +135,7 @@ class PrivateChatSessionCell extends StatelessWidget {
                       Text(
                         DateFormatter.diff(session.lastMessageTime),
                         style: TextStyle(
-                          color: const Color(0xFFA19C9A),
+                          color: AppColors.textSecondary,
                           fontSize: 10.sp,
                         ),
                       ),
@@ -148,7 +149,7 @@ class PrivateChatSessionCell extends StatelessWidget {
                         child: Text(
                           session.showExtMessage,
                           style: TextStyle(
-                            color: const Color(0xFFA19C9A),
+                            color: AppColors.textSecondary,
                             fontSize: 12.sp,
                           ),
                           maxLines: 1,
@@ -164,7 +165,7 @@ class PrivateChatSessionCell extends StatelessWidget {
                             vertical: 1.w,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF0443E),
+                            color: AppColors.notification,
                             borderRadius: BorderRadius.circular(7.w),
                           ),
                           constraints: BoxConstraints(
@@ -176,7 +177,7 @@ class PrivateChatSessionCell extends StatelessWidget {
                                 ? '99+'
                                 : '${session.unreadNumber.value}',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.onColor,
                               fontSize: 10.sp,
                               fontWeight: FontWeight.w600,
                             ),

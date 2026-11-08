@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/business/home_page_lists/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,14 +34,14 @@ class CategoryTabsWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.w),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? Color(0xFFEDEFF3)
-                      : Color(0xFF262B35),
+                      ? AppColors.selected
+                      : AppColors.surfaceMuted,
                   borderRadius: BorderRadius.circular(28.r),
                 ),
                 child: Text(
                   categories[index].name,
                   style: TextStyle(
-                    color: isSelected ? Color(0xFF07070a) : Colors.white,
+                    color: isSelected ? AppColors.textPrimary : AppColors.textPrimary,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold ,
                     height: 1.5

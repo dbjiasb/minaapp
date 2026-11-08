@@ -30,7 +30,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
@@ -38,7 +38,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
           icon: ImageView(Images.security_back_png, height: 24, width: 24),
         ),
         backgroundColor: Colors.transparent,
-        title: Text(Copywriting.security_create_Group, style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),
+        title: Text(Copywriting.security_create_Group, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),
       ),
       ),
       body: _buildBodyView(context),
@@ -70,7 +70,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
       Text(
         Copywriting.security_group_Name,
         style: TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
           fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
@@ -80,7 +80,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
         margin: EdgeInsets.only(top: 12),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: const BoxDecoration(
-          color: Color(0xFF272533),
+          color: AppColors.surfaceMuted,
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: Center(
@@ -91,10 +91,10 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
               border: InputBorder.none,
               hintText: Copywriting.security_enter_the_group_name,
               isCollapsed: true,
-              hintStyle: TextStyle(color: Color(0xFF636268), fontSize: 13),
+              hintStyle: TextStyle(color: AppColors.textPrimary, fontSize: 13),
             ),
             inputFormatters: [LengthLimitingTextInputFormatter(40)],
-            style: const TextStyle(color: Colors.white, fontSize: 12),
+            style: const TextStyle(color: AppColors.textPrimary, fontSize: 12),
             onChanged: (value) {
               controller.rxNameText.value = value;
             },
@@ -115,7 +115,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
               height: 56,
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(40),
               ),
               child: CachedImage.clipImage(
@@ -131,13 +131,13 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                 height: 16,
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: const BoxDecoration(
-                  color: Color(0xFFF8F8F8),
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Text(
                   Security.security_owner,
                   style: TextStyle(
-                    color: Color(0xFF727272),
+                    color: AppColors.textSecondary,
                     fontSize: 9,
                     height: 16 / 9,
                     fontWeight: FontWeight.w600,
@@ -154,7 +154,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
           child: Text(
             MyAccount.name,
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 12,
               height: 16 / 12,
             ),
@@ -182,7 +182,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
             width: 56,
             height: 56,
             decoration: const BoxDecoration(
-              color: Color(0xFF1B1E25),
+              color: AppColors.surfaceMuted,
               borderRadius: BorderRadius.all(Radius.circular(28)),
             ),
             alignment: Alignment.center,
@@ -198,7 +198,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
       Text(
         Copywriting.security_group_Member,
         style: TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
           fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
@@ -234,7 +234,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
               height: 56,
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(40),
               ),
               child: CachedImage.clipImage(
@@ -264,7 +264,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                   alignment: Alignment.center,
                   child: const Icon(
                     Icons.close_rounded,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     size: 13,
                   ),
                 ),
@@ -279,7 +279,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
           child: Text(
             roleItem[Security.security_userBase]?[Security.security_nickName] ?? '',
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 12,
               height: 16 / 12,
             ),
@@ -296,7 +296,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
       Text(
         Copywriting.security_group_Scenario,
         style: TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
           fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
@@ -306,7 +306,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         margin: EdgeInsets.only(top: 12),
         decoration: const BoxDecoration(
-          color: Color(0xFF272533),
+          color: AppColors.surfaceMuted,
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: TextField(
@@ -316,10 +316,10 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
             border: InputBorder.none,
             hintText: Copywriting.security_enter_the_Group_Scenario,
             isCollapsed: true,
-            hintStyle: const TextStyle(color: Color(0xFF636268), fontSize: 12),
+            hintStyle: const TextStyle(color: AppColors.textPrimary, fontSize: 12),
           ),
           maxLines: null,
-          style: const TextStyle(color: Colors.white, fontSize: 12),
+          style: const TextStyle(color: AppColors.textPrimary, fontSize: 12),
           inputFormatters: [LengthLimitingTextInputFormatter(500)],
           onChanged: (value) {
             controller.rxScenarioText.value = value;
@@ -359,7 +359,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                   Text(
                     Copywriting.security_create_Group,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: AppColors.textPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.w900,
                     ),
@@ -378,7 +378,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                               Text(
                                 '${MyAccount.freeCrowedLeftTimes == -1 ? "∞" : "(${MyAccount.freeCrowedUsedTimes}/${(MyAccount.freeCrowedLeftTimes + MyAccount.freeCrowedUsedTimes)})"} free',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: AppColors.textPrimary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
@@ -388,7 +388,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                           : const Text(
                             ' Free',
                             style: TextStyle(
-                              color: Colors.black,
+                              color: AppColors.textPrimary,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -406,7 +406,7 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
                           Text(
                             ' ${CrowedManager.instance.createCostValue}',
                             style: const TextStyle(
-                              color: Colors.black,
+                              color: AppColors.textPrimary,
                               fontSize: 16,
                             ),
                           ),
@@ -460,7 +460,7 @@ class _RolePanelViewState extends State<RolePanelView>
       bottom: true,
       child: Container(
         decoration: const BoxDecoration(
-          color: Color(0xFF202028),
+          color: AppColors.surfaceMuted,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
@@ -479,7 +479,7 @@ class _RolePanelViewState extends State<RolePanelView>
                   Copywriting.security_add_Group_Member,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -534,7 +534,7 @@ class _RolePanelViewState extends State<RolePanelView>
       return Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Color(0xFF272533),
+          color: isSelected ? AppColors.primary : AppColors.surfaceMuted,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
@@ -542,7 +542,7 @@ class _RolePanelViewState extends State<RolePanelView>
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,
-            color: isSelected ? Colors.black : Color(0xFFABABAD),
+            color: isSelected ? AppColors.textPrimary : AppColors.textSecondary,
           ),
         ),
       );
@@ -591,7 +591,7 @@ class _RolePanelViewState extends State<RolePanelView>
         padding: EdgeInsets.all(12),
         margin: EdgeInsets.only(bottom: 4),
         decoration: BoxDecoration(
-          color: AppColors.ocBox,
+          color: AppColors.surfaceMuted,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -607,7 +607,7 @@ class _RolePanelViewState extends State<RolePanelView>
             Text(
               roleItem[Security.security_userBase]?[Security.security_nickName] ?? '',
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
               ),

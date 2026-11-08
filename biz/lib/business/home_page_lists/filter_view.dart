@@ -55,7 +55,7 @@ class RoleFilterWidget extends StatelessWidget {
       height: Get.height * 0.7,
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0xFF1B1E25),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -67,7 +67,7 @@ class RoleFilterWidget extends StatelessWidget {
               Text(
                 Security.security_filters,
                 style: const TextStyle(
-                    color: Color(0xFFFFFFFF),
+                    color: AppColors.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
@@ -76,7 +76,7 @@ class RoleFilterWidget extends StatelessWidget {
                 onTap: () {
                   Get.back();
                 },
-                child: Icon(Icons.close, color: Color(0xFFABABAD), size: 24)//Image.asset(IMGP.chat_close, width: 24, height: 24),
+                child: Icon(Icons.close, color: AppColors.textSecondary, size: 24)//Image.asset(IMGP.chat_close, width: 24, height: 24),
               )
             ],
           ),
@@ -86,7 +86,7 @@ class RoleFilterWidget extends StatelessWidget {
           Text(
             Security.security_gender,
             style: TextStyle(
-                color: Color(0xFFABABAD),
+                color: AppColors.textSecondary,
                 fontSize: 14,
                 fontWeight: FontWeight.bold),
           ),
@@ -96,7 +96,7 @@ class RoleFilterWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFF12151C),
+              color: AppColors.surfaceMuted,
               borderRadius: BorderRadius.circular(22),
             ),
             height: 44,
@@ -107,7 +107,7 @@ class RoleFilterWidget extends StatelessWidget {
                     label: Container(
                       // margin: const EdgeInsets.only(bottom: 4, top: 4),
                       decoration: BoxDecoration(
-                        color: sel == v ? Colors.white : Colors.transparent,
+                        color: sel == v ? AppColors.selected : Colors.transparent,
                         borderRadius: BorderRadius.circular(18),
                       ),
                       height: 34,
@@ -116,8 +116,8 @@ class RoleFilterWidget extends StatelessWidget {
                         t,
                         style: TextStyle(
                           color: sel == v
-                              ? const Color(0xFF110803)
-                              : const Color(0xFF5C5E64),
+                              ? AppColors.textPrimary
+                              : AppColors.textPrimary,
                           fontSize: 14,
                           height: 1.2,
                           fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class RoleFilterWidget extends StatelessWidget {
           Text(
             Security.security_tags,
             style: TextStyle(
-                color: Color(0xFFABABAD),
+                color: AppColors.textSecondary,
                 fontSize: 14,
                 fontWeight: FontWeight.bold),
           ),
@@ -184,8 +184,8 @@ class RoleFilterWidget extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             color: isTagSeled(e[Security.security_id])
-                                ? Colors.white
-                                : Colors.white.withValues(alpha: 0.05),
+                                ? AppColors.selected
+                                : AppColors.surfaceMuted,
                             borderRadius: BorderRadius.circular(22),
                           ),
                           padding: const EdgeInsets.symmetric(
@@ -194,8 +194,8 @@ class RoleFilterWidget extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 14,
                                   color: isTagSeled(e[Security.security_id])
-                                      ? Color(0xFF110803)
-                                      : Color(0xFFABABAD))),
+                                      ? AppColors.textPrimary
+                                      : AppColors.textSecondary)),
                         ),
                       )))
                   .toList(),
@@ -218,13 +218,13 @@ class RoleFilterWidget extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.refresh,
-                          color: Color(0xFFABABAD),
+                          color: AppColors.textSecondary,
                           size: 20,
                         ),
                         Text(
                           Security.security_reset.tr,
                           style: const TextStyle(
-                              color: Color(0xFFABABAD),
+                              color: AppColors.textSecondary,
                               fontSize: 12,
                               fontWeight: FontWeight.bold),
                         ),
@@ -254,7 +254,7 @@ class RoleFilterWidget extends StatelessWidget {
                           children: [
                             Text(Security.security_done,
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: AppColors.textPrimary,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold)),
                             if (count > 0) const SizedBox(width: 4),
@@ -269,7 +269,7 @@ class RoleFilterWidget extends StatelessWidget {
                                 height: 16,
                                 child: Text(count.toString(),
                                     style: const TextStyle(
-                                        color: Colors.white,
+                                        color: AppColors.textPrimary,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 11)),
                               ),

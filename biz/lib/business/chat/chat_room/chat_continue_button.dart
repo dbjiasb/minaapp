@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,14 +36,14 @@ class ChatContinueButton extends StatelessWidget {
           children: [
             Icon(
               Icons.auto_awesome,
-              color: Colors.white,
+              color: AppColors.onMedia,
               size: 18.w,
             ),
             SizedBox(width: 8.w),
             Text(
               Security.security_continue,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.onMedia,
                 fontSize: 15.sp,
                 fontWeight: FontWeight.w600,
               ),

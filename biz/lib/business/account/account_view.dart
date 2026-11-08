@@ -54,8 +54,8 @@ class AccountView extends StatelessWidget {
         isScrollable: true,
         indicator: const BoxDecoration(),
         dividerColor: Colors.transparent,
-        labelColor: Colors.white,
-        unselectedLabelColor: Colors.white.withValues(alpha: 0.4),
+        labelColor: AppColors.textPrimary,
+        unselectedLabelColor: AppColors.textSecondary,
         labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         unselectedLabelStyle: const TextStyle(
           fontSize: 16,
@@ -72,10 +72,10 @@ class AccountView extends StatelessWidget {
         },
       );
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        backgroundColor: AppColors.base_background,
+        systemOverlayStyle: AppAppearance.overlayStyle,
+        backgroundColor: AppColors.background,
         elevation: 0,
         toolbarHeight: 0,
       ),
@@ -87,7 +87,7 @@ class AccountView extends StatelessWidget {
             height: 400,
             left: 0,
             right: 0,
-            child: Container(color: AppColors.base_background),
+            child: Container(color: AppColors.background),
           ),
           Positioned(
             left: 0,
@@ -155,7 +155,7 @@ class AccountView extends StatelessWidget {
                       child: Icon(
                         Icons.settings,
                         size: 28,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -179,14 +179,14 @@ class AccountView extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Color(0xFF261F1F),
+          color: AppColors.surface,
         ),
         child: Text(
           Copywriting.security_log_out,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 14,
-            color: Color(0xFFF8397D),
+            color: AppColors.link,
           ),
         ),
       ),
@@ -273,7 +273,7 @@ class AccountView extends StatelessWidget {
               () => Text(
                 nickname.isNotEmpty ? nickname : Security.security_user,
                 style: TextStyle(
-                  color: Color(0xFFFFE407),
+                  color: AppColors.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.w900,
                 ),
@@ -290,7 +290,7 @@ class AccountView extends StatelessWidget {
                   Text(
                     'ID:$ID',
                     style: TextStyle(
-                      color: Color(0xFF7F848F),
+                      color: AppColors.textSecondary,
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),
@@ -313,7 +313,7 @@ class AccountView extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: Color(0xFF272533),
+              color: AppColors.surfaceMuted,
             ),
             padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
             child: Center(
@@ -323,13 +323,13 @@ class AccountView extends StatelessWidget {
                     imageUrl: ImagePath.ic_edit,
                     width: 16,
                     height: 16,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                   ),
                   SizedBox(width: 2),
                   Text(
                     Copywriting.security_edit,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -366,7 +366,7 @@ class AccountView extends StatelessWidget {
           child: Container(
             height: 72,
             decoration: BoxDecoration(
-              color: Color(0xFF202026),
+              color: AppColors.surface,
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
             padding: EdgeInsets.symmetric(horizontal: 16),
@@ -382,7 +382,7 @@ class AccountView extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     SizedBox(height: 8),
@@ -401,7 +401,7 @@ class AccountView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ),
@@ -410,7 +410,7 @@ class AccountView extends StatelessWidget {
                   ],
                 ),
                 Spacer(),
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white60),
+                Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.textSecondary),
                 // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
               ],
             ),
@@ -427,7 +427,7 @@ class AccountView extends StatelessWidget {
           child: Container(
             height: 72,
             decoration: BoxDecoration(
-              color: Color(0xFF202026),
+              color: AppColors.surface,
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
             padding: EdgeInsets.symmetric(horizontal: 16),
@@ -443,7 +443,7 @@ class AccountView extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     // Row(
@@ -470,7 +470,7 @@ class AccountView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ),
@@ -479,7 +479,7 @@ class AccountView extends StatelessWidget {
                   ],
                 ),
                 Spacer(),
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white60),
+                Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.textSecondary),
                 // CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20),
               ],
             ),
@@ -558,7 +558,8 @@ class AccountView extends StatelessWidget {
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
           ),
-          image: DecorationImage(
+          color: AppColors.selected,
+          image: AppAppearance.isLight ? null : DecorationImage(
             image: ImageView.getImageProvider(Images.security_premium_bg_png),
             fit: BoxFit.cover,
           ),
@@ -573,7 +574,7 @@ class AccountView extends StatelessWidget {
             Text(
               Security.security_vIP,
               style: TextStyle(
-                color: Color(0xFF07070A),
+                color: AppColors.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -587,7 +588,7 @@ class AccountView extends StatelessWidget {
                           Text(
                             '${Copywriting.security_expires_on} ${CalendarHelper.formatDate(date: MyAccount.premEdTm) ?? ''}',
                             style: const TextStyle(
-                              color: Color(0xFF07070A),
+                              color: AppColors.textPrimary,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
@@ -596,7 +597,7 @@ class AccountView extends StatelessWidget {
                             Images.security_arrow_right_png,
                             height: 16,
                             width: 16,
-                            color: Colors.black.withValues(alpha: 0.5),
+                            color: AppColors.textPrimary.withValues(alpha: 0.5),
                           ),
                         ],
                       )
@@ -608,9 +609,9 @@ class AccountView extends StatelessWidget {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
-                              Color(0xFF171411),
-                              Color(0xFF84786C),
-                              Color(0xFF07070A),
+                              AppColors.surfaceMuted,
+                              AppColors.surfaceMuted,
+                              AppColors.surfaceMuted,
                             ],
                             stops: [0.049, 0.361, 0.879],
                           ),
@@ -620,7 +621,7 @@ class AccountView extends StatelessWidget {
                         child: Text(
                           Security.security_Subscribe,
                           style: TextStyle(
-                            color: Color(0xFFFFEFDA),
+                            color: AppColors.textPrimary,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),
@@ -657,7 +658,7 @@ class AccountView extends StatelessWidget {
   Widget _buildFeatureView() {
     return Container(
       padding: EdgeInsets.only(top: 4),
-      color: AppColors.base_background,
+      color: AppColors.background,
       child: PageView(
         controller: controller.pageController,
         onPageChanged: (index) {
@@ -673,7 +674,7 @@ class AccountView extends StatelessWidget {
   Widget menuArea() {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFF202026),
+        color: AppColors.surface,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       padding: const EdgeInsets.all(16),
@@ -697,7 +698,7 @@ class AccountView extends StatelessWidget {
                         Text(
                           Copywriting.security_daily_Task,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
                           ),
@@ -749,7 +750,7 @@ class AccountView extends StatelessWidget {
                         Text(
                           Copywriting.security_notifications,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
                           ),
@@ -786,7 +787,7 @@ class AccountView extends StatelessWidget {
                     Text(
                       Copywriting.security_collections,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
                       ),
@@ -813,7 +814,7 @@ class AccountView extends StatelessWidget {
                     Text(
                       Copywriting.security_feedback,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
                       ),
@@ -898,7 +899,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return Container(
-      color: AppColors.base_background,
+      color: AppColors.background,
       height: 40,
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -931,7 +932,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
                   Text(
                     Security.security_create,
                     style: TextStyle(
-                      color: Color(0xFF07070a),
+                      color: AppColors.textPrimary,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),

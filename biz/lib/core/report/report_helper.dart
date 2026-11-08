@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -20,7 +21,7 @@ class ReportHelper {
     showAlert(
       Padding(
         padding: EdgeInsets.only(left: 24, top: 22, right: 24, bottom: 7),
-        child: Text(Security.security_Report, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16)),
+        child: Text(Security.security_Report, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary, fontSize: 16)),
       ),
       view,
       confirmText: Security.security_confirm,

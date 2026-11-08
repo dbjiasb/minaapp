@@ -25,19 +25,19 @@ class EditMyInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        leading: InkWell(overlayColor: WidgetStateProperty.all(Colors.transparent), onTap: Get.back, child: Container(alignment: Alignment.center, padding: EdgeInsets.only(left: 16), child: ImageView(Images.security_back_png, fit: BoxFit.cover, height: 24, width: 24))),
+        leading: InkWell(overlayColor: WidgetStateProperty.all(Colors.transparent), onTap: Get.back, child: Container(alignment: Alignment.center, padding: EdgeInsets.only(left: 16), child: ImageView(Images.security_back_png, color: AppColors.textPrimary, fit: BoxFit.cover, height: 24, width: 24))),
         centerTitle: true,
-        backgroundColor: AppColors.base_background,
-        title: Text(Copywriting.security_edit_information, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+        backgroundColor: AppColors.background,
+        title: Text(Copywriting.security_edit_information, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
         actions: [
           InkWell(
             overlayColor: WidgetStateProperty.all(Colors.transparent),
             onTap: controller.saveMyInfo,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Text(Security.security_Save, style: TextStyle(color: AppColors.ocMain, fontSize: 14, fontWeight: FontWeight.bold)),
+              child: Text(Security.security_Save, style: TextStyle(color: AppColors.accentText, fontSize: 14, fontWeight: FontWeight.bold)),
             ),
           ),
         ],
@@ -62,10 +62,10 @@ class EditMyInfoPage extends StatelessWidget {
                         Obx(
                           () =>
                               MyAccount.avatar.isEmpty
-                                  ? Container(color: Colors.grey, height: 88, width: 88)
+                                  ? Container(color: AppColors.surfaceMuted, height: 88, width: 88)
                                   : AvatarView(url: MyAccount.avatar, size: 88),
                         ),
-                        Positioned(right: 2, bottom: 2, child: Icon(Icons.camera_alt, size: 24, color: Colors.white,)),
+                        Positioned(right: 2, bottom: 2, child: Icon(Icons.camera_alt, size: 24, color: AppColors.textPrimary,)),
                       ],
                     ),
                   ),
@@ -73,7 +73,7 @@ class EditMyInfoPage extends StatelessWidget {
               ),
 
               Container(
-                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
+                decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(12)),
                 child: Column(children: [_buildNameItem(), _buildGenderItem(), _buildBirthdayItem()]),
               ),
               // Container(
@@ -117,11 +117,11 @@ class EditMyInfoPage extends StatelessWidget {
       child: Row(
         spacing: 4,
         children: [
-          Text(Security.security_Name, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+          Text(Security.security_Name, style: TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)),
           Expanded(
             child: TextField(
               controller: controller.nameController,
-              style: TextStyle(color: Colors.white, fontSize: 11, height: 1.0),
+              style: TextStyle(color: AppColors.textPrimary, fontSize: 11, height: 1.0),
               decoration: InputDecoration(border: InputBorder.none, isDense: true),
               textAlignVertical: TextAlignVertical.center,
               textAlign: TextAlign.right,
@@ -143,12 +143,12 @@ class EditMyInfoPage extends StatelessWidget {
         child: Row(
           spacing: 4,
           children: [
-            Text(Security.security_Gender, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+            Text(Security.security_Gender, style: TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)),
             Expanded(
               child: Row(
                 children: [
                   Spacer(),
-                  Obx(() => Text(controller.genderText.value, style: TextStyle(color: Colors.white, fontSize: 11, height: 1.0))),
+                  Obx(() => Text(controller.genderText.value, style: TextStyle(color: AppColors.textPrimary, fontSize: 11, height: 1.0))),
                   // Image.asset(ImagePath.right_arrow, height: 16, width: 16),
                 ],
               ),
@@ -169,7 +169,7 @@ class EditMyInfoPage extends StatelessWidget {
         child: Row(
           spacing: 4,
           children: [
-            Text(Security.security_Birthday, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+            Text(Security.security_Birthday, style: TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)),
             Expanded(
               child: Row(
                 children: [
@@ -177,7 +177,7 @@ class EditMyInfoPage extends StatelessWidget {
                   Obx(
                     () => Text(
                       DateFormat('yyyy-MM-dd').format(DateTime.fromMillisecondsSinceEpoch(controller.birthdayText.value)),
-                      style: TextStyle(color: Colors.white, fontSize: 11, height: 1.0),
+                      style: TextStyle(color: AppColors.textPrimary, fontSize: 11, height: 1.0),
                     ),
                   ),
                   GestureDetector(onTap: () async {}, child: CachedImage(imageUrl: ImagePath.ic_arrow_right_circle, width: 20, height: 20)),

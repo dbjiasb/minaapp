@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -74,7 +75,7 @@ class AICallView extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           ],
@@ -88,7 +89,7 @@ class AICallView extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           ],
@@ -115,7 +116,7 @@ class AICallView extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0x40000000), Color(0x00000000)],
+                    colors: [AppColors.surfaceMuted, AppColors.surfaceMuted],
                   ),
                 ),
                 child: SingleChildScrollView(
@@ -123,7 +124,7 @@ class AICallView extends StatelessWidget {
                   child: Text(
                     viewController.speechContent.value,
                     style: TextStyle(
-                      color: Color(0xB3FFFFFF),
+                      color: AppColors.textSecondary,
                       fontSize: 13,
                       fontWeight: FontWeight.normal,
                     ),
@@ -145,7 +146,7 @@ class AICallView extends StatelessWidget {
               Copywriting.security_interrupt_AI,
               style: TextStyle(
                 fontSize: 14,
-                color: Color(0xFFABABAD),
+                color: AppColors.textSecondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -161,7 +162,7 @@ class AICallView extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           ],
@@ -189,7 +190,7 @@ class AICallView extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
-              color: hidden ? Colors.transparent : Colors.white,
+              color: hidden ? Colors.transparent : AppColors.textPrimary,
             ),
             children: [
               TextSpan(
@@ -217,7 +218,7 @@ class AICallView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0A0B12),
+      backgroundColor: AppColors.background,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -228,7 +229,7 @@ class AICallView extends StatelessWidget {
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0), // 调整模糊程度
             child: Container(
-              color: Colors.transparent, // 确保容器透明
+              color: AppColors.background.withValues(alpha: AppAppearance.isLight ? 0.94 : 0),
             ),
           ),
 
@@ -245,7 +246,7 @@ class AICallView extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       buildCostWidget(false),
@@ -267,7 +268,7 @@ class AICallView extends StatelessWidget {
                         viewController.session.name,
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -284,7 +285,7 @@ class AICallView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           Obx(
@@ -295,7 +296,7 @@ class AICallView extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w900,
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ),

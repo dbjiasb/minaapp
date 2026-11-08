@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 
@@ -42,7 +43,7 @@ class MessageOptionView extends StatelessWidget {
     int crossAxisCount = count > 4 ? 4 : count;
     return Container(
       width: 48 * crossAxisCount + 12 * (crossAxisCount - 1) + 40,
-      decoration: const BoxDecoration(color: Color(0xe6000000), borderRadius: BorderRadius.all(Radius.circular(12))),
+      decoration: const BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.all(Radius.circular(12))),
       child: GridView.count(
         shrinkWrap: true,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -97,8 +98,8 @@ class MessageOptionView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ImageView(replaceImage ?? optionItem.icon, width: 24, height: 24),
-            Text(optionItem.title, style: TextStyle(color: Colors.white, fontSize: 9), textAlign: TextAlign.center, maxLines: 2),
+            ImageView(replaceImage ?? optionItem.icon, color: replaceImage != null ? AppColors.accentText : AppColors.textPrimary, width: 24, height: 24),
+            Text(optionItem.title, style: TextStyle(color: AppColors.textPrimary, fontSize: 9), textAlign: TextAlign.center, maxLines: 2),
           ],
         ),
       ),

@@ -23,7 +23,7 @@ class PrivateChatHistoryListView extends StatelessWidget {
     return Obx(
       () =>
           logic.isLoading.value && logic.dataList.isEmpty
-              ? Center(child: CircularProgressIndicator(color: AppColors.primary))
+              ? Center(child: CircularProgressIndicator(color: AppColors.accentText))
               : RefreshConfiguration(
                 springDescription: SpringDescription.withDampingRatio(
                   mass: 1.0, // 减小质量，让物体更轻巧、更容易被拉动
@@ -50,7 +50,7 @@ class PrivateChatHistoryListView extends StatelessWidget {
                                   alignment: Alignment.centerRight,
                                   padding: EdgeInsets.only(right: 20.w),
                                   color: const Color(0xFFF0443E),
-                                  child: Icon(Icons.delete_outline, color: Colors.white, size: 24.w),
+                                  child: Icon(Icons.delete_outline, color: AppColors.textPrimary, size: 24.w),
                                 ),
                                 confirmDismiss: (direction) async {
                                   return await logic.deleteSession(session);
@@ -91,8 +91,8 @@ class PrivateChatHistoryListView extends StatelessWidget {
             child: Container(
               width: 120.w,
               height: 120.w,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.1)),
-              child: Center(child: Icon(Icons.inbox_outlined, size: 60.w, color: Colors.white.withOpacity(0.3))),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.surfaceMuted),
+              child: Center(child: Icon(Icons.inbox_outlined, size: 60.w, color: AppColors.textSecondary)),
             ),
           ),
         ],

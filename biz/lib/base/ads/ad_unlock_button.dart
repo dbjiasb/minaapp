@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -64,13 +65,13 @@ class _MediaAdsButtonState extends State<MediaAdsButton> {
                   children: [
                     const Icon(
                       Icons.video_library,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       size: 16,
                     ),
                     Text(
                       Copywriting.security_aD_Free,
                       style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 13,
                           fontWeight: FontWeight.bold),
                     ).marginOnly(left: 4, right: 4),
@@ -78,11 +79,11 @@ class _MediaAdsButtonState extends State<MediaAdsButton> {
                       // alignment: Alignment.center,
                       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                       decoration: BoxDecoration(
-                          color: Colors.black26,
+                          color: AppColors.surfaceMuted,
                           borderRadius: BorderRadius.circular(12)),
                       child: Text(
                         '${AdsManager.getResLockUseCount(widget.sourceType)}/${AdsManager.getResLockTotalCount(widget.sourceType)}',
-                        style: const TextStyle(fontSize: 10, color: Colors.white),
+                        style: const TextStyle(fontSize: 10, color: AppColors.textPrimary),
                       ),
                     )
                   ],

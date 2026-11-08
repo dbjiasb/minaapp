@@ -68,13 +68,13 @@ class _ReportViewState extends State<ReportView> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 48),
         padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(color: Color(0xFF12151C), borderRadius: BorderRadius.all(Radius.circular(16))),
+        decoration: const BoxDecoration(color: AppColors.background, borderRadius: BorderRadius.all(Radius.circular(16))),
         child: GetBuilder<ReportLogic>(
           builder: (logic) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(Security.security_report.tr, style: TextStyle(color: Color(0xFFAAAAAA), fontFamily: Security.security_specialFont.tr, fontSize: 16)),
+                Text(Security.security_report.tr, style: TextStyle(color: AppColors.textPrimary, fontFamily: Security.security_specialFont.tr, fontSize: 16)),
                 const SizedBox(height: 6),
                 ...reasons.map((e) => _buildCheckBox(e, logic)),
                 const SizedBox(height: 6),
@@ -82,11 +82,11 @@ class _ReportViewState extends State<ReportView> {
                   controller: _editingController,
                   decoration: InputDecoration(
                     filled: true,
-                    labelStyle: const TextStyle(color: Colors.white, fontSize: 14),
+                    labelStyle: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
                     hintText: Security.security_description.tr,
-                    fillColor: Color(0xFFF5F5F5),
+                    fillColor: AppColors.surfaceMuted,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                    hintStyle: const TextStyle(color: Color(0xFF999999), fontSize: 14),
+                    hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                     enabledBorder: const OutlineInputBorder(
                       gapPadding: 0,
                       borderRadius: BorderRadius.all(Radius.circular(40)),
@@ -117,7 +117,7 @@ class _ReportViewState extends State<ReportView> {
         child: Row(
           children: [
             Radio.adaptive(
-              activeColor: AppColors.primary,
+              activeColor: AppColors.accentText,
               value: reason,
               groupValue: logic.currentReason.value,
               onChanged: (value) {
@@ -126,7 +126,7 @@ class _ReportViewState extends State<ReportView> {
               },
             ),
             const SizedBox(width: 4),
-            Text(reason[Security.security_desc] ?? "", style: const TextStyle(fontSize: 12, color: Colors.white)),
+            Text(reason[Security.security_desc] ?? "", style: const TextStyle(fontSize: 12, color: AppColors.textPrimary)),
           ],
         ).marginOnly(top: 8),
       ),
@@ -142,11 +142,11 @@ class _ReportViewState extends State<ReportView> {
               Get.back();
             },
             style: TextButton.styleFrom(
-              backgroundColor: Color(0xFF12151C),
-              side: BorderSide(color: Colors.white.withValues(alpha: .7), width: 1),
+              backgroundColor: AppColors.background,
+              side: BorderSide(color: AppColors.textSecondary, width: 1),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
             ),
-            child: Text(Security.security_cancel, style: TextStyle(color: Colors.white.withValues(alpha: .7), fontSize: 16, fontWeight: FontWeight.w700)),
+            child: Text(Security.security_cancel, style: TextStyle(color: AppColors.textSecondary, fontSize: 16, fontWeight: FontWeight.w700)),
           ),
         ),
         const SizedBox(width: 12),
@@ -158,10 +158,10 @@ class _ReportViewState extends State<ReportView> {
             style: TextButton.styleFrom(
               minimumSize: const Size(0, 0),
               backgroundColor: AppColors.primary,
-              side: const BorderSide(color: Color(0xFFF96F88), width: 1),
+              side: BorderSide.none,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
             ),
-            child: Text(Security.security_report, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700)),
+            child: Text(Security.security_report, style: const TextStyle(color: AppColors.accentForeground, fontSize: 16, fontWeight: FontWeight.w700)),
           ),
         ),
       ],

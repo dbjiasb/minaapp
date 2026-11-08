@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,7 +45,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
             padding: const EdgeInsets.only(left: 22, right: 8),
             margin: const EdgeInsets.only(left: 5, top: 2, bottom: 2),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.3),
+              color: AppColors.surface.withOpacity(0.3),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Obx(() {
@@ -52,7 +53,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
                 '${type == 0 ? MyAccount.coins : MyAccount.gems}',
                 textAlign: TextAlign.right,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -74,7 +75,12 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      List<Widget> contentList = [drawBG(), drawCharacter()];
+      List<Widget> contentList = [
+        drawBG(),
+        if (AppAppearance.isLight)
+          const Positioned.fill(child: IgnorePointer(child: ColoredBox(color: Color(0xE8F8F7F3)))),
+        drawCharacter(),
+      ];
       if ((currentNode[Security.security_id] ?? 0) > 0) {
         if (currentNode.isNarrator) {
           contentList.add(drawNarrator());
@@ -88,15 +94,15 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
       contentList.add(drawClickTips());
 
       return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.background,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.background,
           elevation: 0.0,
-          systemOverlayStyle: SystemUiOverlayStyle.light,
+          systemOverlayStyle: AppAppearance.overlayStyle,
           leading: Padding(
             padding: const EdgeInsets.only(left: 8),
-            child: AppWidgets.backBtn(color: Colors.white),
+            child: AppWidgets.backBtn(color: AppColors.background),
           ),
           actions: [
             Obx(() => currentNode.needCost ? drawWealthView(1) : Container()),
@@ -116,7 +122,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
                   !controller.isResPrepared.value
                       ? Text(
                           'Loading（${controller.progress.value}%）',
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: AppColors.textPrimary),
                         )
                       : Container(),
                 ],
@@ -165,9 +171,9 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
           height: 32,
           width: 32,
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.3),
+            color: AppColors.surface.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white, width: 2),
+            border: Border.all(color: AppColors.border, width: 2),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(14),
@@ -186,7 +192,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
           child: Text(
             name,
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
@@ -208,7 +214,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
             child: Text(
               MyAccount.name,
               style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -222,7 +228,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
           width: 32,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.white, width: 2),
+            border: Border.all(color: AppColors.border, width: 2),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(14),
@@ -294,7 +300,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFFFBF8FC),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.all(Radius.circular(4)).copyWith(
                   bottomLeft: isMine ? Radius.circular(12) : Radius.circular(4),
                   bottomRight: isMine
@@ -305,7 +311,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
               child: AnimatedTextView(
                 text: currentNode[Security.security_value] ?? '',
                 style: const TextStyle(
-                  color: Color(0xFF727272),
+                  color: AppColors.textSecondary,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   height: 1.4,
@@ -331,7 +337,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
           children: [
             Text(
               Copywriting.security_click_anywhere_to_continue___,
-              style: const TextStyle(color: Colors.white, fontSize: 12),
+              style: const TextStyle(color: AppColors.textPrimary, fontSize: 12),
             ),
             // Image.asset('assets/images/dating/ic_next.png', package: Security.security_message, width: 20,),
           ],
@@ -364,16 +370,16 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
             Container(
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
-                // color: Color(0xFF3B356F).withValues(alpha: 0.8),
+                // color: AppColors.surface.withValues(alpha: 0.8),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   stops: const [0.0, 0.2, 0.8, 1],
                   colors: [
-                    Color(0xFF3B356F).withValues(alpha: 0),
-                    Color(0xFF3B356F).withValues(alpha: 0.9),
-                    Color(0xFF3B356F).withValues(alpha: 0.9),
-                    Color(0xFF3B356F).withValues(alpha: 0),
+                    AppColors.surface.withValues(alpha: 0),
+                    AppColors.surface.withValues(alpha: 0.97),
+                    AppColors.surface.withValues(alpha: 0.97),
+                    AppColors.surface.withValues(alpha: 0),
                   ],
                 ),
               ),
@@ -384,7 +390,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
               child: AnimatedTextView(
                 text: currentNode[Security.security_value] ?? '',
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 20,
                   fontWeight: FontWeight.w400,
                   height: 1.5,
@@ -414,7 +420,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
           },
           child: bgName.isNotEmpty
               ? controller.imageAsset(bgName, fit: BoxFit.cover)
-              : Container(color: Colors.black),
+              : Container(color: AppColors.surfaceMuted),
         ),
       );
     });
@@ -435,7 +441,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
       int cost = action[Security.security_cost];
       int disCost = action[Security.security_disCost];
       int costType = action[Security.security_costType];
-      Color fontColor = cost > 0 ? Colors.white : Color(0xFF333333);
+      Color fontColor = cost > 0 ? AppColors.textPrimary : AppColors.textPrimary;
       bool selectBefore = action[ES.sb] == 1;
       bool isLock = cost > 0 && !selectBefore;
 
@@ -457,7 +463,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
                 tmpCost,
                 style: TextStyle(
                   /*fontFamily: AppFont.rammettoOne,*/
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: !small ? 14 : 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -495,7 +501,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
                           child: Text(
                             Security.security_fREE,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 20,
                               fontWeight: FontWeight.w900,
                             ),
@@ -571,7 +577,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Colors.white,
+                                      color: AppColors.border,
                                       width: 1,
                                     ),
                                     borderRadius: BorderRadius.circular(8),
@@ -605,7 +611,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
                           Text(
                             Security.security_mode,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.bold,
                               fontSize: 8,
                             ),
@@ -621,7 +627,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
                     mode[Security.security_name] ?? '',
                     style: TextStyle(
                       /*fontFamily: AppFont.rammettoOne, */
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 11,
                       height: 1.4,
                       fontWeight: FontWeight.bold,
@@ -663,7 +669,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
                         ),
                         height: 60,
                         decoration: BoxDecoration(
-                          color: cost > 0 ? null : Colors.white,
+                          color: cost > 0 ? null : AppColors.surface,
                           borderRadius: cost > 0
                               ? null
                               : const BorderRadius.only(
@@ -720,7 +726,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
                             Security.security_bEFORE,
                             style: TextStyle(
                               /*fontFamily: AppFont.rammettoOne, */
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 13,
                               fontWeight: FontWeight.w900,
                             ),

@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:biz/shared/widget/thinking_animated_view.dart';
 
@@ -53,7 +54,7 @@ class ChatGeneratingCell extends ChatCell {
           height: 44,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isMine ? Color(0xffFFF9B4).withValues(alpha:0.9) : Color(0xff272533).withValues(alpha:0.9),
+            color: isMine ? AppColors.chatOutgoing : AppColors.chatIncoming,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(12),
               topRight: Radius.circular(12),

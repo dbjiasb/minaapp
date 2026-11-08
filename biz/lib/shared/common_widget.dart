@@ -20,7 +20,7 @@ extension AppBarExt on AppBar {
           Text(
             tips ?? Security.security_empty,
             // style: const TextStyle(color: SWColors.t1, fontSize: 16, fontWeight: FontWeight.normal),
-            style: TextStyle(color: AppColors.main, fontSize: 16, fontWeight: FontWeight.normal),
+            style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.normal),
           ),
         ],
       ),
@@ -28,14 +28,14 @@ extension AppBarExt on AppBar {
   }
 
   /// 异步body
-  static Widget mainBody<T>(Future<T>? future, AsyncContentWidgetBuilder<T> builder, {Color loadColor = AppColors.primary, WidgetBuilder? loadBuilder}) {
+  static Widget mainBody<T>(Future<T>? future, AsyncContentWidgetBuilder<T> builder, {Color loadColor = AppColors.accentText, WidgetBuilder? loadBuilder}) {
     return FutureBuilder<T>(
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return loadBuilder != null ? loadBuilder(context) : Center(child: CircularProgressIndicator(color: loadColor));
         } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}', style: const TextStyle(color: AppColors.main, fontSize: 16, fontWeight: FontWeight.normal)));
+          return Center(child: Text('Error: ${snapshot.error}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.normal)));
         } else if (snapshot.hasData && snapshot.data is T) {
           return builder(snapshot.data as T, context);
         } else {
@@ -51,9 +51,9 @@ extension AppBarExt on AppBar {
     Widget? titleView,
     Widget? leading,
     List<Widget>? actions,
-    SystemUiOverlayStyle? style = SystemUiOverlayStyle.light,
+    SystemUiOverlayStyle? style = AppAppearance.overlayStyle,
     PreferredSizeWidget? bottom,
-    Color backgroundColor = AppColors.base_background,
+    Color backgroundColor = AppColors.background,
     Color? returnIconColor,
     bool? centerTitle = true,
     VoidCallback? onPressed,
@@ -62,7 +62,7 @@ extension AppBarExt on AppBar {
     return AppBar(
       title:
           titleView ??
-          (title != null ? Text(title, style: titleTextStyle ?? const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)) : null),
+          (title != null ? Text(title, style: titleTextStyle ?? const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)) : null),
       backgroundColor: backgroundColor,
       elevation: 0.0,
       centerTitle: centerTitle,
@@ -75,20 +75,20 @@ extension AppBarExt on AppBar {
           leading ??
           Padding(
             padding: const EdgeInsets.only(left: 8),
-            child: IconButton(onPressed: onPressed ?? () => Get.back(), icon: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, fit: BoxFit.cover, height: 24, width: 24)),
+            child: IconButton(onPressed: onPressed ?? () => Get.back(), icon: Icon(Icons.arrow_back_ios_new_rounded, color: returnIconColor ?? AppColors.textPrimary, size: 22)),
           ),
     );
   }
 
   static PreferredSizeWidget buildCustomAppBar(Widget child, {List<Widget>? actions, double? leadingWidth, double titleSpacing = 10}) {
     return AppBar(
-      backgroundColor: AppColors.base_background,
-      title: Theme(data: ThemeData(highlightColor: Colors.transparent, splashColor: Colors.transparent), child: child),
+      backgroundColor: AppColors.background,
+      title: child,
       titleSpacing: titleSpacing,
       elevation: 0,
       actions: actions,
       leadingWidth: leadingWidth,
-      leading: IconButton(icon: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, fit: BoxFit.cover, height: 24, width: 24), onPressed: Get.back),
+      leading: IconButton(icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary, size: 22), onPressed: Get.back),
     );
   }
 }

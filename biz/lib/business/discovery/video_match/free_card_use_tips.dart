@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/preferences/preferences.dart';
@@ -23,14 +24,14 @@ class FreeCardUseTip extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(24),
           margin: const EdgeInsets.symmetric(horizontal: 44),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
+          decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(24)),
           child: Column(
             children: [
-              Text(Copywriting.security_cost_Trial_Card, style: const TextStyle(color: Color(0xFF080E1B), fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(Copywriting.security_cost_Trial_Card, style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
               Text(
                 Copywriting.security_you_re_now_using_your_trial_card_or_available_call_time___whichever_applies_,
-                style: TextStyle(fontSize: 14, color: Color(0xFF727272), fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 14, color: AppColors.textSecondary, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12), // 分隔符
               // 带项目符号的列表
@@ -40,12 +41,12 @@ class FreeCardUseTip extends StatelessWidget {
               const SizedBox(height: 12), // 分隔符
               const Text(
                 "1. If you hang up mid-minute or during a trial, used time or cards won't be refunded.",
-                style: TextStyle(fontSize: 14, color: Color(0xFF727272), fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 14, color: AppColors.textSecondary, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               const Text(
                 "2. If both are used up and you don't have enough gems, the call will end automatically.",
-                style: TextStyle(fontSize: 14, color: Color(0xFF727272), fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 14, color: AppColors.textSecondary, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               Obx(() {
@@ -63,9 +64,9 @@ class FreeCardUseTip extends StatelessWidget {
                         ),
                         alignment: PlaceholderAlignment.middle,
                       ),
-                      TextSpan(text: Copywriting.security_don_t_remind_me_again, style: TextStyle(color: Color(0xFF9D9EA5), fontSize: 11)),
+                      TextSpan(text: Copywriting.security_don_t_remind_me_again, style: TextStyle(color: AppColors.textSecondary, fontSize: 11)),
                     ],
-                    style: const TextStyle(color: Color(0xFF9D9EA5), fontSize: 12, height: 1.3),
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.3),
                   ),
                 );
               }),
@@ -87,7 +88,7 @@ class FreeCardUseTip extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Text(Copywriting.security_i_understand, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                  child: Text(Copywriting.security_i_understand, style: TextStyle(color: AppColors.onColor, fontSize: 16, fontWeight: FontWeight.bold)),
                 ),
               ),
               GestureDetector(
@@ -99,8 +100,8 @@ class FreeCardUseTip extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 8),
                   alignment: Alignment.center,
                   width: double.infinity,
-                  decoration: BoxDecoration(color: const Color(0xFFF7F7FA), borderRadius: BorderRadius.circular(16)),
-                  child: Text(Security.security_cancel, style: TextStyle(color: Color(0xFFABABAD), fontSize: 16)),
+                  decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
+                  child: Text(Security.security_cancel, style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
                 ),
               ),
             ],
@@ -114,9 +115,9 @@ class FreeCardUseTip extends StatelessWidget {
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(text: bullet, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF080E1B))),
+          TextSpan(text: bullet, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textPrimary)),
           const WidgetSpan(child: SizedBox(width: 8)),
-          TextSpan(text: content, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF727272))),
+          TextSpan(text: content, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textSecondary)),
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/report/report_manager.dart';
@@ -24,9 +25,9 @@ class MatchScanResultPage extends GetView<MatchScanLogic> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Color(0xFF12151C),
+        backgroundColor: AppColors.background,
         appBar: AppBar(
-          backgroundColor: Color(0xFF12151C),
+          backgroundColor: AppColors.background,
           elevation: 0,
           leading: IconButton(
             icon: ImageView(Images.security_back_png, fit: BoxFit.fill),
@@ -80,7 +81,7 @@ class MatchScanResultPage extends GetView<MatchScanLogic> {
                   bottom: 20,
                   child: Text(
                     callNotice[Security.security_fromNick] ?? '',
-                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -118,7 +119,7 @@ class MatchScanResultPage extends GetView<MatchScanLogic> {
                   // ),
                 ),
                 SizedBox(width: 8),
-                Text(Security.security_accept, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                Text(Security.security_accept, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -128,7 +129,7 @@ class MatchScanResultPage extends GetView<MatchScanLogic> {
             ReportManager.sendEvent(Security.security_click_user_match_video, {Security.security_action: Security.security_nextMatch});
             controller.rejectAndStartMatch(callNotice[Security.security_callId]);
           },
-          child: Text(Security.security_next, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)).marginOnly(bottom: 40, top: 20),
+          child: Text(Security.security_next, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)).marginOnly(bottom: 40, top: 20),
         ),
       ],
     );

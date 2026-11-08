@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'dart:ui';
 
 import 'package:biz/base/crypt/images.dart';
@@ -65,9 +66,9 @@ class ExploreItemView extends StatelessWidget {
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.4),
+                      color: AppColors.surface.withValues(alpha: AppAppearance.isLight ? 0.97 : 0.9),
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24), bottomLeft: Radius.circular(24), bottomRight: Radius.circular(24)),
-                      border: Border.all(color: Colors.white30, width: 1),
+                      border: Border.all(color: AppColors.border, width: 1),
                     ),
                     padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 16),
                     child: Column(
@@ -81,7 +82,7 @@ class ExploreItemView extends StatelessWidget {
                                 padding: const EdgeInsets.only(right: 2),
                                 child: Text(
                                   data[Security.security_nickname] ?? "",
-                                  style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontSize: 24, color: AppColors.textPrimary, fontWeight: FontWeight.bold),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -97,11 +98,11 @@ class ExploreItemView extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                ImageView(Images.security_linknum_webp, width: 16, height: 16).marginOnly(right: 4),
-                                Text(linkNum, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+                                ImageView(Images.security_linknum_webp, color: AppColors.textSecondary, width: 16, height: 16).marginOnly(right: 4),
+                                Text(linkNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.w500)),
                                 SizedBox(width: 12),
-                                ImageView(Images.security_heart_count_webp, width: 16, height: 16).marginOnly(right: 4),
-                                Text(heatNum, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+                                ImageView(Images.security_heart_count_webp, color: AppColors.textSecondary, width: 16, height: 16).marginOnly(right: 4),
+                                Text(heatNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.w500)),
                               ],
                             ),
                           ],
@@ -110,7 +111,7 @@ class ExploreItemView extends StatelessWidget {
                             ? Container()
                             : Text(
                           data[Security.security_bio] ?? "",
-                          style: const TextStyle(fontSize: 14, color: Color(0xCCFFFFFF)),
+                          style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ).marginOnly(top: 8),
@@ -146,11 +147,11 @@ class ExploreItemView extends StatelessWidget {
                         : Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: const Color(0x1affffff),
+                            color: AppColors.surfaceMuted,
                             borderRadius: BorderRadius.circular(30),
-                            border: Border.all(color: Colors.white30, width: 1),
+                            border: Border.all(color: AppColors.border, width: 1),
                           ),
-                          child: Text(e, style: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold)),
+                          child: Text(e, style: const TextStyle(fontSize: 12, color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
                         ),
               )
               .toList() ??
@@ -178,7 +179,7 @@ class ExploreItemView extends StatelessWidget {
         child: Text(
           Security.security_Chat,
           style: TextStyle(
-            color: Color(0xCC221600),
+            color: AppColors.textPrimary,
             fontSize: 18,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.15,

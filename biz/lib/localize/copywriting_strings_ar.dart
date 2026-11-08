@@ -536,7 +536,7 @@ abstract final class CopywritingStringsAr {
         'لف ذراعيك حول ركبتيك، واجلس منحنيًا قليلاً، وعينيك دافئة علي.',
     'security_create_your_account': 'أنشئ حسابك',
     'security_input_content_here__Option_': 'إدخال المحتوى هنا (خيار)',
-    'security_mina_Team': 'فريق مينا',
+    'security_miora_Team': 'فريق Miora',
     'security_story_background': 'خلفية القصة',
     'security_tap_to_continue___': 'انقر للمتابعة...',
     'security_aI_Character': 'شخصية الذكاء الاصطناعي',
@@ -558,7 +558,7 @@ abstract final class CopywritingStringsAr {
     'security_All_Chat': 'كل الدردشة',
     'security_Create_Video': 'إنشاء فيديو',
     'security_Generate_Video': 'توليد الفيديو',
-    'security_Mina_Support': 'دعم مينا',
+    'security_Miora_Support': 'دعم Miora',
     'security_No_groups_yet__go_create_one_':
         'لا توجد مجموعات حتى الآن، اذهب لإنشاء واحدة!',
     'security_Please_input_description': 'الرجاء إدخال الوصف',

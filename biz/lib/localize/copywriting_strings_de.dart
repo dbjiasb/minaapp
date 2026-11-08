@@ -555,7 +555,7 @@ abstract final class CopywritingStringsDe {
     'security_create_your_account': 'Erstellen Sie Ihr Konto',
     'security_input_content_here__Option_':
         'Geben Sie hier Inhalte ein (Option)',
-    'security_mina_Team': 'Mina-Team',
+    'security_miora_Team': 'Miora-Team',
     'security_story_background': 'Hintergrund der Geschichte',
     'security_tap_to_continue___': 'Tippen Sie, um fortzufahren...',
     'security_aI_Character': 'KI-Charakter',
@@ -578,7 +578,7 @@ abstract final class CopywritingStringsDe {
     'security_All_Chat': 'Alle Chats',
     'security_Create_Video': 'Video erstellen',
     'security_Generate_Video': 'Video generieren',
-    'security_Mina_Support': 'Mina-Unterstützung',
+    'security_Miora_Support': 'Miora-Unterstützung',
     'security_No_groups_yet__go_create_one_':
         'Noch keine Gruppen, erstellen Sie eine!',
     'security_Please_input_description':

@@ -43,7 +43,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondPage,
+      backgroundColor: AppColors.surface,
       body: Container(
         child: Column(
           children: [
@@ -111,7 +111,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
                 child: Text(
                   textAlign: TextAlign.center,
                   Copywriting.security_audio_Library,
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.w700),
+                  style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.w700),
                 ),
               ),
             ),
@@ -150,7 +150,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
                     buttonStyleData: ButtonStyleData(
                       overlayColor: WidgetStateProperty.all(Colors.transparent),
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(color: AppColors.secondPage, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(8)),
                     ),
                     value: _logic.selectedGender.value,
                     onChanged: _logic.resetGender,
@@ -165,7 +165,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
                             child: Wrap(
                               children: [
                                 RotatedBox(quarterTurns: _logic.expandStatus.value, child: ImageView(Images.security_back_png, height: 16, width: 16)),
-                                Text(value, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
+                                Text(value, style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w600)),
                               ],
                             ),
                           ),
@@ -178,7 +178,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
                             value: value,
                             child: Container(
                               alignment: Alignment.center,
-                              child: Text(value, style: const TextStyle(color: Color(0xFF12151C), fontSize: 11, fontWeight: FontWeight.w600)),
+                              child: Text(value, style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w600)),
                             ),
                           );
                         }).toList(),
@@ -214,7 +214,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
               Obx(
                 () =>
                     _logic.playingVoiceItem[Security.security_vid] == item[Security.security_vid]
-                        ? Container(margin: EdgeInsets.only(right: 8), width: 16, height: 16, child: CircularProgressIndicator(color: AppColors.ocMain))
+                        ? Container(margin: EdgeInsets.only(right: 8), width: 16, height: 16, child: CircularProgressIndicator(color: AppColors.accentText))
                         : InkWell(
                           onTap: () {
                             playVoice(item);
@@ -225,7 +225,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(4),
-                  child: Text(itemName, style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 14)),
+                  child: Text(itemName, style: const TextStyle(fontWeight: FontWeight.w500, color: AppColors.textPrimary, fontSize: 14)),
                 ),
               ),
               Obx(() {
@@ -234,14 +234,14 @@ class _OCVoicePageState extends State<OCVoicePage> {
                       width: 24,
                       height: 24,
                       decoration: BoxDecoration(color: AppColors.ocMain, shape: BoxShape.circle),
-                      child: const Padding(padding: EdgeInsets.all(2), child: Icon(Icons.check, color: Colors.black, size: 16)),
+                      child: const Padding(padding: EdgeInsets.all(2), child: Icon(Icons.check, color: AppColors.textPrimary, size: 16)),
                     )
                     : Container(
                       width: 24,
                       height: 24,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 1.5),
+                        border: Border.all(color: AppColors.border, width: 1.5),
                       ),
                     );
               }),
@@ -256,7 +256,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
                     .map(
                       (label) => Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Color(0xFF2F3031)),
+                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.surfaceMuted),
                         child: Text(label, style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.undo, fontSize: 11)),
                       ),
                     )
@@ -292,7 +292,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
           width: 343,
           alignment: Alignment.center,
           decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.ocMain),
-          child: Text(Security.security_Save, style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w900)),
+          child: Text(Security.security_Save, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w900)),
         ),
       ),
     );

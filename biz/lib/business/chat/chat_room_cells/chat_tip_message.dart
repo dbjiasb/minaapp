@@ -44,11 +44,11 @@ class ChatTipsCell extends ChatCell {
           margin: EdgeInsets.only(bottom: 12),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(22),
-              color: Colors.black.withValues(alpha: 0.5)
+              color: (AppAppearance.isLight ? AppColors.surface : Colors.black.withValues(alpha: 0.5))
           ),
           child: Text(
             tipsMessage.text,
-            style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: AppFonts.medium),
+            style: TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: AppFonts.medium),
           ),
         ))
       ],

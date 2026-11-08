@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:biz/base/crypt/copywriting.dart';
+import 'package:biz/base/crypt/security.dart';
+import 'package:biz/business/chat/chat_session.dart';
 import 'package:biz/localize/copywriting_strings_ar.dart';
 import 'package:biz/localize/copywriting_strings_de.dart';
 import 'package:biz/localize/copywriting_strings_es.dart';
@@ -15,6 +17,32 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
+  test('restored support identity follows the brand and active locale', () {
+    addTearDown(() => Get.locale = null);
+    Get.locale = const Locale('en', 'US');
+    final stored = <String, dynamic>{
+      Security.security_ownerId: 1,
+      Security.security_id: '$kOffChatSessionId',
+      Security.security_name: 'Mina Support',
+      Security.security_avatar: '',
+      Security.security_lastMessageTime: 0,
+      Security.security_accountType: 0,
+    };
+    final support = ChatSession.fromDatabase(stored);
+    expect(support.name, 'Miora Support');
+    support.name = 'Mina Support'; // A legacy server profile refresh.
+    expect(support.name, 'Miora Support');
+
+    Get.locale = const Locale('de', 'DE');
+    expect(support.name, 'Miora-Unterstützung');
+    final person = ChatSession.fromDatabase({
+      ...stored,
+      Security.security_id: '123',
+      Security.security_name: 'Mina',
+    });
+    expect(person.name, 'Mina');
+  });
+
   test('every translated locale contains the complete Copywriting key set', () {
     final expectedKeys = CopywritingStringsDe.values.keys.toSet();
     final locales = <Map<String, String>>[
@@ -25,7 +53,7 @@ void main() {
       CopywritingStringsAr.values,
     ];
 
-    expect(expectedKeys, hasLength(436));
+    expect(expectedKeys, hasLength(439));
     for (final locale in locales) {
       expect(locale.keys.toSet(), expectedKeys);
       expect(locale.values, everyElement(isNotEmpty));

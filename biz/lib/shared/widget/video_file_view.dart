@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -81,7 +82,7 @@ class _VideoFileViewState extends State<VideoFileView> {
             ],
           )
               : Container(
-            color: Colors.grey[300], // Placeholder while loading
+            color: AppColors.surfaceMuted, // Placeholder while loading
             child: const Center(child: CircularProgressIndicator()),
           ),
         ),
@@ -90,7 +91,7 @@ class _VideoFileViewState extends State<VideoFileView> {
           right: 0,
           bottom: 0,
           top: 0,
-          child: Center(child: Icon(Icons.play_circle, size: 32, color: Colors.white)),
+          child: Center(child: Icon(Icons.play_circle, size: 32, color: AppColors.onMedia)),
         ),
       ],
     );

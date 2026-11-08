@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 // import 'package:jce/tudou/DailyTaskProcess.dart';
@@ -41,10 +42,10 @@ class _MatchTaskViewState extends State<MatchTaskView> {
   Widget build(BuildContext context) {
     return Container(
       height: 438,
-      decoration: const BoxDecoration(color: Color(0xFFF8F3FF), borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30))),
+      decoration: const BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30))),
       child: Stack(
         children: [
-          CachedImage(imageUrl: MatchRes.base + Images.security_ic_match_task_bg_webp, width: double.infinity, fit: BoxFit.fitHeight),
+          if (!AppAppearance.isLight) CachedImage(imageUrl: MatchRes.base + Images.security_ic_match_task_bg_webp, width: double.infinity, fit: BoxFit.fitHeight),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: Obx(() {
@@ -54,7 +55,7 @@ class _MatchTaskViewState extends State<MatchTaskView> {
                   ShaderMask(
                     shaderCallback: (Rect bounds) {
                       return const LinearGradient(
-                        colors: [Color(0xFF8E3170), Color(0xFF300D4A), Color(0xFF300D4A)],
+                        colors: [AppColors.textPrimary, AppColors.textPrimary, AppColors.textPrimary],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(Rect.fromLTWH(0.0, 0.0, bounds.width, bounds.height));
@@ -122,14 +123,14 @@ class _MatchTaskViewState extends State<MatchTaskView> {
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          gradient: const LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [Color(0xFFF6E7FE), Color(0xFFE7E2FF)]),
+          gradient: const LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [AppColors.surface, AppColors.surface]),
         ),
         child: Row(
           children: [
             Container(
               margin: const EdgeInsets.only(right: 12),
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(100)),
+              decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(100)),
               child: CachedImage(
                 imageUrl: MatchRes.base + _getTaskIconByType(dailyTaskProcess[Security.security_task]?[Security.security_taskType] ?? 0),
                 width: 28,
@@ -143,11 +144,11 @@ class _MatchTaskViewState extends State<MatchTaskView> {
                 children: [
                   Text(
                     dailyTaskProcess[Security.security_task]?[Security.security_taskName] ?? '',
-                    style: const TextStyle(color: Color(0xFF080E1B), fontSize: 14, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     "${dailyTaskProcess['process']}/${dailyTaskProcess[Security.security_task]?['total']}",
-                    style: const TextStyle(color: Color(0xFFFF56BB), fontSize: 12),
+                    style: const TextStyle(color: AppColors.link, fontSize: 12),
                   ),
                 ],
               ).marginOnly(right: 12),
@@ -157,12 +158,12 @@ class _MatchTaskViewState extends State<MatchTaskView> {
               height: 36,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: notFinish ? const Color(0xFF120204) : const Color(0xFF120204).withOpacity(0.5),
+                color: notFinish ? AppColors.surfaceMuted : AppColors.surfaceMuted.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(100),
               ),
               child: Text(
                 notFinish ? Security.security_go : Security.security_done,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: notFinish ? Colors.white : Colors.white.withOpacity(0.5)),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: notFinish ? AppColors.textPrimary : AppColors.textPrimary.withOpacity(0.5)),
               ),
             ),
           ],
@@ -186,7 +187,7 @@ class _MatchTaskViewState extends State<MatchTaskView> {
           alignment: Alignment.center,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFFFF56BB), Color(0xFF6B39FF)],
+              colors: [AppColors.selected, AppColors.primary],
               // 渐变色数组
               begin: Alignment.centerLeft,
               // 渐变起始点
@@ -198,7 +199,7 @@ class _MatchTaskViewState extends State<MatchTaskView> {
             mainTaskProcess[Security.security_finishStatus] == ETaskFinishStatus.NOT_FINISH
                 ? 'In progress (${mainTaskProcess['process']}/${mainTaskProcess[Security.security_task]?['total']})'
                 : (mainTaskProcess[Security.security_finishStatus] == ETaskFinishStatus.HAS_FINISHED ? Security.security_claim.tr : Security.security_rewarded),
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
       ),

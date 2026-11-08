@@ -30,7 +30,7 @@ class PostAsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(color: Color(0xFF12151C), borderRadius: BorderRadius.only(topRight: Radius.circular(24), topLeft: Radius.circular(24))),
+      decoration: const BoxDecoration(color: AppColors.background, borderRadius: BorderRadius.only(topRight: Radius.circular(24), topLeft: Radius.circular(24))),
       child: Column(
         children: [
           _buildTitleView(),
@@ -50,12 +50,12 @@ class PostAsPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const SizedBox.shrink(), // 占位，保持结构
-        Text(Copywriting.security_post_As, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(Copywriting.security_post_As, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16)),
         GestureDetector(
           onTap: () {
             Get.back();
           },
-          child: CachedImage(imageUrl: '${MomentRes.base}/iic_close.webp', width: 24, height: 24),
+          child: CachedImage(imageUrl: '${MomentRes.base}iic_close.webp', width: 24, height: 24),
         ),
       ],
     );
@@ -66,10 +66,10 @@ class PostAsPage extends StatelessWidget {
       child: Container(
         height: 32,
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(color: const Color(0xFFFFFFFF).withOpacity(0.05), borderRadius: const BorderRadius.all(Radius.circular(8))),
+        decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: const BorderRadius.all(Radius.circular(8))),
         child: Row(
           children: [
-            Icon(Icons.search, color: Colors.white, size: 16),
+            Icon(Icons.search, color: AppColors.textPrimary, size: 16),
             const SizedBox(width: 8),
             Expanded(
               child: Center(
@@ -80,11 +80,11 @@ class PostAsPage extends StatelessWidget {
                     border: InputBorder.none,
                     hintText: Security.security_name,
                     isCollapsed: true,
-                    hintStyle: TextStyle(color: Color(0xFF494C53), fontSize: 12),
+                    hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 12),
                   ),
                   textInputAction: TextInputAction.search,
                   inputFormatters: [LengthLimitingTextInputFormatter(100)],
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 12),
                   maxLines: 1,
                   minLines: 1,
                   expands: false,
@@ -134,7 +134,7 @@ class PostAsPage extends StatelessWidget {
             textAlign: TextAlign.center,
             Copywriting.security_you_need_to_have_your_own_role_to_post___nGo_create_a_character.replaceAll('\\n', '\n'),
             // style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal),
-            style: TextStyle(color: Color(0xFFABABAD), fontSize: 14, fontWeight: FontWeight.normal),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 14, fontWeight: FontWeight.normal),
           ),
           GestureDetector(
             onTap: () {
@@ -148,9 +148,9 @@ class PostAsPage extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16, color: Colors.black,),
+                  CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16, color: AppColors.textPrimary,),
                   const SizedBox(width: 4),
-                  Text(Copywriting.security_create_Character, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
+                  Text(Copywriting.security_create_Character, style: TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -190,7 +190,7 @@ class PostAsPage extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(12)),
+        decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(12)),
         child: Row(
           children: [
             AvatarView(url: characterSelectInfo[Security.security_userBase]?[Security.security_avatarUrl] ?? '', size: 44),
@@ -201,7 +201,7 @@ class PostAsPage extends StatelessWidget {
               children: [
                 Text(
                   characterSelectInfo[Security.security_userBase][Security.security_nickName] ?? '',
-                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 2),
                 _buildCharacterFlag(characterSelectInfo),
@@ -230,7 +230,7 @@ class PostAsPage extends StatelessWidget {
       decoration: BoxDecoration(
         color:
             characterSelectInfo[Security.security_dailyPostCount] >= characterSelectInfo[Security.security_dailyMaxPostCount]
-                ? Colors.white.withOpacity(0.1)
+                ? AppColors.surfaceMuted
                 : const Color(0xFFFF1E6B).withOpacity(0.1),
         borderRadius: BorderRadius.circular(100),
       ),
@@ -240,8 +240,8 @@ class PostAsPage extends StatelessWidget {
           fontSize: 10,
           color:
               characterSelectInfo[Security.security_dailyPostCount] >= characterSelectInfo[Security.security_dailyMaxPostCount]
-                  ? const Color(0xFFFF1E6B)
-                  : const Color(0xFFABABAD),
+                  ? AppColors.link
+                  : AppColors.textSecondary,
         ),
       ),
     );

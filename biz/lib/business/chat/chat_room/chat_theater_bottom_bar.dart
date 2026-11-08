@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:io';
 
@@ -36,7 +37,7 @@ class ChatTheaterBottomBar extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFF0F0F0F).withValues(alpha: 0.0), Color(0xFF0F0F0F).withValues(alpha: 0.9)],
+              colors: [AppColors.background.withValues(alpha: 0.0), AppColors.background.withValues(alpha: 0.98)],
             ),
           ),
           child: SafeArea(
@@ -72,7 +73,7 @@ class ChatTheaterBottomBar extends StatelessWidget {
         child: Container(
           height: 44,
           padding: EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(color: Color(0xFF999999).withValues(alpha: 0.8), borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(12)),
           child: Row(
             children: [
               Expanded(
@@ -80,14 +81,14 @@ class ChatTheaterBottomBar extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextField(
-                        cursorColor: Colors.white,
+                        cursorColor: AppColors.textPrimary,
                         onChanged: (value) {
                           viewController.onTextChanged(value);
                         },
                         onSubmitted: (value) {
                           viewController.sendText(value);
                         },
-                        style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+                        style: TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w600),
                         controller: viewController.textController,
                         focusNode: viewController.focusNode,
                         decoration: InputDecoration(
@@ -96,7 +97,7 @@ class ChatTheaterBottomBar extends StatelessWidget {
                           fillColor: Colors.transparent,
                           filled: true,
                           hintText: Copywriting.security_send_message__reply_by_AI,
-                          hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontWeight: FontWeight.w600, fontSize: 11),
+                          hintStyle: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w600, fontSize: 11),
                           contentPadding: EdgeInsets.zero,
                         ),
                         textInputAction: TextInputAction.send,
@@ -128,9 +129,9 @@ class ChatTheaterBottomBar extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: Color(0xFF30292D).withValues(alpha: 0.6),
+              color: (AppAppearance.isLight ? AppColors.surface : Color(0xFF30292D).withValues(alpha: 0.6)),
               borderRadius: BorderRadius.circular(28),
-              border: Border.all(width: 1, color: Color(0xFFFFFBA3)),
+              border: Border.all(width: 1, color: AppColors.border),
             ),
             height: 56,
             alignment: Alignment.center,
@@ -145,7 +146,7 @@ class ChatTheaterBottomBar extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 alignment: Alignment.centerLeft,
-                child: Text(text, style: TextStyle(color: Color(0xFFFCFACD), fontSize: 12, fontWeight: FontWeight.bold)),
+                child: Text(text, style: TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.bold)),
               ),
             ),
           ),
@@ -165,7 +166,7 @@ class ChatTheaterBottomBar extends StatelessWidget {
         children: [
           if (icon != null) CachedImage(imageUrl: icon, height: 16, width: 16),
           if (icon != null) SizedBox(width: 4),
-          Text(name, style: TextStyle(color: Color(0xFFB1AEAC), fontSize: 12)),
+          Text(name, style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
         ],
       ),
     );

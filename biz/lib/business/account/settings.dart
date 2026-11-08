@@ -66,19 +66,19 @@ class AccountSettings extends StatelessWidget {
         title: Text(
           Copywriting.security_settings,
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: AppColors.base_background,
+        backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
           onPressed: () => Get.back(),
         ),
       ),
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -86,7 +86,7 @@ class AccountSettings extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               padding: EdgeInsets.zero,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.1),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -103,7 +103,7 @@ class AccountSettings extends StatelessWidget {
                               Text(
                                 e.title,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -113,7 +113,7 @@ class AccountSettings extends StatelessWidget {
                                 Text(
                                   e.subtitle!,
                                   style: TextStyle(
-                                    color: Color(0xFF999999),
+                                    color: AppColors.textSecondary,
                                     fontSize: 13,
                                   ),
                                 ),
@@ -121,6 +121,7 @@ class AccountSettings extends StatelessWidget {
                               ],
                               ImageView(
                                 Images.security_arrow_right_png,
+                                color: AppColors.textSecondary,
                                 height: 16,
                                 width: 16,
                               ),
@@ -140,14 +141,14 @@ class AccountSettings extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 16),
                 height: 44,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   Copywriting.security_log_out,
                   style: TextStyle(
-                    color: Color(0xffF84652),
+                    color: AppColors.error,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
@@ -219,7 +220,7 @@ class AccountSettings extends StatelessWidget {
         child: Container(
           constraints: BoxConstraints(maxHeight: Get.height * 0.72),
           decoration: BoxDecoration(
-            color: Color(0xFF1C1C24),
+            color: AppColors.surface,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -233,7 +234,7 @@ class AccountSettings extends StatelessWidget {
                       child: Text(
                         Copywriting.security_select_language,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -241,7 +242,7 @@ class AccountSettings extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () => Get.back(),
-                      icon: Icon(Icons.close, color: Colors.white),
+                      icon: Icon(Icons.close, color: AppColors.textPrimary),
                     ),
                   ],
                 ),
@@ -258,10 +259,10 @@ class AccountSettings extends StatelessWidget {
                     return ListTile(
                       title: Text(
                         language.nativeName,
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        style: TextStyle(color: AppColors.textPrimary, fontSize: 15),
                       ),
                       trailing: selected
-                          ? Icon(Icons.check, color: AppColors.primary)
+                          ? Icon(Icons.check, color: AppColors.accentText)
                           : null,
                       onTap: () => Get.back(result: language.locale),
                     );

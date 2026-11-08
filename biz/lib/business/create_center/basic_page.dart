@@ -161,8 +161,8 @@ class _BasicCoreState extends State<BasicCore> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14)),
-        const Text('*', style: TextStyle(color: AppColors.ocMain, fontWeight: FontWeight.w700, fontSize: 14)),
+        Text(label, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 14)),
+        const Text('*', style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.w700, fontSize: 14)),
       ],
     );
   }
@@ -170,11 +170,11 @@ class _BasicCoreState extends State<BasicCore> {
   Widget _createRoleImageSection() {
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Color(0xff1A181E)),
+      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.surfaceMuted),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(Copywriting.security_role_image, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12)),
+          Text(Copywriting.security_role_image, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 12)),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -190,10 +190,10 @@ class _BasicCoreState extends State<BasicCore> {
                       Container(
                         height: 100,
                         width: 100,
-                        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.06), borderRadius: BorderRadius.circular(8)),
+                        decoration: BoxDecoration(color: AppColors.surface.withValues(alpha: 0.06), borderRadius: BorderRadius.circular(8)),
                         child: Obx(() {
                           if (_controller.processingImage.value) {
-                            return Center(child: CircularProgressIndicator(color: AppColors.ocMain));
+                            return Center(child: CircularProgressIndicator(color: AppColors.accentText));
                           }
 
                           if (_controller.referenceImageBytes.value.isNotEmpty) {
@@ -233,7 +233,7 @@ class _BasicCoreState extends State<BasicCore> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      style: TextStyle(fontSize: 11, color: Color(0xffABABAD), fontWeight: FontWeight.w500),
+                      style: TextStyle(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
                       maxLines: 2,
                       Copywriting.security_the_uploaded_image_serves_as_a_reference_for_facial_features_and_style_elements,
                     ),
@@ -251,14 +251,14 @@ class _BasicCoreState extends State<BasicCore> {
     return Container(
       height: 90,
       padding: const EdgeInsets.all(12),
-      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Color(0xff1A181E)),
+      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.surfaceMuted),
       child: Column(
         children: [
           Obx(
             () => Row(
               children: [
-                Text(Security.security_Name, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12)),
-                Text(' (3-20 characters)', style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9)),
+                Text(Security.security_Name, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 12)),
+                Text(' (3-20 characters)', style: TextStyle(color: AppColors.textPrimary.withValues(alpha: 0.7), fontSize: 9)),
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.center,
@@ -274,7 +274,7 @@ class _BasicCoreState extends State<BasicCore> {
             alignment: Alignment.center,
             height: 40,
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: Colors.white.withValues(alpha: 0.06)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: AppColors.surface.withValues(alpha: 0.06)),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -290,20 +290,20 @@ class _BasicCoreState extends State<BasicCore> {
                       contentPadding: EdgeInsets.zero,
                       isDense: true,
                       border: InputBorder.none,
-                      hintStyle: TextStyle(color: Color(0xff636268), fontSize: 11, height: 1.2, fontWeight: FontWeight.w500),
+                      hintStyle: TextStyle(color: AppColors.textPrimary, fontSize: 11, height: 1.2, fontWeight: FontWeight.w500),
                       hintText: Copywriting.security_name_your_character,
                     ),
-                    style: const TextStyle(color: Colors.white, fontSize: 11, height: 1.2, fontWeight: FontWeight.w500),
+                    style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, height: 1.2, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Obx(() {
                   if (_controller.characterName.value.length < 20) {
-                    return Text(_controller.characterName.value.length.toString(), style: const TextStyle(color: Colors.white, fontSize: 11));
+                    return Text(_controller.characterName.value.length.toString(), style: const TextStyle(color: AppColors.textPrimary, fontSize: 11));
                   } else {
                     return Text(_controller.characterName.value.length.toString(), style: const TextStyle(color: Colors.red, fontSize: 11));
                   }
                 }),
-                const Text('/20', style: TextStyle(color: Color(0xFF9EA0A5), fontSize: 11, fontWeight: FontWeight.w500)),
+                const Text('/20', style: TextStyle(color: AppColors.textSecondary, fontSize: 11, fontWeight: FontWeight.w500)),
               ],
             ),
           ),
@@ -319,10 +319,10 @@ class _BasicCoreState extends State<BasicCore> {
         child: Container(
           padding: const EdgeInsets.all(12),
           height: 90,
-          decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Color(0xff1A181E)),
+          decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.surfaceMuted),
           child: Column(
             children: [
-              Row(children: [Text(Security.security_Gender, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12))]),
+              Row(children: [Text(Security.security_Gender, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 12))]),
               const SizedBox(height: 8),
               Row(
                 children: [
@@ -336,7 +336,7 @@ class _BasicCoreState extends State<BasicCore> {
                         decoration: BoxDecoration(
                           border: _controller.selectedGender.value == Gender.female ? Border.all(width: 2, color: const Color(0xFFFF46A4)) : null,
                           borderRadius: const BorderRadius.all(Radius.circular(8)),
-                          color: Colors.white.withValues(alpha: 0.06),
+                          color: AppColors.surface.withValues(alpha: 0.06),
                         ),
                         height: 40,
                         child: Container(
@@ -349,7 +349,7 @@ class _BasicCoreState extends State<BasicCore> {
                               Text(
                                 Security.security_Female,
                                 style: TextStyle(
-                                  color: _controller.selectedGender.value == Gender.female ? Color(0xFFF832B2) : Color(0xff636268),
+                                  color: _controller.selectedGender.value == Gender.female ? AppColors.link : AppColors.textPrimary,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -371,7 +371,7 @@ class _BasicCoreState extends State<BasicCore> {
                         decoration: BoxDecoration(
                           border: _controller.selectedGender.value == Gender.male ? Border.all(width: 2, color: const Color(0xFF4694FF)) : null,
                           borderRadius: const BorderRadius.all(Radius.circular(8)),
-                          color: Colors.white.withValues(alpha: 0.06),
+                          color: AppColors.surface.withValues(alpha: 0.06),
                         ),
                         height: 40,
                         child: Container(
@@ -384,7 +384,7 @@ class _BasicCoreState extends State<BasicCore> {
                               Text(
                                 Security.security_Male,
                                 style: TextStyle(
-                                  color: _controller.selectedGender.value == Gender.male ? Color(0xFF339FF0) : Color(0xff636268),
+                                  color: _controller.selectedGender.value == Gender.male ? AppColors.link : AppColors.textPrimary,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -424,7 +424,7 @@ class _BasicCoreState extends State<BasicCore> {
           children: [
             _createInfoLabel(Security.security_Sound),
             Container(
-              decoration: BoxDecoration(color: Color(0xff1A181E), borderRadius: BorderRadius.all(Radius.circular(12))),
+              decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.all(Radius.circular(12))),
               height: 48,
               child: Row(
                 children: [
@@ -436,9 +436,9 @@ class _BasicCoreState extends State<BasicCore> {
                       child: Row(
                         children: [
                           const SizedBox(width: 12),
-                          Obx(() => _controller.soundPlaying.value ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: AppColors.ocMain)).marginOnly(left: 8) : ImageView(Images.security_sound_play_png),),
+                          Obx(() => _controller.soundPlaying.value ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: AppColors.accentText)).marginOnly(left: 8) : ImageView(Images.security_sound_play_png),),
                           const SizedBox(width: 8),
-                          Text(Copywriting.security_click_to_play, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xFF999999))),
+                          Text(Copywriting.security_click_to_play, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: AppColors.textSecondary)),
                         ],
                       ),
                     ),
@@ -459,7 +459,7 @@ class _BasicCoreState extends State<BasicCore> {
                             _controller.selectedSound[Security.security_name] != null
                                 ? Text(
                                   _controller.selectedSound[Security.security_name],
-                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xffababad)),
+                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: AppColors.textSecondary),
                                 )
                                 : Container(),
                             SizedBox(width: 4),
@@ -487,7 +487,7 @@ class _BasicCoreState extends State<BasicCore> {
     bool alignBetween = true,
   }) {
     return Container(
-      decoration: const BoxDecoration(color: Color(0xff1A181E), borderRadius: BorderRadius.all(Radius.circular(12))),
+      decoration: const BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.all(Radius.circular(12))),
       child: Padding(
         padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
         child: Column(
@@ -500,25 +500,25 @@ class _BasicCoreState extends State<BasicCore> {
                     child: Text(
                       textAlign: TextAlign.left,
                       leftLabel,
-                      style: const TextStyle(color: Color(0xffababad), fontWeight: FontWeight.w500, fontSize: 11),
+                      style: const TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w500, fontSize: 11),
                     ),
                   )
                 else
-                  Text(leftLabel, style: const TextStyle(color: Color(0xffababad), fontWeight: FontWeight.w500, fontSize: 11)),
+                  Text(leftLabel, style: const TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w500, fontSize: 11)),
                 if (!alignBetween)
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.right,
                       rightLabel,
-                      style: const TextStyle(color: Color(0xffababad), fontWeight: FontWeight.w500, fontSize: 11),
+                      style: const TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w500, fontSize: 11),
                     ),
                   )
                 else
-                  Text(rightLabel, style: const TextStyle(color: Color(0xffababad), fontWeight: FontWeight.w500, fontSize: 11)),
+                  Text(rightLabel, style: const TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w500, fontSize: 11)),
               ],
             ),
             Obx(
-              () => Slider(activeColor: AppColors.ocMain, inactiveColor: Colors.white.withValues(alpha: 0.06), min: 0, max: 100, value: value.value, onChanged: onChanged),
+              () => Slider(activeColor: AppColors.ocMain, inactiveColor: AppColors.surface.withValues(alpha: 0.06), min: 0, max: 100, value: value.value, onChanged: onChanged),
             ),
           ],
         ),
@@ -537,7 +537,7 @@ class _BasicCoreState extends State<BasicCore> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Container(
-        decoration: const BoxDecoration(color: Color(0xff1A181E), borderRadius: BorderRadius.all(Radius.circular(12))),
+        decoration: const BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.all(Radius.circular(12))),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -545,14 +545,14 @@ class _BasicCoreState extends State<BasicCore> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(Security.security_Slim, style: TextStyle(color: Color(0xffababad), fontWeight: FontWeight.w500, fontSize: 11)),
-                  Text(Security.security_Curvy, style: TextStyle(color: Color(0xffababad), fontWeight: FontWeight.w500, fontSize: 11)),
+                  Text(Security.security_Slim, style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w500, fontSize: 11)),
+                  Text(Security.security_Curvy, style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w500, fontSize: 11)),
                 ],
               ),
               Obx(
                 () => Slider(
                   activeColor: AppColors.ocMain,
-                  inactiveColor: const Color(0xFF171425),
+                  inactiveColor: AppColors.surfaceMuted,
                   min: 0,
                   max: 100,
                   value: _controller.bodyType.value.toDouble(),
@@ -572,12 +572,12 @@ class _BasicCoreState extends State<BasicCore> {
       child: Container(
         height: 32,
         width: 125,
-        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20)), color: AppColors.secondPage),
+        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20)), color: AppColors.surface),
         child: Obx(
           () => Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(Copywriting.security_more_Details, style: TextStyle(color: Color(0xffababad), fontSize: 11, fontWeight: FontWeight.w500)),
+              Text(Copywriting.security_more_Details, style: TextStyle(color: AppColors.textSecondary, fontSize: 11, fontWeight: FontWeight.w500)),
               SizedBox(width: 4),
               RotatedBox(quarterTurns: _controller.expandPhysiqueRotate.value, child: ImageView(Images.security_arrow_down_png, width: 16, height: 16)),
             ],
@@ -601,7 +601,7 @@ class _BasicCoreState extends State<BasicCore> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(itemKey, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700)),
+                    Text(itemKey, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 12),
                     Container(
                       alignment: Alignment.centerLeft,
@@ -619,15 +619,15 @@ class _BasicCoreState extends State<BasicCore> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                          color: _controller.physiqueAttributes[itemKey] == tag ? Colors.white : Colors.white12,
+                                          color: _controller.physiqueAttributes[itemKey] == tag ? AppColors.border : AppColors.border,
                                           width: 2,
                                         ),
-                                        color: _controller.physiqueAttributes[itemKey] == tag ? Colors.white : Colors.transparent,
+                                        color: _controller.physiqueAttributes[itemKey] == tag ? AppColors.surface : Colors.transparent,
                                       ),
                                       child: Text(
                                         tag,
                                         style: TextStyle(
-                                          color: _controller.physiqueAttributes[itemKey] == tag ? Colors.black : Color(0xFFB8B7B4),
+                                          color: _controller.physiqueAttributes[itemKey] == tag ? AppColors.textPrimary : AppColors.textSecondary,
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -660,7 +660,7 @@ class _BasicCoreState extends State<BasicCore> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(itemKey, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700)),
+                    Text(itemKey, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 12),
                     Container(
                       alignment: Alignment.centerLeft,
@@ -677,16 +677,16 @@ class _BasicCoreState extends State<BasicCore> {
                                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(8),
-                                        color: _controller.physiqueAttributes[itemKey] == tag ? Colors.white : Colors.transparent,
+                                        color: _controller.physiqueAttributes[itemKey] == tag ? AppColors.surface : Colors.transparent,
                                         border: Border.all(
-                                          color: _controller.physiqueAttributes[itemKey] == tag ? Colors.white : Colors.white12,
+                                          color: _controller.physiqueAttributes[itemKey] == tag ? AppColors.border : AppColors.border,
                                           width: 2,
                                         ),
                                       ),
                                       child: Text(
                                         tag,
                                         style: TextStyle(
-                                          color: _controller.physiqueAttributes[itemKey] == tag ? Colors.black : Color(0xffB8B7B4),
+                                          color: _controller.physiqueAttributes[itemKey] == tag ? AppColors.textPrimary : AppColors.textSecondary,
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -710,11 +710,11 @@ class _BasicCoreState extends State<BasicCore> {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         padding: const EdgeInsets.all(12),
-        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Color(0xff1A181E)),
+        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: AppColors.surfaceMuted),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(Copywriting.security_permission_settings, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700)),
+            Text(Copywriting.security_permission_settings, style: const TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.w700)),
             Row(children: [_buildShareItem(false), const SizedBox(width: 12), _buildShareItem(true)]).marginOnly(top: 12),
           ],
         ),
@@ -732,15 +732,15 @@ class _BasicCoreState extends State<BasicCore> {
           height: 48,
           width: 156.w,
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white.withValues(alpha: 0.06)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.surface.withValues(alpha: 0.06)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(!isPublic ? Security.security_private : Security.security_public, style: const TextStyle(fontSize: 11, color: Colors.white)),
+              Text(!isPublic ? Security.security_private : Security.security_public, style: const TextStyle(fontSize: 11, color: AppColors.textPrimary)),
               const Spacer(),
               Icon(
                 _controller.isPublicShare.value == isPublic ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                color: _controller.isPublicShare.value == isPublic ? AppColors.primary : Colors.white,
+                color: _controller.isPublicShare.value == isPublic ? AppColors.accentText : AppColors.textPrimary,
               ),
             ],
           ),
@@ -759,7 +759,7 @@ class BasicPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color(0xff07070A),
+        backgroundColor: AppColors.background,
         leading: IconButton(
           onPressed: () {
             CharacterService.instance.save();
@@ -770,21 +770,21 @@ class BasicPage extends StatelessWidget {
         title: Text(
           textAlign: TextAlign.center,
           Copywriting.security_create_My_Character,
-          style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),
+          style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),
         ),
         actions: [
           Container(
             padding: EdgeInsets.all(16),
             child: Row(
               children: [
-                Text('1', style: TextStyle(color: AppColors.ocMain, fontWeight: FontWeight.w700, fontSize: 14, fontFamily: Copywriting.security_sF_Pro_bold)),
-                Text('/2', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 9, fontFamily: Copywriting.security_sF_Pro_bold)),
+                Text('1', style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.w700, fontSize: 14, fontFamily: Copywriting.security_sF_Pro_bold)),
+                Text('/2', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 9, fontFamily: Copywriting.security_sF_Pro_bold)),
               ],
             ),
           ),
         ],
       ),
-      backgroundColor: Color(0xff07070A),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -818,12 +818,12 @@ class BasicPage extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
-                  color: _controller.canProceed.value ? AppColors.ocMain : Color(0xFF474D4C),
+                  color: _controller.canProceed.value ? AppColors.ocMain : AppColors.surfaceMuted,
                 ),
                 child: Text(
                   Security.security_Next,
                   style: TextStyle(
-                    color: _controller.canProceed.value ? Colors.black : Colors.black.withValues(alpha: 0.6),
+                    color: _controller.canProceed.value ? AppColors.textPrimary : AppColors.textPrimary.withValues(alpha: 0.6),
                     fontSize: 14,
                     fontWeight: FontWeight.w900,
                   ),

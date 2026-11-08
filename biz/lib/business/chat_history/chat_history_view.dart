@@ -46,10 +46,10 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.base_background,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: AppColors.background,
+        systemOverlayStyle: AppAppearance.overlayStyle,
         elevation: 0,
         toolbarHeight: 40,
         leadingWidth: 200,
@@ -59,7 +59,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
           child: Text(
             TabLabels.chats,
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               fontFamily: Security.security_hYPangDunDun,
@@ -69,7 +69,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
         actions: [
           GestureDetector(
             onTap: _showSessionSetting,
-            child: Icon(Icons.more_horiz, size: 24, color: Colors.white),
+            child: Icon(Icons.more_horiz, size: 24, color: AppColors.textPrimary),
           ).marginOnly(right: 16)
         ],
       ),
@@ -126,7 +126,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                       vertical: 4.w,
                     ),
                     decoration: BoxDecoration(
-                      color: isSelected ? Color(0xFFEDEFF3) : Color(0xFF262B35),
+                      color: isSelected ? AppColors.selected : AppColors.surfaceMuted,
                       borderRadius: BorderRadius.circular(28.r),
                     ),
                     child: Text(
@@ -134,7 +134,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                       style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
-                        color: isSelected ? Color(0xFF07070A) : Colors.white,
+                        color: isSelected ? AppColors.textPrimary : AppColors.textPrimary,
                         height: 1.5,
                       ),
                     ),
@@ -217,7 +217,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                                 child: Text(
                                   e[Security.security_nickname] ?? '',
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.textPrimary,
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
@@ -254,11 +254,11 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         strokeWidth: 2,
                       ),
                     )
-                  : ImageView(Images.mina_refresh_trend, width: 22, height: 22),
+                  : ImageView(Images.mina_refresh_trend, color: AppColors.textSecondary, width: 22, height: 22),
             ),
           ),
           // SizedBox(height: 4.w),
@@ -268,7 +268,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
               'Refresh',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontSize: 10,
                 fontWeight: FontWeight.bold,
               ),
@@ -299,7 +299,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
           alignment: Alignment.topRight,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 4),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.surface),
             margin: const EdgeInsets.only(top: 48, right: 16),
             child: IntrinsicHeight(
               child: Column(
@@ -323,7 +323,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                       child: Text(
                         e,
-                        style: const TextStyle(color: AppColors.base_background, fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ),
                   );
@@ -360,7 +360,7 @@ class _ChatHistoryTabBarDelegate extends SliverPersistentHeaderDelegate {
   ) {
     return Container(
       alignment: Alignment.centerLeft,
-      color: AppColors.base_background,
+      color: AppColors.background,
       padding: EdgeInsets.only(left: leftPadding, bottom: bottomSpacing),
       child: tabBar,
     );

@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 
 import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -37,13 +38,13 @@ class ChatMuseView extends StatelessWidget {
                         sendText?.call(viewController.items[index]);
                       },
                       child: Container(
-                        decoration: BoxDecoration(color: Color(0xff000000).withValues(alpha: 0.3), borderRadius: BorderRadius.circular(12)),
+                        decoration: BoxDecoration(color: (AppAppearance.isLight ? AppColors.surface : Color(0xff000000).withValues(alpha: 0.3)), borderRadius: BorderRadius.circular(12)),
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                           alignment: Alignment.centerLeft,
                           child: Text(
                             viewController.items[index],
-                            style: TextStyle(color: Color(0xFFC4AFFF), fontWeight: FontWeight.w600, fontSize: 11, height: 1.8),
+                            style: TextStyle(color: AppAppearance.isLight ? AppColors.link : Color(0xFFC4AFFF), fontWeight: FontWeight.w600, fontSize: 11, height: 1.8),
                           ),
                         ),
                       ),

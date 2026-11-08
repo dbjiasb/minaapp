@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ uses the system icon splash rather than a full-screen bitmap. -->
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowSplashScreenBackground">@color/miora_launch_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/miora_launcher</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/miora_brand_yellow</item>
+    </style>
+</resources>

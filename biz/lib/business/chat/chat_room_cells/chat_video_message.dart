@@ -180,8 +180,8 @@ class ChatVideoCell extends ChatCell {
       child: Center(
         child: Container(
           padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(50)),
-          child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 32),
+          decoration: BoxDecoration(color: AppColors.mediaScrim, borderRadius: BorderRadius.circular(50)),
+          child: const Icon(Icons.play_arrow_rounded, color: AppColors.onMedia, size: 32),
         ),
       ),
     );
@@ -302,9 +302,8 @@ class ChatVideoCell extends ChatCell {
                                   shape: BoxShape.circle,
                                   color:
                                   videoIndicator.value == index
-                                      ? Colors
-                                      .white // 当前页用蓝色
-                                      : Colors.grey.withValues(alpha: 0.5), // 其他页用灰色
+                                      ? AppColors.onMedia // 当前页用蓝色
+                                      : AppColors.surfaceMuted.withValues(alpha: 0.5), // 其他页用灰色
                                 ),
                               ),
                             );
@@ -399,7 +398,7 @@ class ChatVideoCell extends ChatCell {
             margin: EdgeInsets.only(top: 8),
             padding: EdgeInsets.symmetric(horizontal: 8),
             alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: Color(0x33000000)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: AppColors.mediaScrim),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -408,7 +407,7 @@ class ChatVideoCell extends ChatCell {
                 SizedBox(width: 4),
                 if (isPremiumFreeReload && videoMessage.reloadPrice != 0) ImageView(Images.security_premium_png, width: 16, height: 16),
                 SizedBox(width: 4),
-                Text(text, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: AppFonts.medium)),
+                Text(text, style: TextStyle(color: AppColors.onMedia, fontSize: 12, fontWeight: AppFonts.medium)),
               ],
             ),
           ),
@@ -454,7 +453,7 @@ class ChatVideoCell extends ChatCell {
                   children: [
                     ImageView(videoMessage.currencyType == 1 ? Images.security_gem_png : Images.security_coin_png, width: 24, height: 24),
                     SizedBox(width: 4),
-                    Text('${videoMessage.unlockPrice}', style: TextStyle(color: Colors.white, fontWeight: AppFonts.black, fontSize: 16)),
+                    Text('${videoMessage.unlockPrice}', style: TextStyle(color: AppColors.onMedia, fontWeight: AppFonts.black, fontSize: 16)),
                   ],
                 ),
 
@@ -470,12 +469,12 @@ class ChatVideoCell extends ChatCell {
                         children: [
                           ImageView(generateVideoCostIcon, width: 24, height: 24),
                           SizedBox(width: 4),
-                          Text('${VideoCreateManager.cost}', style: TextStyle(color: Colors.white, fontWeight: AppFonts.black, fontSize: 16)),
+                          Text('${VideoCreateManager.cost}', style: TextStyle(color: AppColors.onMedia, fontWeight: AppFonts.black, fontSize: 16)),
                         ],
                       ),
 
                     if (VideoCreateManager.isFree || VideoCreateManager.isPremiumFree)
-                      Text(Security.security_Free, style: TextStyle(color: Colors.white, fontWeight: AppFonts.black, fontSize: 16)),
+                      Text(Security.security_Free, style: TextStyle(color: AppColors.onMedia, fontWeight: AppFonts.black, fontSize: 16)),
                   ],
                 )
                     : SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)),
@@ -540,7 +539,7 @@ class ChatVideoCell extends ChatCell {
       alignment: Alignment.center,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [Text(Security.security_Unlock, style: TextStyle(color: AppColors.mainDarkColor, fontWeight: AppFonts.semiBold, fontSize: 14))],
+        children: [Text(Security.security_Unlock, style: TextStyle(color: AppColors.accentForeground, fontWeight: AppFonts.semiBold, fontSize: 14))],
       ),
     );
 
@@ -595,7 +594,7 @@ class ChatVideoCell extends ChatCell {
       alignment: Alignment.center,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [Text(Security.security_Unlock, style: TextStyle(color: AppColors.mainDarkColor, fontWeight: AppFonts.semiBold, fontSize: 14))],
+        children: [Text(Security.security_Unlock, style: TextStyle(color: AppColors.accentForeground, fontWeight: AppFonts.semiBold, fontSize: 14))],
       ),
     );
 
@@ -616,7 +615,7 @@ class ChatVideoCell extends ChatCell {
       fit: StackFit.expand,
       children: [
         ImageView(Images.security_chat_img_placeholder_png, fit: BoxFit.cover, width: 172, height: 256),
-        Center(child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2)),
+        Center(child: CircularProgressIndicator(color: AppColors.accentText, strokeWidth: 2)),
       ],
     );
   }

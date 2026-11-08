@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/images.dart';
 // 用Getx库实现一个视频播放器，播放器接受 videoUrl 作为参数，并播放视频
@@ -26,8 +27,8 @@ class VideoPlayerView extends StatelessWidget {
     return Scaffold(
       // 去掉标题栏，设置背景为黑色
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: AppColors.background,
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
         // 设置返回按钮为白色
         title: null,
         // 去掉标题
@@ -36,14 +37,14 @@ class VideoPlayerView extends StatelessWidget {
         actions: [
           if (viewController.canDownload == 1)
             IconButton(
-              icon: const Icon(Icons.download, color: Colors.white),
+              icon: const Icon(Icons.download, color: AppColors.textPrimary),
               onPressed: () {
                 viewController.saveVideoToGallery();
               },
             ),
         ],
       ),
-      backgroundColor: Colors.black, // 设置页面背景为黑色
+      backgroundColor: AppColors.background, // 设置页面背景为黑色
       body: Center(
         child: Obx(() {
           if (viewController.isImageFile.value) {
@@ -55,7 +56,7 @@ class VideoPlayerView extends StatelessWidget {
           }
 
           if (viewController.hasError.value || !viewController.isPlayerReady) {
-            return Text(Copywriting.security_Video_initialization_failed, style: const TextStyle(color: Colors.white70));
+            return Text(Copywriting.security_Video_initialization_failed, style: const TextStyle(color: AppColors.textSecondary));
           }
 
           final ratio = viewController._player.controller.value.aspectRatio;
@@ -86,8 +87,8 @@ class VideoPlayerView extends StatelessWidget {
           // child: Icon(playerController.value.isPlaying ? Icons.pause : Icons.play_arrow),
           child: Container(
             // padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: Colors.black45, borderRadius: BorderRadius.circular(60)),
-            child: Center(child: Obx(() => Icon(viewController.isPlaying.value ? Icons.pause : Icons.play_arrow, color: Colors.white, size: 32))),
+            decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(60)),
+            child: Center(child: Obx(() => Icon(viewController.isPlaying.value ? Icons.pause : Icons.play_arrow, color: AppColors.textPrimary, size: 32))),
           ),
         );
       }),

@@ -62,7 +62,7 @@ class GiftPanel extends StatelessWidget {
               height: 56,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isSelected ? Color(0xff8761F1).withValues(alpha: 0.2) : Color(0xff000000).withValues(alpha: 0.15),
+                color: isSelected ? Color(0xff8761F1).withValues(alpha: 0.2) : AppColors.surfaceMuted.withValues(alpha: 0.15),
                 border: isSelected ? Border.all(color: AppColors.primary, width: 2) : null,
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -73,7 +73,7 @@ class GiftPanel extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 item.giftName,
-                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.white),
+                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -87,7 +87,7 @@ class GiftPanel extends StatelessWidget {
                 children: [
                   ImageView(item.currencyIcon, width: 12, height: 12),
                   const SizedBox(width: 2),
-                  Text(item.price.toString(), style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w600, color: Colors.white)),
+                  Text(item.price.toString(), style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
                 ],
               ),
             ),
@@ -141,7 +141,7 @@ class GiftPanel extends StatelessWidget {
                                 padding: EdgeInsets.symmetric(horizontal: 18),
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),
-                                child: Text(Security.security_Send, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
+                                child: Text(Security.security_Send, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.accentForeground)),
                               ),
                             ),
                           ],
@@ -167,7 +167,7 @@ class GiftPanel extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xff1E1E1E), Color(0xff000000)],
+          colors: [AppColors.surface, AppColors.background],
         ),
         borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),

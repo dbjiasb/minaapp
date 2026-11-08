@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class SceneListView extends GetView<SceneListController> {
             top: 40,
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xFF3A0B4F),
+                color: AppColors.surfaceMuted,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -70,8 +71,8 @@ class SceneListView extends GetView<SceneListController> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: dating[Security.security_unlocked] == 0
-                                  ? Colors.white.withValues(alpha: 0.7)
-                                  : Colors.white,
+                                  ? AppColors.textPrimary.withValues(alpha: 0.7)
+                                  : AppColors.textPrimary,
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -82,7 +83,7 @@ class SceneListView extends GetView<SceneListController> {
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 11,
                               height: 1.3,
                             ),
@@ -124,7 +125,7 @@ class SceneListView extends GetView<SceneListController> {
                       ),
                     ),
                   if (dating[Security.security_unlocked] == 0)
-                    Container(color: Colors.black38),
+                    Container(color: AppColors.surfaceMuted),
                   if (dating[Security.security_unlocked] == 0)
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -142,13 +143,13 @@ class SceneListView extends GetView<SceneListController> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.black26,
+                            color: AppColors.surfaceMuted,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Text(
                             dating[Security.security_unlockConditionText] ?? "",
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
@@ -185,7 +186,7 @@ class SceneListView extends GetView<SceneListController> {
         child: Text(
           dating[Security.security_chapterName] ?? "",
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.textPrimary,
             fontSize: 11,
             fontWeight: FontWeight.w900,
           ),
@@ -223,7 +224,7 @@ class SceneListView extends GetView<SceneListController> {
               height: 48,
               width: 48,
               decoration: BoxDecoration(
-                color: Color(0xFFD9D9D9),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Color(0xFFFF7D7D), width: 1),
               ),
@@ -243,7 +244,7 @@ class SceneListView extends GetView<SceneListController> {
                 ? Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black26,
+                        color: AppColors.surfaceMuted,
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
@@ -265,7 +266,7 @@ class SceneListView extends GetView<SceneListController> {
               Text(
                 Security.security_mode,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.w900,
                   fontSize: 10,
                 ),
@@ -286,19 +287,19 @@ class SceneListView extends GetView<SceneListController> {
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(8),
         ),
         foregroundDecoration: dating[Security.security_unlocked] == 0
             ? BoxDecoration(
-                color: Color(0x80333333),
+                color: AppColors.surfaceMuted,
                 borderRadius: BorderRadius.circular(8),
               )
             : null,
         child: Text(
           Copywriting.security_start_Game,
           style: const TextStyle(
-            color: Color(0xFF080E1B),
+            color: AppColors.textPrimary,
             fontSize: 15,
             fontWeight: FontWeight.w900,
           ),
@@ -318,7 +319,7 @@ class SceneListView extends GetView<SceneListController> {
 
     return Stack(
       children: [
-        Positioned.fill(child: Container(color: Colors.black)),
+        Positioned.fill(child: Container(color: AppColors.surfaceMuted)),
         Positioned(
           left: 0,
           right: 0,
@@ -347,12 +348,12 @@ class SceneListView extends GetView<SceneListController> {
       title: Text(
         Copywriting.security_dating_Game,
         style: const TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
-      systemOverlayStyle: SystemUiOverlayStyle.light,
+      systemOverlayStyle: AppAppearance.overlayStyle,
       backgroundColor: Colors.transparent,
       // titleTextStyle: TextStyle(
       //     color: SWColors.t2, fontSize: 20,  fontWeight: FontWeight.bold),
@@ -381,7 +382,7 @@ class SceneListView extends GetView<SceneListController> {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: Color(0xFF12151C),
+            color: AppColors.surfaceMuted,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -394,7 +395,7 @@ class SceneListView extends GetView<SceneListController> {
               ),
               Text(
                 Security.security_mode,
-                style: TextStyle(color: Colors.white, fontSize: 12),
+                style: TextStyle(color: AppColors.textPrimary, fontSize: 12),
               ),
             ],
           ),

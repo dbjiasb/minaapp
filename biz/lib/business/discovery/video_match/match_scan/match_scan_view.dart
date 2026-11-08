@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,8 @@ class MatchScanPage extends GetView<MatchScanLogic> {
       },
       child: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
+          color: AppColors.background,
+        image: AppAppearance.isLight ? null : DecorationImage(
             image: CachedImageProvider('${MatchRes.base}ic_match_bg.png'), // 替换为你的图片路径
             fit: BoxFit.cover, // 图片填充整个屏幕
           ),
@@ -54,7 +56,7 @@ class MatchScanPage extends GetView<MatchScanLogic> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(width: double.infinity, height: 375, child: SVGAEasyPlayer(resUrl: "${MatchRes.base}match_scan.svga", fit: BoxFit.fitHeight)),
-        Text(Copywriting.security_invites_you_to_video_calling_, style: TextStyle(fontSize: 13, color: Colors.white)).marginOnly(top: 130),
+        Text(Copywriting.security_invites_you_to_video_calling_, style: TextStyle(fontSize: 13, color: AppColors.textPrimary)).marginOnly(top: 130),
       ],
     );
   }

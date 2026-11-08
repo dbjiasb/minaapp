@@ -32,8 +32,8 @@ class HomePageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF07070a),
-      appBar: AppBar(backgroundColor: Color(0xFF07070a), systemOverlayStyle: SystemUiOverlayStyle.light, elevation: 0, toolbarHeight: 0),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(backgroundColor: AppColors.background, systemOverlayStyle: AppAppearance.overlayStyle, elevation: 0, toolbarHeight: 0),
       body: SafeArea(
         bottom: false,
         child: Stack(
@@ -96,15 +96,15 @@ class HomePageView extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.w),
               decoration: BoxDecoration(
-                  color: Color(0xFF171C29),
+                  color: AppColors.surfaceMuted,
                   borderRadius: BorderRadius.circular(32.w),
-                  border: Border.all(color: Color(0xFF2A3144), width: 1)
+                  border: Border.all(color: AppColors.border, width: 1)
               ),
               child: Row(
                 children: [
-                  ImageView(Images.mina_search, width: 14.w, height: 14.w),
+                  ImageView(Images.mina_search, color: AppColors.textSecondary, width: 14.w, height: 14.w),
                   SizedBox(width: 6.w),
-                  Flexible(child: Text(Copywriting.security_Search_by_ID__name__tag___, style: TextStyle(color: Color(0xFFAEB6C7), fontSize: 12.sp), maxLines: 1, overflow: TextOverflow.ellipsis,)),
+                  Flexible(child: Text(Copywriting.security_Search_by_ID__name__tag___, style: TextStyle(color: AppColors.textSecondary, fontSize: 12.sp), maxLines: 1, overflow: TextOverflow.ellipsis,)),
                 ],
               ),
             ),
@@ -125,16 +125,16 @@ class HomePageView extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.w),
                   decoration: BoxDecoration(
-                      color: Color(0xFF171C29),
+                      color: AppColors.surfaceMuted,
                       borderRadius: BorderRadius.circular(32.w),
-                      border: Border.all(color: Color(0xFF2A3144), width: 1)
+                      border: Border.all(color: AppColors.border, width: 1)
                   ),
                   child: Obx(() {
                     return Row(
                       children: [
-                        ImageView(Images.mina_filter, width: 14.w, height: 14.w),
+                        ImageView(Images.mina_filter, color: AppColors.textPrimary, width: 14.w, height: 14.w),
                         SizedBox(width: 4.w),
-                        Text(Security.security_Filter, style: TextStyle(color: Color(0xFFF2F4F8), fontSize: 13.sp)),
+                        Text(Security.security_Filter, style: TextStyle(color: AppColors.textPrimary, fontSize: 13.sp)),
                         if (RoleManager.instance.hasFilter) SizedBox(width: 4.w),
                         if (RoleManager.instance.hasFilter) Container(width: 8, height: 8, decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),)
                       ],
@@ -173,7 +173,7 @@ class HomePageView extends StatelessWidget {
             children: [
               ImageView(Images.security_ic_add_create_png, width: 20.w, height: 20.w),
               SizedBox(width: 4.w),
-              Text(Security.security_create, style: TextStyle(color: Color(0xFF07070a), fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(Security.security_create, style: TextStyle(color: AppColors.textPrimary, fontSize: 14.sp, fontWeight: FontWeight.w600)),
             ],
           ),
         ),

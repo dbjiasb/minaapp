@@ -1,211 +1,224 @@
-import 'package:biz/base/crypt/routes.dart';
 import 'dart:async';
 
-import 'package:biz/core/util/cached_image.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:biz/base/api_service/api_service_export.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/core/account/account_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
-import '../../base/app_info/app_manager.dart';
 import '../../base/router/router_names.dart';
+import '../../shared/app_brand.dart';
 import '../../shared/app_theme.dart';
 import '../../shared/toast/toast.dart';
 
 class CreateAccountView extends StatelessWidget {
   CreateAccountView({super.key});
 
-  CreateAccountViewController viewController = Get.put(CreateAccountViewController());
+  final CreateAccountViewController viewController = Get.put(
+    CreateAccountViewController(),
+  );
+
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+      filled: true,
+      fillColor: AppColors.surfaceMuted,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.border),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.accentText),
+      ),
+    );
+  }
 
   Widget _buildMailInputView() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      child: Container(
-        height: 48,
-        decoration: const BoxDecoration(color: Color(0xFF202026), borderRadius: BorderRadius.all(Radius.circular(12))),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                onChanged: viewController.onMailChange,
-                style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  labelStyle: TextStyle(color: Colors.white),
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none)),
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none)),
-                  hintText: Copywriting.security_entry_your_email,
-                  hintStyle: TextStyle(color: Color(0x80FFFFFF), fontWeight: FontWeight.w600, fontSize: 13),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return TextFormField(
+      onChanged: viewController.onMailChange,
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
+      autofillHints: const [AutofillHints.email],
+      autocorrect: false,
+      textCapitalization: TextCapitalization.none,
+      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+      decoration: _inputDecoration(Copywriting.security_entry_your_email),
     );
   }
 
   Widget _buildVerifyCodeView() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      child: Container(
-        height: 48,
-        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Color(0xFF202026)),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                onChanged: viewController.onVerifyCodeChange,
-                style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                  hintText: Copywriting.security_enter_verification_code,
-                  hintStyle: TextStyle(color: Color(0x80FFFFFF), fontSize: 13, fontWeight: FontWeight.w600),
+    return TextFormField(
+      onChanged: viewController.onVerifyCodeChange,
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.done,
+      autofillHints: const [AutofillHints.oneTimeCode],
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+      decoration: _inputDecoration(Copywriting.security_enter_verification_code)
+          .copyWith(
+            suffixIcon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Obx(
+                () => TextButton(
+                  onPressed: viewController.canSendCode.value
+                      ? viewController.onObtainCodeButtonClicked
+                      : null,
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.accentText,
+                    disabledForegroundColor: AppColors.disabled,
+                    textStyle: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  child: Text(
+                    viewController.countdown.value > 0
+                        ? '${viewController.countdown.value}s'
+                        : Copywriting.security_obtain_code,
+                  ),
                 ),
               ),
             ),
-            Obx(() {
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: viewController.canSendCode.value ? viewController.onObtainCodeButtonClicked : null,
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  width: 100,
-                  height: 40,
-                  child: Center(
-                    child: Text(
-                      viewController.countdown.value > 0 ? '${viewController.countdown.value}s' : Copywriting.security_obtain_code,
-                      style:
-                      viewController.countdown.value > 0
-                          ? TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700)
-                          : (viewController.canSendCode.value
-                          ? const TextStyle(color: Color(0xFFFFEF3B), fontSize: 13, fontWeight: FontWeight.w700)
-                          : TextStyle(color: Colors.transparent, fontSize: 13, fontWeight: FontWeight.w700)),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
   Widget _buildContinueButton() {
-    return GestureDetector(
-      onTap: viewController.login,
-      child: Obx(
-            () =>
-            Container(
-              height: 54,
-              margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
-              decoration: BoxDecoration(
-                color: viewController.canContinue.value ? AppColors.mainLightColor : AppColors.mainLightColor.withValues(alpha: 0.5),
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-              ),
-              child: Center(
-                child: Text(
-                  Security.security_Continue,
-                  style: TextStyle(
-                    color: viewController.canContinue.value ? Color(0xFF0F0F0F) : const Color(0x800F0F0F),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+    return Obx(
+      () => SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: viewController.canContinue.value
+              ? viewController.login
+              : null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: AppColors.accentForeground,
+            disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.35),
+            disabledForegroundColor: AppColors.textSecondary,
+            elevation: 0,
+            shadowColor: Colors.transparent,
+            minimumSize: const Size.fromHeight(54),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-      ),
-    );
-  }
-
-  Widget _buildAgreeText() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 24),
-      child: GestureDetector(
-        onTap: () {
-          _onCheckButtonClicked();
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          // children: [_buildCheckButton(), const SizedBox(width: 8), _buildBottomTips()],
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          child: Text(Security.security_Continue),
         ),
       ),
     );
   }
 
-  _onCheckButtonClicked() async {
-    viewController.checked.value = !viewController.checked.value;
-  }
-
-  _onTermsOfServiceClicked() {
-    Get.toNamed(
-      Routers.webView,
-      arguments: {Security.security_title: Copywriting.security_terms_of_service, Security.security_url: AppManager.instance.termsHtml},
-    );
-  }
-
-  _onBackButtonClicked() {
-    Get.back();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.transparent,
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            CachedImage(imageUrl: ImagePath.loginbg, height: double.infinity, width: double.infinity, fit: BoxFit.cover),
-            SafeArea(
-              child: SingleChildScrollView(
-                child:Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      alignment: Alignment.centerLeft,
-                      child: Text(Copywriting.security_create_your_account, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: AppAppearance.isLight
+              ? const [
+                  Color(0xFFFFF4C7),
+                  AppColors.background,
+                  AppColors.background,
+                ]
+              : const [AppColors.background, AppColors.background],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: BackButton(onPressed: () => Get.back()),
+        ),
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SafeArea(
+            top: false,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: (constraints.maxHeight - 56).clamp(
+                        0.0,
+                        double.infinity,
+                      ),
                     ),
-                    SizedBox(height: 32),
-                    _buildMailInputView(),
-                    const SizedBox(height: 12),
-                    _buildVerifyCodeView(),
-                    _buildContinueButton(),
-                    SizedBox(height: 128,)
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-                left: 0, top: 0,
-                child: SafeArea(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 12),
-                height: 44,
-                child: GestureDetector(
-                  onTap: _onBackButtonClicked,
-                  child: Container(
-                    width: 36,
-                    height: 36,
-                    alignment: Alignment.center,
-                    child: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, width: 36, height: 36),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 420),
+                        child: AutofillGroup(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Center(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Image.asset(
+                                    AppBrand.logoAsset,
+                                    package: 'biz',
+                                    width: 88,
+                                    height: 88,
+                                    semanticLabel: AppBrand.name,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              const Text(
+                                AppBrand.name,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: AppColors.textPrimary,
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              const SizedBox(height: 48),
+                              Text(
+                                Copywriting.security_create_your_account,
+                                style: const TextStyle(
+                                  color: AppColors.textPrimary,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              _buildMailInputView(),
+                              const SizedBox(height: 12),
+                              _buildVerifyCodeView(),
+                              const SizedBox(height: 24),
+                              _buildContinueButton(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )),
-          ],
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -241,6 +254,7 @@ class CreateAccountViewController extends GetxController {
 
   void onMailChange(String text) {
     account = text;
+    canContinue.value = account.isNotEmpty && verifyCode.isNotEmpty;
     canSendCode.value = account.isNotEmpty && countdown.value == 0;
   }
 
@@ -258,7 +272,9 @@ class CreateAccountViewController extends GetxController {
 
   void login() async {
     if (checked.value == false) {
-      Toast.error(Copywriting.security_please_agree_to_the_terms_and_conditions);
+      Toast.error(
+        Copywriting.security_please_agree_to_the_terms_and_conditions,
+      );
       return;
     }
 
@@ -270,7 +286,10 @@ class CreateAccountViewController extends GetxController {
     }
 
     Toast.loading(status: Copywriting.security_logging_in___);
-    ApiResponse response = await AccountService.instance.loginWithEmail(account, verifyCode);
+    ApiResponse response = await AccountService.instance.loginWithEmail(
+      account,
+      verifyCode,
+    );
     if (response.isSuccess) {
       Toast.dismiss();
       //弹出所有页面并进入主页
@@ -282,7 +301,10 @@ class CreateAccountViewController extends GetxController {
 
   void _getVerifyCode() async {
     Toast.loading(status: Copywriting.security_sending___);
-    ApiResponse response = await AccountService.instance.getVerifyCode(account, AccountType.email);
+    ApiResponse response = await AccountService.instance.getVerifyCode(
+      account,
+      AccountType.email,
+    );
     if (response.isSuccess) {
       _startTimer();
       Toast.dismiss();

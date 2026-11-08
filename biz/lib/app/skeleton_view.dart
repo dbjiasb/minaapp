@@ -49,8 +49,17 @@ class SkeletonView extends StatelessWidget {
             onPressed: () {
               viewController.onTabClicked(index);
             },
-            icon: normalIcon,
-            selectedIcon: selectedIcon,
+            tooltip: item.name,
+            icon: AppAppearance.isLight
+                ? Icon(const [Icons.explore_outlined, Icons.auto_awesome_outlined, Icons.chat_bubble_outline_rounded, Icons.person_outline_rounded][index], color: AppColors.textSecondary, size: 25)
+                : normalIcon,
+            selectedIcon: AppAppearance.isLight
+                ? Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+                    decoration: BoxDecoration(color: AppColors.selected, borderRadius: BorderRadius.circular(16)),
+                    child: Icon(const [Icons.explore_rounded, Icons.auto_awesome_rounded, Icons.chat_bubble_rounded, Icons.person_rounded][index], color: AppColors.accentForeground, size: 25),
+                  )
+                : selectedIcon,
             isSelected: viewController.selectedIndex.value == index,
             highlightColor: Colors.transparent,
           ),
@@ -62,7 +71,7 @@ class SkeletonView extends StatelessWidget {
                 bool needRedot = UserManager.instance.notificationReminder.value || UserManager.instance.taskReminder.value;
                 if (!needRedot) return Container();
                 return IgnorePointer(
-                  child: Container(width: 8, height: 8, decoration: BoxDecoration(color: const Color(0xFFF84652), borderRadius: BorderRadius.circular(20))),
+                  child: Container(width: 8, height: 8, decoration: BoxDecoration(color: AppColors.notification, borderRadius: BorderRadius.circular(20))),
                 );
               }),
             ),
@@ -80,10 +89,10 @@ class SkeletonView extends StatelessWidget {
                     height: 16,
                     alignment: Alignment.center,
                     // padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                    decoration: BoxDecoration(color: const Color(0xFFF84652), borderRadius: BorderRadius.circular(20)),
+                    decoration: BoxDecoration(color: AppColors.notification, borderRadius: BorderRadius.circular(20)),
                     child: Text(
                       viewController.unreadCount.toString(),
-                      style: TextStyle(fontSize: 9, color: Colors.white, fontWeight: FontWeight.bold, height: 1.5),
+                      style: TextStyle(fontSize: 9, color: AppColors.onColor, fontWeight: FontWeight.bold, height: 1.5),
                       maxLines: 1,
                     ),
                   ),
@@ -97,9 +106,9 @@ class SkeletonView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BorderSide border = BorderSide(color: const Color(0xFF2E2E2E), width: 1);
+    BorderSide border = BorderSide(color: AppColors.border, width: 1);
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       body: Column(
         children: [
           Expanded(
@@ -113,11 +122,11 @@ class SkeletonView extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.symmetric(vertical: 6),
             decoration: BoxDecoration(
               border: Border(left: border, right: border, top: border),
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-              color: const Color(0xFF05030D),
+              color: AppAppearance.isLight ? AppColors.surface : AppColors.surfaceMuted,
             ),
             child: SafeArea(
               top: false,

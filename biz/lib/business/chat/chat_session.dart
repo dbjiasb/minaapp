@@ -72,7 +72,12 @@ enum ChatStatus {
 class ChatSession {
   String id = ''; //这个是数字Uid 例如10139
   int get userId => int.tryParse(id) ?? 0;
-  String name = '';
+  String _name = '';
+
+  // Resolve the official identity at display time, including restored sessions
+  // and profile refreshes that still contain the previous server-side name.
+  String get name => isOffChatSession ? Copywriting.security_Miora_Support : _name;
+  set name(String value) => _name = value;
   String avatar = '';
   DateTime lastMessageTime;
   String lastMessageText = '';
@@ -107,13 +112,14 @@ class ChatSession {
 
   ChatSession({
     required this.id,
-    required this.name,
+    required String name,
     required this.avatar,
     required this.lastMessageTime,
     required this.lastMessageText,
     required this.accountType,
     int? ownerId,
-  }) : ownerId = ownerId ?? AccountService.instance.account.userId;
+  }) : _name = name,
+       ownerId = ownerId ?? AccountService.instance.account.userId;
 
   @override
   toString() {
@@ -145,7 +151,7 @@ class ChatSession {
   ChatSession.fromDatabase(Map<String, dynamic> map)
     : ownerId = map[Security.security_ownerId] as int,
       id = map[Security.security_id] as String,
-      name = map[Security.security_name] as String,
+      _name = map[Security.security_name] as String,
       avatar = map[Security.security_avatar] as String,
       lastMessageTime = DateTime.fromMillisecondsSinceEpoch(map[Security.security_lastMessageTime] as int),
       lastMessageText = map[Security.security_lastMessageText] ?? '',
@@ -166,7 +172,7 @@ class ChatSession {
   ChatSession.fromRouter(Map router)
     : ownerId = AccountService.instance.account.userId,
       id = router[Security.security_id],
-      name = router[Security.security_name],
+      _name = router[Security.security_name],
       avatar = router[Security.security_avatar],
       lastMessageTime = router[Security.security_lastMessageTime] == null ? DateTime.now() : DateTime.fromMillisecondsSinceEpoch(router[Security.security_lastMessageTime]),
       lastMessageText = router[Security.security_lastMessageText] ?? '',
@@ -185,7 +191,7 @@ class ChatSession {
   ChatSession.fromStory(Map router)
       : ownerId = AccountService.instance.account.userId,
       id = "${router["targetRoleInfo"]?[Security.security_targetUid]}",
-        name = router[Security.security_name],
+        _name = router[Security.security_name],
         avatar = router[Security.security_backgroundUrl],
         // backgroundUrl = (router[Security.security_backgroundUrl] as String? ?? '').obs,
         backgroundUrl = (router[Security.security_coverUrl] as String? ?? '').obs,
@@ -205,7 +211,7 @@ class ChatSession {
   ChatSession.fromAIRole(Map router)
       : ownerId = AccountService.instance.account.userId,
       id = router[Security.security_id] ?? "${router[Security.security_uid] ?? ''}",
-        name = router[Security.security_name] ?? '',
+        _name = router[Security.security_name] ?? '',
         avatar = router[Security.security_avatar] ?? '',
         backgroundUrl = (router[Security.security_backgroundUrl] as String? ?? '').obs,
         lastMessageTime =
@@ -241,7 +247,7 @@ class ChatSession {
   }
 
   static ChatSession get offChatSession =>
-      ChatSession(id: '$kOffChatSessionId', name: Copywriting.security_Mina_Support, avatar: "${ApiConfig.cdn}/services/${Security.security_client_config}/icon/mina_team.png", lastMessageText: Copywriting.security_contact_us_for_support_, lastMessageTime: DateTime.now(), accountType: 0);
+      ChatSession(id: '$kOffChatSessionId', name: Copywriting.security_Miora_Support, avatar: "${ApiConfig.cdn}/services/${Security.security_client_config}/icon/mina_team.png", lastMessageText: Copywriting.security_contact_us_for_support_, lastMessageTime: DateTime.now(), accountType: 0);
 
   bool get isOffChatSession => id == kOffChatSessionId.toString();
 

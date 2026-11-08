@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class LevelUpPopUp extends StatelessWidget {
     required int rewardGem,
     required Map rewardMode,
   }) {
-    Get.dialog(LevelUpPopUp(level: level, avatar: avatar, rewardCoin: rewardCoin, rewardGem: rewardGem, rewardMode: rewardMode), barrierDismissible: false, useSafeArea: false, barrierColor: Colors.black.withValues(alpha: 0.8));
+    Get.dialog(LevelUpPopUp(level: level, avatar: avatar, rewardCoin: rewardCoin, rewardGem: rewardGem, rewardMode: rewardMode), barrierDismissible: false, useSafeArea: false, barrierColor: AppColors.barrier.withValues(alpha: 0.8));
   }
 
   @override
@@ -69,7 +70,7 @@ class LevelUpPopUp extends StatelessWidget {
                             foreground: Paint()
                               ..shader = LinearGradient(
                                 colors: <Color>[
-                                  Colors.white,
+                                  AppColors.surface,
                                   Color(0xFFFDDD64),
                                 ],
                               ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
@@ -90,7 +91,7 @@ class LevelUpPopUp extends StatelessWidget {
                       ],
                     ),
                   ),
-                  child: Text(Copywriting.security_level_Up_, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white)),
+                  child: Text(Copywriting.security_level_Up_, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.textPrimary)),
                 )),
                 Positioned(
                   bottom: 0, left: 0, right: 0, height: 254,
@@ -121,7 +122,7 @@ class LevelUpPopUp extends StatelessWidget {
                 ),
               ],
             )),
-            Text(Copywriting.security_your_reward, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+            Text(Copywriting.security_your_reward, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
             SizedBox(height: 12,),
             Stack(
               alignment: Alignment.center,
@@ -130,7 +131,7 @@ class LevelUpPopUp extends StatelessWidget {
                   width: 72, height: 72,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: Colors.black.withValues(alpha: 0.4),
+                    color: AppColors.surfaceMuted.withValues(alpha: 0.4),
                     // gradient: LinearGradient(
                     //   colors: [
                     //     Color(0xFFFFBD46).withValues(alpha: 0),
@@ -144,7 +145,7 @@ class LevelUpPopUp extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ImageView(Images.security_coin_png, width: 36, height: 36,),
-                    Text('x$rewardCoin', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.white)),
+                    Text('x$rewardCoin', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.textPrimary)),
                   ],
                 ),
               ],

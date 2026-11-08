@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,8 +30,8 @@ class BalanceViewStyle {
 
   static const defaultStyle = BalanceViewStyle(
     // 改为const常量
-    color: Colors.white,
-    bgColor: Color(0x1AFFFFFF),
+    color: AppColors.textPrimary,
+    bgColor: AppColors.surfaceMuted,
     height: 20,
     borderRadius: 10,
     padding: 4,

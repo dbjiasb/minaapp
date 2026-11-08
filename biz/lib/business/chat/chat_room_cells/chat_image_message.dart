@@ -261,8 +261,8 @@ class ChatImageCell extends ChatCell {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: imageIndicator.value == index
-                                        ? Colors.white // 当前页用蓝色
-                                        : Colors.grey.withValues(alpha: 0.5), // 其他页用灰色
+                                        ? AppColors.onMedia // 当前页用蓝色
+                                        : AppColors.surfaceMuted.withValues(alpha: 0.5), // 其他页用灰色
                                   ),
                                 ));
                               }),
@@ -308,7 +308,7 @@ class ChatImageCell extends ChatCell {
               margin: EdgeInsets.only(top: 8),
               padding: EdgeInsets.symmetric(horizontal: 8),
               alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: Color(0x33000000)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: AppColors.mediaScrim),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -325,14 +325,14 @@ class ChatImageCell extends ChatCell {
             margin: EdgeInsets.only(top: 8),
             padding: EdgeInsets.symmetric(horizontal: 8),
             alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: Color(0x33000000)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: AppColors.mediaScrim),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ImageView(Images.security_refresh_png, width: 12, height: 12),
                 SizedBox(width: 4),
-                Text(text, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: AppFonts.medium)),
+                Text(text, style: TextStyle(color: AppColors.onMedia, fontSize: 12, fontWeight: AppFonts.medium)),
               ],
             ),
           ),
@@ -411,7 +411,7 @@ class ChatImageCell extends ChatCell {
                   children: [
                     ImageView(imageMessage.currencyType == 1 ? Images.security_gem_png : Images.security_coin_png, width: 24, height: 24),
                     SizedBox(width: 4),
-                    Text('${imageMessage.unlockPrice}', style: TextStyle(color: Colors.white, fontWeight: AppFonts.black, fontSize: 16)),
+                    Text('${imageMessage.unlockPrice}', style: TextStyle(color: AppColors.onMedia, fontWeight: AppFonts.black, fontSize: 16)),
                   ],
                 ),
             ],
@@ -474,7 +474,7 @@ class ChatImageCell extends ChatCell {
         children: [
           ImageView(Images.security_unlock_png, width: 16, height: 16),
           SizedBox(width: 4),
-          Text(Security.security_Unlock, style: TextStyle(color: Colors.black, fontWeight: AppFonts.medium, fontSize: 14)),
+          Text(Security.security_Unlock, style: TextStyle(color: AppColors.mediaScrim, fontWeight: AppFonts.medium, fontSize: 14)),
         ],
       ),
     );
@@ -509,7 +509,7 @@ class ChatImageCell extends ChatCell {
       fit: StackFit.expand,
       children: [
         ImageView(Images.security_chat_img_placeholder_png, fit: BoxFit.cover, width: 172, height: 256),
-        Center(child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2)),
+        Center(child: CircularProgressIndicator(color: AppColors.accentText, strokeWidth: 2)),
       ],
     );
   }

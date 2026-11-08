@@ -42,7 +42,7 @@ class ChatRecordView extends StatelessWidget {
       },
     );
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => Get.back(),

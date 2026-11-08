@@ -89,13 +89,13 @@ class _AIConsentDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const bodyStyle = TextStyle(
-      color: Color(0xFFB9B9B9),
+      color: AppColors.textSecondary,
       fontSize: 12,
       fontWeight: FontWeight.w500,
       height: 1.45,
     );
     const linkStyle = TextStyle(
-      color: AppColors.primary,
+      color: AppColors.accentText,
       fontSize: 13,
       fontWeight: FontWeight.w700,
       decoration: TextDecoration.underline,
@@ -108,7 +108,7 @@ class _AIConsentDialog extends StatelessWidget {
         color: Colors.transparent,
         child: Container(
           decoration: const BoxDecoration(
-            color: Color(0xFF333333),
+            color: AppColors.surface,
             borderRadius: BorderRadius.all(Radius.circular(24)),
           ),
           child: Padding(
@@ -120,7 +120,7 @@ class _AIConsentDialog extends StatelessWidget {
                   'AI Data Permission',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -172,7 +172,7 @@ class _AIConsentDialog extends StatelessWidget {
                           height: 44,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.12),
+                            color: AppColors.surfaceMuted,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(12),
                             ),
@@ -180,7 +180,7 @@ class _AIConsentDialog extends StatelessWidget {
                           child: const Text(
                             'Not Now',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                             ),
@@ -204,7 +204,7 @@ class _AIConsentDialog extends StatelessWidget {
                           child: const Text(
                             'Agree',
                             style: TextStyle(
-                              color: AppColors.mainDarkColor,
+                              color: AppColors.accentForeground,
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                             ),

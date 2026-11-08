@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:typed_data';
 
@@ -38,7 +39,7 @@ class ImageViewer extends StatelessWidget {
         elevation: 0,
         // 左上方添加返回按钮
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -54,7 +55,7 @@ class ImageViewer extends StatelessWidget {
 
           if (canDownload == 1)
             IconButton(
-              icon: const Icon(Icons.download, color: Colors.white),
+              icon: const Icon(Icons.download, color: AppColors.textPrimary),
               onPressed: () {
                 onSave();
               },
@@ -64,7 +65,7 @@ class ImageViewer extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            color: Colors.black,
+            color: AppColors.surfaceMuted,
             child: Center(
               // 使用 InteractiveViewer 实现双指捏合缩放和拖动
               child: InteractiveViewer(
@@ -75,7 +76,7 @@ class ImageViewer extends StatelessWidget {
                   placeholder:
                       (context, url) => Container(
                         padding: const EdgeInsets.all(16),
-                        child: SizedBox(width: 32, height: 32, child: const CircularProgressIndicator(color: Colors.white)),
+                        child: SizedBox(width: 32, height: 32, child: const CircularProgressIndicator(color: AppColors.accentText)),
                       ),
                 ),
               ),
@@ -98,12 +99,12 @@ class ImageViewer extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: Colors.white12,
+                              color: AppColors.surfaceMuted,
                               borderRadius: BorderRadius.circular(20)
                             ),
                             child: Obx(() => Text(
                               expandDes.value ? 'Collapse' : 'Expand',
-                              style: TextStyle(color: Colors.white, fontSize: 14
+                              style: TextStyle(color: AppColors.textPrimary, fontSize: 14
                               ),
                             )),
                           )).marginOnly(right: 8),
@@ -115,12 +116,12 @@ class ImageViewer extends StatelessWidget {
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                  color: Colors.white12,
+                                  color: AppColors.surfaceMuted,
                                   borderRadius: BorderRadius.circular(20)
                               ),
                               child: Text(
                                 'Copy',
-                                style: TextStyle(color: Colors.white, fontSize: 14
+                                style: TextStyle(color: AppColors.textPrimary, fontSize: 14
                                 ),
                               ),
                             ))
@@ -128,10 +129,10 @@ class ImageViewer extends StatelessWidget {
                     ).marginOnly(left: 12, bottom: 6),
                     Container(
                       padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 32),
-                      color: Color(0xFF12151C),
+                      color: AppColors.surfaceMuted,
                       child: Obx(() => Text(
                         imageDes,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppColors.textPrimary),
                         maxLines: expandDes.value ? 50 : 3,
                         overflow: TextOverflow.ellipsis,
                       ))

@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _ReorderResGridViewState extends State<ReorderResGridView> {
               scrollController: _scrollController,
               enableDraggable: false,
               enableScrollingWhileDragging: false,
-              dragChildBoxDecoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 3, spreadRadius: 1)]),
+              dragChildBoxDecoration: BoxDecoration(boxShadow: [BoxShadow(color: AppColors.shadow.withOpacity(0.1), blurRadius: 3, spreadRadius: 1)]),
               onReorder: (List<OrderUpdateEntity> orderUpdateEntities) {
                 for (final orderUpdateEntity in orderUpdateEntities) {
                   reOrderImage(orderUpdateEntity.oldIndex, orderUpdateEntity.newIndex);
@@ -100,7 +101,7 @@ class _ReorderResGridViewState extends State<ReorderResGridView> {
                             onTap: widget.onAddMoreTap,
                             child: Container(
                               alignment: Alignment.center,
-                              decoration: BoxDecoration(color: const Color(0xFF1B1E25), borderRadius: BorderRadius.circular(12)),
+                              decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(12)),
                               child: CachedImage(imageUrl: MomentRes.base+Images.security_iic_pic_add_webp, width: 24, height: 24),
                             ),
                           ),
@@ -124,7 +125,7 @@ class _ReorderResGridViewState extends State<ReorderResGridView> {
                 borderRadius: BorderRadius.zero,
                 errorWidget: (context, url, error) {
                   return Container(
-                    color: Colors.grey,
+                    color: AppColors.surfaceMuted,
                     width: double.infinity,
                   );
                 },
@@ -132,7 +133,7 @@ class _ReorderResGridViewState extends State<ReorderResGridView> {
                   return Container(
                     width: double.infinity,
                     height: double.infinity,
-                    decoration: BoxDecoration(color: Color(0xFF2F3137), borderRadius: BorderRadius.circular(16)),
+                    decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(16)),
                   );
                 },
               ),

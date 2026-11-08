@@ -29,7 +29,7 @@ class ChatModeView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
-        color: AppColors.base_background,
+        color: AppColors.background,
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(24),
           topLeft: Radius.circular(24),
@@ -41,7 +41,7 @@ class ChatModeView extends StatelessWidget {
           Text(
             Copywriting.security_switch_the_Model,
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
@@ -121,7 +121,7 @@ class ChatModeView extends StatelessWidget {
         child: Text(
           Copywriting.security_switch,
           style: const TextStyle(
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -153,8 +153,8 @@ class ChatModeView extends StatelessWidget {
                 end: Alignment.centerRight,
                 colors:
                     chatModel[Security.security_premiumOnly] == 1
-                        ? [const Color(0x1affdb42), const Color(0x00ffffff)]
-                        : [const Color(0x0dffffff), const Color(0x00ffffff)],
+                        ? [const Color(0x1affdb42), AppColors.surfaceMuted]
+                        : [AppColors.surfaceMuted, AppColors.surfaceMuted],
               ),
             ),
             child: Column(
@@ -164,7 +164,7 @@ class ChatModeView extends StatelessWidget {
                     Text(
                       chatModel[Security.security_name] ?? "",
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                       ),
@@ -189,7 +189,7 @@ class ChatModeView extends StatelessWidget {
                 ),
                 Text(
                   chatModel[Security.security_desc] ?? "",
-                  style: const TextStyle(color: Colors.white60, fontSize: 11),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
                 ).marginOnly(top: 12),
               ],
             ),
@@ -214,7 +214,7 @@ class ChatModeView extends StatelessWidget {
                     Text(
                       Copywriting.security_limited_Free,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.onColor,
                         fontSize: 9,
                         fontWeight: FontWeight.bold,
                       ),
@@ -228,12 +228,12 @@ class ChatModeView extends StatelessWidget {
                       format: CountDownTimerFormat.hoursMinutesSeconds,
                       enableDescriptions: false,
                       colonsTextStyle: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.onColor,
                         fontSize: 9,
                         fontWeight: FontWeight.bold,
                       ),
                       timeTextStyle: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.onColor,
                         fontSize: 9,
                         fontWeight: FontWeight.bold,
                       ),

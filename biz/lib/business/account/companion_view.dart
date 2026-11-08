@@ -74,7 +74,7 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
                             child: Text(
                               companion[Security.security_nickname],
                               maxLines: 1,
-                              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                              style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -113,11 +113,11 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
                 popUpAnchor: Alignment.topCenter, // Position of the arrow on the pop-up widget
                 arrowDirection: ArrowDirection.up,
               ),
-              popUpColor: Colors.black,
+              popUpColor: AppColors.textPrimary,
               popUp: Container(
                 width: 80,
                 height: 40,
-                decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(8)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -128,7 +128,7 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
                           controller.myCompanions.remove(companion);
                         }
                       },
-                      child: Text(Security.security_delete, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                      child: Text(Security.security_delete, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
@@ -136,8 +136,8 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
               child: Container(
                 width: 20,
                 height: 20,
-                decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.4), shape: BoxShape.circle),
-                child: Icon(Icons.more_vert, color: Colors.white, size: 16),
+                decoration: BoxDecoration(color: AppColors.surfaceMuted.withValues(alpha: 0.4), shape: BoxShape.circle),
+                child: Icon(Icons.more_vert, color: AppColors.textPrimary, size: 16),
               ),
             ),
           ),
@@ -165,7 +165,7 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
       child: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Color(0xFF1A181E)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: AppColors.surface),
             padding: EdgeInsets.all(8),
             child: Row(
               children: [
@@ -186,7 +186,7 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
                     children: [
                       Row(
                         children: [
-                          Text(companion[Security.security_nickname], style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text(companion[Security.security_nickname], style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
                           SizedBox(width: 6),
                           ImageView(shared == 1 ? "oc_public.png" : "oc_private.png", height: 20, width: 20),
                           const Spacer(),
@@ -199,16 +199,16 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
                               popUpBorderRadius: BorderRadius.circular(12),
                               baseBorderRadius: BorderRadius.circular(18),
                             ),
-                            popUpColor: const Color(0xFF2A282E),
+                            popUpColor: AppColors.surfaceMuted,
                             onHover: false,
                             popUp: Material(
                               color: Colors.transparent,
                               child: Container(
                                 width: 124,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF2A282E),
+                                  color: AppColors.surfaceMuted,
                                   borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                                  border: Border.all(color: AppColors.border),
                                 ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -221,7 +221,7 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
                                         RH.toPage(Routers.editOC, args: {Security.security_targetUid: uid});
                                       },
                                     ),
-                                    Divider(height: 1, thickness: 1, color: Colors.white.withValues(alpha: 0.08)),
+                                    Divider(height: 1, thickness: 1, color: AppColors.border),
                                     _buildCompanionAction(
                                       icon: Icons.delete_outline,
                                       title: Security.security_delete,
@@ -238,14 +238,14 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
                                 ),
                               ),
                             ),
-                            child: SizedBox(width: 36, height: 36, child: Icon(Icons.more_horiz, color: const Color(0xFF9B999F), size: 24)),
+                            child: SizedBox(width: 36, height: 36, child: Icon(Icons.more_horiz, color: AppColors.textSecondary, size: 24)),
                           ),
                         ],
                       ),
                       SizedBox(height: 8),
                       Text(
                         companion[Security.security_bio],
-                        style: TextStyle(color: Color(0xFFB8B7B4), fontSize: 12, fontWeight: FontWeight.w500),
+                        style: TextStyle(color: AppColors.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -260,7 +260,7 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
     ).marginSymmetric(horizontal: 8);
   }
 
-  Widget _buildCompanionAction({required IconData icon, required String title, required VoidCallback onTap, Color color = Colors.white}) {
+  Widget _buildCompanionAction({required IconData icon, required String title, required VoidCallback onTap, Color color = AppColors.textPrimary}) {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
@@ -284,13 +284,13 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar:
           controller.viewAll
               ? AppBar(
-                systemOverlayStyle: SystemUiOverlayStyle.light,
-                title: Text('My Companions', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                backgroundColor: AppColors.base_background,
+                systemOverlayStyle: AppAppearance.overlayStyle,
+                title: Text('My Companions', style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
+                backgroundColor: AppColors.background,
                 leading: IconButton(onPressed: Get.back, icon: ImageView(Images.security_back_png, height: 24, width: 24)),
               )
               : null,
@@ -301,13 +301,13 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
 
         if (!showRequesting && showCount == 0) {
           return Container(
-            color: AppColors.base_background,
+            color: AppColors.background,
             child: ListStatusView(status: ListStatus.empty, emptyDesc: 'No companions yet, go create one!'),
           );
         }
 
         return showRequesting
-            ? Container(color: AppColors.base_background, child: Center(child: CircularProgressIndicator(color: AppColors.primary)))
+            ? Container(color: AppColors.background, child: Center(child: CircularProgressIndicator(color: AppColors.accentText)))
             : ListView.separated(
               itemBuilder: (context, index) {
                 return _buildCompanionListItem(controller.myCompanions[index]);

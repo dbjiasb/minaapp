@@ -551,7 +551,7 @@ abstract final class CopywritingStringsFr {
         'Enroulez vos bras autour de vos genoux, assis légèrement recroquevillé, les yeux chaleureux sur moi.',
     'security_create_your_account': 'Créez votre compte',
     'security_input_content_here__Option_': 'Saisissez le contenu ici (Option)',
-    'security_mina_Team': 'L\'équipe Mina',
+    'security_miora_Team': 'L\'équipe Miora',
     'security_story_background': 'Contexte de l\'histoire',
     'security_tap_to_continue___': 'Appuyez pour continuer...',
     'security_aI_Character': 'Personnage IA',
@@ -574,7 +574,7 @@ abstract final class CopywritingStringsFr {
     'security_All_Chat': 'Tous les chats',
     'security_Create_Video': 'Créer une vidéo',
     'security_Generate_Video': 'Générer une vidéo',
-    'security_Mina_Support': 'Assistance Mina',
+    'security_Miora_Support': 'Assistance Miora',
     'security_No_groups_yet__go_create_one_':
         'Pas encore de groupe, allez en créer un !',
     'security_Please_input_description': 'Veuillez saisir une description',

@@ -40,7 +40,7 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                 decoration:
                     (index == viewController.selectedIndex.value)
                         ? BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.selected,
                           borderRadius: BorderRadius.circular(8),
                         )
                         : null,
@@ -55,8 +55,8 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                     fontSize: 13,
                     color:
                         (index == viewController.selectedIndex.value)
-                            ? const Color(0xFF07070A)
-                            : Colors.white,
+                            ? AppColors.textPrimary
+                            : AppColors.textPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -86,7 +86,7 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: const Color(0xFF252329),
+                  color: AppColors.surfaceMuted,
                 ),
                 child: SingleChildScrollView(
                   child: Wrap(
@@ -136,14 +136,14 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                                                     .selectedItem
                                                     .value)
                                             ? BoxDecoration(
-                                              color: Colors.white,
+                                              color: AppColors.selected,
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                             )
                                             : BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(8),
-                                              color: Colors.white10,
+                                              color: AppColors.border,
                                             ),
                                     child: Text(
                                       e[Security.security_desc] ?? '',
@@ -158,8 +158,8 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                                                         .prompts[index]
                                                         .selectedItem
                                                         .value)
-                                                ? Color(0xFF07070A)
-                                                : const Color(0xFFA19C9A),
+                                                ? AppColors.textPrimary
+                                                : AppColors.textSecondary,
                                       ),
                                     ),
                                   ),
@@ -201,7 +201,7 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                   Security.security_Create,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF07070A),
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -217,7 +217,7 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                   viewController.price.toString(),
                   style: const TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF07070A),
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -237,7 +237,7 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
         height: 568,
         padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
         decoration: BoxDecoration(
-          color: Color(0xFF1A181E),
+          color: AppColors.surface,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
@@ -257,14 +257,14 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       BalanceView(
                         type: BalanceType.coin,
                         style: BalanceViewStyle(
-                          color: AppColors.primary,
-                          bgColor: Colors.white10,
+                          color: AppColors.accentText,
+                          bgColor: AppColors.border,
                           borderRadius: 8,
                           height: 24,
                           padding: 8,
@@ -273,7 +273,7 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                     ],
                   ),
                 ),
-                Divider(height: 1, color: Colors.white10),
+                Divider(height: 1, color: AppColors.border),
                 SizedBox(
                   height: 44,
                   child: TabBar(
@@ -311,8 +311,8 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                                     style: TextStyle(
                                       color:
                                           isSelected
-                                              ? Colors.white
-                                              : Color(0xFFA19C9A),
+                                              ? AppColors.textPrimary
+                                              : AppColors.textSecondary,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -359,16 +359,16 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
       child: TextField(
         controller: viewController.promptController,
         maxLines: 10,
-        style: TextStyle(color: Colors.white, fontSize: 14),
+        style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
         decoration: InputDecoration(
           hintText:
               Copywriting
                   .security_enter_your_image_prompt__e_g__A_girl__sitting_on_a_bench___,
-          hintStyle: TextStyle(color: Color(0xFF66676D), fontSize: 14),
-          labelStyle: TextStyle(color: Colors.white, fontSize: 14),
+          hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+          labelStyle: TextStyle(color: AppColors.textPrimary, fontSize: 14),
           hintMaxLines: 3,
           filled: true,
-          fillColor: Color(0xFF252329),
+          fillColor: AppColors.surfaceMuted,
           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
@@ -401,7 +401,7 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.selected,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -409,7 +409,7 @@ class CreateImagePanel extends GetView<CreateImagePanelController> {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF07070A),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ).marginOnly(right: 8);

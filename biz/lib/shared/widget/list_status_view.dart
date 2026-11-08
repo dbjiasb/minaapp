@@ -21,7 +21,7 @@ class ListStatusView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ImageView(Images.mina_empty_list, width: 150, height: 150),
-          Text(emptyDesc ?? Copywriting.security_no_data, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF9EA1A8))),
+          Text(emptyDesc ?? Copywriting.security_no_data, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.textSecondary)),
         ],
       ),
     );
@@ -35,7 +35,7 @@ class ListStatusView extends StatelessWidget {
           ImageView(Images.mina_empty_list, width: 180, height: 180),
           Text(
             errorDesc ?? Copywriting.security_network_exception__please_try_again_later,
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF9EA1A8)),
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.textSecondary),
           ),
         ],
       ),
@@ -43,7 +43,7 @@ class ListStatusView extends StatelessWidget {
   }
 
   Widget buildLoadingView() {
-    return CircularProgressIndicator(color: AppColors.mainLightColor);
+    return CircularProgressIndicator(color: AppColors.accentText);
   }
 
   Widget buildSuccessView() {

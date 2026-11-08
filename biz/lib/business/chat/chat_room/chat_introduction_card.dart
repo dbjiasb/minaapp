@@ -1,3 +1,4 @@
+import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/business/chat/chat_session.dart';
 import 'package:biz/core/util/cached_image.dart';
@@ -22,9 +23,9 @@ class ChatIntroductionCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.4),
+          color: (AppAppearance.isLight ? AppColors.surface : Colors.black.withOpacity(0.4)),
           borderRadius: BorderRadius.circular(16.w),
-          border: Border.all(color: Colors.white.withOpacity(0.1), width: 1),
+          border: Border.all(color: AppColors.surfaceMuted, width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,8 +42,8 @@ class ChatIntroductionCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(session.name, style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold)),
-                      if (session.isAiChat) Text(Copywriting.security_aI_Character, style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 12.sp)),
+                      Text(session.name, style: TextStyle(color: AppColors.textPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+                      if (session.isAiChat) Text(Copywriting.security_aI_Character, style: TextStyle(color: AppColors.textSecondary, fontSize: 12.sp)),
                     ],
                   ),
                 ),
@@ -50,7 +51,7 @@ class ChatIntroductionCard extends StatelessWidget {
                 if (session.bio.isNotEmpty)
                   GestureDetector(
                     onTap: controller.toggleExpanded,
-                    child: Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.white, size: 24.w),
+                    child: Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.textPrimary, size: 24.w),
                   ),
               ],
             ),
@@ -60,10 +61,10 @@ class ChatIntroductionCard extends StatelessWidget {
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(12.w)),
+                decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(12.w)),
                 child: Text(
                   session.bio,
-                  style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 14.sp, height: 1.5),
+                  style: TextStyle(color: AppColors.textSecondary, fontSize: 14.sp, height: 1.5),
                   maxLines: isExpanded ? null : 2,
                   overflow: isExpanded ? null : TextOverflow.ellipsis,
                 ),

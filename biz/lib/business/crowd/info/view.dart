@@ -23,7 +23,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.base_background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         leading: IconButton(
           onPressed: Get.back,
@@ -31,7 +31,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
         ),
         backgroundColor: Colors.transparent,
         centerTitle: false,
-        title: Text(Copywriting.security_group_Info, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),),
+        title: Text(Copywriting.security_group_Info, style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w900),),
         actions: [_buildEditAction()],
       ),
       body: _buildBody(),
@@ -54,7 +54,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                 ? Text(
                   Security.security_save,
                   style: TextStyle(
-                    color: AppColors.primary,
+                    color: AppColors.accentText,
                     fontSize: 14,
                     fontWeight: FontWeight.w900,
                   ),
@@ -63,15 +63,15 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   margin: EdgeInsets.only(right: 16),
                   decoration: BoxDecoration(
-                    color: Color(0xFF272533),
+                    color: AppColors.surfaceMuted,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.edit, size: 18, color: Colors.white),
+                      Icon(Icons.edit, size: 18, color: AppColors.textPrimary),
                       Text(
                         Copywriting.security_edit,
-                        style: TextStyle(color: Colors.white, fontSize: 14),
+                        style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
                       ),
                     ],
                   ),
@@ -85,7 +85,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
       return Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Color(0x0DFFFFFF),
+          color: AppColors.surfaceMuted,
           borderRadius: const BorderRadius.all(Radius.circular(16)),
         ),
         child: Column(
@@ -109,7 +109,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                       decoration: BoxDecoration(
                         color:
                             controller.editing.value
-                                ? Color(0xFF272533)
+                                ? AppColors.surfaceMuted
                                 : Colors.transparent,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(8),
@@ -124,13 +124,13 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                           hintText: Copywriting.security_edit_Group_Name,
                           isCollapsed: true,
                           hintStyle: TextStyle(
-                            color: Color(0xFFABABAD),
+                            color: AppColors.textSecondary,
                             fontSize: 12,
                           ),
                         ),
                         inputFormatters: [LengthLimitingTextInputFormatter(40)],
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 12,
                         ),
                         onChanged: (value) {
@@ -149,7 +149,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
               decoration: BoxDecoration(
                 color:
                     controller.editing.value
-                        ? Color(0xFF272533)
+                        ? AppColors.surfaceMuted
                         : Colors.transparent,
                 borderRadius: BorderRadius.all(Radius.circular(13)),
               ),
@@ -160,12 +160,12 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                   border: InputBorder.none,
                   hintText: Copywriting.security_edit_Group_Scenario,
                   isCollapsed: true,
-                  hintStyle: TextStyle(color: Color(0xFFABABAD), fontSize: 12),
+                  hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 12),
                   enabled: controller.editing.value,
                 ),
                 maxLines: 6,
                 inputFormatters: [LengthLimitingTextInputFormatter(500)],
-                style: const TextStyle(color: Color(0xFFABABAD), fontSize: 11),
+                style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
                 onChanged: (value) {
                   controller.rxScenarioText.value = value;
                 },
@@ -181,7 +181,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-        color: Color(0x0DFFFFFF),
+        color: AppColors.surfaceMuted,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Obx(() {
@@ -194,7 +194,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                 Text(
                   Copywriting.security_group_Member,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
@@ -203,7 +203,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                 Text(
                   '${controller.rxCrowInfo.value.members.length}',
                   style: TextStyle(
-                    color: Color(0x66FFFFFF),
+                    color: AppColors.textSecondary,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
@@ -261,7 +261,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                       Text(
                         '${member[Security.security_userbase]?[Security.security_nickName] ?? ''}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 13,
                           height: 20 / 13,
                           fontWeight: FontWeight.bold,
@@ -274,7 +274,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0x0DFFFFFF),
+                            color: AppColors.surfaceMuted,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(12),
                             ),
@@ -282,7 +282,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                           child: Text(
                             Copywriting.security_group_Owner,
                             style: TextStyle(
-                              color: Color(0xFFFFEF3B),
+                              color: AppColors.accentText,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -305,7 +305,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(0x0DF8F8F8),
+                              color: AppColors.surfaceMuted,
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(12),
                               ),
@@ -313,7 +313,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                             child: Text(
                               Security.security_expired,
                               style: TextStyle(
-                                color: Colors.white70,
+                                color: AppColors.textSecondary,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -327,7 +327,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0x0DF8F8F8),
+                            color: AppColors.surfaceMuted,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(12),
                             ),
@@ -335,7 +335,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                           child: Text(
                             Security.security_deactivated,
                             style: TextStyle(
-                              color: Colors.white70,
+                              color: AppColors.textSecondary,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -354,7 +354,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
                             ),
                             child: ImageView(
                               Images.security_ic_chat_msg_delete_png,
-                              color: Color(0xFFF84652),
+                              color: AppColors.error,
                               width: 16,
                               height: 16,
                             ),
@@ -394,7 +394,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
             width: 44,
             height: 44,
             decoration: const BoxDecoration(
-              color: Color(0xFF1B1E25),
+              color: AppColors.surfaceMuted,
               borderRadius: BorderRadius.all(Radius.circular(28)),
             ),
             child: Center(
@@ -404,7 +404,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
           Text(
             Copywriting.security_add_New_Group_Member,
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -426,14 +426,14 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Color(0xFF272533),
+            color: AppColors.surfaceMuted,
             borderRadius: const BorderRadius.all(Radius.circular(16)),
           ),
           child: Center(
             child: Text(
               Copywriting.security_disband_Group,
               style: TextStyle(
-                color: Color(0xFFF84652),
+                color: AppColors.error,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),

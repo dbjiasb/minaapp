@@ -25,10 +25,10 @@ class MomentListViewPage extends GetView<MomentListViewLogic> {
 
   Widget _buildBody() {
     return Scaffold(
-      backgroundColor: Color(0xFF12151C),
-      appBar: AppBar(backgroundColor: Colors.transparent, surfaceTintColor: Colors.transparent, elevation: 0, toolbarHeight: 0),
+      backgroundColor: AppColors.background,
+      primary: false,
       body: Container(
-        margin: const EdgeInsets.only(left: 16, right: 16, top: 40),
+        margin: EdgeInsets.only(left: 16, right: 16, top: AppAppearance.isLight ? 8 : 40),
         child: Column(
           children: [
             Row(
@@ -58,7 +58,7 @@ class MomentListViewPage extends GetView<MomentListViewLogic> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           margin: const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
-            color: index == controller.currentIndex.value ? const Color(0x1AFF56BB) : Colors.transparent,
+            color: index == controller.currentIndex.value ? AppColors.selected : Colors.transparent,
             borderRadius: BorderRadius.circular(100),
           ),
           child: Text(
@@ -66,7 +66,7 @@ class MomentListViewPage extends GetView<MomentListViewLogic> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: index == controller.currentIndex.value ? AppColors.primary : const Color(0xFFABABAD),
+              color: index == controller.currentIndex.value ? AppColors.accentForeground : AppColors.textSecondary,
             ),
           ),
         );
@@ -86,9 +86,9 @@ class MomentListViewPage extends GetView<MomentListViewLogic> {
         decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(100)),
         child: Row(
           children: [
-            CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16, color: Colors.black),
+            CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16, color: AppColors.textPrimary),
             const SizedBox(width: 4),
-            Text(Security.security_post, style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
+            Text(Security.security_post, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
           ],
         ),
       ),

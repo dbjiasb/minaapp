@@ -77,7 +77,7 @@ class _WebViewState extends State<WebView> {
     L.i('WebView initState, url: $url, title: $title, hideAppBar: $hideAppBar');
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(AppColors.base_background)
+      ..setBackgroundColor(AppColors.background)
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String pageUrl) {
@@ -163,19 +163,19 @@ class _WebViewState extends State<WebView> {
     return Scaffold(
       extendBody: !showAppBar,
       extendBodyBehindAppBar: !showAppBar,
-      backgroundColor: Color(0xFF12151D),
+      backgroundColor: AppColors.background,
       appBar: showAppBar
           ? AppBar(
-              systemOverlayStyle: SystemUiOverlayStyle.light,
+              systemOverlayStyle: AppAppearance.overlayStyle,
               title: Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              backgroundColor: AppColors.base_background,
+              backgroundColor: AppColors.background,
               leading: IconButton(
                 icon: CachedImage(
                   imageUrl: ImagePath.ic_arrow_left_circle,
@@ -193,7 +193,7 @@ class _WebViewState extends State<WebView> {
                       height: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation(Colors.black),
+                        valueColor: AlwaysStoppedAnimation(AppColors.accentText),
                       ),
                     ),
                   ),
