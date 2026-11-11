@@ -39,7 +39,7 @@ class ReportManager {
   }
 
   AdjustConfig get adjustConfig {
-    return AdjustConfig(Platform.isIOS ? Security.security_u8slrnkdzhfk : Security.security_gcjw4vodvncw, AdjustEnvironment.production)
+    return AdjustConfig(Security.security_u8slrnkdzhfk, AdjustEnvironment.production)
       ..attributionCallback = (AdjustAttribution attribution) {
         handleAdjustAttribution(attribution);
       }
