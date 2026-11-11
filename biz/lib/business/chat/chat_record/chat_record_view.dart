@@ -1,9 +1,7 @@
-import 'package:biz/base/crypt/images.dart';
-import 'package:biz/base/assets/image_view.dart';
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/localize/tab_labels.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/shared/widget/keep_alive_wrapper.dart';
 import 'package:biz/shared/widget/title_bar.dart';
 
@@ -44,12 +42,7 @@ class ChatRecordView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () => Get.back(),
-          child: Container(
-              // color: Colors.blue,
-              alignment: Alignment.center, child: ImageView(Images.security_back_png, width: 24, height: 24)),
-        ),
+        leading: AppBackButton(onPressed: () => Get.back()),
         backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,

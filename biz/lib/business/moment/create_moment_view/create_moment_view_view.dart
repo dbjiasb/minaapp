@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/business/moment/constant_state.dart';
@@ -32,7 +33,7 @@ class CreateMomentViewPage extends GetView<CreateMomentViewLogic> {
         appBar: AppBar(
           foregroundColor: AppColors.textPrimary,
           systemOverlayStyle: AppAppearance.overlayStyle,
-          leading: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+          leading: AppBackButton(onPressed: () => Get.back()),
           backgroundColor: AppColors.background,
           title: const Text(''),
           actions: [

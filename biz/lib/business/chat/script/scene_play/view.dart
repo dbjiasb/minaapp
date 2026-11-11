@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/router/route_helper.dart';
 import 'package:biz/core/account/account_service.dart';
-import 'package:biz/shared/widget/app_widgets.dart';
 import '../../../../base/assets/image_view.dart';
 import '../../../../base/crypt/copywriting.dart';
 import '../../../../base/crypt/images.dart';
@@ -100,10 +100,7 @@ class ScenePlayView extends GetView<ScenePlayLogic> {
           backgroundColor: AppColors.background,
           elevation: 0.0,
           systemOverlayStyle: AppAppearance.overlayStyle,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: AppWidgets.backBtn(color: AppColors.background),
-          ),
+          leading: AppBackButton(onPressed: () => Get.back()),
           actions: [
             Obx(() => currentNode.needCost ? drawWealthView(1) : Container()),
             Obx(() => currentNode.needCost ? drawWealthView(0) : Container()),

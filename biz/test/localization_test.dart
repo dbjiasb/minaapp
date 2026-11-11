@@ -128,7 +128,7 @@ void main() {
       TabTranslations.ar,
     ];
 
-    expect(expectedKeys, hasLength(26));
+    expect(expectedKeys, hasLength(27));
     for (final locale in locales) {
       expect(locale.keys.toSet(), expectedKeys);
       expect(locale.values, everyElement(isNotEmpty));

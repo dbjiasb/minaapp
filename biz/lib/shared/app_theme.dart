@@ -75,6 +75,7 @@ class AppColors {
 
   static const Color main = background;
   static const Color primary = Color(0xFFFFE407);
+  static const Color chatAction = Color(0xFF7357D9);
   static const Color secondPage = surface;
   static const Color ocBox = surfaceMuted;
   static const Color ocMain = Color(0xFFFFE407);
@@ -128,6 +129,10 @@ class AppTheme {
         displayColor: AppColors.textPrimary,
       ),
       iconTheme: const IconThemeData(color: AppColors.textPrimary),
+      tabBarTheme: const TabBarThemeData(
+        splashFactory: NoSplash.splashFactory,
+        overlayColor: WidgetStatePropertyAll(Colors.transparent),
+      ),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.textPrimary,

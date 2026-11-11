@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:biz/core/account/account_service.dart';
 import 'package:biz/core/util/cached_image.dart';
 import 'package:biz/shared/app_theme.dart';
 
-import '../../../base/assets/image_path.dart';
 import '../../../base/assets/image_view.dart';
 import '../../../base/router/route_helper.dart';
 import '../../../base/router/router_names.dart';
@@ -25,10 +25,7 @@ class CrowedInfoView extends GetView<CrowedInfoController> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: Get.back,
-          icon: ImageView(Images.security_back_png, height: 24, width: 24),
-        ),
+        leading: AppBackButton(onPressed: () => Get.back()),
         backgroundColor: Colors.transparent,
         centerTitle: false,
         title: Text(Copywriting.security_group_Info, style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w900),),

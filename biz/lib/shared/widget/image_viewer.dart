@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:typed_data';
@@ -38,8 +39,7 @@ class ImageViewer extends StatelessWidget {
         // 去除阴影
         elevation: 0,
         // 左上方添加返回按钮
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+        leading: AppBackButton(
           onPressed: () {
             Navigator.pop(context);
           },

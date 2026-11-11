@@ -50,14 +50,18 @@ class SkeletonView extends StatelessWidget {
               viewController.onTabClicked(index);
             },
             tooltip: item.name,
+            style: IconButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+              overlayColor: Colors.transparent,
+            ),
             icon: AppAppearance.isLight
-                ? Icon(const [Icons.explore_outlined, Icons.auto_awesome_outlined, Icons.chat_bubble_outline_rounded, Icons.person_outline_rounded][index], color: AppColors.textSecondary, size: 25)
+                ? Icon(const [Icons.auto_awesome_outlined, Icons.explore_outlined, Icons.chat_bubble_outline_rounded, Icons.person_outline_rounded][index], color: AppColors.textSecondary, size: 25)
                 : normalIcon,
             selectedIcon: AppAppearance.isLight
                 ? Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
                     decoration: BoxDecoration(color: AppColors.selected, borderRadius: BorderRadius.circular(16)),
-                    child: Icon(const [Icons.explore_rounded, Icons.auto_awesome_rounded, Icons.chat_bubble_rounded, Icons.person_rounded][index], color: AppColors.accentForeground, size: 25),
+                    child: Icon(const [Icons.auto_awesome_rounded, Icons.explore_rounded, Icons.chat_bubble_rounded, Icons.person_rounded][index], color: AppColors.accentForeground, size: 25),
                   )
                 : selectedIcon,
             isSelected: viewController.selectedIndex.value == index,
@@ -156,20 +160,20 @@ class SkeletonViewController extends GetxController {
 
   List<BottomBarItem> items = <BottomBarItem>[
     BottomBarItem(
-      name: Security.security_Discovery,
-      pageBuilder: () {
-        return KeepAliveWrapper(child: DiscoveryView());
-      },
-      selectedBuilder: () => ImageView(Images.security_tab_moment_1_png, width: 28, height: 28),
-      normalBuilder: () => ImageView(Images.security_tab_moment_0_png, width: 28, height: 28),
-    ),
-    BottomBarItem(
       name: Security.security_list,
       pageBuilder: () {
         return KeepAliveWrapper(child: HomePageView()); //TheaterListView()
       },
       selectedBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_1, width: 28, height: 28),
       normalBuilder: () => CachedImage(imageUrl: ImagePath.bt_0_0, width: 28, height: 28),
+    ),
+    BottomBarItem(
+      name: Security.security_Discovery,
+      pageBuilder: () {
+        return KeepAliveWrapper(child: DiscoveryView());
+      },
+      selectedBuilder: () => ImageView(Images.security_tab_moment_1_png, width: 28, height: 28),
+      normalBuilder: () => ImageView(Images.security_tab_moment_0_png, width: 28, height: 28),
     ),
     BottomBarItem(
       name: Security.security_chat,

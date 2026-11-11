@@ -1,12 +1,11 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/shared/app_brand.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:biz/base/app_info/app_manager.dart';
-import 'package:biz/base/assets/image_path.dart';
 
 import '../../base/crypt/security.dart';
 import '../../base/router/route_helper.dart';
-import '../../core/util/cached_image.dart';
 import '../../shared/app_theme.dart';
 
 class AboutView extends StatelessWidget {
@@ -20,7 +19,7 @@ class AboutView extends StatelessWidget {
         title: Text(Security.security_about, style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(icon: CachedImage(imageUrl: ImagePath.ic_arrow_left_circle, width: 32, height: 32), onPressed: () => RH.back()),
+        leading: AppBackButton(onPressed: RH.back),
       ),
       body: SafeArea(
         child: Align(

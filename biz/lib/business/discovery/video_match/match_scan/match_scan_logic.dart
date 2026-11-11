@@ -1,12 +1,7 @@
-import 'package:biz/base/crypt/routes.dart';
-import 'dart:ffi';
-
 import 'package:get/get.dart';
 import 'package:biz/shared/alert.dart';
 
-import '../../../../base/api_service/api_response.dart';
 import '../../../../base/crypt/copywriting.dart';
-import '../../../../base/crypt/routes.dart';
 import '../../../../base/crypt/security.dart';
 import '../../../../base/report/report_manager.dart';
 import '../../../../base/router/route_helper.dart';
@@ -14,6 +9,7 @@ import '../../../../base/router/router_names.dart';
 import '../../../chat/call/call_manager.dart';
 import '../../services/match_service.dart';
 import 'match_scan_state.dart';
+import 'match_exit_guard.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 // import 'package:utils/alerts.dart';
 // import 'package:common/common.dart';
@@ -26,27 +22,9 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 class MatchScanLogic extends GetxController {
   final MatchScanState state = MatchScanState();
 
-  Future<bool> cancelVideoMatch() async {
-    int status = 0;
-    await showConfirmAlert(Security.security_tips, Copywriting.security_exit_Video_Matching_, cancelText: Security.security_cancel, confirmText: Security.security_confirm, onConfirm: () async {
+  final _exitGuard = MatchExitGuard();
 
-      EasyLoading.show();
-      ApiResponse rsp = await MatchService.to.cancelVideoCallMatch();
-      if (rsp.isSuccess) {
-        status = 1;
-      } else {
-        EasyLoading.showToast(rsp.description);
-      }
-      EasyLoading.dismiss();
-      status = 2;
-    });
-
-    String action = status == 1 ? Security.security_confirmExitMatch : (status == 0 ? Security.security_cancelExitMatch : Security.security_failedExitMatch);
-    ReportManager.sendEvent(Security.security_click_user_match_video, {Security.security_action: action});
-
-    RH.back();
-    return status == 1;
-  }
+  Future<bool> cancelVideoMatch() => _cancelMatch();
 
   @override
   void onClose() {
@@ -79,25 +57,72 @@ class MatchScanLogic extends GetxController {
     // });
   }
 
-  Future<bool> cancelAndRejectVideoMatch(int callId) async {
+  Future<bool> cancelAndRejectVideoMatch(int callId) =>
+      _cancelMatch(callId: callId);
 
-    int status = 0;
-
-    await showConfirmAlert(Security.security_tips, Copywriting.security_exit_Video_Matching_, cancelText: Security.security_cancel, confirmText: Security.security_confirm, onConfirm: () async {
-
-      EasyLoading.show();
-      ApiResponse rsp = await MatchService.to.cancelVideoCallMatch();
-      if (rsp.isSuccess) {
-        status = 1;
-      } else {
-        EasyLoading.showToast(rsp.description);
-      }
-      EasyLoading.dismiss();
-      status = 2;
+  Future<bool> _cancelMatch({int? callId}) async {
+    MatchExitOutcome outcome;
+    try {
+      outcome = await _exitGuard.run(
+        confirm: () async =>
+            await showConfirmAlert(
+              Security.security_tips,
+              Copywriting.security_exit_Video_Matching_,
+              cancelText: Security.security_cancel,
+              confirmText: Security.security_confirm,
+            ) ==
+            true,
+        cancel: () async {
+          EasyLoading.show();
+          String? error;
+          try {
+            final response = await MatchService.to.cancelVideoCallMatch();
+            if (!response.isSuccess) {
+              error = response.description;
+              return false;
+            }
+            if (callId != null) {
+              final response = await CallManager.instance.refuse(
+                callId: callId,
+              );
+              if (!response.isSuccess) {
+                error = response.description;
+                return false;
+              }
+              CallManager.instance.curCall = null;
+            }
+            return true;
+          } finally {
+            await EasyLoading.dismiss();
+            if (error != null) EasyLoading.showToast(error);
+          }
+        },
+        leave: RH.back,
+      );
+    } catch (_) {
+      outcome = MatchExitOutcome.failed;
+      EasyLoading.showToast(
+        Copywriting.security_network_error__please_try_again_later,
+      );
+    }
+    if (outcome == MatchExitOutcome.busy) return false;
+    final String action;
+    if (callId == null) {
+      action = outcome == MatchExitOutcome.exited
+          ? Security.security_confirmExitMatch
+          : outcome == MatchExitOutcome.cancelled
+          ? Security.security_cancelExitMatch
+          : Security.security_failedExitMatch;
+    } else {
+      action = outcome == MatchExitOutcome.exited
+          ? Security.security_confirmExitMatchResult
+          : outcome == MatchExitOutcome.cancelled
+          ? Security.security_cancelExitMatchResult
+          : Security.security_failedExitMatch;
+    }
+    ReportManager.sendEvent(Security.security_click_user_match_video, {
+      Security.security_action: action,
     });
-
-    String action = status == 1 ? Security.security_confirmExitMatchResult : (status == 0 ? Security.security_cancelExitMatchResult : Security.security_failedExitMatch);
-    ReportManager.sendEvent(Security.security_click_user_match_video, {Security.security_action: action});
-    return status == 1;
+    return outcome == MatchExitOutcome.exited;
   }
 }

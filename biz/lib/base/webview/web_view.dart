@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -17,11 +18,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
-import '../../core/util/cached_image.dart';
 import '../../core/util/log_util.dart';
 import '../../shared/app_theme.dart';
 import '../ads/ad_utils.dart';
-import '../assets/image_path.dart';
 import '../router/router_names.dart';
 
 // flutter 端
@@ -176,14 +175,7 @@ class _WebViewState extends State<WebView> {
                 ),
               ),
               backgroundColor: AppColors.background,
-              leading: IconButton(
-                icon: CachedImage(
-                  imageUrl: ImagePath.ic_arrow_left_circle,
-                  width: 32,
-                  height: 32,
-                ),
-                onPressed: () => RH.back(),
-              ),
+              leading: AppBackButton(onPressed: RH.back),
               actions: [
                 if (_isLoading)
                   Padding(
@@ -221,6 +213,19 @@ class _WebViewState extends State<WebView> {
                     child: Text(Security.security_retry),
                   ),
                 ],
+              ),
+            ),
+          if (!showAppBar && (_isLoading || _hasError))
+            Positioned(
+              top: 0,
+              left: 8,
+              child: SafeArea(
+                bottom: false,
+                child: Material(
+                  color: AppColors.background,
+                  shape: const CircleBorder(),
+                  child: AppBackButton(onPressed: _handleBackPress),
+                ),
               ),
             ),
         ],

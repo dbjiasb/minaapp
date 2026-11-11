@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/other.dart';
@@ -73,8 +74,7 @@ class AccountSettings extends StatelessWidget {
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
+        leading: AppBackButton(
           onPressed: () => Get.back(),
         ),
       ),

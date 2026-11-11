@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,18 +29,23 @@ class RechargePremiumView extends StatelessWidget {
             backgroundColor: AppColors.background,
             body: Stack(children: [
           if (!AppAppearance.isLight) ImageView(Images.security_premium_buy_bg_png, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
+          _buildContent(controller),
           _buildBackButton(controller),
-          _buildContent(controller)
         ]));
       },
     );
   }
 
   Widget _buildBackButton(RechargePremiumViewController controller) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: controller.navigateBack,
-        child: Padding(padding: EdgeInsets.only(left: 18, top: 10), child: ImageView(Images.security_back_png, height: 24, width: 24)),
+    return Positioned(
+      top: 0,
+      left: 8,
+      child: SafeArea(
+        bottom: false,
+        child: AppBackButton(
+          onPressed: controller.navigateBack,
+          onMedia: !AppAppearance.isLight,
+        ),
       ),
     );
   }
@@ -386,14 +392,14 @@ class RechargePremiumView extends StatelessWidget {
   }
 
   Widget _buildLegalLinks() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 12,
       children: [
         TextButton(
           onPressed: () => launchUrl(EncHelper.rcg_urlTrms),
           child: Text(EncHelper.rcg_trms, style: TextStyle(color: AppColors.textPrimary, fontSize: 10, fontWeight: FontWeight.w500)),
         ),
-        const SizedBox(width: 12),
         TextButton(
           onPressed: () => launchUrl(EncHelper.rcg_urlPrivacy),
           child: Text(EncHelper.rcg_privacy, style: TextStyle(color: AppColors.textPrimary, fontSize: 10, fontWeight: FontWeight.w500)),

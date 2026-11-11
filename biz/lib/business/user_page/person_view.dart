@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/apis.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/copywriting.dart';
@@ -51,10 +52,7 @@ class PersonViewPage extends StatelessWidget {
     } catch (e) {
       return Scaffold(
         appBar: AppBar(
-          leading: GestureDetector(
-            onTap: Get.back,
-            child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView(Images.security_back_png, width: 24, height: 24)),
-          ),
+          leading: AppBackButton(onPressed: () => Get.back()),
         ),
         body: Center(child: Text('An error occured, please try agin later'))
       );
@@ -146,9 +144,9 @@ class PersonViewPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: Get.back,
-                    child: Container(width: 32, height: 44, alignment: Alignment.center, child: ImageView(Images.security_back_png, width: 24, height: 24)),
+                  AppBackButton(
+                    onPressed: () => Get.back(),
+                    onMedia: !AppAppearance.isLight,
                   ),
                   Obx(
                     () =>

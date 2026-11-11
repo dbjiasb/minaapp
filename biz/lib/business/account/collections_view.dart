@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,21 +8,16 @@ import 'package:biz/core/user_manager/user_manager.dart';
 import 'package:biz/base/crypt/routes.dart';
 
 import '../../base/api_service/api_response.dart';
-import '../../base/assets/image_path.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-import '../../base/assets/image_view.dart';
 import '../../base/crypt/constants.dart';
 import '../../base/crypt/copywriting.dart';
-import '../../base/crypt/images.dart';
 import '../../base/crypt/security.dart';
 import '../../base/router/router_names.dart';
 import '../../core/util/cached_image.dart';
 import '../../shared/app_theme.dart';
-import '../../shared/widget/app_widgets.dart';
 import '../../shared/widget/list_status_view.dart';
 import '../../shared/widget/title_bar.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../home_page_lists/list_item.dart';
 
 import '../home_page_lists/role_manager.dart';
@@ -36,7 +32,9 @@ class CollectionsView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        leading: InkWell(overlayColor: WidgetStateProperty.all(Colors.transparent), onTap: Get.back, child: Container(alignment: Alignment.center, padding: EdgeInsets.only(left: 16), child: ImageView(Images.security_back_png, fit: BoxFit.cover, height: 24, width: 24))),
+        leading: AppBackButton(
+          onPressed: () => Get.back(),
+        ),
         centerTitle: true,
         backgroundColor: AppColors.background,
         title: Text(

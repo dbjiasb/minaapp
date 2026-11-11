@@ -1,17 +1,12 @@
-import 'package:biz/shared/app_brand.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/shared/widget/character_card.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:biz/core/util/cached_image.dart';
 
-import '../../base/assets/image_view.dart';
-import '../../base/crypt/images.dart';
 import '../../base/preferences/preferences.dart';
 import '../../shared/widget/app_widgets.dart';
-import 'list_item.dart';
 
 class RoleCardWidget extends StatelessWidget {
   final Map item;
@@ -33,13 +28,6 @@ class RoleCardWidget extends StatelessWidget {
     String bio = item[Security.security_bio] ?? "";
 
     int acType = item[Security.security_accountType];
-    String masterName = item[Security.security_robotInfo]?[Security.security_masterInfo]?[Security.security_nickName] ?? '';
-    if (masterName == Security.security_Official) {
-      masterName = AppBrand.name;
-    }
-    String linkNum = RoleItem.shortStringForCount(item[Security.security_heatInfo]?[Security.security_connectors] ?? 0);
-    String heatNum = RoleItem.shortStringForCount(item[Security.security_heatInfo]?[Security.security_heatValue] ?? 0);
-
     // 如果是真人类型且 coverUrl 为空，使用 avatarUrl
     String imageUrl = coverUrl;
     if (isRealType && coverUrl.isEmpty && avatarUrl.isNotEmpty) {
@@ -54,7 +42,10 @@ class RoleCardWidget extends StatelessWidget {
         if (tag is String) {
           tags.add(tag);
         } else if (tag is Map) {
-          String tagName = tag[Security.security_name] ?? tag[Security.security_title] ?? tag.toString();
+          String tagName =
+              tag[Security.security_name] ??
+              tag[Security.security_title] ??
+              tag.toString();
           tags.add(tagName);
         }
       }
@@ -67,15 +58,25 @@ class RoleCardWidget extends StatelessWidget {
 
     if (AppAppearance.isLight) {
       return CharacterCard(
-        image: CachedNetImage(imageUrl: imageUrl, fit: BoxFit.cover),
+        image: CachedNetImage(
+          imageUrl: imageUrl,
+          fit: BoxFit.cover,
+          alignment: Alignment.topCenter,
+        ),
         name: name,
-        badge: AppWidgets.userTag(acType),
+        badge: CharacterCardBadge(
+          label: acType == 0 ? Security.security_Real : Security.security_AI,
+          backgroundColor: AppColors.chatAction,
+          foregroundColor: AppColors.onColor,
+        ),
         bio: bio,
         tags: Preferences.instance.showListCardTags ? tags : const [],
-        creator: isRealType ? '' : masterName,
-        connections: isRealType ? '' : linkNum,
-        heat: isRealType ? '' : heatNum,
         onTap: onTap,
+        footer: CharacterCardAction(
+          label: Security.security_Chat,
+          backgroundColor: AppColors.chatAction,
+          foregroundColor: AppColors.onColor,
+        ),
       );
     }
 
@@ -83,9 +84,7 @@ class RoleCardWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 166.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.r),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.r)),
         child: Stack(
           children: [
             // Background image
@@ -96,6 +95,7 @@ class RoleCardWidget extends StatelessWidget {
                 width: 166.w,
                 height: 260.w,
                 fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
               ),
             ),
 
@@ -124,6 +124,8 @@ class RoleCardWidget extends StatelessWidget {
               ),
             ),
 
+            Positioned(top: 8, left: 8, child: AppWidgets.userTag(acType)),
+
             // Content
             Positioned(
               bottom: 8.w,
@@ -135,17 +137,18 @@ class RoleCardWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Flexible(child: Text(
-                        name,
-                        style: TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
+                      Flexible(
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )),
-                      AppWidgets.userTag(acType),
+                      ),
                     ],
                   ),
                   SizedBox(height: 4.w),
@@ -158,45 +161,31 @@ class RoleCardWidget extends StatelessWidget {
                         color: AppColors.textPrimary.withValues(alpha: 0.9),
                         fontSize: 12.sp,
                         fontWeight: FontWeight.normal,
-                        height: 1.3
+                        height: 1.3,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                  if (bio.isNotEmpty)
-                    SizedBox(height: 8.w),
+                  if (bio.isNotEmpty) SizedBox(height: 8.w),
 
                   // Tags
                   if (tags.isNotEmpty && Preferences.instance.showListCardTags)
                     Wrap(
                       spacing: 4.w,
                       runSpacing: 4.w,
-                      children: tags.take(4).map((tag) => _buildTag(tag)).toList(),
+                      children: tags
+                          .take(4)
+                          .map((tag) => _buildTag(tag))
+                          .toList(),
                     ),
 
-                  if (!isRealType && Preferences.instance.showListCardTags) SizedBox(height: 8),
-                  if (!isRealType)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            masterName.isEmpty ? '' : '@$masterName',
-                            style: TextStyle(color: AppColors.textSecondary, fontSize: 8, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            ImageView(Images.security_linknum_webp, width: 12, height: 12).marginOnly(right: 2),
-                            Text(linkNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 8, fontWeight: FontWeight.w500)),
-                            SizedBox(width: 4),
-                            ImageView(Images.security_heart_count_webp, width: 12, height: 12).marginOnly(right: 2),
-                            Text(heatNum, style: TextStyle(color: AppColors.textPrimary, fontSize: 8, fontWeight: FontWeight.w500)),
-                          ],
-                        ),
-                      ],
-                    ),
+                  const SizedBox(height: 10),
+                  CharacterCardAction(
+                    label: Security.security_Chat,
+                    backgroundColor: AppColors.chatAction,
+                    foregroundColor: AppColors.onColor,
+                  ),
                 ],
               ),
             ),

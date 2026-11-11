@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:flutter/services.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
@@ -7,7 +8,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/api_service/api_response.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/event_center/event_center.dart';
 import 'package:biz/base/router/router_names.dart';
@@ -175,20 +175,9 @@ class ChatTheaterRoomView extends StatelessWidget {
       padding: const EdgeInsets.only(left: 12),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: _onBackButtonClicked,
-            child: Container(
-              width: 32,
-              height: 32,
-              alignment: Alignment.center,
-              child: AppAppearance.isLight
-                ? const Icon(Icons.arrow_back_ios_new_rounded, size: 22, color: AppColors.textPrimary)
-                : CachedImage(
-                imageUrl: ImagePath.ic_arrow_left_circle,
-                width: 32,
-                height: 32,
-              ),
-            ),
+          AppBackButton(
+            onPressed: _onBackButtonClicked,
+            onMedia: !AppAppearance.isLight,
           ),
           SizedBox(width: 10),
           GetBuilder<ChatTheaterRoomViewController>(

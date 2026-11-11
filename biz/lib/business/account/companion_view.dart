@@ -1,4 +1,4 @@
-import 'package:biz/base/crypt/images.dart';
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/api_service/api_response.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/business/create_center/character_service.dart';
@@ -291,7 +291,7 @@ class MyCompanionView extends GetView<MyCompanionViewController> {
                 systemOverlayStyle: AppAppearance.overlayStyle,
                 title: Text('My Companions', style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
                 backgroundColor: AppColors.background,
-                leading: IconButton(onPressed: Get.back, icon: ImageView(Images.security_back_png, height: 24, width: 24)),
+                leading: AppBackButton(onPressed: () => Get.back()),
               )
               : null,
       body: Obx(() {

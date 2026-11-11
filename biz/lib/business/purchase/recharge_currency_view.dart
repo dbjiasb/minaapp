@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/event_center/event_center.dart';
 import 'package:biz/core/account/account_service.dart';
 import 'package:biz/core/util/es_helper.dart';
@@ -30,20 +30,7 @@ class RechargeCurrencyView extends StatelessWidget {
       backgroundColor: AppColors.background,
       extendBody: true,
       appBar: AppBar(
-        leading: InkWell(
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-          onTap: Get.back,
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(left: 16),
-            child: ImageView(
-              Images.security_back_png,
-              fit: BoxFit.cover,
-              height: 24,
-              width: 24,
-            ),
-          ),
-        ),
+        leading: AppBackButton(onPressed: () => Get.back()),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         title: Text(

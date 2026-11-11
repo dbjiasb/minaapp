@@ -1,7 +1,5 @@
-import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:biz/shared/app_theme.dart';
@@ -9,13 +7,8 @@ import 'package:biz/shared/widget/keep_alive_wrapper.dart';
 import 'package:biz/localize/tab_labels.dart';
 import '../../base/app_info/app_manager.dart';
 import '../../base/crypt/copywriting.dart';
-import '../../base/crypt/images.dart';
-import '../../base/preferences/preferences.dart';
 import '../../base/router/route_helper.dart';
-import '../../core/util/cached_image.dart';
-import '../../shared/widget/app_widgets.dart';
 import '../chat/chat_manager.dart';
-import '../chat/chat_session.dart';
 import '../chat/setting/message_setting.dart';
 import 'chat_history_logic.dart';
 import 'theater_history_list/view.dart';
@@ -30,18 +23,6 @@ class ChatHistoryView extends StatefulWidget {
 
 class _ChatHistoryViewState extends State<ChatHistoryView> {
   final logic = Get.put(ChatHistoryViewController());
-  final ScrollController _recommendScrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _recommendScrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +50,12 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
         actions: [
           GestureDetector(
             onTap: _showSessionSetting,
-            child: Icon(Icons.more_horiz, size: 24, color: AppColors.textPrimary),
-          ).marginOnly(right: 16)
+            child: Icon(
+              Icons.more_horiz,
+              size: 24,
+              color: AppColors.textPrimary,
+            ),
+          ).marginOnly(right: 16),
         ],
       ),
       body: SafeArea(
@@ -78,9 +63,6 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
         child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
-              SliverToBoxAdapter(
-                child: _buildRecommendView().marginSymmetric(vertical: 6.w),
-              ),
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _ChatHistoryTabBarDelegate(
@@ -106,7 +88,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                 }
               }).toList(),
             );
-          })
+          }),
         ),
       ),
     );
@@ -114,34 +96,34 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
 
   TabBar _buildTabBar() {
     return TabBar(
-      tabs:
-          logic.tabs
-              .map(
-                (e) => Obx(() {
-                  int index = logic.tabs.indexOf(e);
-                  bool isSelected = logic.currentTabIndex.value == index;
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 4.w,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected ? AppColors.selected : AppColors.surfaceMuted,
-                      borderRadius: BorderRadius.circular(28.r),
-                    ),
-                    child: Text(
-                      e.name,
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? AppColors.textPrimary : AppColors.textPrimary,
-                        height: 1.5,
-                      ),
-                    ),
-                  );
-                }),
-              )
-              .toList(),
+      tabs: logic.tabs
+          .map(
+            (e) => Obx(() {
+              int index = logic.tabs.indexOf(e);
+              bool isSelected = logic.currentTabIndex.value == index;
+              return Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.selected
+                      : AppColors.surfaceMuted,
+                  borderRadius: BorderRadius.circular(28.r),
+                ),
+                child: Text(
+                  e.name,
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.bold,
+                    color: isSelected
+                        ? AppColors.textPrimary
+                        : AppColors.textPrimary,
+                    height: 1.5,
+                  ),
+                ),
+              );
+            }),
+          )
+          .toList(),
       controller: logic.tabController,
       tabAlignment: TabAlignment.start,
       isScrollable: true,
@@ -155,143 +137,12 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
     );
   }
 
-  Widget _buildRecommendView() {
-    return Obx(
-      () =>
-          // !Preferences.instance.isPreUIA &&
-              logic.showRecommend.value &&
-              logic.recommendList.isNotEmpty
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SingleChildScrollView(
-                  controller: _recommendScrollController,
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ...logic.recommendList.map((e) {
-                        return GestureDetector(
-                          onTap: () {
-                            RouteHelper.toChat(
-                              id: e[Security.security_uid].toString(),
-                              name: e[Security.security_nickname],
-                              avatar: e[Security.security_avatar],
-                              accountType: e[Security.security_accountType],
-                              type: SessionType.private,
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              Stack(
-                                alignment: Alignment.topCenter,
-                                clipBehavior: Clip.none,
-                                children: [
-                                  const SizedBox(width: 70, height: 54),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(24),
-                                    child: CachedImage(
-                                      imageUrl:
-                                      e[Security.security_avatar] ?? '',
-                                      width: 48,
-                                      height: 48,
-                                      fit: BoxFit.cover,
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 0,
-                                    bottom: -4,
-                                    left: 0,
-                                    child: AppWidgets.userTag(
-                                      e[Security.security_accountType],
-                                      id: e[Security.security_uid].toString(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 4.w),
-                              Container(
-                                alignment: Alignment.center,
-                                width: 66,
-                                child: Text(
-                                  e[Security.security_nickname] ?? '',
-                                  style: const TextStyle(
-                                    color: AppColors.textPrimary,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ).marginOnly(bottom: 8);
-                      }),
-                      _buildRecommendRefreshButton(),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          : Container(),
-    );
-  }
-
-  Widget _buildRecommendRefreshButton() {
-    return GestureDetector(
-      onTap: logic.refreshingRecommend.value
-          ? null
-          : _refreshRecommendList,
-      child: Column(
-        children: [
-          SizedBox(
-            width: 60,
-            height: 36,
-            child: Center(
-              child: logic.refreshingRecommend.value
-                  ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(
-                        color: AppColors.textPrimary,
-                        strokeWidth: 2,
-                      ),
-                    )
-                  : ImageView(Images.mina_refresh_trend, color: AppColors.textSecondary, width: 22, height: 22),
-            ),
-          ),
-          // SizedBox(height: 4.w),
-          const SizedBox(
-            width: 66,
-            child: Text(
-              'Refresh',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ).marginOnly(bottom: 8);
-  }
-
-  Future<void> _refreshRecommendList() async {
-    await logic.queryRecommendList(true);
-    if (!mounted || !_recommendScrollController.hasClients) return;
-
-    await _recommendScrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOut,
-    );
-  }
-
   void _showSessionSetting() {
-    List<String> titles = [Copywriting.security_mark_all_as_read, Security.security_notification, Copywriting.security_message_setting];
+    List<String> titles = [
+      Copywriting.security_mark_all_as_read,
+      Security.security_notification,
+      Copywriting.security_message_setting,
+    ];
     Get.dialog(
       InkWell(
         onTap: Get.back,
@@ -299,7 +150,10 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
           alignment: Alignment.topRight,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 4),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.surface),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: AppColors.surface,
+            ),
             margin: const EdgeInsets.only(top: 48, right: 16),
             child: IntrinsicHeight(
               child: Column(
@@ -312,7 +166,9 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                       if (index == 0) {
                         maskAllRead();
                       } else if (index == 1) {
-                        RouteHelper.handleRoute(AppManager.instance.notificationUrl,);
+                        RouteHelper.handleRoute(
+                          AppManager.instance.notificationUrl,
+                        );
                       } else if (index == 2) {
                         Get.to(MessageSettingView());
                       }
@@ -320,10 +176,17 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                     child: Container(
                       width: 132,
                       alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 12,
+                      ),
                       child: Text(
                         e,
-                        style: const TextStyle(color: AppColors.textPrimary, fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   );

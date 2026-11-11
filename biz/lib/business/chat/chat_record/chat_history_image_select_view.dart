@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:biz/business/chat/chat_room_cells/chat_image_message.dart';
 import 'package:biz/core/util/cached_image.dart';
 import 'package:biz/shared/toast/toast.dart';
 
-import '../../../base/assets/image_path.dart';
 import '../../../base/assets/image_view.dart';
 import '../../../base/crypt/copywriting.dart';
 import '../../../base/crypt/security.dart';
@@ -26,14 +26,7 @@ class ChatHistoryImageSelectView extends GetView<ChatHistoryImageSelectControlle
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () => Get.back(),
-          child: Container(
-            // color: Colors.blue,
-            alignment: Alignment.center,
-            child: ImageView(Images.security_back_png, width: 24, height: 24),
-          ),
-        ),
+        leading: AppBackButton(onPressed: () => Get.back()),
         backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,

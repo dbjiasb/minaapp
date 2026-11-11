@@ -1,101 +1,51 @@
-import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../base/crypt/security.dart';
 import '../../../base/report/report_manager.dart';
 import '../../../base/router/router_names.dart';
-import '../../../base/ui/lazy_indexed_stack.dart';
-import '../../../core/util/cached_image.dart';
 import '../../../shared/app_theme.dart';
-import '../constant_state.dart';
 import 'moment_item_view.dart';
-import 'moment_list_view_logic.dart';
 
-class MomentListViewPage extends GetView<MomentListViewLogic> {
-  @override
-  MomentListViewLogic get controller => Get.put(MomentListViewLogic());
-
+class MomentListViewPage extends StatelessWidget {
   const MomentListViewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return _buildBody();
-  }
-
-  Widget _buildBody() {
     return Scaffold(
       backgroundColor: AppColors.background,
       primary: false,
-      body: Container(
-        margin: EdgeInsets.only(left: 16, right: 16, top: AppAppearance.isLight ? 8 : 40),
-        child: Column(
-          children: [
-            Row(
-              children: [...controller.titleList.asMap().entries.map((entry) => _buildItemTab(entry.key, entry.value)), const Spacer(), _buildPostBnt()],
-            ).paddingSymmetric(vertical: 6),
-            Expanded(
-              child: Obx(() {
-                return LazyIndexedStack(
-                  index: controller.currentIndex.value,
-                  children: controller.titleList.asMap().entries.map((entry) => _buildPageView(entry.key, entry.value)).toList(),
-                );
-              }),
-            ),
-          ],
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: AppAppearance.isLight ? 8 : 40,
         ),
+        child: const MomentItemView(0),
       ),
+      floatingActionButton: _buildPostButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
-  Widget _buildItemTab(int index, String title) {
-    return GestureDetector(
-      onTap: () {
-        controller.currentIndex.value = index;
-      },
-      child: Obx(() {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          margin: const EdgeInsets.only(right: 10),
-          decoration: BoxDecoration(
-            color: index == controller.currentIndex.value ? AppColors.selected : Colors.transparent,
-            borderRadius: BorderRadius.circular(100),
-          ),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: index == controller.currentIndex.value ? AppColors.accentForeground : AppColors.textSecondary,
-            ),
-          ),
-        );
-      }),
-    );
-  }
-
-  Widget _buildPostBnt() {
-    return GestureDetector(
-      onTap: () {
-        ReportManager.sendEvent(Security.security_click_post_bnt, {Security.security_type: "2"});
+  Widget _buildPostButton() {
+    return FloatingActionButton.extended(
+      heroTag: 'createMoment',
+      backgroundColor: AppColors.primary,
+      foregroundColor: AppColors.textPrimary,
+      shape: const StadiumBorder(),
+      onPressed: () {
+        ReportManager.sendEvent(Security.security_click_post_bnt, {
+          Security.security_type: "2",
+        });
 
         Get.toNamed(Routers.createMoment);
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(100)),
-        child: Row(
-          children: [
-            CachedImage(imageUrl: '${MomentRes.base}iic_add.webp', width: 16, height: 16, color: AppColors.textPrimary),
-            const SizedBox(width: 4),
-            Text(Security.security_post, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
-          ],
-        ),
+      icon: const Icon(Icons.add_rounded, size: 20),
+      label: Text(
+        Security.security_post,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
       ),
     );
-  }
-
-  IndexedStackChild _buildPageView(int index, String title) {
-    return IndexedStackChild(child: MomentItemView(index));
   }
 }

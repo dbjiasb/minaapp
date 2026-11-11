@@ -1,12 +1,11 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/router/route_helper.dart';
 import 'package:biz/core/account/account_service.dart';
-import 'package:biz/shared/widget/app_widgets.dart';
 import '../../../../base/assets/image_view.dart';
 import '../../../../base/crypt/security.dart';
 import '../../../../base/router/router_names.dart';
@@ -29,9 +28,9 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        toolbarHeight: 34,
+        toolbarHeight: 48,
         titleSpacing: 8,
-        leadingWidth: 40,
+        leadingWidth: 56,
         centerTitle: false,
         // automaticallyImplyLeading: false,
         title: Text('Store${''}', style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.start,),
@@ -39,12 +38,7 @@ class AIModeStoreView extends GetView<AIModeStoreController> {
         elevation: 0.0,
         // titleSpacing: titleSpacing,
         systemOverlayStyle: AppAppearance.overlayStyle,
-        leading: Center(child: InkWell(
-          onTap: () {
-            Get.back();
-          },
-          child: Padding(padding: EdgeInsets.only(left: 8), child: AppWidgets.backBtn(),)),
-        ),
+        leading: AppBackButton(onPressed: () => Get.back()),
         actions: [
           GestureDetector(
             onTap: () {

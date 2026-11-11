@@ -1,6 +1,5 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/shared/app_theme.dart';
-import 'package:biz/base/crypt/images.dart';
-import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/report/report_manager.dart';
 import 'package:biz/core/util/cached_image.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +28,7 @@ class MatchScanResultPage extends GetView<MatchScanLogic> {
         appBar: AppBar(
           backgroundColor: AppColors.background,
           elevation: 0,
-          leading: IconButton(
-            icon: ImageView(Images.security_back_png, fit: BoxFit.fill),
+          leading: AppBackButton(
             onPressed: () {
               controller.cancelAndRejectVideoMatch(callNotice[Security.security_callId]);
             },

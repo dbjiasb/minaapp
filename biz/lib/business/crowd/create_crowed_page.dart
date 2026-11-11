@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/gestures.dart';
@@ -12,7 +13,6 @@ import 'package:biz/core/util/ui_util.dart';
 import '../../base/api_service/api_request.dart';
 import '../../base/api_service/api_response.dart';
 import '../../base/api_service/api_service.dart';
-import '../../base/assets/image_path.dart';
 import '../../base/assets/image_view.dart';
 import '../../base/crypt/apis.dart';
 import '../../base/crypt/copywriting.dart';
@@ -33,9 +33,8 @@ class CreateCrowedPage extends GetView<CreateCrowedLogic> {
       backgroundColor: AppColors.background,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: IconButton(
+        leading: AppBackButton(
           onPressed: RouteHelper.back,
-          icon: ImageView(Images.security_back_png, height: 24, width: 24),
         ),
         backgroundColor: Colors.transparent,
         title: Text(Copywriting.security_create_Group, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontFamily: Copywriting.security_sF_Pro_bold, fontWeight: FontWeight.bold),

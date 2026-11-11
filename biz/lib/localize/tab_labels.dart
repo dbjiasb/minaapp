@@ -25,6 +25,7 @@ abstract final class TabLabels {
   static String get life => _text('life');
   static String get private => _text('private');
   static String get discovery => _text('discovery');
+  static String get swipe => _text('swipe');
   static String get match => _text('match');
   static String get basic => _text('basic');
   static String get advanced => _text('advanced');

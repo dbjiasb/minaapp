@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/core/util/collections_util.dart';
@@ -25,7 +26,7 @@ class CreatePostImagePage extends GetView<CreatePostImageLogic> {
       appBar: AppBar(
         foregroundColor: AppColors.textPrimary,
           systemOverlayStyle: AppAppearance.overlayStyle,
-          leading: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+          leading: AppBackButton(onPressed: () => Get.back()),
         backgroundColor: AppColors.background,
         title: Text(Copywriting.security_generate_for_Moment, style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
         actions: [

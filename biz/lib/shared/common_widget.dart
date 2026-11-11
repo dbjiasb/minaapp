@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -75,7 +76,7 @@ extension AppBarExt on AppBar {
           leading ??
           Padding(
             padding: const EdgeInsets.only(left: 8),
-            child: IconButton(onPressed: onPressed ?? () => Get.back(), icon: Icon(Icons.arrow_back_ios_new_rounded, color: returnIconColor ?? AppColors.textPrimary, size: 22)),
+            child: AppBackButton(onPressed: onPressed ?? () => Get.back(), color: returnIconColor),
           ),
     );
   }
@@ -88,7 +89,7 @@ extension AppBarExt on AppBar {
       elevation: 0,
       actions: actions,
       leadingWidth: leadingWidth,
-      leading: IconButton(icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary, size: 22), onPressed: Get.back),
+      leading: AppBackButton(onPressed: () => Get.back()),
     );
   }
 }

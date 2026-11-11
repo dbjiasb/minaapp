@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'dart:io';
@@ -33,7 +34,7 @@ class MomentDetailViewPage extends GetView<MomentDetailViewLogic> {
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.textPrimary,
         systemOverlayStyle: AppAppearance.overlayStyle,
-        leading: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+        leading: AppBackButton(onPressed: () => Get.back()),
         actions: [
           _buildCollectView(),
           OverlayPopup(

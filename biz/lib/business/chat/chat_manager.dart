@@ -488,9 +488,9 @@ class ChatManager {
     }
   }
 
-  void sayHelloIfNeeded(ChatSession session) async {
+  Future<void> sayHelloIfNeeded(ChatSession session) async {
     final account = MyAccount;
-    if (!_isCurrent(account)) return;
+    if (!_isCurrent(account) || session.greeted) return;
 
     //发送消息
     ApiRequest request = ApiRequest(

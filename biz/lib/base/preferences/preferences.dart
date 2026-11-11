@@ -413,6 +413,12 @@ class Preferences {
     return str == '1';
   }
 
+  // 聊天输入框上方的 Ask / Create Video / Create / Call 快捷栏，默认隐藏。
+  bool get showChatQuickActions {
+    String str = appConfig['show_chat_quick_actions'] ?? '0';
+    return str == '1';
+  }
+
   bool get showListCardTags {
     String str = appConfig['show_list_card_tags'] ?? '1';
     return str == '1';

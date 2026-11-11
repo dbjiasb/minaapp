@@ -1,185 +1,131 @@
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
-import 'package:biz/base/crypt/images.dart';
-import 'package:biz/base/event_center/event_center.dart';
 import 'package:biz/business/home_page_lists/role_manager.dart';
 import 'package:biz/shared/app_theme.dart';
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:biz/localize/tab_labels.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-import '../../base/assets/image_view.dart';
-import '../../base/preferences/preferences.dart';
-import '../../base/router/router_names.dart';
-import '../../core/util/log_util.dart';
-import '../create_center/create_oc_dialog.dart';
-import '../create_center/create_oc_rv_dialog.dart';
-import '../theater/theater_list/view.dart';
-import 'category_tabs_widget.dart';
-import 'filter_view.dart';
-import 'role_list_logic.dart';
-import 'role_list_view.dart';
+import '../../base/router/route_helper.dart';
+import '../chat/chat_session.dart';
+import '../theater/theater_list/story_card_widget.dart';
+import 'home_feed_logic.dart';
+import 'role_card_widget.dart';
+import 'package:biz/localize/tab_labels.dart';
 
 class HomePageView extends StatelessWidget {
   HomePageView({super.key});
 
-  HomePageViewController controller = Get.put(HomePageViewController(), tag: Security.security_home_page_controller);
+  final HomePageViewController controller = Get.put(
+    HomePageViewController(),
+    tag: Security.security_home_page_controller,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(backgroundColor: AppColors.background, systemOverlayStyle: AppAppearance.overlayStyle, elevation: 0, toolbarHeight: 0),
+      appBar: AppBar(
+        backgroundColor: AppColors.background,
+        systemOverlayStyle: AppAppearance.overlayStyle,
+        elevation: 0,
+        toolbarHeight: 0,
+      ),
       body: SafeArea(
         bottom: false,
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Obx(() {
-              return Column(
-                children: [
-                  _buildTopBar(),
-                  CategoryTabsWidget(
-                    categories: controller.categories,
-                    selectedIndex: controller.selectedCategoryIndex.value,
-                    onTap: (index) => controller.onCategoryChanged(index),
-                  ),
-                  SizedBox(height: 8.w),
-                  Expanded(
-                    child: TabBarView(
-                      controller: controller.tabController,
-                      children: controller.categories.map((e) => e.type == RoleListType.story
-                          ? TheaterListView(scrollController: controller.scrollController)
-                          : RoleListView(type: e.type, scrollController: controller.scrollController, refreshIndex: controller.refreshIndex)).toList(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: SizedBox(
+                height: 48,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    TabLabels.discovery,
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: Security.security_hYPangDunDun,
                     ),
-                  ),
-                ],
-              );
-            }),
-
-            Positioned(
-              bottom: 16.w,
-              left: 0,
-              right: 0,
-              child: Obx(
-                () => AnimatedOpacity(
-                  opacity: controller.showCreateButton.value ? 1.0 : 0.0,
-                  duration: Duration(milliseconds: 200),
-                  child: AnimatedSlide(
-                    offset: controller.showCreateButton.value ? Offset.zero : Offset(0, 0.5),
-                    duration: Duration(milliseconds: 200),
-                    child: _buildCreateButton(),
                   ),
                 ),
               ),
             ),
+            Expanded(child: _buildFeed()),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTopBar() {
-    return Container(
-      margin: EdgeInsets.only(top: 4.w, bottom: 4.w),
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(child: GestureDetector(
-            onTap: () {
-              Get.toNamed(Routers.search);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.w),
-              decoration: BoxDecoration(
-                  color: AppColors.surfaceMuted,
-                  borderRadius: BorderRadius.circular(32.w),
-                  border: Border.all(color: AppColors.border, width: 1)
-              ),
-              child: Row(
-                children: [
-                  ImageView(Images.mina_search, color: AppColors.textSecondary, width: 14.w, height: 14.w),
-                  SizedBox(width: 6.w),
-                  Flexible(child: Text(Copywriting.security_Search_by_ID__name__tag___, style: TextStyle(color: AppColors.textSecondary, fontSize: 12.sp), maxLines: 1, overflow: TextOverflow.ellipsis,)),
-                ],
-              ),
-            ),
-          )),
-          SizedBox(width: 12.w,),
-          // Text(Security.security_recommend, style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun)),
-          InkWell(
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
-            onTap: () {
-              if (RoleManager.instance.filterList.isEmpty) return;
-              RoleFilterWidget.showFilter(controller.selectedCategory.type.value, filterCondition: RoleManager.instance.filterConfig, onApply: (int gender, List tagIds) {
-                RoleManager.instance.applyFilter(gender, tagIds);
-              },);
-            },
-            child: Stack(
-              alignment: Alignment.centerRight,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.w),
-                  decoration: BoxDecoration(
-                      color: AppColors.surfaceMuted,
-                      borderRadius: BorderRadius.circular(32.w),
-                      border: Border.all(color: AppColors.border, width: 1)
+  Widget _buildFeed() => Obx(() {
+    if (controller.isLoading.value) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.accentText),
+      );
+    }
+    return RefreshIndicator(
+      onRefresh: controller.refreshData,
+      child: CustomScrollView(
+        controller: controller.scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          if (controller.items.isEmpty)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: TextButton(
+                  onPressed: controller.refreshData,
+                  child: Text(
+                    controller.hasError.value
+                        ? Copywriting
+                              .security_network_error__please_try_again_later
+                        : Copywriting.security_no_data,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: AppColors.textSecondary),
                   ),
-                  child: Obx(() {
-                    return Row(
-                      children: [
-                        ImageView(Images.mina_filter, color: AppColors.textPrimary, width: 14.w, height: 14.w),
-                        SizedBox(width: 4.w),
-                        Text(Security.security_Filter, style: TextStyle(color: AppColors.textPrimary, fontSize: 13.sp)),
-                        if (RoleManager.instance.hasFilter) SizedBox(width: 4.w),
-                        if (RoleManager.instance.hasFilter) Container(width: 8, height: 8, decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),)
-                      ],
-                    );
-                  }),
                 ),
-                // Positioned(right: 6, child: )
-              ],
+              ),
+            )
+          else
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(16.w, 4.w, 16.w, 16.w),
+              sliver: SliverMasonryGrid.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 11.w,
+                mainAxisSpacing: 12.w,
+                childCount: controller.items.length,
+                itemBuilder: (context, index) {
+                  final entry = controller.items[index];
+                  if (entry.isStory) return StoryCardWidget(item: entry.data);
+                  final item = entry.data;
+                  return RoleCardWidget(
+                    item: item,
+                    onTap: () => RouteHelper.toChat(
+                      id: item[Security.security_uid].toString(),
+                      name: item[Security.security_nickname] ?? '',
+                      avatar: item[Security.security_avatarUrl] ?? '',
+                      coverUrl:
+                          item[Security.security_coverUrl] ??
+                          item[Security.security_backgroundUrl] ??
+                          '',
+                      accountType: item[Security.security_accountType] ?? 1,
+                      type: SessionType.private,
+                      bio: item[Security.security_bio] ?? '',
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ),
     );
-  }
-
-  Widget _buildCreateButton() {
-    return Center(
-      child: GestureDetector(
-        onTap: () {
-          if (Preferences.instance.isRv) {
-            CreateOcRvDialog.show();
-          } else {
-            CreateOcDialog.show();
-          }
-        },
-        child: Container(
-          width: 86.w,
-          height: 36.w,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Color(0xFFffee6b), Color(0xFFfff8bf)], begin: Alignment.centerLeft, end: Alignment.centerRight),
-            borderRadius: BorderRadius.circular(18.r),
-            boxShadow: [BoxShadow(color: Color(0xFFffee6b).withValues(alpha: 0.3), blurRadius: 8.w, offset: Offset(0, 2.w))],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ImageView(Images.security_ic_add_create_png, width: 20.w, height: 20.w),
-              SizedBox(width: 4.w),
-              Text(Security.security_create, style: TextStyle(color: AppColors.textPrimary, fontSize: 14.sp, fontWeight: FontWeight.w600)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  });
 }
 
 class Category {
@@ -190,97 +136,12 @@ class Category {
   String get name => _labelBuilder();
 }
 
-class HomePageViewController extends GetxController with GetTickerProviderStateMixin {
-  late RxList<Category> categories = RxList<Category>();
-  final RxInt selectedCategoryIndex = 0.obs;
-  Category get selectedCategory => categories[selectedCategoryIndex.value];
-
-  final RxBool showCreateButton = true.obs;
+class HomePageViewController extends HomeFeedLogic {
   final ScrollController scrollController = ScrollController();
-  Timer? _scrollTimer;
-  late TabController tabController;
-
-  RxInt refreshIndex = 0.obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    // isRv = Preferences.instance.isRv.obs;
-    setupCategories();
-    EventCenter.instance.addListener(Preferences.kDicChangedAppConfig, (Event event) {
-      handleAppConfigChanged(event);
-    });
-    _setupScrollListener();
-  }
-
-  void handleAppConfigChanged(Event event) {
-    // if (isRv.value == Preferences.instance.isRv && !isRv.value) return;
-    // isRv.value = Preferences.instance.isRv;
-    setupCategories();
-  }
-
-  void setupCategories() {
-    try {
-      List<Category> tabs = [
-        Category(() => TabLabels.recommend, RoleListType.ai_and_script),
-        Category(
-          () => Preferences.instance.realGirlTitle,
-          RoleListType.real,
-        ),
-        Category(() => TabLabels.oc, RoleListType.ugc),
-        Category(() => TabLabels.featured, RoleListType.dating),
-        Category(() => TabLabels.story, RoleListType.story),
-        Category(() => TabLabels.anime, RoleListType.anime),
-        Category(() => TabLabels.realistic, RoleListType.realistic),
-        Category(() => TabLabels.proOnly, RoleListType.pro_only),
-      ];
-
-      if (categories.length == tabs.length) {
-        return;
-      }
-      refreshIndex++;
-
-      tabController = TabController(length: tabs.length, vsync: this);
-      tabController.addListener(() {
-        if (!tabController.indexIsChanging) {
-          selectedCategoryIndex.value = tabController.index;
-        }
-      });
-      categories.value = tabs;
-    } catch (e) {
-      L.e('setupCategories error: $e');
-    }
-  }
 
   @override
   void onClose() {
-    _scrollTimer?.cancel();
     scrollController.dispose();
-    tabController.dispose();
     super.onClose();
-  }
-
-  void _setupScrollListener() {
-    scrollController.addListener(() {
-      if (showCreateButton.value) {
-        showCreateButton.value = false;
-      }
-
-      _scrollTimer?.cancel();
-
-      _scrollTimer = Timer(Duration(milliseconds: 150), () {
-        if (!isClosed) {
-          showCreateButton.value = true;
-        }
-      });
-    });
-  }
-
-  void onCategoryChanged(int index) {
-    if (isClosed) return;
-    if (!tabController.indexIsChanging && tabController.index != index) {
-      selectedCategoryIndex.value = index;
-      tabController.animateTo(index);
-    }
   }
 }

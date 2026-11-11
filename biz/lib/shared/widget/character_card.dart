@@ -15,6 +15,7 @@ class CharacterCard extends StatelessWidget {
     this.creator = '',
     this.connections = '',
     this.heat = '',
+    this.footer,
   });
 
   final Widget image;
@@ -26,6 +27,7 @@ class CharacterCard extends StatelessWidget {
   final String creator;
   final String connections;
   final String heat;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
@@ -41,28 +43,30 @@ class CharacterCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AspectRatio(aspectRatio: 0.92, child: image),
+            AspectRatio(
+              aspectRatio: 0.92,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  image,
+                  if (badge != null) Positioned(top: 8, left: 8, child: badge!),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      if (badge != null) badge!,
-                    ],
+                  Text(
+                    name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   if (bio.isNotEmpty) ...[
                     const SizedBox(height: 5),
@@ -137,6 +141,7 @@ class CharacterCard extends StatelessWidget {
                       ),
                     ],
                   ],
+                  if (footer != null) ...[const SizedBox(height: 10), footer!],
                 ],
               ),
             ),
@@ -156,5 +161,73 @@ class CharacterCard extends StatelessWidget {
         style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
       ),
     ],
+  );
+}
+
+/// Shared typography and spacing for labels over card images.
+class CharacterCardBadge extends StatelessWidget {
+  const CharacterCardBadge({
+    super.key,
+    required this.label,
+    this.backgroundColor = AppColors.selected,
+    this.foregroundColor = AppColors.accentForeground,
+  });
+
+  final String label;
+  final Color backgroundColor;
+  final Color foregroundColor;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: foregroundColor,
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+          height: 1.2,
+        ),
+      ),
+    ),
+  );
+}
+
+/// The surrounding card handles taps for this full-width action label too.
+class CharacterCardAction extends StatelessWidget {
+  const CharacterCardAction({
+    super.key,
+    required this.label,
+    this.backgroundColor = AppColors.primary,
+    this.foregroundColor = AppColors.accentForeground,
+  });
+
+  final String label;
+  final Color backgroundColor;
+  final Color foregroundColor;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    alignment: Alignment.center,
+    height: 36,
+    width: double.infinity,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      color: backgroundColor,
+    ),
+    child: Text(
+      label,
+      style: TextStyle(
+        color: foregroundColor,
+        fontWeight: FontWeight.w700,
+        fontSize: 13,
+      ),
+    ),
   );
 }

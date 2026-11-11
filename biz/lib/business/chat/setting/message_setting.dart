@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -34,7 +35,7 @@ class MessageSettingView extends GetView<SettingController> {
         title: Text(Copywriting.security_message_Setting, style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary), onPressed: () => Get.back()),
+        leading: AppBackButton(onPressed: () => Get.back()),
       ),
       body: Obx(() {
         return controller.isLoading.value

@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/api_service/api_response.dart';
 import 'package:biz/base/crypt/copywriting.dart';
@@ -397,12 +398,11 @@ class AdvancePage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: AppColors.background,
-        leading: IconButton(
+        leading: AppBackButton(
           onPressed: () {
             CharacterService.instance.save();
             Get.back();
           },
-          icon: ImageView(Images.security_back_png, height: 24, width: 24),
         ),
         title: Text(
           textAlign: TextAlign.center,
@@ -472,12 +472,11 @@ class AdvancePage extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16, right: 16, top: 32),
         child: Row(
           children: [
-            IconButton(
+            AppBackButton(
               onPressed: () {
                 CharacterService.instance.save();
                 Get.back();
               },
-              icon: ImageView(Images.security_back_png, height: 24, width: 24),
             ),
             Expanded(
               child: Text(

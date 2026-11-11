@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'dart:async';
 
 import 'package:biz/base/crypt/images.dart';
@@ -116,12 +117,10 @@ class _OCVoicePageState extends State<OCVoicePage> {
               ),
             ),
             Positioned(
-              child: IconButton(
-                padding: EdgeInsets.zero,
+              child: AppBackButton(
                 onPressed: () {
                   Get.back();
                 },
-                icon: ImageView(Images.security_back_png, height: 24, width: 24),
               ),
             ),
             // Expanded(
@@ -164,7 +163,7 @@ class _OCVoicePageState extends State<OCVoicePage> {
                             alignment: Alignment.center,
                             child: Wrap(
                               children: [
-                                RotatedBox(quarterTurns: _logic.expandStatus.value, child: ImageView(Images.security_back_png, height: 16, width: 16)),
+                                RotatedBox(quarterTurns: _logic.expandStatus.value, child: const Icon(Icons.chevron_left, color: AppColors.textPrimary, size: 16)),
                                 Text(value, style: const TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.w600)),
                               ],
                             ),

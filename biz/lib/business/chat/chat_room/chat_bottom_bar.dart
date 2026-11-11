@@ -67,7 +67,10 @@ class ChatBottomBar extends StatelessWidget {
         children: [
           if (viewController.isGroup) _buildMembersBar(),
           if (viewController.isReal && !viewController.isGroup) buildGreetTips(),
-          if (viewController.isAi  && !viewController.isGroup) buildAiTrick(),
+          if (viewController.isAi &&
+              !viewController.isGroup &&
+              Preferences.instance.showChatQuickActions)
+            buildAiTrick(),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(

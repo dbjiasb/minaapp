@@ -35,8 +35,8 @@ class SearchView extends GetView<SearchLogic> {
           Container(
             margin: const EdgeInsets.only(right: 16, left: 8),
             alignment: Alignment.center,
-            child: InkWell(
-              onTap: () {
+            child: TextButton(
+              onPressed: () {
                 Get.back();
               },
               child: Text(

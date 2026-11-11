@@ -1,9 +1,9 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../base/crypt/security.dart';
-import '../../../../shared/widget/app_widgets.dart';
 import '../service/ai_mode_service.dart';
 
 class AIModeIntro extends StatelessWidget {
@@ -37,15 +37,7 @@ class AIModeIntro extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Center(
-                      child: InkWell(
-                      onTap: () {
-                        onBack?.call();
-                      },
-                      child: Container(padding: const EdgeInsets.only(top: 4, bottom: 4), child: AppWidgets.backBtn(onPressed: () {
-                        onBack?.call();
-                      }),))
-                    ),
+                    AppBackButton(onPressed: () => onBack?.call()),
                     Expanded(
                       child: Text(
                         curMode[Security.security_name] ?? "",

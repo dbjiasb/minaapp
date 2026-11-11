@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,8 +9,6 @@ import 'package:biz/base/crypt/security.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/shared/sheet.dart';
 
-import '../../base/assets/image_view.dart';
-import '../../base/crypt/images.dart';
 import '../../core/account/account_service.dart';
 import '../../core/util/cached_image.dart';
 import '../../core/util/file_upload.dart';
@@ -27,7 +26,7 @@ class EditMyInfoPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        leading: InkWell(overlayColor: WidgetStateProperty.all(Colors.transparent), onTap: Get.back, child: Container(alignment: Alignment.center, padding: EdgeInsets.only(left: 16), child: ImageView(Images.security_back_png, color: AppColors.textPrimary, fit: BoxFit.cover, height: 24, width: 24))),
+        leading: AppBackButton(onPressed: () => Get.back()),
         centerTitle: true,
         backgroundColor: AppColors.background,
         title: Text(Copywriting.security_edit_information, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),

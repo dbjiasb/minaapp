@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'dart:ui';
@@ -357,13 +358,7 @@ class SceneListView extends GetView<SceneListController> {
       backgroundColor: Colors.transparent,
       // titleTextStyle: TextStyle(
       //     color: SWColors.t2, fontSize: 20,  fontWeight: FontWeight.bold),
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 8),
-        child: IconButton(
-          onPressed: Get.back,
-          icon: CachedImage(imageUrl: ImagePath.back, width: 24, height: 24),
-        ),
-      ),
+      leading: AppBackButton(onPressed: () => Get.back()),
       actions: [
         // _buildModeButton(() {
         //   // MessageRoute.toModePage(targetUid);

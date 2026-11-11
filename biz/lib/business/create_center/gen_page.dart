@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/assets/image_view.dart';
 import 'package:biz/base/crypt/routes.dart';
@@ -15,7 +16,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:biz/core/util/log_util.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/event_center/event_center.dart';
@@ -67,11 +67,10 @@ class GenPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
+              AppBackButton(
                 onPressed: () {
                   showStopDialog();
                 },
-                icon: ImageView(Images.security_back_png, height: 24, width: 24),
               ),
             ],
           ),

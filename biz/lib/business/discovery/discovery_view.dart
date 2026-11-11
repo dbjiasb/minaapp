@@ -64,19 +64,27 @@ class DiscoveryView extends GetView<DiscoveryController> {
             // ),
             child: Text(
               tab.name,
-              style:
-                  isSelected
-                      ? TextStyle(color: AppColors.textPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun)
-                      : TextStyle(color: AppColors.textSecondary, fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: Security.security_hYPangDunDun),
+              style: isSelected
+                  ? TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: Security.security_hYPangDunDun,
+                    )
+                  : TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: Security.security_hYPangDunDun,
+                    ),
             ),
           ),
           Positioned(
             bottom: -8,
-            child:
-                isSelected
-                    // ? Image.asset(ImagePath.tab_selected, width: 40, height: 10)
-                    ? SizedBox()
-                    : SizedBox(),
+            child: isSelected
+                // ? Image.asset(ImagePath.tab_selected, width: 40, height: 10)
+                ? SizedBox()
+                : SizedBox(),
           ),
         ],
       );
@@ -88,12 +96,27 @@ class DiscoveryView extends GetView<DiscoveryController> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: AppColors.background,
-      appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.transparent, elevation: 0, systemOverlayStyle: AppAppearance.overlayStyle),
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        systemOverlayStyle: AppAppearance.overlayStyle,
+      ),
       body: Stack(
         children: [
           Padding(
-            padding: AppAppearance.isLight ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top + 48) : EdgeInsets.zero,
-            child: TabBarView(controller: controller.tabController, children: controller.tabs.mapIndexed(_buildItemView).toList()),
+            padding: AppAppearance.isLight
+                ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top + 48)
+                : EdgeInsets.zero,
+            child: Obx(
+              () => TabBarView(
+                controller: controller.tabController,
+                physics: controller.currentIndex.value == 0
+                    ? const NeverScrollableScrollPhysics()
+                    : null,
+                children: controller.tabs.mapIndexed(_buildItemView).toList(),
+              ),
+            ),
           ),
           Positioned(
             top: 0,
@@ -102,7 +125,16 @@ class DiscoveryView extends GetView<DiscoveryController> {
             child: Container(
               decoration: BoxDecoration(
                 color: AppAppearance.isLight ? AppColors.background : null,
-                gradient: AppAppearance.isLight ? null : const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [AppColors.surfaceMuted, AppColors.surfaceMuted]),
+                gradient: AppAppearance.isLight
+                    ? null
+                    : const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          AppColors.surfaceMuted,
+                          AppColors.surfaceMuted,
+                        ],
+                      ),
               ),
               padding: const EdgeInsets.only(left: 4, right: 16),
               child: SafeArea(
@@ -123,7 +155,9 @@ class DiscoveryView extends GetView<DiscoveryController> {
                           onTap: (index) {
                             controller.currentIndex.value = index;
                           },
-                          labelPadding: const EdgeInsets.symmetric(horizontal: 12),
+                          labelPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                          ),
                           indicatorColor: Colors.transparent,
                           indicator: const BoxDecoration(),
                           indicatorPadding: EdgeInsets.zero,
@@ -134,20 +168,33 @@ class DiscoveryView extends GetView<DiscoveryController> {
                         );
                       }),
                       const Spacer(),
-                InkWell(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  onTap: () {
-                    Get.toNamed(Routers.search);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                        color: AppAppearance.isLight ? AppColors.surface : Color(0xFF171C29).withValues(alpha: 0.7),
-                        borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: AppColors.border, width: 1)
-                    ),
-                    child: ImageView(Images.mina_search, color: AppColors.textPrimary, width: 14, height: 14),
-                  )),
+                      InkWell(
+                        overlayColor: MaterialStateProperty.all(
+                          Colors.transparent,
+                        ),
+                        onTap: () {
+                          Get.toNamed(Routers.search);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppAppearance.isLight
+                                ? AppColors.surface
+                                : Color(0xFF171C29).withValues(alpha: 0.7),
+                            borderRadius: BorderRadius.circular(32),
+                            border: Border.all(
+                              color: AppColors.border,
+                              width: 1,
+                            ),
+                          ),
+                          child: ImageView(
+                            Images.mina_search,
+                            color: AppColors.textPrimary,
+                            width: 14,
+                            height: 14,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ).marginOnly(bottom: 8),
@@ -160,7 +207,8 @@ class DiscoveryView extends GetView<DiscoveryController> {
   }
 }
 
-class DiscoveryController extends GetxController with GetTickerProviderStateMixin {
+class DiscoveryController extends GetxController
+    with GetTickerProviderStateMixin {
   RxList tabs = [].obs;
   late TabController tabController;
   bool isRv = Preferences.instance.isPreUIA;
@@ -183,17 +231,21 @@ class DiscoveryController extends GetxController with GetTickerProviderStateMixi
     List newTabs = [];
     if (!rv) {
       newTabs = [
-        DisTab(DisTabType.character, () => TabLabels.discovery),
+        DisTab(DisTabType.character, () => TabLabels.swipe),
         DisTab(DisTabType.moment, () => TabLabels.moment),
         DisTab(DisTabType.match, () => TabLabels.match),
       ];
     } else {
       newTabs = [
-        DisTab(DisTabType.character, () => TabLabels.discovery),
+        DisTab(DisTabType.character, () => TabLabels.swipe),
         DisTab(DisTabType.moment, () => TabLabels.moment),
       ];
     }
-    tabController = TabController(vsync: this, length: newTabs.length, initialIndex: currentIndex.value);
+    tabController = TabController(
+      vsync: this,
+      length: newTabs.length,
+      initialIndex: currentIndex.value,
+    );
     tabController.addListener(() {
       currentIndex.value = tabController.index;
     });

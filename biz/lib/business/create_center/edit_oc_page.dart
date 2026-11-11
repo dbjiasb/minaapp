@@ -1,4 +1,4 @@
-import 'package:biz/base/crypt/images.dart';
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,8 +8,6 @@ import 'package:biz/base/crypt/security.dart';
 import 'package:biz/core/util/ui_util.dart';
 import 'package:biz/shared/widget/keep_alive_wrapper.dart';
 
-import '../../base/assets/image_path.dart';
-import '../../base/assets/image_view.dart';
 import '../../base/crypt/copywriting.dart';
 import '../../base/router/router_names.dart';
 import '../../shared/app_theme.dart';
@@ -51,14 +49,8 @@ class _EditAiPageState extends State<EditAiPage>
 
   AppBar _buildAppBar() {
     return AppBar(
-      toolbarHeight: 40,
-      leading: InkWell(
-        onTap: Get.back,
-        child: Center(
-          // padding: EdgeInsets.all(16),
-          child: ImageView(Images.security_back_png, fit: BoxFit.fill, width: 24, height: 24),
-        ),
-      ),
+      toolbarHeight: 48,
+      leading: AppBackButton(onPressed: () => Get.back()),
       backgroundColor: Colors.transparent,
       title: Text(
         Copywriting.security_edit_My_Character,

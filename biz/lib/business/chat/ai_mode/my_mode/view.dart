@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/base/crypt/images.dart';
 import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,10 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:biz/base/app_info/app_manager.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/business/chat/ai_mode/widget/mode_widget.dart';
 import 'package:biz/shared/app_theme.dart';
-import 'package:biz/shared/widget/app_widgets.dart';
 
 import '../../../../base/api_service/api_config.dart';
 import '../../../../base/api_service/api_response.dart';
@@ -97,14 +96,7 @@ class MyAIModeView extends GetView<MyAIModeLogic> {
                     ).marginOnly(right: 16),
                   )
                 ],
-                leading: Center(
-                  child: InkWell(
-                    onTap: () {
-                      RH.back();
-                    },
-                    child: Container(padding: const EdgeInsets.only(left: 8, top: 4, bottom: 4), child: AppWidgets.backBtn()),
-                  ),
-                ),
+                leading: AppBackButton(onPressed: RH.back),
               ),
               body: body);
         });

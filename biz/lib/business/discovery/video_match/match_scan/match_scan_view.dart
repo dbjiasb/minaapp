@@ -1,6 +1,5 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'package:biz/shared/app_theme.dart';
-import 'package:biz/base/crypt/images.dart';
-import 'package:biz/base/assets/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svga/flutter_svga.dart';
 import 'package:get/get.dart';
@@ -34,8 +33,7 @@ class MatchScanPage extends GetView<MatchScanLogic> {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: IconButton(
-              icon: ImageView(Images.security_back_png, fit: BoxFit.cover, width: 24, height: 24),
+            leading: AppBackButton(
               onPressed: () {
                 controller.cancelVideoMatch();
               },

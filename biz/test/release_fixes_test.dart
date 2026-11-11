@@ -109,6 +109,67 @@ void main() {
     await db.close();
   });
 
+  test(
+    'opening an already greeted chat does not request another greeting',
+    () async {
+      final manager = ChatManager.forTesting(
+        requestSender: (_) async =>
+            throw StateError('unexpected greeting request'),
+        readTag: (_) => null,
+        writeTag: (_, _) {},
+      );
+      addTearDown(manager.dispose);
+      await manager.sayHelloIfNeeded(session('100')..greeted = true);
+    },
+  );
+
+  test(
+    'a successful greeting is sent once and restored on reopening',
+    () async {
+      var requests = 0;
+      final manager = ChatManager.forTesting(
+        requestSender: (_) async {
+          requests++;
+          return response('');
+        },
+        readTag: (_) => null,
+        writeTag: (_, _) {},
+      );
+      addTearDown(manager.dispose);
+      final chat = session('100');
+      await manager.sayHelloIfNeeded(chat);
+      expect(chat.greeted, isTrue);
+      await manager.sayHelloIfNeeded(chat);
+      final restored = (await manager.sessionHandler.querySession('100'))!;
+      await manager.sayHelloIfNeeded(restored);
+      expect(requests, 1);
+    },
+  );
+
+  test('a failed greeting can be retried', () async {
+    var requests = 0;
+    final manager = ChatManager.forTesting(
+      requestSender: (_) async {
+        requests++;
+        return requests == 1
+            ? ApiResponse.withError({
+                Security.security_code: 500,
+                Security.security_description: 'retry',
+              })
+            : response('');
+      },
+      readTag: (_) => null,
+      writeTag: (_, _) {},
+    );
+    addTearDown(manager.dispose);
+    final chat = session('100');
+    await manager.sayHelloIfNeeded(chat);
+    expect(chat.greeted, isFalse);
+    await manager.sayHelloIfNeeded(chat);
+    expect(chat.greeted, isTrue);
+    expect(requests, 2);
+  });
+
   test('same peer and same message IDs coexist across accounts', () async {
     final handler = ChatSessionHandler();
     final a = session('100');

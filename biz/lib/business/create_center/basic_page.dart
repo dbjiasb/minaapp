@@ -1,3 +1,4 @@
+import 'package:biz/shared/widget/app_back_button.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -11,7 +12,6 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/business/create_center/character_service.dart';
@@ -760,12 +760,11 @@ class BasicPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: AppColors.background,
-        leading: IconButton(
+        leading: AppBackButton(
           onPressed: () {
             CharacterService.instance.save();
             Get.back();
           },
-          icon: ImageView(Images.security_back_png, height: 24, width: 24),
         ),
         title: Text(
           textAlign: TextAlign.center,

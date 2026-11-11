@@ -1,13 +1,13 @@
+import 'package:biz/shared/widget/app_back_button.dart';
+import 'package:biz/shared/widget/app_widgets.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:biz/business/chat/chat_room_cells/chat_image_message.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/api_service/api_response.dart';
-import 'package:biz/base/assets/image_path.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/event_center/event_center.dart';
@@ -60,7 +60,6 @@ import '../generate_video/generate_video_panel.dart';
 import './chat_bottom_bar.dart';
 import 'level_up_pop_up.dart';
 import 'sidebar.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 const String kLogTag = '[TalkRoom]';
 
@@ -431,8 +430,8 @@ class ChatRoomView extends StatelessWidget {
             fit: BoxFit.cover,
             errorWidget: (context, url, error) => SizedBox.shrink(),
           ),
-          if (AppAppearance.isLight)
-            ColoredBox(color: AppColors.background.withValues(alpha: url.isEmpty ? 1 : 0.94)),
+          if (url.isNotEmpty)
+            ColoredBox(color: Colors.black.withValues(alpha: 0.2)),
         ],
       );
     });
@@ -445,21 +444,7 @@ class ChatRoomView extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: _onBackButtonClicked,
-            child: Container(
-              width: 32,
-              height: 32,
-              alignment: Alignment.center,
-              child: AppAppearance.isLight
-                ? const Icon(Icons.arrow_back_ios_new_rounded, size: 22, color: AppColors.textPrimary)
-                : CachedNetworkImage(
-                imageUrl: ImagePath.ic_arrow_left_circle,
-                width: 32,
-                height: 32,
-              ),
-            ),
-          ),
+          AppBackButton(onPressed: _onBackButtonClicked, onMedia: true),
           SizedBox(width: 10),
           Expanded(
             child: Align(
@@ -512,15 +497,27 @@ class ChatRoomView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          viewController.session.name,
-                          style: TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          maxLines: 1,
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                viewController.session.name,
+                                style: TextStyle(
+                                  color: AppColors.textPrimary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                maxLines: 1,
+                              ),
+                            ),
+                            if (session.isPrivateAI)
+                              AppWidgets.userTag(
+                                session.accountType,
+                                id: session.id,
+                              ),
+                          ],
                         ),
                         if (session.isRealChat && !session.isGroup)
                           Row(
@@ -647,7 +644,10 @@ class ChatRoomView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: AppAppearance.overlayStyle,
+      value: AppAppearance.overlayStyle.copyWith(
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
       child: PopScope(
         onPopInvokedWithResult: (didPop, ret) {
           if (didPop) {
@@ -694,7 +694,7 @@ class ChatRoomView extends StatelessWidget {
 class ChatRoomViewController extends GetxController {
   final isShowAudioInputAnim = false.obs;
 
-  Map<String, dynamic> arguments = Get.arguments;
+  final Map<String, dynamic> arguments;
 
   final ChatSession session;
   late UserProfileInfo userProfileInfo;
@@ -738,7 +738,7 @@ class ChatRoomViewController extends GetxController {
     }
   }
 
-  ChatRoomViewController(Map<String, dynamic> arguments)
+  ChatRoomViewController(this.arguments)
     : session = createSession(arguments);
 
   @override
@@ -753,10 +753,6 @@ class ChatRoomViewController extends GetxController {
     //刷新session
     await refreshSession();
     L.i('[ChatRoom] sid:${session.id}, sessionId: ${session.sessionId}, greeted: ${session.greeted}');
-
-    if (kDebugMode || !session.greeted) {
-      ChatManager.instance.sayHelloIfNeeded(session);
-    }
 
     //查聊天记录
     List<ChatMessage> results = await ChatManager.instance.messageHandler
@@ -781,6 +777,9 @@ class ChatRoomViewController extends GetxController {
       Security.security_kDidCreateRole,
       onInfoChange,
     );
+    if (!session.greeted) {
+      ChatManager.instance.sayHelloIfNeeded(session);
+    }
     updateInfoIfNeed();
 
     PushService.instance.addObserver(
@@ -945,7 +944,17 @@ class ChatRoomViewController extends GetxController {
 
   void insertMessages(List newest) {
     if (newest.isEmpty) return;
-    waitingMessages.insertAll(0, newest.reversed);
+    // History and live notifications can contain the same message.
+    final knownIds = <int>{
+      ...messages.whereType<ChatMessage>().map((message) => message.id),
+      ...waitingMessages.whereType<ChatMessage>().map((message) => message.id),
+    };
+    final additions = newest
+        .whereType<ChatMessage>()
+        .where((message) => knownIds.add(message.id))
+        .toList();
+    if (additions.isEmpty) return;
+    waitingMessages.insertAll(0, additions.reversed);
     if (_generatingTimer != null) return; //如果已经有定时器了，就等定时器下一次插入消息
     removeGeneratingMessage(); //移除生成中的消息
     insetMessageFromWaiting(); //从等待队列中取出一个消息插入到消息列表中

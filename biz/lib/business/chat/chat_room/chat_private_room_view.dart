@@ -1,9 +1,12 @@
+import 'package:biz/shared/widget/app_back_button.dart';
+import 'package:biz/shared/widget/app_widgets.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/base/crypt/copywriting.dart';
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/crypt/security.dart';
@@ -27,44 +30,50 @@ class ChatPrivateRoomView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(ChatPrivateRoomViewController(Get.arguments));
 
-    return PopScope(
-      onPopInvokedWithResult: (didPop, ret) {
-        if (didPop) {
-          ChatManager.instance.updateChatSession(controller.session);
-        }
-      },
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        resizeToAvoidBottomInset: true,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            // 背景图片
-            _buildBackground(controller),
-            // 深色遮罩
-            Container(color: AppAppearance.isLight ? AppColors.background.withValues(alpha: 0.94) : Colors.black.withOpacity(0.2)),
-            // 主要内容
-            SafeArea(
-              child: Column(
-                children: [
-                  _buildTopBar(controller),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 60.w), // 为底部输入栏留出空间
-                      child: _buildMessageList(controller),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppAppearance.overlayStyle.copyWith(
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: PopScope(
+        onPopInvokedWithResult: (didPop, ret) {
+          if (didPop) {
+            ChatManager.instance.updateChatSession(controller.session);
+          }
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.background,
+          resizeToAvoidBottomInset: true,
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              // 背景图片
+              _buildBackground(controller),
+              // 背景遮罩
+              Container(color: Colors.black.withValues(alpha: 0.2)),
+              // 主要内容
+              SafeArea(
+                child: Column(
+                  children: [
+                    _buildTopBar(controller),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 60.w), // 为底部输入栏留出空间
+                        child: _buildMessageList(controller),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            // 底部输入栏
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: ChatPrivateBottomBar(onSendText: controller.sendText),
-            ),
-          ],
+              // 底部输入栏
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: ChatPrivateBottomBar(onSendText: controller.sendText),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -92,12 +101,12 @@ class ChatPrivateRoomView extends StatelessWidget {
       child: Row(
         children: [
           // 返回按钮
-          GestureDetector(
-            onTap: () {
+          AppBackButton(
+            onMedia: true,
+            onPressed: () {
               ChatManager.instance.updateChatSession(controller.session);
               RouteHelper.back();
             },
-            child: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary, size: 20.w),
           ),
           SizedBox(width: 12.w),
           // 头像
@@ -124,34 +133,10 @@ class ChatPrivateRoomView extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           SizedBox(width: 8.w),
-          // Current:AI 徽章
-          if (controller.session.isAiChat)
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
-              decoration: BoxDecoration(
-                color: AppAppearance.isLight ? AppColors.surface : Colors.black.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(7.r),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Current:AI',
-                    style: TextStyle(
-                      color: AppColors.accentText,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: Copywriting.security_sF_Pro,
-                    ),
-                  ),
-                  SizedBox(width: 4.w),
-                  Icon(
-                    Icons.swap_horiz,
-                    color: AppColors.accentText,
-                    size: 14.w,
-                  ),
-                ],
-              ),
+          if (controller.session.isPrivateAI)
+            AppWidgets.userTag(
+              controller.session.accountType,
+              id: controller.session.id,
             ),
           Spacer(),
           // 更多按钮

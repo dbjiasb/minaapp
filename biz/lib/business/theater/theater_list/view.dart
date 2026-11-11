@@ -1,16 +1,12 @@
-import 'package:biz/base/crypt/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:biz/base/crypt/copywriting.dart';
-import 'package:biz/base/router/route_helper.dart';
-import 'package:biz/core/util/cached_image.dart';
 
-import '../../../base/assets/image_path.dart';
-import '../../../base/crypt/security.dart';
 import '../../../shared/app_theme.dart';
 import 'logic.dart';
+import 'story_card_widget.dart';
 
 class TheaterListView extends StatelessWidget {
   final ScrollController? scrollController;
@@ -32,33 +28,38 @@ class TheaterListView extends StatelessWidget {
         toolbarHeight: 0,
       ),
       backgroundColor: AppColors.background,
-      body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 8.w),
-            Expanded(
-              child: Obx(
-                () =>
-                    controller.isLoading.value
-                        ? Center(child: CircularProgressIndicator())
-                        : RefreshIndicator(
-                          child:
-                              controller.dataList.isEmpty
-                                  ? emptyView()
-                                  : ListView.builder(
-                                    controller: controller.scrollController,
-                                    itemBuilder: (context, index) => _buildListItem(controller.dataList[index]),
-                                    itemCount: controller.dataList.length,
-                                  ),
-                          onRefresh: () async {
-                            controller.refreshData();
-                          },
-                        ),
+      body: Obx(
+        () => controller.isLoading.value
+            ? Center(child: CircularProgressIndicator())
+            : RefreshIndicator(
+                onRefresh: () async {
+                  controller.refreshData();
+                },
+                child: controller.dataList.isEmpty
+                    ? emptyView()
+                    : CustomScrollView(
+                        controller: controller.scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 4.w,
+                            ),
+                            sliver: SliverMasonryGrid.count(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 11.w,
+                              mainAxisSpacing: 12.w,
+                              childCount: controller.dataList.length,
+                              itemBuilder: (context, index) => StoryCardWidget(
+                                item: controller.dataList[index],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
               ),
-            ),
-            SizedBox(height: 8.w),
-          ],
-        ),
+      ),
     );
   }
 
@@ -69,91 +70,17 @@ class TheaterListView extends StatelessWidget {
     child: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text(Copywriting.security_no_data, style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.normal))],
+        children: [
+          Text(
+            Copywriting.security_no_data,
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ],
       ),
     ),
   );
-
-  Widget _buildTagItem(String name) => Container(
-    // margin: EdgeInsets.only(right: 6.w),
-    decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(9.r)),
-    // alignment: Alignment.center,
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-    // height: 18.w,
-    child: Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10.sp, color: AppColors.rose)),
-  );
-
-  Widget _buildListItem(Map item) {
-    String name = item[Security.security_name] ?? "";
-    String coverUrl = item[Security.security_coverUrl] ?? "";
-    List<String> tags = ((item[Security.security_tags] ?? []) as List).cast<String>();
-    String brief = item[Security.security_brief] ?? "";
-    return GestureDetector(
-      onTap: () {
-        RouteHelper.toChatTheater(item);
-      },
-      child: Container(
-        margin: EdgeInsets.only(left: 12.w, right: 12.w, bottom: 12.w),
-        height: 184.w,
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.only(top: 14.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(color: AppColors.border, width: 1.w),
-                gradient: LinearGradient(colors: [AppColors.surface, AppColors.surface]),
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(left: 124.w, right: 12.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 12.w),
-                    Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp, color: AppColors.textPrimary)),
-                    SizedBox(height: 12.w),
-                    Text(
-                      brief,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp, color: AppColors.textSecondary),
-                    ),
-                    Spacer(),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            runAlignment: WrapAlignment.start,
-                            spacing: 4.w,
-                            runSpacing: 4.w,
-                            children: tags.map((e) => _buildTagItem(e)).toList(),
-                          ),
-                        ),
-
-                        SizedBox(width: 4.w),
-                        Container(
-                          alignment: Alignment.center,
-                          height: 28.w,
-                          width: 52.w,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.r), color: Color(0xFFFFE407)),
-                          child: Text(Security.security_gO, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 13.sp)),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12.w),
-                  ],
-                ),
-              ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16.w),
-              child: CachedNetImage(imageUrl: coverUrl, height: 184.w, width: 112.w, fit: BoxFit.cover),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

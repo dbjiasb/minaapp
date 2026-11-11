@@ -26,13 +26,9 @@ import '../../shared/interactions.dart';
 import '../../shared/toast/toast.dart';
 import '../../shared/widget/keep_alive_wrapper.dart';
 import '../chat/setting/message_setting.dart';
-import '../create_center/create_oc_dialog.dart';
-import '../create_center/create_oc_rv_dialog.dart';
 import '../moment/constant_state.dart';
 import '../moment/moment_list_view/moment_item_view.dart';
 import 'about_view.dart';
-import 'companion_view.dart';
-import 'my_group.dart';
 
 class AccountView extends StatelessWidget {
   AccountView({super.key});
@@ -602,29 +598,34 @@ class AccountView extends StatelessWidget {
                         ],
                       )
                       : Container(
-                        height: 24,
-                        width: 84,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              AppColors.surfaceMuted,
-                              AppColors.surfaceMuted,
-                              AppColors.surfaceMuted,
-                            ],
-                            stops: [0.049, 0.361, 0.879],
-                          ),
-                          borderRadius: BorderRadius.circular(12),
+                        constraints: const BoxConstraints(minHeight: 32),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          Security.security_Subscribe,
-                          style: TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        decoration: const ShapeDecoration(
+                          color: AppColors.accentForeground,
+                          shape: StadiumBorder(),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              Security.security_Subscribe,
+                              style: const TextStyle(
+                                color: AppColors.premMain,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                height: 1.2,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(
+                              Icons.chevron_right_rounded,
+                              color: AppColors.premMain,
+                              size: 16,
+                            ),
+                          ],
                         ),
                       ),
             ),
@@ -902,47 +903,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
       color: AppColors.background,
       height: 40,
       padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Expanded(child: tabBar),
-          GestureDetector(
-            onTap: () {
-              CreateOcDialog.show();
-            },
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(32),
-                gradient: LinearGradient(
-                  colors: [Color(0xFFffee6b), Color(0xFFfff8bf)],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ImageView(
-                    Images.security_ic_add_create_png,
-                    width: 20,
-                    height: 20,
-                  ),
-                  SizedBox(width: 2),
-                  Text(
-                    Security.security_create,
-                    style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+      child: tabBar,
     );
   }
 
@@ -964,14 +925,8 @@ class AccountViewController extends GetxController
   late TabController tabController;
   PageController pageController = PageController();
 
-  List<String> get tabNames => [
-    TabLabels.companions,
-    TabLabels.groupChat,
-    TabLabels.moment,
-  ];
-  final RxList<Widget> tabPage = <Widget>[
-    KeepAliveWrapper(child: MyCompanionView(viewAll: 0)),
-  ].obs;
+  List<String> get tabNames => [TabLabels.moment];
+  final RxList<Widget> tabPage = <Widget>[].obs;
 
   @override
   void onInit() {
@@ -990,8 +945,6 @@ class AccountViewController extends GetxController
 
   setupTabs() {
     tabPage.value = <Widget>[
-      KeepAliveWrapper(child: MyCompanionView(viewAll: 0)),
-      KeepAliveWrapper(child: MyGroupView()),
       KeepAliveWrapper(
         child: MomentItemView(
           EMomentListType.MOMENT_LIST_USER,
