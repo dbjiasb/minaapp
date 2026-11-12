@@ -32,19 +32,26 @@ String kEventCenterWillExitChatRoom = Security.security_kEventCenterWillExitChat
 String kEventCenterDidUpdateSession = Security.security_kEventCenterDidUpdateSession;
 
 class ResGenReporter {
-  static Map<int, DateTime> genInfo = {};
+  static final Map<(int, int), DateTime> _genInfo = {};
+
+  static DateTime getGenStartTime(ChatMessage message) =>
+      _genInfo.putIfAbsent((message.ownerId, message.id), DateTime.now);
+
+  static void _recordStart(int ownerId, int mid) {
+    _genInfo[(ownerId, mid)] = DateTime.now();
+  }
 
   /// type 0: image 1: video
-  static void reportGen(int mid, int type) {
-    genInfo[mid] = DateTime.now();
+  static void reportGen(ChatMessage message, int type) {
+    _recordStart(message.ownerId, message.id);
     ReportManager.sendEvent('gen_res', {
-      Security.security_mid: mid.toString(),
+      Security.security_mid: message.id.toString(),
       Security.security_type: type == 0 ? Security.security_image : 'video',
     });
   }
 
   static void reportComplete(int mid, int prepare) {
-    DateTime startDate = genInfo[mid] ?? DateTime.now();
+    DateTime startDate = _genInfo[(MyAccount.userId, mid)] ?? DateTime.now();
     ReportManager.sendEvent('gen_res_done', {
       Security.security_mid: mid.toString(),
       Security.security_time: DateTime.now().difference(startDate).inSeconds.toString(),
@@ -530,7 +537,15 @@ class ChatManager {
 
   Future<ApiResponse> reloadMessage(ChatMessage message) async {
     ApiRequest request = ApiRequest(Apis.security_replaceMsg, params: {Security.security_uuid: message.uuid, Security.security_action: 1});
-    return await _requestSender(request);
+    final response = await _requestSender(request);
+    if (response.isSuccess && (message.type == ChatMessageType.image || message.type == ChatMessageType.video)) {
+      final reloadedMessage = response.data[Security.security_msg];
+      if (reloadedMessage is Map) {
+        final id = reloadedMessage[Security.security_id] as int? ?? message.id;
+        ResGenReporter._recordStart(message.ownerId, id);
+      }
+    }
+    return response;
   }
 
   void onResponseCalled(Event object) {

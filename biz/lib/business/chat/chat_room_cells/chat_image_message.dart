@@ -23,6 +23,7 @@ import '../chat_manager.dart';
 import '../chat_room/chat_room_view.dart';
 import '../chat_room_cells/chat_cell.dart';
 import 'chat_message.dart';
+import 'res_loading_progress.dart';
 
 class ChatImageMessage extends ChatMessage {
   ChatImageMessage({
@@ -118,7 +119,7 @@ class ChatImageMessage extends ChatMessage {
   String get imageUrl => decodedMap[Security.security_url] ?? '';
   String get imageDesc => decodedMap[Security.security_desc] ?? '';
 
-  bool get isLoading => prepared == 0;
+  bool get isLoading => prepared == 0 && !isPrepared;
   bool get isPrepared => prepared == 1 || (decodedMap[Security.security_prepared] == null && imageUrl.isNotEmpty);
   bool get isInit => prepared == 2;
 
@@ -162,7 +163,7 @@ class ChatImageCell extends ChatCell {
     Widget child = GetBuilder<ChatRoomViewController>(
       builder: (_) {
         if (isLoading) {
-          return renderLoadingMask();
+          return renderLoadingMask(isGenerating: true);
         } else {
           return GestureDetector(
             onTap: () {
@@ -192,7 +193,7 @@ class ChatImageCell extends ChatCell {
       id: refreshId,
       builder: (_) {
         if (imageMessage.isLoading) {
-          return renderLoadingMask();
+          return renderLoadingMask(isGenerating: true);
         } else if (imageMessage.unlocked) {
           return GestureDetector(
             onTap: () {
@@ -504,12 +505,19 @@ class ChatImageCell extends ChatCell {
     );
   }
 
-  Widget renderLoadingMask() {
+  Widget renderLoadingMask({bool isGenerating = false}) {
     return Stack(
       fit: StackFit.expand,
       children: [
         ImageView(Images.security_chat_img_placeholder_png, fit: BoxFit.cover, width: 172, height: 256),
-        Center(child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2)),
+        Center(
+          child: isGenerating && !isReal
+              ? ResLoadingProgress(
+                  startTime: ResGenReporter.getGenStartTime(imageMessage),
+                  estimatedSeconds: Preferences.instance.generateImageTime,
+                )
+              : const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2),
+        ),
       ],
     );
   }

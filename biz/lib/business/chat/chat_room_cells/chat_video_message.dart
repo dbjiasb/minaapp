@@ -25,6 +25,7 @@ import '../chat_manager.dart';
 import '../chat_room/chat_room_view.dart';
 import './chat_cell.dart';
 import 'chat_message.dart';
+import 'res_loading_progress.dart';
 
 class ChatVideoMessage extends ChatMessage {
   ChatVideoMessage({
@@ -194,7 +195,7 @@ class ChatVideoCell extends ChatCell {
       builder: (controller) {
         //加载中
         if (isLoading) {
-          return renderLoadingMask();
+          return renderLoadingMask(isGenerating: prepared == 0);
         }
 
         return buildMessageContent(coverUrl, videoUrl);
@@ -208,7 +209,7 @@ class ChatVideoCell extends ChatCell {
       builder: (controller) {
         //加载中
         if (isLoading) {
-          return renderLoadingMask();
+          return renderLoadingMask(isGenerating: videoMessage.prepared == 0);
         }
 
         //生成好了但没解锁||未生成的要主动点击生成
@@ -611,12 +612,19 @@ class ChatVideoCell extends ChatCell {
         : SizedBox.shrink();
   }
 
-  Widget renderLoadingMask() {
+  Widget renderLoadingMask({bool isGenerating = false}) {
     return Stack(
       fit: StackFit.expand,
       children: [
         ImageView(Images.security_chat_img_placeholder_png, fit: BoxFit.cover, width: 172, height: 256),
-        Center(child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2)),
+        Center(
+          child: isGenerating && !isReal
+              ? ResLoadingProgress(
+                  startTime: ResGenReporter.getGenStartTime(videoMessage),
+                  estimatedSeconds: Preferences.instance.generateVideoTime,
+                )
+              : const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2),
+        ),
       ],
     );
   }

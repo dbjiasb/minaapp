@@ -24,6 +24,7 @@ import '../../../base/router/route_helper.dart';
 import '../../../shared/app_theme.dart';
 import '../chat_room/chat_room_view.dart';
 import '../chat_room_cells/chat_video_message.dart';
+import 'generate_video_web_sheet.dart';
 
 const int _kPremiumFreeReason = 3;
 
@@ -158,6 +159,11 @@ class VideoCreateManager {
 class GenerateVideoDialog extends StatelessWidget {
   GenerateVideoDialog({super.key});
 
+  static Uri? get _webUri =>
+      GenerateVideoWebSheet.parseUrl(Preferences.instance.videoGenH5);
+
+  static bool get usesWebView => _webUri != null;
+
   /// prompt 和 imageUrl 来源于图生视频
   /// reloadMessage 来源于视频 reload
   static Future show({
@@ -171,6 +177,28 @@ class GenerateVideoDialog extends StatelessWidget {
     );
     if (!agreed) {
       return;
+    }
+
+    final webUri = _webUri;
+    if (webUri != null) {
+      final reloadParams = _asMap(
+        reloadMessage?.decodedMap['generateVideoParams'],
+      );
+      final uri = GenerateVideoWebSheet.buildUrl(
+        webUri,
+        toUid: Get.find<ChatRoomViewController>().userId,
+        msgId: reloadMessage?.id ?? msgId ?? 0,
+        prompt: prompt ?? _asString(reloadParams[Security.security_prompt]),
+        imageUrl: imageUrl ?? _asString(reloadParams[Security.security_url]),
+      );
+      return Get.bottomSheet(
+        GenerateVideoWebSheet(uri: uri),
+        useRootNavigator: false,
+        persistent: false,
+        isScrollControlled: true,
+        enableDrag: false,
+        backgroundColor: Colors.transparent,
+      );
     }
 
     int cost = VideoCreateManager.cost;
@@ -761,7 +789,7 @@ class GenerateVideoController extends GetxController {
   void reloadVideo() {
     if (reloadMessage == null) return;
     Get.back();
-    roomViewController.reloadMessage(reloadMessage!);
+    roomViewController.reloadMessage(reloadMessage!, allowWebView: false);
   }
 
   void aiWriterPrompt() {

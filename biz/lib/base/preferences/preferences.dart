@@ -13,6 +13,7 @@ import '../../core/util/device_util.dart';
 import '../../core/util/log_util.dart';
 import '../../localize/localization_service.dart';
 import '../../localize/tab_labels.dart';
+import '../api_service/api_config.dart';
 import '../api_service/api_request.dart';
 import '../api_service/api_response.dart';
 import '../api_service/api_service.dart';
@@ -357,6 +358,23 @@ class Preferences {
   // bool get needGalleryWhileCreateOC {
   //   return (appConfig['create_oc_with_gallery'] ?? '1') == "1";
   // }
+
+  int get generateImageTime => _generationTime('generate_img_time', 15);
+
+  int get generateVideoTime => _generationTime('generate_video_time', 90);
+
+  int _generationTime(String key, int fallback) {
+    final seconds = int.tryParse('${appConfig[key]}');
+    return seconds != null && seconds > 0 ? seconds : fallback;
+  }
+
+  String get videoGenH5 {
+    if (isRv) return '';
+    final configuredUrl = appConfig['video_gen_h5'];
+    return configuredUrl is String
+        ? configuredUrl.trim()
+        : '${ApiConfig.h5}/video/generate';
+  }
 
   String get generateVideoPromptHints {
     return appConfig[Security.security_generate_video_tips] ?? Copywriting.security_describe_what_you_want__e_g___A_barista_wipes_the_counter_of_a_small_caf__by_the_river__steam_rising_from_coffee_cups__boats_passing_slowly_outside_the_window__a_cat_napping_on_a_nearby_chair_;

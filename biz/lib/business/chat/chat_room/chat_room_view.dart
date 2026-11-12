@@ -1148,7 +1148,7 @@ class ChatRoomViewController extends GetxController {
     Toast.loading();
     ApiResponse rsp = await VideoCreateManager.requestGenerateVideo(msgId: message.id, sid: session.userId);
     if (rsp.isSuccess) {
-      ResGenReporter.reportGen(message.id, 1);
+      ResGenReporter.reportGen(message, 1);
       message.prepared = 0;
       ChatManager.instance.messageHandler.insertMessage(message);
       // update([message.refreshId]);
@@ -1165,7 +1165,7 @@ class ChatRoomViewController extends GetxController {
     Toast.loading();
     ApiResponse rsp = await CreateImageManager.instance.createImage(session.userId, msgId: message.id);
     if (rsp.isSuccess) {
-      ResGenReporter.reportGen(message.id, 0);
+      ResGenReporter.reportGen(message, 0);
       message.prepared = 0;
       ChatManager.instance.messageHandler.insertMessage(message);
       // update([message.refreshId]);
@@ -1233,7 +1233,14 @@ class ChatRoomViewController extends GetxController {
     }
   }
 
-  void reloadMessage(ChatMessage message) async {
+  void reloadMessage(ChatMessage message, {bool allowWebView = true}) async {
+    if (allowWebView &&
+        message is ChatVideoMessage &&
+        GenerateVideoDialog.usesWebView) {
+      await GenerateVideoDialog.show(reloadMessage: message);
+      return;
+    }
+
     Toast.loading();
     ApiResponse response = await ChatManager.instance.reloadMessage(message);
     if (response.isSuccess) {

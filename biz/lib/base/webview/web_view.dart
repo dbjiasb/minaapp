@@ -34,8 +34,15 @@ final String h5GetMsg = Security.security_receiveMessage;
 
 class WebView extends StatefulWidget {
   final String? url;
+  final bool embedded;
 
-  const WebView({super.key, this.url});
+  const WebView({super.key, this.url, this.embedded = false});
+
+  static bool isSupportedEmbeddedUrl(Uri uri) =>
+      uri.scheme == 'https' &&
+      uri.host.isNotEmpty &&
+      uri.userInfo.isEmpty &&
+      uri.origin == Uri.parse(ApiConfig.h5).origin;
 
   static Future<dynamic> showWeb(
     String url, {
@@ -71,10 +78,16 @@ class _WebViewState extends State<WebView> {
     final rawArguments = Get.arguments;
     arguments = rawArguments is Map ? rawArguments : <String, dynamic>{};
     title = _stringValue(arguments[Security.security_title]);
-    url = _stringValue(arguments[Security.security_url], fallback: widget.url);
+    url = widget.embedded
+        ? widget.url ?? ''
+        : _stringValue(arguments[Security.security_url], fallback: widget.url);
     hideAppBar = _boolValue(arguments[Security.security_hideHeader]);
     _currentUrl = url;
-    L.i('WebView initState, url: $url, title: $title, hideAppBar: $hideAppBar');
+    if (!widget.embedded) {
+      L.i(
+        'WebView initState, url: $url, title: $title, hideAppBar: $hideAppBar',
+      );
+    }
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(AppColors.base_background)
@@ -96,6 +109,7 @@ class _WebViewState extends State<WebView> {
             });
           },
           onWebResourceError: (WebResourceError error) {
+            if (widget.embedded && error.isForMainFrame == false) return;
             if (!mounted) return;
             setState(() {
               _isLoading = false;
@@ -105,9 +119,31 @@ class _WebViewState extends State<WebView> {
               '[WebView] resource error: ${error.errorCode}, ${error.description}',
             );
           },
+          onHttpError: widget.embedded
+              ? (error) {
+                  if (!mounted ||
+                      error.request?.uri.toString() != _currentUrl) {
+                    return;
+                  }
+                  setState(() {
+                    _isLoading = false;
+                    _hasError = true;
+                  });
+                }
+              : null,
           onNavigationRequest: (NavigationRequest request) {
             final uri = Uri.tryParse(request.url);
-            if (uri == null) {
+            if (uri == null ||
+                (widget.embedded && !WebView.isSupportedEmbeddedUrl(uri))) {
+              if (widget.embedded &&
+                  request.isMainFrame &&
+                  mounted &&
+                  _isLoading) {
+                setState(() {
+                  _isLoading = false;
+                  _hasError = true;
+                });
+              }
               return NavigationDecision.prevent;
             }
             if (_isExternalUrl(uri)) {
@@ -137,7 +173,9 @@ class _WebViewState extends State<WebView> {
     }
 
     final uri = Uri.tryParse(url);
-    if (uri == null || !{'http', 'https'}.contains(uri.scheme)) {
+    if (uri == null ||
+        !{'http', 'https'}.contains(uri.scheme) ||
+        (widget.embedded && !WebView.isSupportedEmbeddedUrl(uri))) {
       _isLoading = false;
       _hasError = true;
       return;
@@ -160,6 +198,9 @@ class _WebViewState extends State<WebView> {
 
   @override
   Widget build(BuildContext context) {
+    final body = _buildBody(context);
+    if (widget.embedded) return body;
+
     return Scaffold(
       extendBody: !showAppBar,
       extendBodyBehindAppBar: !showAppBar,
@@ -200,31 +241,57 @@ class _WebViewState extends State<WebView> {
               ],
             )
           : null,
-      body: Stack(
-        children: [
-          WebViewWidget(controller: _controller),
-          if (_isLoading) Center(child: CircularProgressIndicator()),
-          if (_hasError)
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error_outline, size: 48, color: Colors.red),
-                  SizedBox(height: 16),
-                  Text(
-                    Security.security_failed,
-                    style: TextStyle(fontSize: 16),
+      body: body,
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Stack(
+      children: [
+        WebViewWidget(controller: _controller),
+        if (_isLoading) const Center(child: CircularProgressIndicator()),
+        if (_hasError)
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                const SizedBox(height: 16),
+                Text(
+                  Security.security_failed,
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _reloadPage,
+                  child: Text(Security.security_retry),
+                ),
+              ],
+            ),
+          ),
+        if (widget.embedded && (_isLoading || _hasError))
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 16,
+            child: SafeArea(
+              top: false,
+              child: Center(
+                child: Material(
+                  color: Colors.black54,
+                  shape: const CircleBorder(),
+                  child: IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).closeButtonTooltip,
+                    icon: const Icon(Icons.close, color: Colors.white),
                   ),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _reloadPage,
-                    child: Text(Security.security_retry),
-                  ),
-                ],
+                ),
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 
@@ -233,19 +300,27 @@ class _WebViewState extends State<WebView> {
   }
 
   void _reloadPage() {
+    final uri = widget.embedded ? Uri.tryParse(url) : null;
+    if (widget.embedded &&
+        (uri == null || !WebView.isSupportedEmbeddedUrl(uri))) {
+      return;
+    }
     setState(() {
       _hasError = false;
       _isLoading = true;
     });
-    _controller.reload();
+    if (uri != null) {
+      _controller.loadRequest(uri);
+    } else {
+      _controller.reload();
+    }
   }
 
   void _handleMessage(JavaScriptMessage msg) async {
-    L.i('WebView >> Received message: ${msg.message}');
+    if (!mounted) return;
+    if (!widget.embedded) L.i('WebView >> Received message: ${msg.message}');
     if (!_isTrustedWebOrigin(_currentUrl)) {
-      L.e(
-        '[WebView] ignore bridge message from untrusted origin: $_currentUrl',
-      );
+      L.e('[WebView] ignore bridge message from untrusted origin');
       return;
     }
 
@@ -265,12 +340,6 @@ class _WebViewState extends State<WebView> {
         _handleBackPress();
         return;
       } else if (api.contains(kJSBridgeGetUsrInfo)) {
-        if (!_isTrustedH5Origin(_currentUrl)) {
-          L.e(
-            '[WebView] refuse user info bridge from non-H5 origin: $_currentUrl',
-          );
-          return;
-        }
         var baseInfo = {...(ApiService.instance.base())};
         baseInfo[Security.security_guid] = baseInfo[Security.security_did];
         baseInfo[Security.security_channel] = baseInfo[Security.security_app];
@@ -524,23 +593,11 @@ class _WebViewState extends State<WebView> {
 
   bool _isExternalUrl(Uri uri) => uri.queryParameters['external'] == '1';
 
-  bool _isTrustedH5Origin(String rawUrl) => true;///_isSameOrigin(rawUrl, ApiConfig.h5);
-
-  bool _isTrustedWebOrigin(String rawUrl) => true;
-
-  bool _isSameOrigin(String rawUrl, String trustedUrl) {
-    final urlUri = Uri.tryParse(rawUrl);
-    final trustedUri = Uri.tryParse(trustedUrl);
-    if (urlUri == null || trustedUri == null) return false;
-    return urlUri.scheme == trustedUri.scheme &&
-        urlUri.host == trustedUri.host &&
-        (urlUri.hasPort ? urlUri.port : _defaultPort(urlUri.scheme)) ==
-            (trustedUri.hasPort
-                ? trustedUri.port
-                : _defaultPort(trustedUri.scheme));
+  bool _isTrustedWebOrigin(String rawUrl) {
+    if (!widget.embedded) return true;
+    final uri = Uri.tryParse(rawUrl);
+    return uri != null && WebView.isSupportedEmbeddedUrl(uri);
   }
-
-  int _defaultPort(String scheme) => scheme == 'https' ? 443 : 80;
 
   Future<void> _openInitialExternalUrl(String rawUrl) async {
     await loadByExternalUrl(rawUrl);
@@ -550,8 +607,11 @@ class _WebViewState extends State<WebView> {
   }
 
   Future<void> _messageOut(String javaScriptString) async {
+    if (widget.embedded && (!mounted || !_isTrustedWebOrigin(_currentUrl))) {
+      return;
+    }
     try {
-      L.i('WebView >> Send message: $javaScriptString');
+      if (!widget.embedded) L.i('WebView >> Send message: $javaScriptString');
       await _controller.runJavaScript(javaScriptString);
     } catch (e) {
       L.e('[WebView] failed to send JavaScript message: $e');
