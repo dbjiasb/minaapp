@@ -27,7 +27,6 @@ import '../../shared/toast/toast.dart';
 import '../../shared/widget/keep_alive_wrapper.dart';
 import '../chat/setting/message_setting.dart';
 import '../create_center/create_oc_dialog.dart';
-import '../create_center/create_oc_rv_dialog.dart';
 import '../moment/constant_state.dart';
 import '../moment/moment_list_view/moment_item_view.dart';
 import 'about_view.dart';

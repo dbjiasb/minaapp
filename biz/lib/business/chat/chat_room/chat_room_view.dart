@@ -560,15 +560,17 @@ class ChatRoomView extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(
-                                        mod[Security.security_name] ?? '',
-                                        style: TextStyle(
-                                          color: Color(0xFF999999),
-                                          fontSize: 11,
+                                      Flexible(
+                                        child: Text(
+                                          mod[Security.security_name] ?? '',
+                                          style: TextStyle(
+                                            color: Color(0xFF999999),
+                                            fontSize: 11,
+                                            height: 1,
+                                          ),
+                                          maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          height: 1,
                                         ),
-                                        maxLines: 1,
                                       ),
                                       SizedBox(width: 2),
                                       ImageView(

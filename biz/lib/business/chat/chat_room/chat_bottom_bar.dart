@@ -738,18 +738,19 @@ class ChatBottomBar extends StatelessWidget {
         spacing: 8,
         children:
             items.map((item) {
-              return Container(
-                height: 30,
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  color: Color(0x99333333),
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                  border: Border.all(color: Color(0x66FFFFFF), width: 1),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    (item[Security.security_action] as Function?)?.call();
-                  },
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  (item[Security.security_action] as Function?)?.call();
+                },
+                child: Container(
+                  height: 30,
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: Color(0x99333333),
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    border: Border.all(color: Color(0x66FFFFFF), width: 1),
+                  ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

@@ -112,30 +112,23 @@ class _ReorderResGridViewState extends State<ReorderResGridView> {
   }
 
   Widget _buildResView(Map resInfo) {
+    const borderRadius = BorderRadius.all(Radius.circular(12));
+    if (resInfo[Security.security_type] == EMomentResType.VIDEO) {
+      return VideoView(videoUrl: resInfo[Security.security_url] ?? '', borderRadius: borderRadius);
+    }
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child:
-          resInfo[Security.security_type] == EMomentResType.VIDEO
-              ? VideoView(videoUrl: resInfo[Security.security_url] ?? '',)
-              : CachedImage(
-                imageUrl: resInfo[Security.security_url] ?? '',
-                width: double.infinity,
-                fit: BoxFit.cover,
-                borderRadius: BorderRadius.zero,
-                errorWidget: (context, url, error) {
-                  return Container(
-                    color: Colors.grey,
-                    width: double.infinity,
-                  );
-                },
-                placeholder: (context, url) {
-                  return Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: BoxDecoration(color: Color(0xFF2F3137), borderRadius: BorderRadius.circular(16)),
-                  );
-                },
-              ),
+      borderRadius: borderRadius,
+      child: CachedImage(
+        imageUrl: resInfo[Security.security_url] ?? '',
+        width: double.infinity,
+        fit: BoxFit.cover,
+        errorWidget: (context, url, error) {
+          return Container(color: Colors.grey, width: double.infinity);
+        },
+        placeholder: (context, url) {
+          return Container(width: double.infinity, height: double.infinity, color: const Color(0xFF2F3137));
+        },
+      ),
     );
   }
 

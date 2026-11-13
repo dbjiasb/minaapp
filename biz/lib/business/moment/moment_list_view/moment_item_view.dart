@@ -473,6 +473,7 @@ class _MomentItemViewState extends State<MomentItemView> {
   }
 
   Widget _buildResView(Map resInfo) {
+    const borderRadius = BorderRadius.all(Radius.circular(12));
     return InkWell(
       overlayColor: WidgetStateProperty.all(Colors.transparent),
       onTap: () {
@@ -489,30 +490,29 @@ class _MomentItemViewState extends State<MomentItemView> {
         }
       },
 
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: resInfo[Security.security_type] == EMomentResType.VIDEO
-            ? VideoView(videoUrl: resInfo[Security.security_url] ?? '')
-            : CachedImage(
+      child: resInfo[Security.security_type] == EMomentResType.VIDEO
+          ? VideoView(
+              videoUrl: resInfo[Security.security_url] ?? '',
+              borderRadius: borderRadius,
+            )
+          : ClipRRect(
+              borderRadius: borderRadius,
+              child: CachedImage(
                 imageUrl: resInfo[Security.security_url] ?? '',
                 width: double.infinity,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) {
                   return Container(color: Colors.grey, width: double.infinity);
                 },
-                borderRadius: BorderRadius.all(Radius.circular(12)),
                 placeholder: (context, url) {
                   return Container(
                     width: double.infinity,
                     height: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF2F3137),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
+                    color: const Color(0xFF2F3137),
                   );
                 },
               ),
-      ),
+            ),
     );
   }
 

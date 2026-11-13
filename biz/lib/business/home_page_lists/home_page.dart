@@ -17,7 +17,6 @@ import '../../base/preferences/preferences.dart';
 import '../../base/router/router_names.dart';
 import '../../core/util/log_util.dart';
 import '../create_center/create_oc_dialog.dart';
-import '../create_center/create_oc_rv_dialog.dart';
 import '../theater/theater_list/view.dart';
 import 'category_tabs_widget.dart';
 import 'filter_view.dart';
@@ -153,13 +152,7 @@ class HomePageView extends StatelessWidget {
   Widget _buildCreateButton() {
     return Center(
       child: GestureDetector(
-        onTap: () {
-          if (Preferences.instance.isRv) {
-            CreateOcRvDialog.show();
-          } else {
-            CreateOcDialog.show();
-          }
-        },
+        onTap: CreateOcDialog.show,
         child: Container(
           width: 86.w,
           height: 36.w,

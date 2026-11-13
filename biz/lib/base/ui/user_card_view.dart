@@ -109,6 +109,7 @@ class VideoView extends StatefulWidget {
   final double width;
   final double height;
   final bool autoScale;
+  final BorderRadius borderRadius;
 
   VideoView({
     Key? key,
@@ -117,6 +118,7 @@ class VideoView extends StatefulWidget {
     this.height = double.infinity,
     this.width = double.infinity,
     this.autoScale = false,
+    this.borderRadius = BorderRadius.zero,
   }) : super(key: key);
 
   @override
@@ -165,18 +167,24 @@ class _VideoViewState extends State<VideoView> {
 
   @override
   Widget build(BuildContext context) {
-    Widget videoWidget = _controller.value.isInitialized
-        ? (widget.autoScale
-        ? SizedBox.expand(
-      child: FittedBox(
-        fit: BoxFit.cover,
-        child: SizedBox(width: _controller.value.size.width, height: _controller.value.size.height, child: VideoPlayer(_controller)),
-      ),
-    )
-        : Center(
-      child: AspectRatio(aspectRatio: _controller.value.aspectRatio, child: VideoPlayer(_controller)),
-    ))
-        : const SizedBox();
+    Widget videoWidget = const SizedBox();
+    if (_controller.value.isInitialized) {
+      final size = _controller.value.size;
+      final player = VideoPlayer(_controller);
+      final frame = _clipFrame(
+        widget.autoScale
+            ? FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(width: size.width, height: size.height, child: player),
+              )
+            : player,
+      );
+      videoWidget = widget.autoScale
+          ? SizedBox.expand(child: frame)
+          : Center(
+              child: AspectRatio(aspectRatio: _controller.value.aspectRatio, child: frame),
+            );
+    }
 
     return SizedBox(
       width: widget.width,
@@ -188,17 +196,19 @@ class _VideoViewState extends State<VideoView> {
           AnimatedOpacity(
             opacity: _showVideo ? 0 : 1,
             duration: const Duration(milliseconds: 300),
-            child: CachedImage(
-              imageUrl: widget.coverUrl ?? "",
-              width: widget.width,
-              height: widget.height,
-              fit: BoxFit.cover,
-              errorWidget: (context, url, error) {
-                return _defaultBg();
-              },
-              placeholder: (context, url) {
-                return _defaultBg();
-              },
+            child: _clipFrame(
+              CachedImage(
+                imageUrl: widget.coverUrl ?? "",
+                width: widget.width,
+                height: widget.height,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) {
+                  return _defaultBg();
+                },
+                placeholder: (context, url) {
+                  return _defaultBg();
+                },
+              ),
             ),
           ),
 
@@ -207,6 +217,13 @@ class _VideoViewState extends State<VideoView> {
         ],
       ),
     );
+  }
+
+  Widget _clipFrame(Widget child) {
+    if (widget.borderRadius == BorderRadius.zero) {
+      return child;
+    }
+    return ClipRRect(borderRadius: widget.borderRadius, child: child);
   }
 
   Widget _defaultBg() {
