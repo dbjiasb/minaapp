@@ -1,4 +1,3 @@
-import 'package:biz/base/crypt/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:biz/business/chat/chat_session.dart';
@@ -16,65 +15,6 @@ class PrivateChatSessionCell extends StatelessWidget {
     required this.session,
     required this.onTap,
   });
-
-  Widget _buildAccountTypeBadge() {
-    if (session.accountType == 1 ||
-        session.accountType == 3 ||
-        session.accountType == 4) {
-      // AI badge
-      return Container(
-        margin: EdgeInsets.only(left: 4.w),
-        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 0.w),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF556AEB), Color(0xFFB635F4)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          border: Border.all(
-            color: const Color(0xFFAFB2FF).withOpacity(0.6),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(6.w),
-        ),
-        child: Text(
-          Security.security_aI,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 11.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      );
-    } else if (session.accountType == 0) {
-      // Real badge
-      return Container(
-        margin: EdgeInsets.only(left: 4.w),
-        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 0.w),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFFEB55DD), Color(0xFFF38D45)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          border: Border.all(
-            color: const Color(0xFFFDBAA2).withOpacity(0.6),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(6.w),
-        ),
-        child: Text(
-          Security.security_real,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 11.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      );
-    }
-    return const SizedBox.shrink();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,12 +63,11 @@ class PrivateChatSessionCell extends StatelessWidget {
                             AppWidgets.userTag(
                               session.accountType,
                               id: session.id,
-                              isGroup: session.isGroup
+                              isGroup: session.isGroup,
                             ),
                           ],
                         ),
                       ),
-                      // _buildAccountTypeBadge(),
                       SizedBox(width: 8.w),
                       // 时间
                       Text(

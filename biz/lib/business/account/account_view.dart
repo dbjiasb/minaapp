@@ -6,6 +6,7 @@ import 'package:biz/base/crypt/security.dart';
 import 'package:biz/base/preferences/preferences.dart';
 import 'package:biz/base/router/router_names.dart';
 import 'package:biz/core/account/account_service.dart';
+import 'package:biz/core/report/report_helper.dart';
 import 'package:biz/core/user_manager/user_manager.dart';
 import 'package:biz/shared/app_theme.dart';
 import 'package:biz/shared/widget/avatar_view.dart';
@@ -675,159 +676,117 @@ class AccountView extends StatelessWidget {
         color: Color(0xFF202026),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              //
-              InkWell(
-                onTap: () async {
-                  await RH.toTask();
-                  UserManager.instance.queryUserReminders();
-                },
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        ImageView(Images.mina_task, width: 28, height: 28),
-                        SizedBox(height: 4),
-                        Text(
-                          Copywriting.security_daily_Task,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                      right: 5,
-                      top: 3,
-                      child: Obx(() {
-                        return UserManager.instance.taskReminder.value
-                            ? Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                            )
-                            : Container();
-                      }),
-                    ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  RH.toPage(
-                    Routers.webView,
-                    args: {
-                      Security.security_title: '',
-                      Security.security_url:
-                          AppManager.instance.notificationUrl,
-                      Security.security_hideHeader: 1,
-                    },
-                  );
-                },
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        // Icon(Icons.notifications, color: Colors.white),
-                        ImageView(
-                          Images.mina_notification,
-                          width: 28,
-                          height: 28,
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          Copywriting.security_notifications,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                      right: 5,
-                      top: 3,
-                      child: Obx(() {
-                        return UserManager.instance.notificationReminder.value
-                            ? Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                            )
-                            : Container();
-                      }),
-                    ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.toNamed(Routers.collections, arguments: {});
-                },
-                child: Column(
-                  children: [
-                    ImageView(Images.mina_collection, width: 28, height: 28),
-                    SizedBox(height: 4),
-                    Text(
-                      Copywriting.security_collections,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  L.uploadIfNeed();
-                  Get.toNamed(
-                    Routers.webView,
-                    arguments: {
-                      Security.security_title: '',
-                      Security.security_url: Preferences.instance.dcLink,
-                    },
-                  );
-                },
-                child: Column(
-                  children: [
-                    // Icon(Icons.feedback, color: Colors.white),
-                    ImageView(Images.mina_feedback, width: 28, height: 28),
-                    SizedBox(height: 4),
-                    Text(
-                      Copywriting.security_feedback,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          _menuItem(
+            label: 'Task',
+            icon: ImageView(Images.mina_task, width: 28, height: 28),
+            reminder: UserManager.instance.taskReminder,
+            onTap: () async {
+              await RH.toTask();
+              UserManager.instance.queryUserReminders();
+            },
           ),
-          // Row(
-          //   children: [
-          //
-          //   ],
-          // )
+          _menuItem(
+            label: 'Notification',
+            icon: ImageView(Images.mina_notification, width: 28, height: 28),
+            reminder: UserManager.instance.notificationReminder,
+            onTap: () {
+              RH.toPage(
+                Routers.webView,
+                args: {
+                  Security.security_title: '',
+                  Security.security_url: AppManager.instance.notificationUrl,
+                  Security.security_hideHeader: 1,
+                },
+              );
+            },
+          ),
+          _menuItem(
+            label: 'Collection',
+            icon: ImageView(Images.mina_collection, width: 28, height: 28),
+            onTap: () {
+              Get.toNamed(Routers.collections, arguments: {});
+            },
+          ),
+          _menuItem(
+            label: Copywriting.security_feedback,
+            icon: ImageView(Images.mina_feedback, width: 28, height: 28),
+            onTap: () {
+              L.uploadIfNeed();
+              ReportHelper.showReportDialog(0);
+            },
+          ),
+          _menuItem(
+            label: Copywriting.security_contact_us,
+            icon: const Icon(
+              Icons.discord,
+              size: 28,
+              color: Color(0xFF9690FF),
+              shadows: [Shadow(color: Color(0x889690FF), blurRadius: 8)],
+            ),
+            onTap: () {
+              Get.toNamed(
+                Routers.webView,
+                arguments: {
+                  Security.security_title: '',
+                  Security.security_url: Preferences.instance.dcLink,
+                },
+              );
+            },
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _menuItem({
+    required String label,
+    required Widget icon,
+    required VoidCallback onTap,
+    RxBool? reminder,
+  }) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                icon,
+                if (reminder != null)
+                  Positioned(
+                    right: 0,
+                    top: 3,
+                    child: Obx(() {
+                      return reminder.value
+                          ? Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            )
+                          : const SizedBox.shrink();
+                    }),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 9,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

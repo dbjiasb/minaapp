@@ -514,7 +514,9 @@ class ChatRoomView extends StatelessWidget {
                           ),
                           maxLines: 1,
                         ),
-                        if (session.isRealChat && !session.isGroup)
+                        if (session.isRealChat &&
+                            !session.isGroup &&
+                            !ChatSession.isOfficialAccount(session.id))
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -527,14 +529,17 @@ class ChatRoomView extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(width: 4),
-                              Text(
-                                Security.security_online,
-                                style: TextStyle(
-                                  color: Color(0xFFB8B8B8),
-                                  fontSize: 11,
-                                  height: 1,
+                              Flexible(
+                                child: Text(
+                                  Security.security_online,
+                                  style: TextStyle(
+                                    color: Color(0xFFB8B8B8),
+                                    fontSize: 11,
+                                    height: 1,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
                               ),
                             ],
                           ),
@@ -593,45 +598,55 @@ class ChatRoomView extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8),
-          GestureDetector(
-            onTap: () {
-              RH.toRecharge((session.isAiChat || session.isGroup) ? 0 : 1);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-              decoration: BoxDecoration(
-                color: Color(0xCC333333),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Row(
-                spacing: 4,
-                children: [
-                  ImageView(
-                    session.isAiChat || session.isGroup
-                        ? Images.security_coin_png
-                        : Images.security_gem_png,
-                    height: 16,
-                    width: 16,
-                  ),
-                  Obx(
-                    () => Text(
+          if (session.isOffChatSession)
+            IconButton(
+              onPressed: () {
+                RH.toWeb(Preferences.instance.dcLink);
+              },
+              icon: const Icon(Icons.discord, size: 24, color: Colors.white),
+              tooltip: 'Discord',
+            )
+          else ...[
+            GestureDetector(
+              onTap: () {
+                RH.toRecharge((session.isAiChat || session.isGroup) ? 0 : 1);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Color(0xCC333333),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Row(
+                  spacing: 4,
+                  children: [
+                    ImageView(
                       session.isAiChat || session.isGroup
-                          ? MyAccount.coins.toFixString
-                          : MyAccount.gems.toFixString,
-                      style: TextStyle(color: Colors.white, fontSize: 12),
+                          ? Images.security_coin_png
+                          : Images.security_gem_png,
+                      height: 16,
+                      width: 16,
                     ),
-                  ),
-                ],
+                    Obx(
+                      () => Text(
+                        session.isAiChat || session.isGroup
+                            ? MyAccount.coins.toFixString
+                            : MyAccount.gems.toFixString,
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          IconButton(
-            onPressed: () {
-              UserManager.instance.getUserSettings(session.userId);
-              _scaffoldKey.currentState?.openEndDrawer();
-            },
-            icon: ImageView(Images.security_more_png, width: 24, height: 24),
-          ),
+            IconButton(
+              onPressed: () {
+                UserManager.instance.getUserSettings(session.userId);
+                _scaffoldKey.currentState?.openEndDrawer();
+              },
+              icon: ImageView(Images.security_more_png, width: 24, height: 24),
+            ),
+          ],
           SizedBox(width: 5),
         ],
       ),
@@ -651,7 +666,7 @@ class ChatRoomView extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         child: Scaffold(
           key: _scaffoldKey,
-          endDrawer: _buildChatDrawer(),
+          endDrawer: session.isOffChatSession ? null : _buildChatDrawer(),
           backgroundColor: AppColors.base_background,
           resizeToAvoidBottomInset: true,
           body: Stack(

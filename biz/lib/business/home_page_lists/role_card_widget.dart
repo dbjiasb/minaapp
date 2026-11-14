@@ -79,6 +79,7 @@ class RoleCardWidget extends StatelessWidget {
                 width: 166.w,
                 height: 260.w,
                 fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
               ),
             ),
 

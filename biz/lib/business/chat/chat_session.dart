@@ -243,6 +243,9 @@ class ChatSession {
   static ChatSession get offChatSession =>
       ChatSession(id: '$kOffChatSessionId', name: Copywriting.security_Mina_Support, avatar: "${ApiConfig.cdn}/services/${Security.security_client_config}/icon/mina_team.png", lastMessageText: Copywriting.security_contact_us_for_support_, lastMessageTime: DateTime.now(), accountType: 0);
 
+  static bool isOfficialAccount(String? id) =>
+      id == '$kOffChatSessionId' || id == '100001';
+
   bool get isOffChatSession => id == kOffChatSessionId.toString();
 
   bool get isGroup => type == SessionType.group;
